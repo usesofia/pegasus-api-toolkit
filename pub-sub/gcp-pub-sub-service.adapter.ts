@@ -6,7 +6,7 @@ import { LOGGER_SERVICE_PORT } from '../logger/logger.module';
 import { ClsService } from 'nestjs-cls';
 import { v4 as uuidv4 } from 'uuid';
 import { GCP_PUB_SUB } from './gcp-pub-sub.module';
-import { Base } from 'src/base';
+import { Base } from '../base';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 

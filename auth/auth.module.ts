@@ -6,7 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { OrgRolesGuard } from './guards/org-roles.guard';
 import { OrgTypesGuard } from './guards/org-types.guard';
 import { GcpServiceAccountGuard } from './guards/gcp-service-account.guard';
-import { BASE_CONFIG, BaseConfigEntity } from 'src/config/base-config.entity';
+import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
 
 @Global()
 @Module({
