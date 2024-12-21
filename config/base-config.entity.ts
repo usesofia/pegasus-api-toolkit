@@ -58,7 +58,7 @@ export const BaseConfigSchema = z.object({
   }),
   pubSub: z.object({
     topics: z.object({
-      cacheHitOnGetAuthUser: z.literal('cache-hit-on-get-auth-user'),
+      cacheHitOnGetAuthUser: z.string(),
     }),
   }),
 });
