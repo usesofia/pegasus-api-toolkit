@@ -5,6 +5,8 @@
   "author": "Pegasus",
   "private": true,
   "license": "UNLICENSED",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
