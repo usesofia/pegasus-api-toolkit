@@ -1,6 +1,6 @@
 {
   "name": "pegasus-api-swiss-army-knife",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "author": "",
   "private": true,
@@ -20,11 +20,29 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.1.4",
+    "@google-cloud/pubsub": "^4.9.0",
+    "@logtail/pino": "^0.5.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^8.1.0",
+    "@sentry/node": "^8.47.0",
+    "google-auth-library": "^9.15.0",
+    "ioredis": "^5.4.2",
+    "luxon": "^3.5.0",
+    "memory-cache-ttl": "^1.0.52",
+    "mongoose": "^8.9.2",
+    "morgan": "^1.10.0",
+    "nested-mask-attributes": "^1.1.1",
+    "nestjs-cls": "^4.5.0",
+    "nestjs-zod": "^4.2.0",
+    "pino": "^9.5.0",
+    "pino-pretty": "^13.0.0",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "uuid": "^11.0.3",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -32,6 +50,8 @@
     "@nestjs/testing": "^10.0.0",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.2",
+    "@types/luxon": "^3.4.2",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^20.3.1",
     "@types/supertest": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
