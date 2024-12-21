@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
 import { PubSub } from '@google-cloud/pubsub';
+import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
 
 export const GCP_PUB_SUB = Symbol('GcpPubSub');
 
