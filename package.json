@@ -1,8 +1,8 @@
 {
-  "name": "pegasus-api-swiss-army-knife",
+  "name": "pegasus-api-toolkit",
   "version": "1.0.0",
-  "description": "",
-  "author": "",
+  "description": "A toolkit for developing APIs for the Pegasus platform.",
+  "author": "Pegasus",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
