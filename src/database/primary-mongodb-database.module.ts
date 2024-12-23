@@ -22,4 +22,4 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
   ],
   exports: [PRIMARY_MONGOOSE_CONNECTION],
 })
-export class PrimaryMongoDatabaseModule {}
+export class PrimaryMongoDbDatabaseModule {}
