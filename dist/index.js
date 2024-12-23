@@ -14,7 +14,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./auth/auth.module"), exports);
 __exportStar(require("./auth/auth.controller"), exports);
 __exportStar(require("./auth/constants/org-role.enum"), exports);
 __exportStar(require("./auth/constants/org-type.enum"), exports);
@@ -31,6 +30,7 @@ __exportStar(require("./auth/guards/org-roles.guard"), exports);
 __exportStar(require("./auth/guards/org-types.guard"), exports);
 __exportStar(require("./auth/payloads/cache-hit-on-get-auth-user.payload"), exports);
 __exportStar(require("./auth/ports/auth-service.port"), exports);
+__exportStar(require("./auth/adapters/clerk-auth-service.adapter"), exports);
 __exportStar(require("./cache/cache.module"), exports);
 __exportStar(require("./cache/adapters/memory-cache-service.adapter"), exports);
 __exportStar(require("./cache/adapters/redis-cache-service.adapter"), exports);

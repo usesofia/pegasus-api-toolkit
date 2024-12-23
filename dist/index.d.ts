@@ -1,4 +1,3 @@
-export * from './auth/auth.module';
 export * from './auth/auth.controller';
 export * from './auth/constants/org-role.enum';
 export * from './auth/constants/org-type.enum';
@@ -15,6 +14,7 @@ export * from './auth/guards/org-roles.guard';
 export * from './auth/guards/org-types.guard';
 export * from './auth/payloads/cache-hit-on-get-auth-user.payload';
 export * from './auth/ports/auth-service.port';
+export * from './auth/adapters/clerk-auth-service.adapter';
 export * from './cache/cache.module';
 export * from './cache/adapters/memory-cache-service.adapter';
 export * from './cache/adapters/redis-cache-service.adapter';
