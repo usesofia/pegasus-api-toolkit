@@ -17,11 +17,11 @@ exports.AuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_port_1 = require("../ports/auth-service.port");
 const core_1 = require("@nestjs/core");
-const base_1 = require("../../base");
 const base_config_entity_1 = require("../../config/base-config.entity");
-const logger_module_1 = require("../../logger/logger.module");
 const nestjs_cls_1 = require("nestjs-cls");
 const ignore_auth_guard_decorator_1 = require("../decorators/ignore-auth-guard.decorator");
+const base_1 = require("../../base");
+const logger_module_1 = require("../../logger/logger.module");
 let AuthGuard = AuthGuard_1 = class AuthGuard extends base_1.Base {
     constructor(baseConfig, logger, cls, reflector, authService) {
         super(AuthGuard_1.name, baseConfig, logger, cls);

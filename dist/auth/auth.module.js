@@ -41,11 +41,15 @@ exports.AuthModule = AuthModule = __decorate([
             },
             {
                 provide: core_1.APP_GUARD,
-                useClass: org_roles_guard_1.OrgRolesGuard,
+                useFactory: () => {
+                    return org_roles_guard_1.OrgRolesGuard;
+                },
             },
             {
                 provide: core_1.APP_GUARD,
-                useClass: org_types_guard_1.OrgTypesGuard,
+                useFactory: () => {
+                    return org_types_guard_1.OrgTypesGuard;
+                },
             },
             {
                 provide: core_1.APP_GUARD,

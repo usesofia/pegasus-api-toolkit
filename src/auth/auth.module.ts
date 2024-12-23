@@ -29,11 +29,15 @@ import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
     },
     {
       provide: APP_GUARD,
-      useClass: OrgRolesGuard,
+      useFactory: () => {
+        return OrgRolesGuard;
+      },
     },
     {
       provide: APP_GUARD,
-      useClass: OrgTypesGuard,
+      useFactory: () => {
+        return OrgTypesGuard;
+      },
     },
     {
       provide: APP_GUARD,

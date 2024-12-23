@@ -8,11 +8,11 @@ import {
 } from '@nestjs/common';
 import { AuthServicePort, AUTH_SERVICE_PORT } from '../ports/auth-service.port';
 import { Reflector } from '@nestjs/core';
-import { Base } from '../../base';
 import { BaseConfigEntity, BASE_CONFIG } from '../../config/base-config.entity';
-import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
 import { ClsService } from 'nestjs-cls';
 import { IGNORE_AUTH_GUARD_KEY } from '../decorators/ignore-auth-guard.decorator';
+import { Base } from '../../base';
+import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
 
 @Injectable()
 export class AuthGuard extends Base implements CanActivate {

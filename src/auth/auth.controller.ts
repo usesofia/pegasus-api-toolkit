@@ -1,8 +1,5 @@
 import { Controller, Post, Inject, LoggerService, Body, UseGuards } from '@nestjs/common';
-import { Base } from '../base';
-import { LOGGER_SERVICE_PORT } from '../logger/logger.module';
 import { ClsService } from 'nestjs-cls';
-import { Log } from '../utils/log.utils';
 import {
   ApiTags,
   ApiOperation,
@@ -10,7 +7,6 @@ import {
   ApiBody,
   ApiOkResponse,
 } from '@nestjs/swagger';
-import { ExceptionResponseEntity } from '../app-exceptions.filter';
 import { AuthServicePort, AUTH_SERVICE_PORT } from './ports/auth-service.port';
 import { AuthUserEntity } from './entities/auth-user.entity';
 import { PubSubMessageBodyDto } from '../pub-sub/pub-sub-message.dto';
@@ -18,6 +14,10 @@ import { CacheHitOnGetAuthUserPayload } from './payloads/cache-hit-on-get-auth-u
 import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
 import { GcpServiceAccountGuard } from './guards/gcp-service-account.guard';
 import { IgnoreAuthGuard } from './decorators/ignore-auth-guard.decorator';
+import { ExceptionResponseEntity } from '../app-exceptions.filter';
+import { Base } from '../base';
+import { LOGGER_SERVICE_PORT } from '../logger/logger.module';
+import { Log } from '../utils/log.utils';
 
 @ApiTags('Auth')
 @ApiResponse({

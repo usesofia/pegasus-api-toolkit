@@ -6,15 +6,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrimaryMongoDatabaseModule = exports.PRIMARY_MONGOOSE_CONNECTION = void 0;
+exports.PrimaryMongoDbDatabaseModule = exports.PRIMARY_MONGOOSE_CONNECTION = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const base_config_entity_1 = require("../config/base-config.entity");
 exports.PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
-let PrimaryMongoDatabaseModule = class PrimaryMongoDatabaseModule {
+let PrimaryMongoDbDatabaseModule = class PrimaryMongoDbDatabaseModule {
 };
-exports.PrimaryMongoDatabaseModule = PrimaryMongoDatabaseModule;
-exports.PrimaryMongoDatabaseModule = PrimaryMongoDatabaseModule = __decorate([
+exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule;
+exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
         providers: [
@@ -33,5 +33,5 @@ exports.PrimaryMongoDatabaseModule = PrimaryMongoDatabaseModule = __decorate([
         ],
         exports: [exports.PRIMARY_MONGOOSE_CONNECTION],
     })
-], PrimaryMongoDatabaseModule);
+], PrimaryMongoDbDatabaseModule);
 //# sourceMappingURL=primary-mongodb-database.module.js.map
