@@ -57,3 +57,5 @@ export class AuthGuard extends Base implements CanActivate {
     }
   }
 }
+
+export const AUTH_GUARD = Symbol('AuthGuard');

@@ -1,3 +1,4 @@
+export * from './auth/auth.module';
 export * from './auth/auth.controller';
 export * from './auth/constants/org-role.enum';
 export * from './auth/constants/org-type.enum';

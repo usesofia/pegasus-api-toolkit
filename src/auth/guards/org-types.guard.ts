@@ -25,3 +25,5 @@ export class OrgTypesGuard implements CanActivate {
     return allowedTypes.includes(userOrgType);
   }
 }
+
+export const ORG_TYPES_GUARD = Symbol('OrgTypesGuard');

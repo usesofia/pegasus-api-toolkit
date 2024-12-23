@@ -9,10 +9,10 @@ import {
 import { Reflector } from '@nestjs/core';
 import { OAuth2Client } from 'google-auth-library';
 import { BaseConfigEntity, BASE_CONFIG } from '../../config/base-config.entity';
-import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
 import { ClsService } from 'nestjs-cls';
-import { Base } from '../../base';
 import { IGNORE_GCP_SERVICE_ACCOUNT_GUARD_KEY } from '../decorators/ignore-gcp-service-account-guard.decorator';
+import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
+import { Base } from '../../base';
 
 @Injectable()
 export class GcpServiceAccountGuard extends Base implements CanActivate {
@@ -64,3 +64,5 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
     return true;
   }
 }
+
+export const GCP_SERVICE_ACCOUNT_GUARD = Symbol('GcpServiceAccountGuard');

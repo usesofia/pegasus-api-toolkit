@@ -14,3 +14,4 @@ export declare class AuthGuard extends Base implements CanActivate {
     private extractTokenFromHeader;
     canActivate(context: ExecutionContext): Promise<boolean>;
 }
+export declare const AUTH_GUARD: unique symbol;

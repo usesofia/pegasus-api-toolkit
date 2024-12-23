@@ -13,15 +13,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var GcpServiceAccountGuard_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GcpServiceAccountGuard = void 0;
+exports.GCP_SERVICE_ACCOUNT_GUARD = exports.GcpServiceAccountGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const google_auth_library_1 = require("google-auth-library");
 const base_config_entity_1 = require("../../config/base-config.entity");
-const logger_module_1 = require("../../logger/logger.module");
 const nestjs_cls_1 = require("nestjs-cls");
-const base_1 = require("../../base");
 const ignore_gcp_service_account_guard_decorator_1 = require("../decorators/ignore-gcp-service-account-guard.decorator");
+const logger_module_1 = require("../../logger/logger.module");
+const base_1 = require("../../base");
 let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountGuard extends base_1.Base {
     constructor(baseConfig, logger, cls, reflector) {
         super(GcpServiceAccountGuard_1.name, baseConfig, logger, cls);
@@ -63,4 +63,5 @@ exports.GcpServiceAccountGuard = GcpServiceAccountGuard = GcpServiceAccountGuard
     __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService,
         core_1.Reflector])
 ], GcpServiceAccountGuard);
+exports.GCP_SERVICE_ACCOUNT_GUARD = Symbol('GcpServiceAccountGuard');
 //# sourceMappingURL=gcp-service-account.guard.js.map

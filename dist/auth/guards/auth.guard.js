@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var AuthGuard_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthGuard = void 0;
+exports.AUTH_GUARD = exports.AuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_port_1 = require("../ports/auth-service.port");
 const core_1 = require("@nestjs/core");
@@ -64,4 +64,5 @@ exports.AuthGuard = AuthGuard = AuthGuard_1 = __decorate([
     __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService,
         core_1.Reflector, Object])
 ], AuthGuard);
+exports.AUTH_GUARD = Symbol('AuthGuard');
 //# sourceMappingURL=auth.guard.js.map

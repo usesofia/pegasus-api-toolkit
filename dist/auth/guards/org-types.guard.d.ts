@@ -5,3 +5,4 @@ export declare class OrgTypesGuard implements CanActivate {
     constructor(reflector: Reflector);
     canActivate(context: ExecutionContext): boolean;
 }
+export declare const ORG_TYPES_GUARD: unique symbol;

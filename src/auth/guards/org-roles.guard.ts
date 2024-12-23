@@ -24,3 +24,5 @@ export class OrgRolesGuard implements CanActivate {
     return allowedRoles.includes(userOrgRole);
   }
 }
+
+export const ORG_ROLES_GUARD = Symbol('OrgRolesGuard');

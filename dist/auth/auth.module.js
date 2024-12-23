@@ -24,42 +24,59 @@ exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [],
         providers: [
-            auth_guard_1.AuthGuard,
+            {
+                provide: auth_guard_1.AUTH_GUARD,
+                useClass: auth_guard_1.AuthGuard,
+            },
+            {
+                provide: gcp_service_account_guard_1.GCP_SERVICE_ACCOUNT_GUARD,
+                useClass: gcp_service_account_guard_1.GcpServiceAccountGuard,
+            },
+            {
+                provide: org_roles_guard_1.ORG_ROLES_GUARD,
+                useClass: org_roles_guard_1.OrgRolesGuard,
+            },
+            {
+                provide: org_types_guard_1.ORG_TYPES_GUARD,
+                useClass: org_types_guard_1.OrgTypesGuard,
+            },
             {
                 provide: auth_service_port_1.AUTH_SERVICE_PORT,
                 useClass: clerk_auth_service_adapter_1.ClerkAuthServiceAdapter,
             },
             {
                 provide: core_1.APP_GUARD,
-                useFactory: (baseConfig) => {
+                useFactory: (baseConfig, authGuard) => {
                     if (baseConfig.auth.applyAuthGuardToAllRoutes) {
-                        return auth_guard_1.AuthGuard;
+                        return authGuard;
                     }
                     return null;
                 },
-                inject: [base_config_entity_1.BASE_CONFIG],
+                inject: [base_config_entity_1.BASE_CONFIG, auth_guard_1.AUTH_GUARD],
             },
             {
                 provide: core_1.APP_GUARD,
-                useFactory: () => {
-                    return org_roles_guard_1.OrgRolesGuard;
+                useFactory: (orgRolesGuard) => {
+                    return orgRolesGuard;
                 },
+                inject: [org_roles_guard_1.ORG_ROLES_GUARD],
             },
             {
                 provide: core_1.APP_GUARD,
-                useFactory: () => {
-                    return org_types_guard_1.OrgTypesGuard;
+                useFactory: (orgTypesGuard) => {
+                    return orgTypesGuard;
                 },
+                inject: [org_types_guard_1.ORG_TYPES_GUARD],
             },
             {
                 provide: core_1.APP_GUARD,
-                useFactory: (baseConfig) => {
+                useFactory: (baseConfig, gcpServiceAccountGuard) => {
                     if (baseConfig.auth.applyGcpServiceAccountGuardToAllRoutes) {
-                        return gcp_service_account_guard_1.GcpServiceAccountGuard;
+                        return gcpServiceAccountGuard;
                     }
                     return null;
                 },
-                inject: [base_config_entity_1.BASE_CONFIG],
+                inject: [base_config_entity_1.BASE_CONFIG, gcp_service_account_guard_1.GCP_SERVICE_ACCOUNT_GUARD],
             },
         ],
         controllers: [],

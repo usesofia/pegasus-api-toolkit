@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrgRolesGuard = void 0;
+exports.ORG_ROLES_GUARD = exports.OrgRolesGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const org_roles_decorator_1 = require("../decorators/org-roles.decorator");
@@ -35,4 +35,5 @@ exports.OrgRolesGuard = OrgRolesGuard = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [core_1.Reflector])
 ], OrgRolesGuard);
+exports.ORG_ROLES_GUARD = Symbol('OrgRolesGuard');
 //# sourceMappingURL=org-roles.guard.js.map

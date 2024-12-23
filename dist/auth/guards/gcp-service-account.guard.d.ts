@@ -12,3 +12,4 @@ export declare class GcpServiceAccountGuard extends Base implements CanActivate 
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, reflector: Reflector);
     canActivate(context: ExecutionContext): Promise<boolean>;
 }
+export declare const GCP_SERVICE_ACCOUNT_GUARD: unique symbol;
