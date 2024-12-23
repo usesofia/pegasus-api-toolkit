@@ -34,6 +34,10 @@ export * from './correlation/correlation.constants';
 export * from './database/base-mongodb-repository.adapter';
 export * from './database/primary-mongodb-database.module';
 
+// Health
+export * from './health/health.module';
+export * from './health/health.controller';
+
 // Logger
 export * from './logger/logger.module';
 export * from './logger/pino-logger';

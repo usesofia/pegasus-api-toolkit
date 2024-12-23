@@ -24,6 +24,8 @@ export * from './config/base-config.entity';
 export * from './correlation/correlation.constants';
 export * from './database/base-mongodb-repository.adapter';
 export * from './database/primary-mongodb-database.module';
+export * from './health/health.module';
+export * from './health/health.controller';
 export * from './logger/logger.module';
 export * from './logger/pino-logger';
 export * from './page/page-info.entity';
