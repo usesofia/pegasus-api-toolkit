@@ -1,9 +1,9 @@
 import { Model, Document } from 'mongoose';
 import { NotFoundException, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
-import { Base } from '../base';
 import { BaseConfigEntity } from '../config/base-config.entity';
 import { AuthUserEntity } from '../auth/entities/auth-user.entity';
+import { Base } from '../base';
 import { Log } from '../utils/log.utils';
 
 export abstract class BaseMongoDbRepositoryAdapter<

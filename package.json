@@ -1,15 +1,15 @@
 {
-  "name": "pegasus-api-toolkit",
-  "version": "1.0.0",
-  "description": "A toolkit for developing APIs for the Pegasus platform.",
-  "author": "Pegasus",
-  "private": true,
+  "name": "@usesofia/pegasus-api-toolkit",
+  "version": "1.0.1",
+  "description": "Um conjunto de ferramentas para desenvolvimento de APIs para o Pegasus.",
+  "author": "Sofia",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "UNLICENSED",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "/dist"
-  ],
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
