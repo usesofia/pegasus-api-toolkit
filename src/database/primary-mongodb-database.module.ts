@@ -10,7 +10,9 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
     {
       provide: PRIMARY_MONGOOSE_CONNECTION,
       useFactory: (baseConfig: BaseConfigEntity): Promise<typeof mongoose> => {
-        const mongoDatabases = baseConfig.databases.filter((db) => db.type === 'mongodb');
+        const mongoDatabases = baseConfig.databases.filter(
+          (db) => db.type === 'mongodb',
+        );
         if (mongoDatabases.length === 0) {
           throw new Error('No MongoDB databases found.');
         }

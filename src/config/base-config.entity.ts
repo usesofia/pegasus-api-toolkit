@@ -6,20 +6,29 @@ import { safeInstantiateEntity } from '../utils/entity.utils';
 export const BaseConfigSchema = z.object({
   env: z.nativeEnum(Environment),
   nodeEnv: z.enum(['development', 'production']),
-  databases: z.array(z.object({
-    type: z.enum(['mongodb']),
-    uri: z.string(),
-  })),
-  auth: z.object({
-    applyAuthGuardToAllRoutes: z.boolean(),
-    applyGcpServiceAccountGuardToAllRoutes: z.boolean(),
-  }).refine(
-    (data) => !(data.applyAuthGuardToAllRoutes && data.applyGcpServiceAccountGuardToAllRoutes),
-    {
-      message: 'Cannot apply both auth guard and GCP service account guard to all routes simultaneously.',
-      path: ['auth']
-    }
+  databases: z.array(
+    z.object({
+      type: z.enum(['mongodb']),
+      uri: z.string(),
+    }),
   ),
+  auth: z
+    .object({
+      applyAuthGuardToAllRoutes: z.boolean(),
+      applyGcpServiceAccountGuardToAllRoutes: z.boolean(),
+    })
+    .refine(
+      (data) =>
+        !(
+          data.applyAuthGuardToAllRoutes &&
+          data.applyGcpServiceAccountGuardToAllRoutes
+        ),
+      {
+        message:
+          'Cannot apply both auth guard and GCP service account guard to all routes simultaneously.',
+        path: ['auth'],
+      },
+    ),
   logger: z.object({
     level: z.enum(['log', 'error', 'warn', 'debug']),
     consoleLog: z.boolean(),

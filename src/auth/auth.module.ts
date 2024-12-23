@@ -5,7 +5,10 @@ import { AUTH_GUARD, AuthGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { ORG_ROLES_GUARD, OrgRolesGuard } from './guards/org-roles.guard';
 import { ORG_TYPES_GUARD, OrgTypesGuard } from './guards/org-types.guard';
-import { GCP_SERVICE_ACCOUNT_GUARD, GcpServiceAccountGuard } from './guards/gcp-service-account.guard';
+import {
+  GCP_SERVICE_ACCOUNT_GUARD,
+  GcpServiceAccountGuard,
+} from './guards/gcp-service-account.guard';
 import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
 
 @Global()
@@ -58,7 +61,10 @@ import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
     },
     {
       provide: APP_GUARD,
-      useFactory: (baseConfig: BaseConfigEntity, gcpServiceAccountGuard: GcpServiceAccountGuard) => {
+      useFactory: (
+        baseConfig: BaseConfigEntity,
+        gcpServiceAccountGuard: GcpServiceAccountGuard,
+      ) => {
         if (baseConfig.auth.applyGcpServiceAccountGuardToAllRoutes) {
           return gcpServiceAccountGuard;
         }

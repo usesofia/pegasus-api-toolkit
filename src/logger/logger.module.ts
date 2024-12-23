@@ -8,7 +8,10 @@ import {
 } from '@nestjs/common';
 import { PinoLoggerAdapter } from './pino-logger';
 import * as morgan from 'morgan';
-import { correlationIdKey, correlationIdTokenKey } from '../correlation/correlation.constants';
+import {
+  correlationIdKey,
+  correlationIdTokenKey,
+} from '../correlation/correlation.constants';
 
 export const LOGGER_SERVICE_PORT = Symbol('LoggerServicePort');
 

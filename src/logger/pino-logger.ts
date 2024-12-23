@@ -38,7 +38,9 @@ export class PinoLoggerAdapter implements LoggerService {
   private readonly shouldConsoleLog: boolean;
   private readonly environment: string;
 
-  constructor(@Inject(BASE_CONFIG) private readonly baseConfig: BaseConfigEntity) {
+  constructor(
+    @Inject(BASE_CONFIG) private readonly baseConfig: BaseConfigEntity,
+  ) {
     this.remoteLogger = pino({
       transport: {
         target: '@logtail/pino',
