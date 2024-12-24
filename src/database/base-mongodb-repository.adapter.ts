@@ -5,18 +5,21 @@ import { BaseConfigEntity } from '../config/base-config.entity';
 import { AuthUserEntity } from '../auth/entities/auth-user.entity';
 import { Base } from '../base';
 import { Log } from '../utils/log.utils';
-import { DeepMergeLeafURI, deepmergeCustom } from "deepmerge-ts";
+import { DeepMergeLeafURI, deepmergeCustom } from 'deepmerge-ts';
 import { BaseSessionPort } from './base-session.port';
 import { BaseMongoDbSessionAdapter } from './base-mongodb-session.adapter';
 import { BaseSessionStarterPort } from './base-session-starter.port';
 
 export abstract class BaseMongoDbRepositoryAdapter<
-  TDoc extends Document,
-  TEntity,
-  TCreateRequest extends { data: Partial<TDoc> },
-  TFindOneRequest extends { id: string },
-  TPartialUpdateRequest extends { id: string; data: Partial<TDoc> },
-> extends Base implements BaseSessionStarterPort {
+    TDoc extends Document,
+    TEntity,
+    TCreateRequest extends { data: Partial<TDoc> },
+    TFindOneRequest extends { id: string },
+    TPartialUpdateRequest extends { id: string; data: Partial<TDoc> },
+  >
+  extends Base
+  implements BaseSessionStarterPort
+{
   constructor(
     className: string,
     protected readonly baseConfig: BaseConfigEntity,
@@ -57,7 +60,9 @@ export abstract class BaseMongoDbRepositoryAdapter<
       createdByOrganization: requester.organization,
     });
 
-    let saved = await created.save({ session: previousSession?.getSession() ?? null });
+    let saved = await created.save({
+      session: previousSession?.getSession() ?? null,
+    });
 
     if (request.populate) {
       saved = await saved.populate(request.populate.split(','));
@@ -79,10 +84,12 @@ export abstract class BaseMongoDbRepositoryAdapter<
     request: TFindOneRequest & { populate?: string };
     previousSession?: BaseSessionPort;
   }): Promise<TEntity> {
-    const doc = await this.model.findOne({
-      _id: request.id,
-      organization: requester.organization,
-    }).session(previousSession?.getSession() ?? null);
+    const doc = await this.model
+      .findOne({
+        _id: request.id,
+        organization: requester.organization,
+      })
+      .session(previousSession?.getSession() ?? null);
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -96,33 +103,36 @@ export abstract class BaseMongoDbRepositoryAdapter<
   }
 
   @Log()
-  private async _partialUpdateTransactionFn(
-    {
-      requester,
-      request,
-      session,
-    }: {
-      requester: AuthUserEntity;
-      request: TPartialUpdateRequest & { populate?: string };
-      session: ClientSession;
-    }
-  ): Promise<TEntity> {
-    const existing = await this.model.findOne({
-      _id: request.id,
-      organization: requester.organization,
-    }).session(session);
+  private async _partialUpdateTransactionFn({
+    requester,
+    request,
+    session,
+  }: {
+    requester: AuthUserEntity;
+    request: TPartialUpdateRequest & { populate?: string };
+    session: ClientSession;
+  }): Promise<TEntity> {
+    const existing = await this.model
+      .findOne({
+        _id: request.id,
+        organization: requester.organization,
+      })
+      .session(session);
 
     if (!existing) {
       throw new NotFoundException('Recurso não encontrado.');
     }
 
     // Use deepmerge with custom configuration to not merge arrays
-    const merged = deepmergeCustom<unknown, {
-      DeepMergeArraysURI: DeepMergeLeafURI;
-    }>({
+    const merged = deepmergeCustom<
+      unknown,
+      {
+        DeepMergeArraysURI: DeepMergeLeafURI;
+      }
+    >({
       mergeArrays: false,
     })(existing.toObject(), request.data);
-    
+
     Object.assign(existing, merged);
     await existing.save({ session });
 
@@ -132,7 +142,6 @@ export abstract class BaseMongoDbRepositoryAdapter<
 
     return this.toEntity(existing);
   }
-
 
   @Log()
   private async _partialUpdate({
@@ -144,11 +153,19 @@ export abstract class BaseMongoDbRepositoryAdapter<
     request: TPartialUpdateRequest & { populate?: string };
     session: ClientSession;
   }): Promise<TEntity> {
-    if(session.inTransaction()) {
-      return await this._partialUpdateTransactionFn({ requester, request, session });
+    if (session.inTransaction()) {
+      return await this._partialUpdateTransactionFn({
+        requester,
+        request,
+        session,
+      });
     } else {
       return await session.withTransaction(async () => {
-        return await this._partialUpdateTransactionFn({ requester, request, session });
+        return await this._partialUpdateTransactionFn({
+          requester,
+          request,
+          session,
+        });
       });
     }
   }
@@ -167,12 +184,20 @@ export abstract class BaseMongoDbRepositoryAdapter<
     previousSession?: BaseSessionPort;
   }): Promise<TEntity> {
     if (previousSession) {
-      return await this._partialUpdate({ requester, request, session: previousSession.getSession() });
+      return await this._partialUpdate({
+        requester,
+        request,
+        session: previousSession.getSession(),
+      });
     } else {
       const session = await this.model.db.startSession();
       let result: TEntity;
       try {
-        result = await this._partialUpdate({ requester, request, session: session });
+        result = await this._partialUpdate({
+          requester,
+          request,
+          session: session,
+        });
       } finally {
         await session.endSession();
       }
@@ -193,9 +218,11 @@ export abstract class BaseMongoDbRepositoryAdapter<
     request: { id: string };
     previousSession?: BaseSessionPort;
   }): Promise<void> {
-    await this.model.findOneAndDelete({
-      _id: request.id,
-      organization: requester.organization,
-    }).session(previousSession?.getSession() ?? null);
+    await this.model
+      .findOneAndDelete({
+        _id: request.id,
+        organization: requester.organization,
+      })
+      .session(previousSession?.getSession() ?? null);
   }
 }

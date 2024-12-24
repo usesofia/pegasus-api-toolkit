@@ -73,7 +73,8 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
       lastName: clerkUser.lastName!,
       organization: clerkOrganization.id,
       organizationRole: organizationRole as OrganizationRole,
-      organitzaionType: clerkOrganization.privateMetadata.type as OrganizationType,
+      organitzaionType: clerkOrganization.privateMetadata
+        .type as OrganizationType,
     });
   }
 

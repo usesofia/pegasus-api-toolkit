@@ -8,8 +8,14 @@ import {
   GcpServiceAccountGuard,
 } from './guards/gcp-service-account.guard';
 import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
-import { ORGANIZATION_ROLES_GUARD, OrganizationRolesGuard } from './guards/organization-roles.guard';
-import { ORGANIZATION_TYPES_GUARD, OrganizationTypesGuard } from './guards/organization-types.guard';
+import {
+  ORGANIZATION_ROLES_GUARD,
+  OrganizationRolesGuard,
+} from './guards/organization-roles.guard';
+import {
+  ORGANIZATION_TYPES_GUARD,
+  OrganizationTypesGuard,
+} from './guards/organization-types.guard';
 
 @Global()
 @Module({
