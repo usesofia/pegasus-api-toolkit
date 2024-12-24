@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const base_1 = require("../base");
 const log_utils_1 = require("../utils/log.utils");
 const deepmerge_ts_1 = require("deepmerge-ts");
+const base_mongodb_session_adapter_1 = require("./base-mongodb-session.adapter");
 class BaseMongoDbRepositoryAdapter extends base_1.Base {
     constructor(className, baseConfig, logger, cls, model) {
         super(className, baseConfig, logger, cls);
@@ -22,24 +23,27 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         this.cls = cls;
         this.model = model;
     }
-    async create({ requester, request, }) {
+    async startSession() {
+        return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession());
+    }
+    async create({ requester, request, previousSession, }) {
         const created = new this.model({
             ...request.data,
             organization: requester.organization,
             createdByUser: requester.id,
             createdByOrganization: requester.organization,
         });
-        let saved = await created.save();
+        let saved = await created.save({ session: previousSession?.getSession() ?? null });
         if (request.populate) {
             saved = await saved.populate(request.populate.split(','));
         }
         return this.toEntity(saved);
     }
-    async findOne({ requester, request, }) {
+    async findOne({ requester, request, previousSession, }) {
         const doc = await this.model.findOne({
             _id: request.id,
             organization: requester.organization,
-        });
+        }).session(previousSession?.getSession() ?? null);
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
@@ -48,44 +52,64 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         }
         return this.toEntity(doc);
     }
-    async partialUpdate({ requester, request, }) {
-        const session = await this.model.db.startSession();
-        try {
-            let updated = await session.withTransaction(async () => {
-                const existing = await this.model.findOne({
-                    _id: request.id,
-                    organization: requester.organization,
-                }).session(session);
-                if (!existing) {
-                    throw new common_1.NotFoundException('Recurso não encontrado.');
-                }
-                const merged = (0, deepmerge_ts_1.deepmergeCustom)({
-                    mergeArrays: false,
-                })(existing.toObject(), request.data);
-                Object.assign(existing, merged);
-                await existing.save({ session });
-                if (request.populate) {
-                    await existing.populate(request.populate.split(','));
-                }
-                return existing;
-            });
-            if (!updated) {
-                throw new common_1.NotFoundException('Recurso não encontrado.');
-            }
-            return this.toEntity(updated);
+    async _partialUpdateTransactionFn({ requester, request, session, }) {
+        const existing = await this.model.findOne({
+            _id: request.id,
+            organization: requester.organization,
+        }).session(session);
+        if (!existing) {
+            throw new common_1.NotFoundException('Recurso não encontrado.');
         }
-        finally {
-            await session.endSession();
+        const merged = (0, deepmerge_ts_1.deepmergeCustom)({
+            mergeArrays: false,
+        })(existing.toObject(), request.data);
+        Object.assign(existing, merged);
+        await existing.save({ session });
+        if (request.populate) {
+            await existing.populate(request.populate.split(','));
+        }
+        return this.toEntity(existing);
+    }
+    async _partialUpdate({ requester, request, session, }) {
+        if (session.inTransaction()) {
+            return await this._partialUpdateTransactionFn({ requester, request, session });
+        }
+        else {
+            return await session.withTransaction(async () => {
+                return await this._partialUpdateTransactionFn({ requester, request, session });
+            });
         }
     }
-    async remove({ requester, request, }) {
+    async partialUpdate({ requester, request, previousSession, }) {
+        if (previousSession) {
+            return await this._partialUpdate({ requester, request, session: previousSession.getSession() });
+        }
+        else {
+            const session = await this.model.db.startSession();
+            let result;
+            try {
+                result = await this._partialUpdate({ requester, request, session: session });
+            }
+            finally {
+                await session.endSession();
+            }
+            return result;
+        }
+    }
+    async remove({ requester, request, previousSession, }) {
         await this.model.findOneAndDelete({
             _id: request.id,
             organization: requester.organization,
-        });
+        }).session(previousSession?.getSession() ?? null);
     }
 }
 exports.BaseMongoDbRepositoryAdapter = BaseMongoDbRepositoryAdapter;
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BaseMongoDbRepositoryAdapter.prototype, "startSession", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
@@ -98,6 +122,18 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], BaseMongoDbRepositoryAdapter.prototype, "findOne", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BaseMongoDbRepositoryAdapter.prototype, "_partialUpdateTransactionFn", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BaseMongoDbRepositoryAdapter.prototype, "_partialUpdate", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
