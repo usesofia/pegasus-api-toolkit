@@ -34,6 +34,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^8.1.0",
     "@sentry/node": "^8.47.0",
+    "deepmerge-ts": "^7.1.3",
     "google-auth-library": "^9.15.0",
     "ioredis": "^5.4.2",
     "luxon": "^3.5.0",

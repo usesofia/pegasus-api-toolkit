@@ -12,12 +12,15 @@ exports.BaseConfigSchema = zod_1.z.object({
         type: zod_1.z.enum(['mongodb']),
         uri: zod_1.z.string(),
     })),
-    auth: zod_1.z.object({
+    auth: zod_1.z
+        .object({
         applyAuthGuardToAllRoutes: zod_1.z.boolean(),
         applyGcpServiceAccountGuardToAllRoutes: zod_1.z.boolean(),
-    }).refine((data) => !(data.applyAuthGuardToAllRoutes && data.applyGcpServiceAccountGuardToAllRoutes), {
+    })
+        .refine((data) => !(data.applyAuthGuardToAllRoutes &&
+        data.applyGcpServiceAccountGuardToAllRoutes), {
         message: 'Cannot apply both auth guard and GCP service account guard to all routes simultaneously.',
-        path: ['auth']
+        path: ['auth'],
     }),
     logger: zod_1.z.object({
         level: zod_1.z.enum(['log', 'error', 'warn', 'debug']),

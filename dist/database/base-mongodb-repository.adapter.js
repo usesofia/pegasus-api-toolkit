@@ -13,6 +13,7 @@ exports.BaseMongoDbRepositoryAdapter = void 0;
 const common_1 = require("@nestjs/common");
 const base_1 = require("../base");
 const log_utils_1 = require("../utils/log.utils");
+const deepmerge_ts_1 = require("deepmerge-ts");
 class BaseMongoDbRepositoryAdapter extends base_1.Base {
     constructor(className, baseConfig, logger, cls, model) {
         super(className, baseConfig, logger, cls);
@@ -26,6 +27,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
             ...request.data,
             organization: requester.org,
             createdByUser: requester.id,
+            createdByOrganization: requester.org,
         });
         let saved = await created.save();
         if (request.populate) {
@@ -47,17 +49,34 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         return this.toEntity(doc);
     }
     async partialUpdate({ requester, request, }) {
-        let updated = await this.model.findOneAndUpdate({
-            _id: request.id,
-            organization: requester.org,
-        }, request.data, { new: true });
-        if (!updated) {
-            throw new common_1.NotFoundException('Recurso não encontrado.');
+        const session = await this.model.db.startSession();
+        try {
+            let updated = await session.withTransaction(async () => {
+                const existing = await this.model.findOne({
+                    _id: request.id,
+                    organization: requester.org,
+                }).session(session);
+                if (!existing) {
+                    throw new common_1.NotFoundException('Recurso não encontrado.');
+                }
+                const merged = (0, deepmerge_ts_1.deepmergeCustom)({
+                    mergeArrays: false,
+                })(existing.toObject(), request.data);
+                Object.assign(existing, merged);
+                await existing.save({ session });
+                if (request.populate) {
+                    await existing.populate(request.populate.split(','));
+                }
+                return existing;
+            });
+            if (!updated) {
+                throw new common_1.NotFoundException('Recurso não encontrado.');
+            }
+            return this.toEntity(updated);
         }
-        if (request.populate) {
-            updated = await updated.populate(request.populate.split(','));
+        finally {
+            await session.endSession();
         }
-        return this.toEntity(updated);
     }
     async remove({ requester, request, }) {
         await this.model.findOneAndDelete({
