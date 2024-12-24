@@ -42,9 +42,9 @@ export abstract class BaseMongoDbRepositoryAdapter<
   }): Promise<TEntity> {
     const created = new this.model({
       ...request.data,
-      organization: requester.org,
+      organization: requester.organization,
       createdByUser: requester.id,
-      createdByOrganization: requester.org,
+      createdByOrganization: requester.organization,
     });
 
     let saved = await created.save();
@@ -69,7 +69,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
   }): Promise<TEntity> {
     const doc = await this.model.findOne({
       _id: request.id,
-      organization: requester.org,
+      organization: requester.organization,
     });
 
     if (!doc) {
@@ -100,7 +100,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
       let updated = await session.withTransaction(async () => {
         const existing = await this.model.findOne({
           _id: request.id,
-          organization: requester.org,
+          organization: requester.organization,
         }).session(session);
 
         if (!existing) {
@@ -147,7 +147,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
   }): Promise<void> {
     await this.model.findOneAndDelete({
       _id: request.id,
-      organization: requester.org,
+      organization: requester.organization,
     });
   }
 }

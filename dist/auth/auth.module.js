@@ -12,10 +12,10 @@ const clerk_auth_service_adapter_1 = require("./adapters/clerk-auth-service.adap
 const auth_service_port_1 = require("./ports/auth-service.port");
 const auth_guard_1 = require("./guards/auth.guard");
 const core_1 = require("@nestjs/core");
-const org_roles_guard_1 = require("./guards/org-roles.guard");
-const org_types_guard_1 = require("./guards/org-types.guard");
 const gcp_service_account_guard_1 = require("./guards/gcp-service-account.guard");
 const base_config_entity_1 = require("../config/base-config.entity");
+const organization_roles_guard_1 = require("./guards/organization-roles.guard");
+const organization_types_guard_1 = require("./guards/organization-types.guard");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -33,12 +33,12 @@ exports.AuthModule = AuthModule = __decorate([
                 useClass: gcp_service_account_guard_1.GcpServiceAccountGuard,
             },
             {
-                provide: org_roles_guard_1.ORG_ROLES_GUARD,
-                useClass: org_roles_guard_1.OrgRolesGuard,
+                provide: organization_roles_guard_1.ORGANIZATION_ROLES_GUARD,
+                useClass: organization_roles_guard_1.OrganizationRolesGuard,
             },
             {
-                provide: org_types_guard_1.ORG_TYPES_GUARD,
-                useClass: org_types_guard_1.OrgTypesGuard,
+                provide: organization_types_guard_1.ORGANIZATION_TYPES_GUARD,
+                useClass: organization_types_guard_1.OrganizationTypesGuard,
             },
             {
                 provide: auth_service_port_1.AUTH_SERVICE_PORT,
@@ -56,17 +56,17 @@ exports.AuthModule = AuthModule = __decorate([
             },
             {
                 provide: core_1.APP_GUARD,
-                useFactory: (orgRolesGuard) => {
-                    return orgRolesGuard;
+                useFactory: (organizationRolesGuard) => {
+                    return organizationRolesGuard;
                 },
-                inject: [org_roles_guard_1.ORG_ROLES_GUARD],
+                inject: [organization_roles_guard_1.ORGANIZATION_ROLES_GUARD],
             },
             {
                 provide: core_1.APP_GUARD,
-                useFactory: (orgTypesGuard) => {
-                    return orgTypesGuard;
+                useFactory: (organizationTypesGuard) => {
+                    return organizationTypesGuard;
                 },
-                inject: [org_types_guard_1.ORG_TYPES_GUARD],
+                inject: [organization_types_guard_1.ORGANIZATION_TYPES_GUARD],
             },
             {
                 provide: core_1.APP_GUARD,

@@ -62,8 +62,8 @@ export class AuthController extends Base {
     const payload = body.extractPayload(CacheHitOnGetAuthUserPayload);
     await this.authService.getUser({
       userId: payload.userId,
-      orgId: payload.orgId,
-      orgRole: payload.orgRole,
+      organizationId: payload.organizationId,
+      organizationRole: payload.organizationRole,
       ignoreCache: true,
     });
   }

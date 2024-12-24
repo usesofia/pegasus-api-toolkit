@@ -1,33 +1,33 @@
 import { z } from 'zod';
-import { OrgRole } from '../constants/org-role.enum';
-import { OrgType } from '../constants/org-type.enum';
+import { OrganizationRole } from '../constants/organization-role.enum';
+import { OrganizationType } from '../constants/organization-type.enum';
 export declare const AuthUserEntitySchema: z.ZodObject<{
     id: z.ZodString;
     primaryEmail: z.ZodString;
     primaryPhoneNumber: z.ZodString;
     firstName: z.ZodString;
     lastName: z.ZodString;
-    org: z.ZodString;
-    orgRole: z.ZodNativeEnum<typeof OrgRole>;
-    orgType: z.ZodNativeEnum<typeof OrgType>;
+    organization: z.ZodString;
+    organizationRole: z.ZodNativeEnum<typeof OrganizationRole>;
+    organitzaionType: z.ZodNativeEnum<typeof OrganizationType>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     primaryEmail: string;
     primaryPhoneNumber: string;
     firstName: string;
     lastName: string;
-    org: string;
-    orgRole: OrgRole;
-    orgType: OrgType;
+    organization: string;
+    organizationRole: OrganizationRole;
+    organitzaionType: OrganizationType;
 }, {
     id: string;
     primaryEmail: string;
     primaryPhoneNumber: string;
     firstName: string;
     lastName: string;
-    org: string;
-    orgRole: OrgRole;
-    orgType: OrgType;
+    organization: string;
+    organizationRole: OrganizationRole;
+    organitzaionType: OrganizationType;
 }>;
 declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
     id: string;
@@ -35,27 +35,27 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
     primaryPhoneNumber: string;
     firstName: string;
     lastName: string;
-    org: string;
-    orgRole: OrgRole;
-    orgType: OrgType;
+    organization: string;
+    organizationRole: OrganizationRole;
+    organitzaionType: OrganizationType;
 }, z.ZodObjectDef<{
     id: z.ZodString;
     primaryEmail: z.ZodString;
     primaryPhoneNumber: z.ZodString;
     firstName: z.ZodString;
     lastName: z.ZodString;
-    org: z.ZodString;
-    orgRole: z.ZodNativeEnum<typeof OrgRole>;
-    orgType: z.ZodNativeEnum<typeof OrgType>;
+    organization: z.ZodString;
+    organizationRole: z.ZodNativeEnum<typeof OrganizationRole>;
+    organitzaionType: z.ZodNativeEnum<typeof OrganizationType>;
 }, "strip", z.ZodTypeAny>, {
     id: string;
     primaryEmail: string;
     primaryPhoneNumber: string;
     firstName: string;
     lastName: string;
-    org: string;
-    orgRole: OrgRole;
-    orgType: OrgType;
+    organization: string;
+    organizationRole: OrganizationRole;
+    organitzaionType: OrganizationType;
 }>;
 export declare class AuthUserEntity extends AuthUserEntity_base {
     static build(input: z.infer<typeof AuthUserEntitySchema>): AuthUserEntity;

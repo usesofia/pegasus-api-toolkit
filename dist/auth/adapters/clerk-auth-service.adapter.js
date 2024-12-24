@@ -33,16 +33,16 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
         });
         const user = await this.getUser({
             userId: jwt.sub,
-            orgId: jwt.org_id,
-            orgRole: jwt.org_role,
+            organizationId: jwt.org_id,
+            organizationRole: jwt.org_role,
         });
         return user;
     }
-    async getUser({ userId, orgId, orgRole, ignoreCache, }) {
+    async getUser({ userId, organizationId, organizationRole, ignoreCache, }) {
         const { clerkUser, clerkOrganization } = await this.getCachedClerkUserAndOrganization({
             userId,
-            orgId,
-            orgRole,
+            organizationId,
+            organizationRole,
             ignoreCache,
         });
         return auth_user_entity_1.AuthUserEntity.build({
@@ -51,16 +51,16 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
             primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
             firstName: clerkUser.firstName,
             lastName: clerkUser.lastName,
-            org: clerkOrganization.id,
-            orgRole: orgRole,
-            orgType: clerkOrganization.privateMetadata.type,
+            organization: clerkOrganization.id,
+            organizationRole: organizationRole,
+            organitzaionType: clerkOrganization.privateMetadata.type,
         });
     }
-    async getClerkUserAndOrganization({ userId, orgId, }) {
+    async getClerkUserAndOrganization({ userId, organizationId, }) {
         const [clerkUser, clerkOrganization] = await Promise.all([
             clerk_sdk_node_1.clerkClient.users.getUser(userId),
             clerk_sdk_node_1.clerkClient.organizations.getOrganization({
-                organizationId: orgId,
+                organizationId,
             }),
         ]);
         return {
@@ -68,23 +68,23 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
             clerkOrganization,
         };
     }
-    async getCachedClerkUserAndOrganization({ userId, orgId, orgRole, ignoreCache = false, }) {
+    async getCachedClerkUserAndOrganization({ userId, organizationId, organizationRole, ignoreCache = false, }) {
         const cacheKey = `${this.constructor.name}.getCachedClerkUserAndOrganization(${JSON.stringify({
             userId,
-            orgId,
+            organizationId,
         })})`;
         const cached = await this.cacheService.get(cacheKey);
         if (cached && !ignoreCache) {
             this.pubSubService.unsafePublish(this.baseConfig.pubSub.topics.cacheHitOnGetAuthUser, cache_hit_on_get_auth_user_payload_1.CacheHitOnGetAuthUserPayload.build({
                 userId,
-                orgId,
-                orgRole,
+                organizationId,
+                organizationRole,
             }));
             return JSON.parse(cached);
         }
         const { clerkUser, clerkOrganization } = await this.getClerkUserAndOrganization({
             userId,
-            orgId,
+            organizationId,
         });
         await this.cacheService.set(cacheKey, JSON.stringify({
             clerkUser,

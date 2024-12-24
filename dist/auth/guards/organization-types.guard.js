@@ -9,31 +9,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ORG_ROLES_GUARD = exports.OrgRolesGuard = void 0;
+exports.ORGANIZATION_TYPES_GUARD = exports.OrganizationTypesGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
-const org_roles_decorator_1 = require("../decorators/org-roles.decorator");
-let OrgRolesGuard = class OrgRolesGuard {
+const organization_types_decorator_1 = require("../decorators/organization-types.decorator");
+let OrganizationTypesGuard = class OrganizationTypesGuard {
     constructor(reflector) {
         this.reflector = reflector;
     }
     canActivate(context) {
-        const allowedRoles = this.reflector.get(org_roles_decorator_1.ORG_ROLES_KEY, context.getHandler());
-        if (!allowedRoles) {
+        const allowedTypes = this.reflector.get(organization_types_decorator_1.ORGANIZATION_TYPES_KEY, context.getHandler());
+        if (!allowedTypes) {
             return true;
         }
         const { user } = context.switchToHttp().getRequest();
-        const userOrgRole = user.orgRole;
-        if (!userOrgRole) {
+        const userOrgType = user.organitzaionType;
+        if (!userOrgType) {
             return false;
         }
-        return allowedRoles.includes(userOrgRole);
+        return allowedTypes.includes(userOrgType);
     }
 };
-exports.OrgRolesGuard = OrgRolesGuard;
-exports.OrgRolesGuard = OrgRolesGuard = __decorate([
+exports.OrganizationTypesGuard = OrganizationTypesGuard;
+exports.OrganizationTypesGuard = OrganizationTypesGuard = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [core_1.Reflector])
-], OrgRolesGuard);
-exports.ORG_ROLES_GUARD = Symbol('OrgRolesGuard');
-//# sourceMappingURL=org-roles.guard.js.map
+], OrganizationTypesGuard);
+exports.ORGANIZATION_TYPES_GUARD = Symbol('OrganizationTypesGuard');
+//# sourceMappingURL=organization-types.guard.js.map

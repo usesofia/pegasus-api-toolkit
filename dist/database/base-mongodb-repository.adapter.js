@@ -25,9 +25,9 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
     async create({ requester, request, }) {
         const created = new this.model({
             ...request.data,
-            organization: requester.org,
+            organization: requester.organization,
             createdByUser: requester.id,
-            createdByOrganization: requester.org,
+            createdByOrganization: requester.organization,
         });
         let saved = await created.save();
         if (request.populate) {
@@ -38,7 +38,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
     async findOne({ requester, request, }) {
         const doc = await this.model.findOne({
             _id: request.id,
-            organization: requester.org,
+            organization: requester.organization,
         });
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
@@ -54,7 +54,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
             let updated = await session.withTransaction(async () => {
                 const existing = await this.model.findOne({
                     _id: request.id,
-                    organization: requester.org,
+                    organization: requester.organization,
                 }).session(session);
                 if (!existing) {
                     throw new common_1.NotFoundException('Recurso não encontrado.');
@@ -81,7 +81,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
     async remove({ requester, request, }) {
         await this.model.findOneAndDelete({
             _id: request.id,
-            organization: requester.org,
+            organization: requester.organization,
         });
     }
 }

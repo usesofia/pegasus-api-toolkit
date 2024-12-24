@@ -1,15 +1,15 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthUserEntity } from '../entities/auth-user.entity';
-import { ORG_TYPES_KEY } from '../decorators/org-types.decorator';
+import { ORGANIZATION_TYPES_KEY } from '../decorators/organization-types.decorator';
 
 @Injectable()
-export class OrgTypesGuard implements CanActivate {
+export class OrganizationTypesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
     const allowedTypes = this.reflector.get<string[]>(
-      ORG_TYPES_KEY,
+      ORGANIZATION_TYPES_KEY,
       context.getHandler(),
     );
     if (!allowedTypes) {
@@ -17,7 +17,7 @@ export class OrgTypesGuard implements CanActivate {
     }
     const { user } = context.switchToHttp().getRequest();
 
-    const userOrgType = (user as AuthUserEntity).orgType;
+    const userOrgType = (user as AuthUserEntity).organitzaionType;
     if (!userOrgType) {
       return false;
     }
@@ -26,4 +26,4 @@ export class OrgTypesGuard implements CanActivate {
   }
 }
 
-export const ORG_TYPES_GUARD = Symbol('OrgTypesGuard');
+export const ORGANIZATION_TYPES_GUARD = Symbol('OrganizationTypesGuard');

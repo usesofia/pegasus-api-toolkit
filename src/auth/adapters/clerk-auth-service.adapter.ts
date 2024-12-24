@@ -8,8 +8,8 @@ import {
 import { AuthServicePort } from '../ports/auth-service.port';
 import { AuthUserEntity } from '../entities/auth-user.entity';
 import { BaseConfigEntity, BASE_CONFIG } from '../../config/base-config.entity';
-import { OrgRole } from '../constants/org-role.enum';
-import { OrgType } from '../constants/org-type.enum';
+import { OrganizationRole } from '../constants/organization-role.enum';
+import { OrganizationType } from '../constants/organization-type.enum';
 import {
   PubSubServicePort,
   PUB_SUB_SERVICE_PORT,
@@ -39,8 +39,8 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
 
     const user = await this.getUser({
       userId: jwt.sub,
-      orgId: jwt.org_id!,
-      orgRole: jwt.org_role!,
+      organizationId: jwt.org_id!,
+      organizationRole: jwt.org_role!,
     });
 
     return user;
@@ -48,20 +48,20 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
 
   async getUser({
     userId,
-    orgId,
-    orgRole,
+    organizationId,
+    organizationRole,
     ignoreCache,
   }: {
     userId: string;
-    orgId: string;
-    orgRole: string;
+    organizationId: string;
+    organizationRole: string;
     ignoreCache?: boolean;
   }): Promise<AuthUserEntity> {
     const { clerkUser, clerkOrganization } =
       await this.getCachedClerkUserAndOrganization({
         userId,
-        orgId,
-        orgRole,
+        organizationId,
+        organizationRole,
         ignoreCache,
       });
 
@@ -71,18 +71,18 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
       primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
       firstName: clerkUser.firstName!,
       lastName: clerkUser.lastName!,
-      org: clerkOrganization.id,
-      orgRole: orgRole as OrgRole,
-      orgType: clerkOrganization.privateMetadata.type as OrgType,
+      organization: clerkOrganization.id,
+      organizationRole: organizationRole as OrganizationRole,
+      organitzaionType: clerkOrganization.privateMetadata.type as OrganizationType,
     });
   }
 
   private async getClerkUserAndOrganization({
     userId,
-    orgId,
+    organizationId,
   }: {
     userId: string;
-    orgId: string;
+    organizationId: string;
   }): Promise<{
     clerkUser: User;
     clerkOrganization: Organization;
@@ -90,7 +90,7 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
     const [clerkUser, clerkOrganization] = await Promise.all([
       clerkClient.users.getUser(userId),
       clerkClient.organizations.getOrganization({
-        organizationId: orgId,
+        organizationId,
       }),
     ]);
 
@@ -102,13 +102,13 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
 
   private async getCachedClerkUserAndOrganization({
     userId,
-    orgId,
-    orgRole,
+    organizationId,
+    organizationRole,
     ignoreCache = false,
   }: {
     userId: string;
-    orgId: string;
-    orgRole: string;
+    organizationId: string;
+    organizationRole: string;
     ignoreCache?: boolean;
   }): Promise<{
     clerkUser: User;
@@ -117,7 +117,7 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
     const cacheKey = `${this.constructor.name}.getCachedClerkUserAndOrganization(${JSON.stringify(
       {
         userId,
-        orgId,
+        organizationId,
       },
     )})`;
 
@@ -128,8 +128,8 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
         this.baseConfig.pubSub.topics.cacheHitOnGetAuthUser,
         CacheHitOnGetAuthUserPayload.build({
           userId,
-          orgId,
-          orgRole,
+          organizationId,
+          organizationRole,
         }),
       );
       return JSON.parse(cached);
@@ -138,7 +138,7 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
     const { clerkUser, clerkOrganization } =
       await this.getClerkUserAndOrganization({
         userId,
-        orgId,
+        organizationId,
       });
 
     await this.cacheService.set(

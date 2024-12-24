@@ -9,10 +9,10 @@ export declare class ClerkAuthServiceAdapter implements AuthServicePort {
     private readonly pubSubService;
     constructor(baseConfig: BaseConfigEntity, cacheService: CacheServicePort, pubSubService: PubSubServicePort);
     verifyToken(token: string): Promise<AuthUserEntity>;
-    getUser({ userId, orgId, orgRole, ignoreCache, }: {
+    getUser({ userId, organizationId, organizationRole, ignoreCache, }: {
         userId: string;
-        orgId: string;
-        orgRole: string;
+        organizationId: string;
+        organizationRole: string;
         ignoreCache?: boolean;
     }): Promise<AuthUserEntity>;
     private getClerkUserAndOrganization;

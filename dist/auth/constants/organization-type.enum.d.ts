@@ -1,4 +1,4 @@
-export declare enum OrgType {
+export declare enum OrganizationType {
     LEAF = "LEAF",
     GROUP = "GROUP"
 }

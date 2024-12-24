@@ -4,13 +4,13 @@ export interface AuthServicePort {
   verifyToken(token: string): Promise<AuthUserEntity>;
   getUser({
     userId,
-    orgId,
-    orgRole,
+    organizationId,
+    organizationRole,
     ignoreCache,
   }: {
     userId: string;
-    orgId: string;
-    orgRole: string;
+    organizationId: string;
+    organizationRole: string;
     ignoreCache?: boolean;
   }): Promise<AuthUserEntity>;
 }

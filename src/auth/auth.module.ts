@@ -3,13 +3,13 @@ import { ClerkAuthServiceAdapter } from './adapters/clerk-auth-service.adapter';
 import { AUTH_SERVICE_PORT } from './ports/auth-service.port';
 import { AUTH_GUARD, AuthGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { ORG_ROLES_GUARD, OrgRolesGuard } from './guards/org-roles.guard';
-import { ORG_TYPES_GUARD, OrgTypesGuard } from './guards/org-types.guard';
 import {
   GCP_SERVICE_ACCOUNT_GUARD,
   GcpServiceAccountGuard,
 } from './guards/gcp-service-account.guard';
 import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
+import { ORGANIZATION_ROLES_GUARD, OrganizationRolesGuard } from './guards/organization-roles.guard';
+import { ORGANIZATION_TYPES_GUARD, OrganizationTypesGuard } from './guards/organization-types.guard';
 
 @Global()
 @Module({
@@ -24,12 +24,12 @@ import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
       useClass: GcpServiceAccountGuard,
     },
     {
-      provide: ORG_ROLES_GUARD,
-      useClass: OrgRolesGuard,
+      provide: ORGANIZATION_ROLES_GUARD,
+      useClass: OrganizationRolesGuard,
     },
     {
-      provide: ORG_TYPES_GUARD,
-      useClass: OrgTypesGuard,
+      provide: ORGANIZATION_TYPES_GUARD,
+      useClass: OrganizationTypesGuard,
     },
     {
       provide: AUTH_SERVICE_PORT,
@@ -47,17 +47,17 @@ import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
     },
     {
       provide: APP_GUARD,
-      useFactory: (orgRolesGuard: OrgRolesGuard) => {
-        return orgRolesGuard;
+      useFactory: (organizationRolesGuard: OrganizationRolesGuard) => {
+        return organizationRolesGuard;
       },
-      inject: [ORG_ROLES_GUARD],
+      inject: [ORGANIZATION_ROLES_GUARD],
     },
     {
       provide: APP_GUARD,
-      useFactory: (orgTypesGuard: OrgTypesGuard) => {
-        return orgTypesGuard;
+      useFactory: (organizationTypesGuard: OrganizationTypesGuard) => {
+        return organizationTypesGuard;
       },
-      inject: [ORG_TYPES_GUARD],
+      inject: [ORGANIZATION_TYPES_GUARD],
     },
     {
       provide: APP_GUARD,

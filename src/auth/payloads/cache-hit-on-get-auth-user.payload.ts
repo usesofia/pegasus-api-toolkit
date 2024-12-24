@@ -4,8 +4,8 @@ import { safeInstantiateEntity } from '../../utils/entity.utils';
 
 const CacheHitOnGetAuthUserPayloadSchema = z.object({
   userId: z.string(),
-  orgId: z.string(),
-  orgRole: z.string(),
+  organizationId: z.string(),
+  organizationRole: z.string(),
 });
 
 export class CacheHitOnGetAuthUserPayload extends createZodDto(
