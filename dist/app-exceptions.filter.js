@@ -77,6 +77,7 @@ let AppExceptionsFilter = class AppExceptionsFilter {
                 statusCode,
                 message,
                 errors,
+                exception,
             });
         }
         const responseBody = (0, entity_utils_1.safeInstantiateEntity)(ExceptionResponseEntity, {

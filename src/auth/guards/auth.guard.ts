@@ -52,7 +52,14 @@ export class AuthGuard extends Base implements CanActivate {
       const user = await this.authService.verifyToken(token);
       request.user = user;
       return true;
-    } catch (_) {
+    } catch (error) {
+      this.logWarn({
+        functionName: 'canActivate',
+        suffix: 'verifyTokenError',
+        data: {
+          error,
+        },
+      });
       throw new UnauthorizedException();
     }
   }

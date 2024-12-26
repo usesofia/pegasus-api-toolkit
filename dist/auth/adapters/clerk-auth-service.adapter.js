@@ -53,7 +53,7 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
             lastName: clerkUser.lastName,
             organization: clerkOrganization.id,
             organizationRole: organizationRole,
-            organitzaionType: clerkOrganization.privateMetadata
+            organitzaionType: clerkOrganization.publicMetadata
                 .type,
         });
     }

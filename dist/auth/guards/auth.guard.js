@@ -50,7 +50,14 @@ let AuthGuard = AuthGuard_1 = class AuthGuard extends base_1.Base {
             request.user = user;
             return true;
         }
-        catch (_) {
+        catch (error) {
+            this.logWarn({
+                functionName: 'canActivate',
+                suffix: 'verifyTokenError',
+                data: {
+                    error,
+                },
+            });
             throw new common_1.UnauthorizedException();
         }
     }

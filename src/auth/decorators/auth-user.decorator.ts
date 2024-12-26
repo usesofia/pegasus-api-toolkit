@@ -4,6 +4,6 @@ import { AuthUserEntity } from '../entities/auth-user.entity';
 export const AuthUser = createParamDecorator(
   (_: unknown, ctx: ExecutionContext): AuthUserEntity => {
     const request = ctx.switchToHttp().getRequest();
-    return request.user;
+    return AuthUserEntity.build(request.user);
   },
 );

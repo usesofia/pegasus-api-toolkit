@@ -86,6 +86,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
           statusCode,
           message,
           errors,
+          exception,
         },
       );
     }
