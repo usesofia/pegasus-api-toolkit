@@ -1,10 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  clerkClient,
-  Organization,
-  User,
-  verifyToken,
-} from '@clerk/clerk-sdk-node';
+import { clerkClient, Organization, User, verifyToken } from '@clerk/express';
 import { AuthServicePort } from '../ports/auth-service.port';
 import { AuthUserEntity } from '../entities/auth-user.entity';
 import { BaseConfigEntity, BASE_CONFIG } from '../../config/base-config.entity';

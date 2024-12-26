@@ -1,5 +1,6 @@
 export declare enum Environment {
     LOCAL = "local",
-    DEV = "dev"
+    DEV = "dev",
+    INTEGRATION_TEST = "integration-test"
 }
 export declare function getEnvironment(): Environment;

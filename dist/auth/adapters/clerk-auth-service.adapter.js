@@ -14,7 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClerkAuthServiceAdapter = void 0;
 const common_1 = require("@nestjs/common");
-const clerk_sdk_node_1 = require("@clerk/clerk-sdk-node");
+const express_1 = require("@clerk/express");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_config_entity_1 = require("../../config/base-config.entity");
 const pub_sub_service_port_1 = require("../../pub-sub/pub-sub-service.port");
@@ -28,7 +28,7 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
         this.pubSubService = pubSubService;
     }
     async verifyToken(token) {
-        const jwt = await (0, clerk_sdk_node_1.verifyToken)(token, {
+        const jwt = await (0, express_1.verifyToken)(token, {
             jwtKey: this.baseConfig.clerk.jwtKey,
         });
         const user = await this.getUser({
@@ -53,13 +53,14 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
             lastName: clerkUser.lastName,
             organization: clerkOrganization.id,
             organizationRole: organizationRole,
-            organitzaionType: clerkOrganization.privateMetadata.type,
+            organitzaionType: clerkOrganization.privateMetadata
+                .type,
         });
     }
     async getClerkUserAndOrganization({ userId, organizationId, }) {
         const [clerkUser, clerkOrganization] = await Promise.all([
-            clerk_sdk_node_1.clerkClient.users.getUser(userId),
-            clerk_sdk_node_1.clerkClient.organizations.getOrganization({
+            express_1.clerkClient.users.getUser(userId),
+            express_1.clerkClient.organizations.getOrganization({
                 organizationId,
             }),
         ]);

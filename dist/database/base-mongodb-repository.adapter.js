@@ -33,17 +33,21 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
             createdByUser: requester.id,
             createdByOrganization: requester.organization,
         });
-        let saved = await created.save({ session: previousSession?.getSession() ?? null });
+        let saved = await created.save({
+            session: previousSession?.getSession() ?? null,
+        });
         if (request.populate) {
             saved = await saved.populate(request.populate.split(','));
         }
         return this.toEntity(saved);
     }
     async findOne({ requester, request, previousSession, }) {
-        const doc = await this.model.findOne({
+        const doc = await this.model
+            .findOne({
             _id: request.id,
             organization: requester.organization,
-        }).session(previousSession?.getSession() ?? null);
+        })
+            .session(previousSession?.getSession() ?? null);
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
@@ -53,10 +57,12 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         return this.toEntity(doc);
     }
     async _partialUpdateTransactionFn({ requester, request, session, }) {
-        const existing = await this.model.findOne({
+        const existing = await this.model
+            .findOne({
             _id: request.id,
             organization: requester.organization,
-        }).session(session);
+        })
+            .session(session);
         if (!existing) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
@@ -72,23 +78,39 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
     }
     async _partialUpdate({ requester, request, session, }) {
         if (session.inTransaction()) {
-            return await this._partialUpdateTransactionFn({ requester, request, session });
+            return await this._partialUpdateTransactionFn({
+                requester,
+                request,
+                session,
+            });
         }
         else {
             return await session.withTransaction(async () => {
-                return await this._partialUpdateTransactionFn({ requester, request, session });
+                return await this._partialUpdateTransactionFn({
+                    requester,
+                    request,
+                    session,
+                });
             });
         }
     }
     async partialUpdate({ requester, request, previousSession, }) {
         if (previousSession) {
-            return await this._partialUpdate({ requester, request, session: previousSession.getSession() });
+            return await this._partialUpdate({
+                requester,
+                request,
+                session: previousSession.getSession(),
+            });
         }
         else {
             const session = await this.model.db.startSession();
             let result;
             try {
-                result = await this._partialUpdate({ requester, request, session: session });
+                result = await this._partialUpdate({
+                    requester,
+                    request,
+                    session: session,
+                });
             }
             finally {
                 await session.endSession();
@@ -97,10 +119,12 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         }
     }
     async remove({ requester, request, previousSession, }) {
-        await this.model.findOneAndDelete({
+        await this.model
+            .findOneAndDelete({
             _id: request.id,
             organization: requester.organization,
-        }).session(previousSession?.getSession() ?? null);
+        })
+            .session(previousSession?.getSession() ?? null);
     }
 }
 exports.BaseMongoDbRepositoryAdapter = BaseMongoDbRepositoryAdapter;

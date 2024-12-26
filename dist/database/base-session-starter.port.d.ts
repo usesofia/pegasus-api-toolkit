@@ -1,4 +1,4 @@
-import { BaseSessionPort } from "./base-session.port";
+import { BaseSessionPort } from './base-session.port';
 export interface BaseSessionStarterPort {
     startSession(): Promise<BaseSessionPort>;
 }
