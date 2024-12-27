@@ -63,6 +63,7 @@ export * from './utils/environment.utils';
 export * from './utils/entity.utils';
 export * from './utils/log.utils';
 export * from './utils/zod.utils';
+export * from './utils/channel.utils';
 
 // Base
 export * from './base';
