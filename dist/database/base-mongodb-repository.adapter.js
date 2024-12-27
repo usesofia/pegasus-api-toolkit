@@ -23,15 +23,18 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         this.cls = cls;
         this.model = model;
     }
+    getOwnerOrganization({ requester, }) {
+        return requester.organization.id;
+    }
     async startSession() {
         return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession());
     }
     async create({ requester, request, previousSession, }) {
         const created = new this.model({
             ...request.data,
-            organization: requester.organization,
+            organization: this.getOwnerOrganization({ requester }),
             createdByUser: requester.id,
-            createdByOrganization: requester.organization,
+            createdByOrganization: requester.organization.id,
         });
         let saved = await created.save({
             session: previousSession?.getSession() ?? null,
@@ -45,7 +48,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         const doc = await this.model
             .findOne({
             _id: request.id,
-            organization: requester.organization,
+            organization: this.getOwnerOrganization({ requester }),
         })
             .session(previousSession?.getSession() ?? null);
         if (!doc) {
@@ -60,7 +63,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         const existing = await this.model
             .findOne({
             _id: request.id,
-            organization: requester.organization,
+            organization: this.getOwnerOrganization({ requester }),
         })
             .session(session);
         if (!existing) {
@@ -122,12 +125,18 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         await this.model
             .findOneAndDelete({
             _id: request.id,
-            organization: requester.organization,
+            organization: this.getOwnerOrganization({ requester }),
         })
             .session(previousSession?.getSession() ?? null);
     }
 }
 exports.BaseMongoDbRepositoryAdapter = BaseMongoDbRepositoryAdapter;
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", String)
+], BaseMongoDbRepositoryAdapter.prototype, "getOwnerOrganization", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),

@@ -113,12 +113,15 @@ export declare const BaseConfigSchema: z.ZodObject<{
         };
     }>;
     clerk: z.ZodObject<{
+        domain: z.ZodString;
         secretKey: z.ZodString;
         jwtKey: z.ZodString;
     }, "strip", z.ZodTypeAny, {
+        domain: string;
         secretKey: string;
         jwtKey: string;
     }, {
+        domain: string;
         secretKey: string;
         jwtKey: string;
     }>;
@@ -205,6 +208,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
         };
     };
     clerk: {
+        domain: string;
         secretKey: string;
         jwtKey: string;
     };
@@ -255,6 +259,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
         };
     };
     clerk: {
+        domain: string;
         secretKey: string;
         jwtKey: string;
     };
@@ -306,6 +311,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         };
     };
     clerk: {
+        domain: string;
         secretKey: string;
         jwtKey: string;
     };
@@ -436,12 +442,15 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         };
     }>;
     clerk: z.ZodObject<{
+        domain: z.ZodString;
         secretKey: z.ZodString;
         jwtKey: z.ZodString;
     }, "strip", z.ZodTypeAny, {
+        domain: string;
         secretKey: string;
         jwtKey: string;
     }, {
+        domain: string;
         secretKey: string;
         jwtKey: string;
     }>;
@@ -528,6 +537,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         };
     };
     clerk: {
+        domain: string;
         secretKey: string;
         jwtKey: string;
     };

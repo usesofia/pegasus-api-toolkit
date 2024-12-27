@@ -36,6 +36,15 @@ export abstract class BaseMongoDbRepositoryAdapter<
   protected abstract toEntity(doc: TDoc): TEntity;
 
   @Log()
+  protected getOwnerOrganization({
+    requester,
+  }: {
+    requester: AuthUserEntity;
+  }): string {
+    return requester.organization.id;
+  }
+
+  @Log()
   async startSession(): Promise<BaseSessionPort> {
     return new BaseMongoDbSessionAdapter(await this.model.db.startSession());
   }
@@ -55,9 +64,9 @@ export abstract class BaseMongoDbRepositoryAdapter<
   }): Promise<TEntity> {
     const created = new this.model({
       ...request.data,
-      organization: requester.organization,
+      organization: this.getOwnerOrganization({ requester }),
       createdByUser: requester.id,
-      createdByOrganization: requester.organization,
+      createdByOrganization: requester.organization.id,
     });
 
     let saved = await created.save({
@@ -87,7 +96,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
     const doc = await this.model
       .findOne({
         _id: request.id,
-        organization: requester.organization,
+        organization: this.getOwnerOrganization({ requester }),
       })
       .session(previousSession?.getSession() ?? null);
 
@@ -115,7 +124,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
     const existing = await this.model
       .findOne({
         _id: request.id,
-        organization: requester.organization,
+        organization: this.getOwnerOrganization({ requester }),
       })
       .session(session);
 
@@ -221,7 +230,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
     await this.model
       .findOneAndDelete({
         _id: request.id,
-        organization: requester.organization,
+        organization: this.getOwnerOrganization({ requester }),
       })
       .session(previousSession?.getSession() ?? null);
   }

@@ -51,6 +51,7 @@ export const BaseConfigSchema = z.object({
     }),
   }),
   clerk: z.object({
+    domain: z.string(),
     secretKey: z.string(),
     jwtKey: z.string(),
   }),

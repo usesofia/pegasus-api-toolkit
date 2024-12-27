@@ -10,9 +10,21 @@ export const AuthUserEntitySchema = z.object({
   primaryPhoneNumber: z.string(),
   firstName: z.string(),
   lastName: z.string(),
-  organization: z.string(),
-  organizationRole: z.nativeEnum(OrganizationRole),
-  organitzaionType: z.nativeEnum(OrganizationType),
+  organization: z.object({
+    id: z.string(),
+    name: z.string(),
+    role: z.nativeEnum(OrganizationRole),
+    type: z.nativeEnum(OrganizationType),
+    parent: z.object({
+      id: z.string(),
+      name: z.string(),
+      sharedContacts: z.boolean(),
+    }).nullish(),
+    children: z.array(z.object({
+      id: z.string(),
+      name: z.string(),
+    })).nullish(),
+  }),
 });
 
 export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {

@@ -12,9 +12,21 @@ exports.AuthUserEntitySchema = zod_1.z.object({
     primaryPhoneNumber: zod_1.z.string(),
     firstName: zod_1.z.string(),
     lastName: zod_1.z.string(),
-    organization: zod_1.z.string(),
-    organizationRole: zod_1.z.nativeEnum(organization_role_enum_1.OrganizationRole),
-    organitzaionType: zod_1.z.nativeEnum(organization_type_enum_1.OrganizationType),
+    organization: zod_1.z.object({
+        id: zod_1.z.string(),
+        name: zod_1.z.string(),
+        role: zod_1.z.nativeEnum(organization_role_enum_1.OrganizationRole),
+        type: zod_1.z.nativeEnum(organization_type_enum_1.OrganizationType),
+        parent: zod_1.z.object({
+            id: zod_1.z.string(),
+            name: zod_1.z.string(),
+            sharedContacts: zod_1.z.boolean(),
+        }).nullish(),
+        children: zod_1.z.array(zod_1.z.object({
+            id: zod_1.z.string(),
+            name: zod_1.z.string(),
+        })).nullish(),
+    }),
 });
 class AuthUserEntity extends (0, nestjs_zod_1.createZodDto)(exports.AuthUserEntitySchema) {
     static build(input) {

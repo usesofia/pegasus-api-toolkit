@@ -16,5 +16,7 @@ export declare class ClerkAuthServiceAdapter implements AuthServicePort {
         ignoreCache?: boolean;
     }): Promise<AuthUserEntity>;
     private getClerkUserAndOrganization;
+    private getClerkOrganization;
     private getCachedClerkUserAndOrganization;
+    private getCachedClerkOrganization;
 }

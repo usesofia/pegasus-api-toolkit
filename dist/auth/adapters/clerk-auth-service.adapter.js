@@ -45,16 +45,46 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
             organizationRole,
             ignoreCache,
         });
+        let parentOrganization = null;
+        if (clerkOrganization.publicMetadata.parent) {
+            parentOrganization = await this.getCachedClerkOrganization({
+                organizationId: clerkOrganization.publicMetadata.parent,
+                ignoreCache,
+            });
+        }
+        let childrenOrganizations = null;
+        if (clerkOrganization.publicMetadata.children) {
+            childrenOrganizations = await Promise.all(clerkOrganization.publicMetadata.children.map((child) => this.getCachedClerkOrganization({
+                organizationId: child,
+                ignoreCache,
+            })));
+        }
         return auth_user_entity_1.AuthUserEntity.build({
             id: clerkUser.id,
             primaryEmail: clerkUser.emailAddresses[0].emailAddress,
             primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
             firstName: clerkUser.firstName,
             lastName: clerkUser.lastName,
-            organization: clerkOrganization.id,
-            organizationRole: organizationRole,
-            organitzaionType: clerkOrganization.publicMetadata
-                .type,
+            organization: {
+                id: clerkOrganization.id,
+                name: clerkOrganization.name,
+                role: organizationRole,
+                type: clerkOrganization.publicMetadata
+                    .type,
+                parent: parentOrganization
+                    ? {
+                        id: parentOrganization.id,
+                        name: parentOrganization.name,
+                        sharedContacts: parentOrganization.publicMetadata.sharedContacts,
+                    }
+                    : null,
+                children: childrenOrganizations
+                    ? childrenOrganizations.map((child) => ({
+                        id: child.id,
+                        name: child.name,
+                    }))
+                    : null,
+            },
         });
     }
     async getClerkUserAndOrganization({ userId, organizationId, }) {
@@ -68,6 +98,11 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
             clerkUser,
             clerkOrganization,
         };
+    }
+    async getClerkOrganization({ organizationId, }) {
+        return await express_1.clerkClient.organizations.getOrganization({
+            organizationId,
+        });
     }
     async getCachedClerkUserAndOrganization({ userId, organizationId, organizationRole, ignoreCache = false, }) {
         const cacheKey = `${this.constructor.name}.getCachedClerkUserAndOrganization(${JSON.stringify({
@@ -97,6 +132,20 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
             clerkUser,
             clerkOrganization,
         };
+    }
+    async getCachedClerkOrganization({ organizationId, ignoreCache = false, }) {
+        const cacheKey = `${this.constructor.name}.getCachedClerkOrganization(${JSON.stringify({
+            organizationId,
+        })})`;
+        const cached = await this.cacheService.get(cacheKey);
+        if (cached && !ignoreCache) {
+            return JSON.parse(cached);
+        }
+        const organization = await this.getClerkOrganization({
+            organizationId,
+        });
+        await this.cacheService.set(cacheKey, JSON.stringify(organization));
+        return organization;
     }
 };
 exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter;

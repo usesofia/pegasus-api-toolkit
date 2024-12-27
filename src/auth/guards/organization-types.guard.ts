@@ -17,7 +17,7 @@ export class OrganizationTypesGuard implements CanActivate {
     }
     const { user } = context.switchToHttp().getRequest();
 
-    const userOrgType = (user as AuthUserEntity).organitzaionType;
+    const userOrgType = (user as AuthUserEntity).organization.type;
     if (!userOrgType) {
       return false;
     }

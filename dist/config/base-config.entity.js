@@ -44,6 +44,7 @@ exports.BaseConfigSchema = zod_1.z.object({
         }),
     }),
     clerk: zod_1.z.object({
+        domain: zod_1.z.string(),
         secretKey: zod_1.z.string(),
         jwtKey: zod_1.z.string(),
     }),

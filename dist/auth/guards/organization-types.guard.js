@@ -23,7 +23,7 @@ let OrganizationTypesGuard = class OrganizationTypesGuard {
             return true;
         }
         const { user } = context.switchToHttp().getRequest();
-        const userOrgType = user.organitzaionType;
+        const userOrgType = user.organization.type;
         if (!userOrgType) {
             return false;
         }

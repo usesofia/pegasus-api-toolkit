@@ -23,7 +23,7 @@ let OrganizationRolesGuard = class OrganizationRolesGuard {
             return true;
         }
         const { user } = context.switchToHttp().getRequest();
-        const userOrgRole = user.organizationRole;
+        const userOrgRole = user.organization.role;
         if (!userOrgRole) {
             return false;
         }

@@ -60,16 +60,54 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
         ignoreCache,
       });
 
+    let parentOrganization: Organization | null = null;
+
+    if (clerkOrganization.publicMetadata!.parent) {
+      parentOrganization = await this.getCachedClerkOrganization({
+        organizationId: clerkOrganization.publicMetadata!.parent as string,
+        ignoreCache,
+      });
+    }
+
+    let childrenOrganizations: Organization[] | null = null;
+
+    if (clerkOrganization.publicMetadata!.children) {
+      childrenOrganizations = await Promise.all(
+        (clerkOrganization.publicMetadata!.children as string[]).map((child) =>
+          this.getCachedClerkOrganization({
+            organizationId: child as string,
+            ignoreCache,
+          }),
+        ),
+      );
+    }
+
     return AuthUserEntity.build({
       id: clerkUser.id,
       primaryEmail: clerkUser.emailAddresses[0].emailAddress,
       primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
       firstName: clerkUser.firstName!,
       lastName: clerkUser.lastName!,
-      organization: clerkOrganization.id,
-      organizationRole: organizationRole as OrganizationRole,
-      organitzaionType: clerkOrganization.publicMetadata!
-        .type as OrganizationType,
+      organization: {
+        id: clerkOrganization.id,
+        name: clerkOrganization.name,
+        role: organizationRole as OrganizationRole,
+        type: clerkOrganization.publicMetadata!
+          .type as OrganizationType,
+        parent: parentOrganization
+          ? {
+              id: parentOrganization.id,
+              name: parentOrganization.name,
+              sharedContacts: parentOrganization.publicMetadata!.sharedContacts as boolean,
+            }
+          : null,
+        children: childrenOrganizations
+          ? childrenOrganizations.map((child) => ({
+              id: child.id,
+              name: child.name,
+            }))
+          : null,
+      },
     });
   }
 
@@ -94,6 +132,16 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
       clerkUser,
       clerkOrganization,
     };
+  }
+
+  private async getClerkOrganization({
+    organizationId,
+  }: {
+    organizationId: string;
+  }): Promise<Organization> {
+    return await clerkClient.organizations.getOrganization({
+      organizationId,
+    });
   }
 
   private async getCachedClerkUserAndOrganization({
@@ -152,5 +200,33 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
       clerkUser,
       clerkOrganization,
     };
+  }
+
+  private async getCachedClerkOrganization({
+    organizationId,
+    ignoreCache = false,
+  }: {
+    organizationId: string;
+    ignoreCache?: boolean;
+  }): Promise<Organization> {
+    const cacheKey = `${this.constructor.name}.getCachedClerkOrganization(${JSON.stringify(
+      {
+        organizationId,
+      },
+    )})`;
+
+    const cached = await this.cacheService.get(cacheKey);
+
+    if (cached && !ignoreCache) {
+      return JSON.parse(cached);
+    }
+
+    const organization = await this.getClerkOrganization({
+      organizationId,
+    });
+
+    await this.cacheService.set(cacheKey, JSON.stringify(organization));
+
+    return organization;
   }
 }

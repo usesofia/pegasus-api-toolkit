@@ -20,6 +20,9 @@ export declare abstract class BaseMongoDbRepositoryAdapter<TDoc extends Document
     protected readonly model: Model<TDoc>;
     constructor(className: string, baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, model: Model<TDoc>);
     protected abstract toEntity(doc: TDoc): TEntity;
+    protected getOwnerOrganization({ requester, }: {
+        requester: AuthUserEntity;
+    }): string;
     startSession(): Promise<BaseSessionPort>;
     create({ requester, request, previousSession, }: {
         requester: AuthUserEntity;
