@@ -16,7 +16,9 @@ export class OrganizationRolesGuard implements CanActivate {
       return true;
     }
     const { user } = context.switchToHttp().getRequest();
+
     const userOrgRole = (user as AuthUserEntity).organization.role;
+    
     if (!userOrgRole) {
       return false;
     }
