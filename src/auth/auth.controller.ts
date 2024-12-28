@@ -59,12 +59,13 @@ export class AuthController extends Base {
   async refreshAuthUserOnCache(
     @Body() body: PubSubMessageBodyDto,
   ): Promise<void> {
-    const payload = body.extractPayload(CacheHitOnGetAuthUserPayload);
-    await this.authService.getUser({
-      userId: payload.userId,
-      organizationId: payload.organizationId,
-      organizationRole: payload.organizationRole,
-      ignoreCache: true,
-    });
+    return;
+    // const payload = body.extractPayload(CacheHitOnGetAuthUserPayload);
+    // await this.authService.getUser({
+    //   userId: payload.userId,
+    //   organizationId: payload.organizationId,
+    //   organizationRole: payload.organizationRole,
+    //   ignoreCache: true,
+    // });
   }
 }

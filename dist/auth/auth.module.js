@@ -16,6 +16,7 @@ const gcp_service_account_guard_1 = require("./guards/gcp-service-account.guard"
 const base_config_entity_1 = require("../config/base-config.entity");
 const organization_roles_guard_1 = require("./guards/organization-roles.guard");
 const organization_types_guard_1 = require("./guards/organization-types.guard");
+const auth_controller_1 = require("./auth.controller");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -79,7 +80,7 @@ exports.AuthModule = AuthModule = __decorate([
                 inject: [base_config_entity_1.BASE_CONFIG, gcp_service_account_guard_1.GCP_SERVICE_ACCOUNT_GUARD],
             },
         ],
-        controllers: [],
+        controllers: [auth_controller_1.AuthController],
         exports: [],
     })
 ], AuthModule);

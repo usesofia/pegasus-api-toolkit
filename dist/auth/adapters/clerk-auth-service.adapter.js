@@ -126,7 +126,7 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
             clerkUser,
             clerkOrganization,
         }), luxon_1.Duration.fromObject({
-            days: 7,
+            hours: 1,
         }).as('seconds'));
         return {
             clerkUser,
@@ -144,7 +144,9 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
         const organization = await this.getClerkOrganization({
             organizationId,
         });
-        await this.cacheService.set(cacheKey, JSON.stringify(organization));
+        await this.cacheService.set(cacheKey, JSON.stringify(organization), luxon_1.Duration.fromObject({
+            hours: 1,
+        }).as('seconds'));
         return organization;
     }
 };

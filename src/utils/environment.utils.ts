@@ -16,3 +16,11 @@ export function getEnvironment(): Environment {
       throw new Error('Invalid environment.');
   }
 }
+
+export function isLocalEnvironment(): boolean {
+  return getEnvironment() === Environment.LOCAL;
+}
+
+export function isIntegrationTestEnvironment(): boolean {
+  return getEnvironment() === Environment.INTEGRATION_TEST;
+}

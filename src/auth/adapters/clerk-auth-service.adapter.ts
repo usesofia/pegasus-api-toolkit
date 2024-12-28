@@ -192,7 +192,7 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
         clerkOrganization,
       }),
       Duration.fromObject({
-        days: 7,
+        hours: 1,
       }).as('seconds'),
     );
 
@@ -225,7 +225,13 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
       organizationId,
     });
 
-    await this.cacheService.set(cacheKey, JSON.stringify(organization));
+    await this.cacheService.set(
+      cacheKey,
+      JSON.stringify(organization),
+      Duration.fromObject({
+        hours: 1,
+      }).as('seconds'),
+    );
 
     return organization;
   }

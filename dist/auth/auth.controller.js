@@ -20,7 +20,6 @@ const swagger_1 = require("@nestjs/swagger");
 const auth_service_port_1 = require("./ports/auth-service.port");
 const auth_user_entity_1 = require("./entities/auth-user.entity");
 const pub_sub_message_dto_1 = require("../pub-sub/pub-sub-message.dto");
-const cache_hit_on_get_auth_user_payload_1 = require("./payloads/cache-hit-on-get-auth-user.payload");
 const base_config_entity_1 = require("../config/base-config.entity");
 const gcp_service_account_guard_1 = require("./guards/gcp-service-account.guard");
 const ignore_auth_guard_decorator_1 = require("./decorators/ignore-auth-guard.decorator");
@@ -37,13 +36,7 @@ let AuthController = AuthController_1 = class AuthController extends base_1.Base
         this.authService = authService;
     }
     async refreshAuthUserOnCache(body) {
-        const payload = body.extractPayload(cache_hit_on_get_auth_user_payload_1.CacheHitOnGetAuthUserPayload);
-        await this.authService.getUser({
-            userId: payload.userId,
-            organizationId: payload.organizationId,
-            organizationRole: payload.organizationRole,
-            ignoreCache: true,
-        });
+        return;
     }
 };
 exports.AuthController = AuthController;

@@ -16,6 +16,7 @@ import {
   ORGANIZATION_TYPES_GUARD,
   OrganizationTypesGuard,
 } from './guards/organization-types.guard';
+import { AuthController } from './auth.controller';
 
 @Global()
 @Module({
@@ -79,7 +80,7 @@ import {
       inject: [BASE_CONFIG, GCP_SERVICE_ACCOUNT_GUARD],
     },
   ],
-  controllers: [],
+  controllers: [AuthController],
   exports: [],
 })
 export class AuthModule {}

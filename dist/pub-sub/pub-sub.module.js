@@ -11,15 +11,20 @@ const common_1 = require("@nestjs/common");
 const pub_sub_service_port_1 = require("./pub-sub-service.port");
 const gcp_pub_sub_service_adapter_1 = require("./gcp-pub-sub-service.adapter");
 const gcp_pub_sub_module_1 = require("./gcp-pub-sub.module");
+const mongodb_pub_sub_service_adapter_1 = require("./mongodb-pub-sub-service.adapter");
+const environment_utils_1 = require("../utils/environment.utils");
+const mongodb_pub_sub_event_module_1 = require("./mongodb-pub-sub-event.module");
 let PubSubModule = class PubSubModule {
 };
 exports.PubSubModule = PubSubModule;
 exports.PubSubModule = PubSubModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
-        imports: [gcp_pub_sub_module_1.GcpPubSubModule],
+        imports: [gcp_pub_sub_module_1.GcpPubSubModule, mongodb_pub_sub_event_module_1.MongoDbPubSubEventModule],
         providers: [
-            { provide: pub_sub_service_port_1.PUB_SUB_SERVICE_PORT, useClass: gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter },
+            {
+                provide: pub_sub_service_port_1.PUB_SUB_SERVICE_PORT, useClass: (0, environment_utils_1.isLocalEnvironment)() || (0, environment_utils_1.isIntegrationTestEnvironment)() ? mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter : gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter
+            },
         ],
         exports: [pub_sub_service_port_1.PUB_SUB_SERVICE_PORT],
     })

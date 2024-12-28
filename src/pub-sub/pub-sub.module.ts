@@ -2,13 +2,20 @@ import { Global, Module } from '@nestjs/common';
 import { PUB_SUB_SERVICE_PORT } from './pub-sub-service.port';
 import { GcpPubSubServiceAdapter } from './gcp-pub-sub-service.adapter';
 import { GcpPubSubModule } from './gcp-pub-sub.module';
+import { MongoDbPubSubServiceAdapter } from './mongodb-pub-sub-service.adapter';
+import { isIntegrationTestEnvironment, isLocalEnvironment } from '../utils/environment.utils';
+import { MongoDbPubSubEventModule } from './mongodb-pub-sub-event.module';
 
 @Global()
 @Module({
-  imports: [GcpPubSubModule],
+  imports: [GcpPubSubModule, MongoDbPubSubEventModule],
   providers: [
-    { provide: PUB_SUB_SERVICE_PORT, useClass: GcpPubSubServiceAdapter },
+    
+    {
+      provide: PUB_SUB_SERVICE_PORT, useClass:
+        isLocalEnvironment() || isIntegrationTestEnvironment() ? MongoDbPubSubServiceAdapter : GcpPubSubServiceAdapter
+    },
   ],
   exports: [PUB_SUB_SERVICE_PORT],
 })
-export class PubSubModule {}
+export class PubSubModule { }

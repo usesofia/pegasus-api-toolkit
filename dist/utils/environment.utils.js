@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Environment = void 0;
 exports.getEnvironment = getEnvironment;
+exports.isLocalEnvironment = isLocalEnvironment;
+exports.isIntegrationTestEnvironment = isIntegrationTestEnvironment;
 var Environment;
 (function (Environment) {
     Environment["LOCAL"] = "local";
@@ -19,5 +21,11 @@ function getEnvironment() {
         default:
             throw new Error('Invalid environment.');
     }
+}
+function isLocalEnvironment() {
+    return getEnvironment() === Environment.LOCAL;
+}
+function isIntegrationTestEnvironment() {
+    return getEnvironment() === Environment.INTEGRATION_TEST;
 }
 //# sourceMappingURL=environment.utils.js.map
