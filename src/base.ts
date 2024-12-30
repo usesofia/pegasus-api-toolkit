@@ -16,63 +16,65 @@ export class Base {
     level,
     suffix,
     data,
+    correlationId,
   }: {
     functionName: string;
     level: LogLevel;
     suffix: string;
     data: any;
+    correlationId?: string;
   }) {
     switch (level) {
       case 'log':
         this.logger.log(
-          `[${this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
+          `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
-            [correlationIdKey]: this.cls.getId(),
+            [correlationIdKey]: correlationId ?? this.cls.getId(),
             ...data,
           },
         );
         break;
       case 'error':
         this.logger.error(
-          `[${this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
+          `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
-            [correlationIdKey]: this.cls.getId(),
+            [correlationIdKey]: correlationId ?? this.cls.getId(),
             ...data,
           },
         );
         break;
       case 'warn':
         this.logger.warn(
-          `[${this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
+          `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
-            [correlationIdKey]: this.cls.getId(),
+            [correlationIdKey]: correlationId ?? this.cls.getId(),
             ...data,
           },
         );
         break;
       case 'debug':
         this.logger.debug!(
-          `[${this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
+          `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
-            [correlationIdKey]: this.cls.getId(),
+            [correlationIdKey]: correlationId ?? this.cls.getId(),
             ...data,
           },
         );
         break;
       case 'verbose':
         this.logger.verbose!(
-          `[${this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
+          `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
-            [correlationIdKey]: this.cls.getId(),
+            [correlationIdKey]: correlationId ?? this.cls.getId(),
             ...data,
           },
         );
         break;
       case 'fatal':
         this.logger.fatal!(
-          `[${this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
+          `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
-            [correlationIdKey]: this.cls.getId(),
+            [correlationIdKey]: correlationId ?? this.cls.getId(),
             ...data,
           },
         );
@@ -86,16 +88,19 @@ export class Base {
     functionName,
     suffix,
     data,
+    correlationId,
   }: {
     functionName: string;
     suffix: string;
     data: any;
+    correlationId?: string;
   }) {
     this.logLevel({
       functionName,
       level: 'log',
       suffix,
       data,
+      correlationId,
     });
   }
 
@@ -103,59 +108,69 @@ export class Base {
     functionName,
     suffix,
     data,
+    correlationId,
   }: {
     functionName: string;
     suffix: string;
     data: any;
+    correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'debug', suffix, data });
+    this.logLevel({ functionName, level: 'debug', suffix, data, correlationId });
   }
 
   logError({
     functionName,
     suffix,
     data,
+    correlationId,
   }: {
     functionName: string;
     suffix: string;
     data: any;
+    correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'error', suffix, data });
+    this.logLevel({ functionName, level: 'error', suffix, data, correlationId });
   }
 
   logWarn({
     functionName,
     suffix,
     data,
+    correlationId,
   }: {
     functionName: string;
     suffix: string;
     data: any;
+    correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'warn', suffix, data });
+    this.logLevel({ functionName, level: 'warn', suffix, data, correlationId });
   }
 
   logFatal({
     functionName,
     suffix,
     data,
+    correlationId,
   }: {
     functionName: string;
     suffix: string;
     data: any;
+    correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'fatal', suffix, data });
+    this.logLevel({ functionName, level: 'fatal', suffix, data, correlationId });
   }
 
   logVerbose({
     functionName,
     suffix,
     data,
+    correlationId,
   }: {
     functionName: string;
     suffix: string;
     data: any;
+    correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'verbose', suffix, data });
+    this.logLevel({ functionName, level: 'verbose', suffix, data, correlationId });
   }
 }

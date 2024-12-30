@@ -33,11 +33,12 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
         this.publishBuffer = [];
         this.publishBufferFlushInterval = setInterval(() => this.flushPublishBuffer({ max: 256 }), 1000);
     }
-    async publish(topic, payload) {
+    async publish({ topic, payload, correlationId, }) {
         const messageId = await this.pubSub
             .topic(topic)
             .publishMessage({ json: payload });
         this.log({
+            correlationId,
             functionName: 'publish',
             suffix: 'success',
             data: {
@@ -47,11 +48,12 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
             },
         });
     }
-    unsafePublish(topic, payload) {
+    unsafePublish({ topic, payload, }) {
         if (this.publishBuffer.length >= MAX_PUBLISH_BUFFER_SIZE) {
             throw new Error(`Publish buffer is full. It has ${this.publishBuffer.length} items.`);
         }
         this.publishBuffer.push({
+            correlationId: this.cls.getId(),
             id: (0, uuid_1.v4)(),
             topic,
             payload,
@@ -66,11 +68,16 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
         const successItemIdsPublished = [];
         await Promise.all(itemsToBePublished.map(async (item) => {
             try {
-                await this.publish(item.topic, item.payload);
+                await this.publish({
+                    topic: item.topic,
+                    payload: item.payload,
+                    correlationId: item.correlationId,
+                });
                 successItemIdsPublished.push(item.id);
             }
             catch (error) {
                 this.logWarn({
+                    correlationId: item.correlationId,
                     functionName: 'flushPublishBuffer',
                     suffix: 'itemFailedToBePublished',
                     data: {

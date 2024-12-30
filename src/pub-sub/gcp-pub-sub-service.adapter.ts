@@ -11,6 +11,7 @@ import { Base } from '../base';
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
 interface PublishBufferItem {
+  correlationId: string;
   id: string;
   topic: string;
   payload: Record<string, any>;
@@ -37,11 +38,22 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     );
   }
 
-  async publish(topic: string, payload: Record<string, any>): Promise<void> {
+  async publish(
+    {
+      topic,
+      payload,
+      correlationId,
+    }: {
+      topic: string;
+      payload: Record<string, any>;
+      correlationId?: string;
+    },
+  ): Promise<void> {
     const messageId = await this.pubSub
       .topic(topic)
       .publishMessage({ json: payload });
     this.log({
+      correlationId,
       functionName: 'publish',
       suffix: 'success',
       data: {
@@ -52,13 +64,20 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     });
   }
 
-  unsafePublish(topic: string, payload: Record<string, any>): void {
+  unsafePublish({
+    topic,
+    payload,
+  }: {
+    topic: string;
+    payload: Record<string, any>;
+  }): void {
     if (this.publishBuffer.length >= MAX_PUBLISH_BUFFER_SIZE) {
       throw new Error(
         `Publish buffer is full. It has ${this.publishBuffer.length} items.`,
       );
     }
     this.publishBuffer.push({
+      correlationId: this.cls.getId(),
       id: uuidv4(),
       topic,
       payload,
@@ -78,10 +97,15 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     await Promise.all(
       itemsToBePublished.map(async (item) => {
         try {
-          await this.publish(item.topic, item.payload);
+          await this.publish({
+            topic: item.topic,
+            payload: item.payload,
+            correlationId: item.correlationId,
+          });
           successItemIdsPublished.push(item.id);
         } catch (error) {
           this.logWarn({
+            correlationId: item.correlationId,
             functionName: 'flushPublishBuffer',
             suffix: 'itemFailedToBePublished',
             data: {

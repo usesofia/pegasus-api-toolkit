@@ -12,6 +12,7 @@ import { PUB_SUB_EVENT_MODEL } from './mongodb-pub-sub-event.module';
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
 interface PublishBufferItem {
+  correlationId: string;
   id: string;
   topic: string;
   payload: Record<string, any>;
@@ -38,7 +39,15 @@ export class MongoDbPubSubServiceAdapter extends Base implements PubSubServicePo
     );
   }
 
-  async publish(topic: string, payload: Record<string, any>): Promise<void> {
+  async publish({
+    topic,
+    payload,
+    correlationId,
+  }: {
+    topic: string;
+    payload: Record<string, any>;
+    correlationId?: string;
+  }): Promise<void> {
     const event = new this.pubSubEventModel({
       topic,
       payload,
@@ -47,6 +56,7 @@ export class MongoDbPubSubServiceAdapter extends Base implements PubSubServicePo
     await event.save();
 
     this.log({
+      correlationId,
       functionName: 'publish',
       suffix: 'success',
       data: {
@@ -57,13 +67,20 @@ export class MongoDbPubSubServiceAdapter extends Base implements PubSubServicePo
     });
   }
 
-  unsafePublish(topic: string, payload: Record<string, any>): void {
+  unsafePublish({
+    topic,
+    payload,
+  }: {
+    topic: string;
+    payload: Record<string, any>;
+  }): void {
     if (this.publishBuffer.length >= MAX_PUBLISH_BUFFER_SIZE) {
       throw new Error(
         `Publish buffer is full. It has ${this.publishBuffer.length} items.`,
       );
     }
     this.publishBuffer.push({
+      correlationId: this.cls.getId(),
       id: uuidv4(),
       topic,
       payload,
@@ -83,7 +100,11 @@ export class MongoDbPubSubServiceAdapter extends Base implements PubSubServicePo
     await Promise.all(
       itemsToBePublished.map(async (item) => {
         try {
-          await this.publish(item.topic, item.payload);
+          await this.publish({
+            topic: item.topic,
+            payload: item.payload,
+            correlationId: item.correlationId,
+          });
           successItemIdsPublished.push(item.id);
         } catch (error) {
           this.logWarn({

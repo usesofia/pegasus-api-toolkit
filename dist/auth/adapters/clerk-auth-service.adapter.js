@@ -111,11 +111,14 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
         })})`;
         const cached = await this.cacheService.get(cacheKey);
         if (cached && !ignoreCache) {
-            this.pubSubService.unsafePublish(this.baseConfig.pubSub.topics.cacheHitOnGetAuthUser, cache_hit_on_get_auth_user_payload_1.CacheHitOnGetAuthUserPayload.build({
-                userId,
-                organizationId,
-                organizationRole,
-            }));
+            this.pubSubService.unsafePublish({
+                topic: this.baseConfig.pubSub.topics.cacheHitOnGetAuthUser,
+                payload: cache_hit_on_get_auth_user_payload_1.CacheHitOnGetAuthUserPayload.build({
+                    userId,
+                    organizationId,
+                    organizationRole,
+                }),
+            });
             return JSON.parse(cached);
         }
         const { clerkUser, clerkOrganization } = await this.getClerkUserAndOrganization({
