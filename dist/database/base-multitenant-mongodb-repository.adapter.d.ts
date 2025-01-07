@@ -6,7 +6,7 @@ import { AuthUserEntity } from '../auth/entities/auth-user.entity';
 import { Base } from '../base';
 import { BaseSessionPort } from './base-session.port';
 import { BaseSessionStarterPort } from './base-session-starter.port';
-export declare abstract class BaseMongoDbRepositoryAdapter<TDoc extends Document, TEntity, TCreateRequest extends {
+export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc extends Document, TEntity, TCreateRequest extends {
     data: Partial<TDoc>;
 }, TFindOneRequest extends {
     id: string;

@@ -31,7 +31,8 @@ export * from './config/base-config.entity';
 export * from './correlation/correlation.constants';
 
 // Database
-export * from './database/base-mongodb-repository.adapter';
+export * from './database/base-multitenant-mongodb-repository.adapter';
+export * from './database/base-default-mongodb-repository.adapter';
 export * from './database/base-mongodb-session.adapter';
 export * from './database/primary-mongodb-database.module';
 export * from './database/base-session-starter.port';

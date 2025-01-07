@@ -9,13 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseMongoDbRepositoryAdapter = void 0;
+exports.BaseMultitenantMongoDbRepositoryAdapter = void 0;
 const common_1 = require("@nestjs/common");
 const base_1 = require("../base");
 const log_utils_1 = require("../utils/log.utils");
 const deepmerge_ts_1 = require("deepmerge-ts");
 const base_mongodb_session_adapter_1 = require("./base-mongodb-session.adapter");
-class BaseMongoDbRepositoryAdapter extends base_1.Base {
+class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
     constructor(className, baseConfig, logger, cls, model) {
         super(className, baseConfig, logger, cls);
         this.baseConfig = baseConfig;
@@ -131,53 +131,53 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         }
     }
 }
-exports.BaseMongoDbRepositoryAdapter = BaseMongoDbRepositoryAdapter;
+exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", String)
-], BaseMongoDbRepositoryAdapter.prototype, "getOwnerOrganization", null);
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "getOwnerOrganization", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], BaseMongoDbRepositoryAdapter.prototype, "startSession", null);
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "startSession", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], BaseMongoDbRepositoryAdapter.prototype, "create", null);
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "create", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], BaseMongoDbRepositoryAdapter.prototype, "findOne", null);
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "findOne", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], BaseMongoDbRepositoryAdapter.prototype, "_partialUpdateTransactionFn", null);
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "_partialUpdateTransactionFn", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], BaseMongoDbRepositoryAdapter.prototype, "_partialUpdate", null);
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "_partialUpdate", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], BaseMongoDbRepositoryAdapter.prototype, "partialUpdate", null);
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "partialUpdate", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], BaseMongoDbRepositoryAdapter.prototype, "remove", null);
-//# sourceMappingURL=base-mongodb-repository.adapter.js.map
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "remove", null);
+//# sourceMappingURL=base-multitenant-mongodb-repository.adapter.js.map

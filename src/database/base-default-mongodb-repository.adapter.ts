@@ -2,7 +2,6 @@ import { Model, Document, ClientSession } from 'mongoose';
 import { NotFoundException, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '../config/base-config.entity';
-import { AuthUserEntity } from '../auth/entities/auth-user.entity';
 import { Base } from '../base';
 import { Log } from '../utils/log.utils';
 import { DeepMergeLeafURI, deepmergeCustom } from 'deepmerge-ts';
@@ -10,7 +9,7 @@ import { BaseSessionPort } from './base-session.port';
 import { BaseMongoDbSessionAdapter } from './base-mongodb-session.adapter';
 import { BaseSessionStarterPort } from './base-session-starter.port';
 
-export abstract class BaseMongoDbRepositoryAdapter<
+export abstract class BaseDefaultMongoDbRepositoryAdapter<
     TDoc extends Document,
     TEntity,
     TCreateRequest extends { data: Partial<TDoc> },
@@ -36,15 +35,6 @@ export abstract class BaseMongoDbRepositoryAdapter<
   protected abstract toEntity(doc: TDoc): TEntity;
 
   @Log()
-  protected getOwnerOrganization({
-    requester,
-  }: {
-    requester: AuthUserEntity;
-  }): string {
-    return requester.organization.id;
-  }
-
-  @Log()
   async startSession(): Promise<BaseSessionPort> {
     return new BaseMongoDbSessionAdapter(await this.model.db.startSession());
   }
@@ -54,17 +44,14 @@ export abstract class BaseMongoDbRepositoryAdapter<
    */
   @Log()
   async create({
-    requester,
     request,
     previousSession,
   }: {
-    requester: AuthUserEntity;
     request: TCreateRequest & { populate?: string };
     previousSession?: BaseSessionPort;
   }): Promise<TEntity> {
     const created = new this.model({
       ...request.data,
-      ownerOrganization: this.getOwnerOrganization({ requester }),
     });
 
     let saved = await created.save({
@@ -83,18 +70,15 @@ export abstract class BaseMongoDbRepositoryAdapter<
    */
   @Log()
   async findOne({
-    requester,
     request,
     previousSession,
   }: {
-    requester: AuthUserEntity;
     request: TFindOneRequest & { populate?: string };
     previousSession?: BaseSessionPort;
   }): Promise<TEntity> {
     const doc = await this.model
       .findOne({
         _id: request.id,
-        ownerOrganization: this.getOwnerOrganization({ requester }),
       })
       .session(previousSession?.getSession() ?? null);
 
@@ -111,18 +95,15 @@ export abstract class BaseMongoDbRepositoryAdapter<
 
   @Log()
   private async _partialUpdateTransactionFn({
-    requester,
     request,
     session,
   }: {
-    requester: AuthUserEntity;
     request: TPartialUpdateRequest & { populate?: string };
     session: ClientSession;
   }): Promise<TEntity> {
     const existing = await this.model
       .findOne({
         _id: request.id,
-        ownerOrganization: this.getOwnerOrganization({ requester }),
       })
       .session(session);
 
@@ -152,24 +133,20 @@ export abstract class BaseMongoDbRepositoryAdapter<
 
   @Log()
   private async _partialUpdate({
-    requester,
     request,
     session,
   }: {
-    requester: AuthUserEntity;
     request: TPartialUpdateRequest & { populate?: string };
     session: ClientSession;
   }): Promise<TEntity> {
     if (session.inTransaction()) {
       return await this._partialUpdateTransactionFn({
-        requester,
         request,
         session,
       });
     } else {
       return await session.withTransaction(async () => {
         return await this._partialUpdateTransactionFn({
-          requester,
           request,
           session,
         });
@@ -182,17 +159,14 @@ export abstract class BaseMongoDbRepositoryAdapter<
    */
   @Log()
   async partialUpdate({
-    requester,
     request,
     previousSession,
   }: {
-    requester: AuthUserEntity;
     request: TPartialUpdateRequest & { populate?: string };
     previousSession?: BaseSessionPort;
   }): Promise<TEntity> {
     if (previousSession) {
       return await this._partialUpdate({
-        requester,
         request,
         session: previousSession.getSession(),
       });
@@ -201,7 +175,6 @@ export abstract class BaseMongoDbRepositoryAdapter<
       let result: TEntity;
       try {
         result = await this._partialUpdate({
-          requester,
           request,
           session: session,
         });
@@ -217,18 +190,15 @@ export abstract class BaseMongoDbRepositoryAdapter<
    */
   @Log()
   async remove({
-    requester,
     request,
     previousSession,
   }: {
-    requester: AuthUserEntity;
     request: { id: string };
     previousSession?: BaseSessionPort;
   }): Promise<void> {
     const doc = await this.model
       .findOneAndDelete({
         _id: request.id,
-        ownerOrganization: this.getOwnerOrganization({ requester }),
       })
       .session(previousSession?.getSession() ?? null);
 
