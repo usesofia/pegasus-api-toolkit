@@ -8,13 +8,14 @@ import { DeepMergeLeafURI, deepmergeCustom } from 'deepmerge-ts';
 import { BaseSessionPort } from './base-session.port';
 import { BaseMongoDbSessionAdapter } from './base-mongodb-session.adapter';
 import { BaseSessionStarterPort } from './base-session-starter.port';
+import { DeepPartial } from '../utils/deep-partial.type';
 
 export abstract class BaseDefaultMongoDbRepositoryAdapter<
     TDoc extends Document,
     TEntity,
-    TCreateRequest extends { data: Partial<TDoc> },
+    TCreateRequest extends { data: DeepPartial<TDoc> },
     TFindOneRequest extends { id: string },
-    TPartialUpdateRequest extends { id: string; data: Partial<TDoc> },
+    TPartialUpdateRequest extends { id: string; data: DeepPartial<TDoc> },
   >
   extends Base
   implements BaseSessionStarterPort
