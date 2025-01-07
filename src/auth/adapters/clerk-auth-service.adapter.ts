@@ -99,6 +99,7 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
               id: parentOrganization.id,
               name: parentOrganization.name,
               sharedContacts: parentOrganization.publicMetadata!.sharedContacts as boolean,
+              sharedSubcategories: parentOrganization.publicMetadata!.sharedSubcategories as boolean,
             }
           : null,
         children: childrenOrganizations

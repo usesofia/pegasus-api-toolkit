@@ -17,14 +17,17 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
             id: z.ZodString;
             name: z.ZodString;
             sharedContacts: z.ZodBoolean;
+            sharedSubcategories: z.ZodBoolean;
         }, "strip", z.ZodTypeAny, {
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         }, {
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         }>>>;
         children: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
             id: z.ZodString;
@@ -45,6 +48,7 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         } | null | undefined;
         children?: {
             name: string;
@@ -59,6 +63,7 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         } | null | undefined;
         children?: {
             name: string;
@@ -80,6 +85,7 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         } | null | undefined;
         children?: {
             name: string;
@@ -101,6 +107,7 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         } | null | undefined;
         children?: {
             name: string;
@@ -123,6 +130,7 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         } | null | undefined;
         children?: {
             name: string;
@@ -144,14 +152,17 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
             id: z.ZodString;
             name: z.ZodString;
             sharedContacts: z.ZodBoolean;
+            sharedSubcategories: z.ZodBoolean;
         }, "strip", z.ZodTypeAny, {
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         }, {
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         }>>>;
         children: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
             id: z.ZodString;
@@ -172,6 +183,7 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         } | null | undefined;
         children?: {
             name: string;
@@ -186,6 +198,7 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         } | null | undefined;
         children?: {
             name: string;
@@ -207,6 +220,7 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
             name: string;
             id: string;
             sharedContacts: boolean;
+            sharedSubcategories: boolean;
         } | null | undefined;
         children?: {
             name: string;

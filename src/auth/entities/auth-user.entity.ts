@@ -20,6 +20,7 @@ export const AuthUserEntitySchema = z.object({
       id: z.string(),
       name: z.string(),
       sharedContacts: z.boolean(),
+      sharedSubcategories: z.boolean(),
     }).nullish(),
     children: z.array(z.object({
       id: z.string(),
