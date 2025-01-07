@@ -32,9 +32,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
     async create({ requester, request, previousSession, }) {
         const created = new this.model({
             ...request.data,
-            organization: this.getOwnerOrganization({ requester }),
-            createdByUser: requester.id,
-            createdByOrganization: requester.organization.id,
+            ownerOrganization: this.getOwnerOrganization({ requester }),
         });
         let saved = await created.save({
             session: previousSession?.getSession() ?? null,
@@ -48,7 +46,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         const doc = await this.model
             .findOne({
             _id: request.id,
-            organization: this.getOwnerOrganization({ requester }),
+            ownerOrganization: this.getOwnerOrganization({ requester }),
         })
             .session(previousSession?.getSession() ?? null);
         if (!doc) {
@@ -63,7 +61,7 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         const existing = await this.model
             .findOne({
             _id: request.id,
-            organization: this.getOwnerOrganization({ requester }),
+            ownerOrganization: this.getOwnerOrganization({ requester }),
         })
             .session(session);
         if (!existing) {
@@ -122,12 +120,15 @@ class BaseMongoDbRepositoryAdapter extends base_1.Base {
         }
     }
     async remove({ requester, request, previousSession, }) {
-        await this.model
+        const doc = await this.model
             .findOneAndDelete({
             _id: request.id,
-            organization: this.getOwnerOrganization({ requester }),
+            ownerOrganization: this.getOwnerOrganization({ requester }),
         })
             .session(previousSession?.getSession() ?? null);
+        if (!doc) {
+            throw new common_1.NotFoundException('Recurso não encontrado.');
+        }
     }
 }
 exports.BaseMongoDbRepositoryAdapter = BaseMongoDbRepositoryAdapter;

@@ -64,9 +64,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
   }): Promise<TEntity> {
     const created = new this.model({
       ...request.data,
-      organization: this.getOwnerOrganization({ requester }),
-      createdByUser: requester.id,
-      createdByOrganization: requester.organization.id,
+      ownerOrganization: this.getOwnerOrganization({ requester }),
     });
 
     let saved = await created.save({
@@ -96,7 +94,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
     const doc = await this.model
       .findOne({
         _id: request.id,
-        organization: this.getOwnerOrganization({ requester }),
+        ownerOrganization: this.getOwnerOrganization({ requester }),
       })
       .session(previousSession?.getSession() ?? null);
 
@@ -124,7 +122,7 @@ export abstract class BaseMongoDbRepositoryAdapter<
     const existing = await this.model
       .findOne({
         _id: request.id,
-        organization: this.getOwnerOrganization({ requester }),
+        ownerOrganization: this.getOwnerOrganization({ requester }),
       })
       .session(session);
 
@@ -227,11 +225,15 @@ export abstract class BaseMongoDbRepositoryAdapter<
     request: { id: string };
     previousSession?: BaseSessionPort;
   }): Promise<void> {
-    await this.model
+    const doc = await this.model
       .findOneAndDelete({
         _id: request.id,
-        organization: this.getOwnerOrganization({ requester }),
+        ownerOrganization: this.getOwnerOrganization({ requester }),
       })
       .session(previousSession?.getSession() ?? null);
+
+    if (!doc) {
+      throw new NotFoundException('Recurso não encontrado.');
+    }
   }
 }

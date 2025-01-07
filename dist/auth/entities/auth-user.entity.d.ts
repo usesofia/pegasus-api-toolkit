@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { OrganizationRole } from '../constants/organization-role.enum';
 import { OrganizationType } from '../constants/organization-type.enum';
+import { BaseConfigEntity } from '../../config/base-config.entity';
 export declare const AuthUserEntitySchema: z.ZodObject<{
     id: z.ZodString;
     primaryEmail: z.ZodString;
@@ -215,5 +216,6 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
 }>;
 export declare class AuthUserEntity extends AuthUserEntity_base {
     static build(input: z.infer<typeof AuthUserEntitySchema>): AuthUserEntity;
+    static buildFromGcpServiceAccount(config: BaseConfigEntity): AuthUserEntity;
 }
 export {};

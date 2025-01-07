@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { OrganizationRole } from '../constants/organization-role.enum';
 import { OrganizationType } from '../constants/organization-type.enum';
 import { safeInstantiateEntity } from '../../utils/entity.utils';
+import { BaseConfigEntity } from '../../config/base-config.entity';
 
 export const AuthUserEntitySchema = z.object({
   id: z.string(),
@@ -30,5 +31,21 @@ export const AuthUserEntitySchema = z.object({
 export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {
   static build(input: z.infer<typeof AuthUserEntitySchema>): AuthUserEntity {
     return safeInstantiateEntity(AuthUserEntity, input);
+  }
+
+  static buildFromGcpServiceAccount(config: BaseConfigEntity): AuthUserEntity {
+    return this.build({
+      id: config.gcp.credentials.client_email,
+      primaryEmail: config.gcp.credentials.client_email,
+      primaryPhoneNumber: '+5511999999999',
+      firstName: 'GCP',
+      lastName: 'Service Account',
+      organization: {
+        id: 'system',
+        name: 'System',
+        role: OrganizationRole.ADMIN,
+        type: OrganizationType.LEAF,
+      },
+    })
   }
 }

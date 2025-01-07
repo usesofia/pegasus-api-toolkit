@@ -22,6 +22,7 @@ const nestjs_cls_1 = require("nestjs-cls");
 const ignore_gcp_service_account_guard_decorator_1 = require("../decorators/ignore-gcp-service-account-guard.decorator");
 const logger_module_1 = require("../../logger/logger.module");
 const base_1 = require("../../base");
+const auth_user_entity_1 = require("../entities/auth-user.entity");
 let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountGuard extends base_1.Base {
     constructor(baseConfig, logger, cls, reflector) {
         super(GcpServiceAccountGuard_1.name, baseConfig, logger, cls);
@@ -52,6 +53,7 @@ let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountG
         if (payload.email !== this.baseConfig.gcp.credentials.client_email) {
             throw new common_1.UnauthorizedException();
         }
+        request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
         return true;
     }
 };

@@ -26,6 +26,7 @@ export * from './database/base-mongodb-repository.adapter';
 export * from './database/base-mongodb-session.adapter';
 export * from './database/primary-mongodb-database.module';
 export * from './database/base-session-starter.port';
+export * from './database/base-session.port';
 export * from './health/health.module';
 export * from './health/health.controller';
 export * from './logger/logger.module';

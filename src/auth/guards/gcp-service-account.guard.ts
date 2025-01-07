@@ -13,6 +13,9 @@ import { ClsService } from 'nestjs-cls';
 import { IGNORE_GCP_SERVICE_ACCOUNT_GUARD_KEY } from '../decorators/ignore-gcp-service-account-guard.decorator';
 import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
 import { Base } from '../../base';
+import { AuthUserEntity } from '../entities/auth-user.entity';
+import { OrganizationRole } from '../constants/organization-role.enum';
+import { OrganizationType } from '../constants/organization-type.enum';
 
 @Injectable()
 export class GcpServiceAccountGuard extends Base implements CanActivate {
@@ -61,8 +64,11 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
       throw new UnauthorizedException();
     }
 
+    request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
+
     return true;
   }
 }
 
 export const GCP_SERVICE_ACCOUNT_GUARD = Symbol('GcpServiceAccountGuard');
+

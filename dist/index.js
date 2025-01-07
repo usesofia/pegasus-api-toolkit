@@ -42,6 +42,7 @@ __exportStar(require("./database/base-mongodb-repository.adapter"), exports);
 __exportStar(require("./database/base-mongodb-session.adapter"), exports);
 __exportStar(require("./database/primary-mongodb-database.module"), exports);
 __exportStar(require("./database/base-session-starter.port"), exports);
+__exportStar(require("./database/base-session.port"), exports);
 __exportStar(require("./health/health.module"), exports);
 __exportStar(require("./health/health.controller"), exports);
 __exportStar(require("./logger/logger.module"), exports);
