@@ -38,7 +38,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         }
         return this.toEntity(saved);
     }
-    async findOne({ request, previousSession, }) {
+    async findByIdOrThrow({ request, previousSession, }) {
         const doc = await this.model
             .findOne({
             _id: request.id,
@@ -46,6 +46,20 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             .session(previousSession?.getSession() ?? null);
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
+        }
+        if (request.populate) {
+            await doc.populate(request.populate.split(','));
+        }
+        return this.toEntity(doc);
+    }
+    async findById({ request, previousSession, }) {
+        const doc = await this.model
+            .findOne({
+            _id: request.id,
+        })
+            .session(previousSession?.getSession() ?? null);
+        if (!doc) {
+            return null;
         }
         if (request.populate) {
             await doc.populate(request.populate.split(','));
@@ -87,7 +101,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             });
         }
     }
-    async partialUpdate({ request, previousSession, }) {
+    async partialUpdateOrThrow({ request, previousSession, }) {
         if (previousSession) {
             return await this._partialUpdate({
                 request,
@@ -109,7 +123,18 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             return result;
         }
     }
-    async remove({ request, previousSession, }) {
+    async partialUpdate({ request, previousSession, }) {
+        try {
+            return await this.partialUpdateOrThrow({ request, previousSession });
+        }
+        catch (error) {
+            if (error instanceof common_1.NotFoundException) {
+                return null;
+            }
+            throw error;
+        }
+    }
+    async removeOrThrow({ request, previousSession, }) {
         const doc = await this.model
             .findOneAndDelete({
             _id: request.id,
@@ -118,6 +143,13 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
+    }
+    async remove({ request, previousSession, }) {
+        await this.model
+            .findOneAndDelete({
+            _id: request.id,
+        })
+            .session(previousSession?.getSession() ?? null);
     }
 }
 exports.BaseDefaultMongoDbRepositoryAdapter = BaseDefaultMongoDbRepositoryAdapter;
@@ -138,7 +170,13 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], BaseDefaultMongoDbRepositoryAdapter.prototype, "findOne", null);
+], BaseDefaultMongoDbRepositoryAdapter.prototype, "findByIdOrThrow", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BaseDefaultMongoDbRepositoryAdapter.prototype, "findById", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
@@ -156,7 +194,19 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
+], BaseDefaultMongoDbRepositoryAdapter.prototype, "partialUpdateOrThrow", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
 ], BaseDefaultMongoDbRepositoryAdapter.prototype, "partialUpdate", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BaseDefaultMongoDbRepositoryAdapter.prototype, "removeOrThrow", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),

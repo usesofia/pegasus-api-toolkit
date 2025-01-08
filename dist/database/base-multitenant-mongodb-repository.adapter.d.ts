@@ -31,22 +31,43 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
         };
         previousSession?: BaseSessionPort;
     }): Promise<TEntity>;
-    findOne({ requester, request, previousSession, }: {
+    findByIdOrThrow({ requester, request, previousSession, }: {
         requester: AuthUserEntity;
         request: TFindOneRequest & {
             populate?: string;
         };
         previousSession?: BaseSessionPort;
     }): Promise<TEntity>;
+    findById({ requester, request, previousSession, }: {
+        requester: AuthUserEntity;
+        request: TFindOneRequest & {
+            populate?: string;
+        };
+        previousSession?: BaseSessionPort;
+    }): Promise<TEntity | null>;
     private _partialUpdateTransactionFn;
     private _partialUpdate;
-    partialUpdate({ requester, request, previousSession, }: {
+    partialUpdateOrThrow({ requester, request, previousSession, }: {
         requester: AuthUserEntity;
         request: TPartialUpdateRequest & {
             populate?: string;
         };
         previousSession?: BaseSessionPort;
     }): Promise<TEntity>;
+    partialUpdate({ requester, request, previousSession, }: {
+        requester: AuthUserEntity;
+        request: TPartialUpdateRequest & {
+            populate?: string;
+        };
+        previousSession?: BaseSessionPort;
+    }): Promise<TEntity | null>;
+    removeOrThrow({ requester, request, previousSession, }: {
+        requester: AuthUserEntity;
+        request: {
+            id: string;
+        };
+        previousSession?: BaseSessionPort;
+    }): Promise<void>;
     remove({ requester, request, previousSession, }: {
         requester: AuthUserEntity;
         request: {

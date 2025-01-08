@@ -42,7 +42,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         }
         return this.toEntity(saved);
     }
-    async findOne({ requester, request, previousSession, }) {
+    async findByIdOrThrow({ requester, request, previousSession, }) {
         const doc = await this.model
             .findOne({
             _id: request.id,
@@ -51,6 +51,21 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             .session(previousSession?.getSession() ?? null);
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
+        }
+        if (request.populate) {
+            await doc.populate(request.populate.split(','));
+        }
+        return this.toEntity(doc);
+    }
+    async findById({ requester, request, previousSession, }) {
+        const doc = await this.model
+            .findOne({
+            _id: request.id,
+            ownerOrganization: this.getOwnerOrganization({ requester }),
+        })
+            .session(previousSession?.getSession() ?? null);
+        if (!doc) {
+            return null;
         }
         if (request.populate) {
             await doc.populate(request.populate.split(','));
@@ -95,7 +110,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             });
         }
     }
-    async partialUpdate({ requester, request, previousSession, }) {
+    async partialUpdateOrThrow({ requester, request, previousSession, }) {
         if (previousSession) {
             return await this._partialUpdate({
                 requester,
@@ -119,7 +134,18 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             return result;
         }
     }
-    async remove({ requester, request, previousSession, }) {
+    async partialUpdate({ requester, request, previousSession, }) {
+        try {
+            return await this.partialUpdateOrThrow({ requester, request, previousSession });
+        }
+        catch (error) {
+            if (error instanceof common_1.NotFoundException) {
+                return null;
+            }
+            throw error;
+        }
+    }
+    async removeOrThrow({ requester, request, previousSession, }) {
         const doc = await this.model
             .findOneAndDelete({
             _id: request.id,
@@ -129,6 +155,14 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
+    }
+    async remove({ requester, request, previousSession, }) {
+        await this.model
+            .findOneAndDelete({
+            _id: request.id,
+            ownerOrganization: this.getOwnerOrganization({ requester }),
+        })
+            .session(previousSession?.getSession() ?? null);
     }
 }
 exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;
@@ -155,7 +189,13 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], BaseMultitenantMongoDbRepositoryAdapter.prototype, "findOne", null);
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "findByIdOrThrow", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "findById", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
@@ -173,7 +213,19 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "partialUpdateOrThrow", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
 ], BaseMultitenantMongoDbRepositoryAdapter.prototype, "partialUpdate", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "removeOrThrow", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),

@@ -27,20 +27,38 @@ export declare abstract class BaseDefaultMongoDbRepositoryAdapter<TDoc extends D
         };
         previousSession?: BaseSessionPort;
     }): Promise<TEntity>;
-    findOne({ request, previousSession, }: {
+    findByIdOrThrow({ request, previousSession, }: {
         request: TFindOneRequest & {
             populate?: string;
         };
         previousSession?: BaseSessionPort;
     }): Promise<TEntity>;
+    findById({ request, previousSession, }: {
+        request: TFindOneRequest & {
+            populate?: string;
+        };
+        previousSession?: BaseSessionPort;
+    }): Promise<TEntity | null>;
     private _partialUpdateTransactionFn;
     private _partialUpdate;
-    partialUpdate({ request, previousSession, }: {
+    partialUpdateOrThrow({ request, previousSession, }: {
         request: TPartialUpdateRequest & {
             populate?: string;
         };
         previousSession?: BaseSessionPort;
     }): Promise<TEntity>;
+    partialUpdate({ request, previousSession, }: {
+        request: TPartialUpdateRequest & {
+            populate?: string;
+        };
+        previousSession?: BaseSessionPort;
+    }): Promise<TEntity | null>;
+    removeOrThrow({ request, previousSession, }: {
+        request: {
+            id: string;
+        };
+        previousSession?: BaseSessionPort;
+    }): Promise<void>;
     remove({ request, previousSession, }: {
         request: {
             id: string;

@@ -67,10 +67,10 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   }
 
   /**
-   * Finds one document by ID.
+   * Finds one document by ID. Throws an NotFoundException if the document is not found.
    */
   @Log()
-  async findOne({
+  async findByIdOrThrow({
     request,
     previousSession,
   }: {
@@ -85,6 +85,34 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
+    }
+
+    if (request.populate) {
+      await doc.populate(request.populate.split(','));
+    }
+
+    return this.toEntity(doc);
+  }
+
+  /**
+   * Finds one document by ID.
+   */
+  @Log()
+  async findById({
+    request,
+    previousSession,
+  }: {
+    request: TFindOneRequest & { populate?: string };
+    previousSession?: BaseSessionPort;
+  }): Promise<TEntity | null> {
+    const doc = await this.model
+      .findOne({
+        _id: request.id,
+      })
+      .session(previousSession?.getSession() ?? null);
+
+    if (!doc) {
+      return null;
     }
 
     if (request.populate) {
@@ -156,10 +184,10 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   }
 
   /**
-   * Partially updates a document by ID.
+   * Partially updates a document by ID. Throws an NotFoundException if the document is not found.
    */
   @Log()
-  async partialUpdate({
+  async partialUpdateOrThrow({
     request,
     previousSession,
   }: {
@@ -186,11 +214,33 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     }
   }
 
+  
   /**
-   * Removes a document by ID.
+   * Partially updates a document by ID.
    */
   @Log()
-  async remove({
+  async partialUpdate({
+    request,
+    previousSession,
+  }: {
+    request: TPartialUpdateRequest & { populate?: string };
+    previousSession?: BaseSessionPort;
+  }): Promise<TEntity | null> {
+    try {
+      return await this.partialUpdateOrThrow({ request, previousSession });
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Removes a document by ID. Throws an NotFoundException if the document is not found.
+   */
+  @Log()
+  async removeOrThrow({
     request,
     previousSession,
   }: {
@@ -206,5 +256,23 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
     }
+  }
+
+  /**
+   * Removes a document by ID.
+   */
+  @Log()
+  async remove({
+    request,
+    previousSession,
+  }: {
+    request: { id: string };
+    previousSession?: BaseSessionPort;
+  }): Promise<void> {
+    await this.model
+      .findOneAndDelete({
+        _id: request.id,
+      })
+      .session(previousSession?.getSession() ?? null);
   }
 }
