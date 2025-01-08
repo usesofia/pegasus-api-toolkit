@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var ClerkAuthServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClerkAuthServiceAdapter = void 0;
 const common_1 = require("@nestjs/common");
@@ -21,9 +22,22 @@ const pub_sub_service_port_1 = require("../../pub-sub/pub-sub-service.port");
 const cache_hit_on_get_auth_user_payload_1 = require("../payloads/cache-hit-on-get-auth-user.payload");
 const cache_service_port_1 = require("../../cache/ports/cache-service.port");
 const luxon_1 = require("luxon");
-let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
-    constructor(baseConfig, cacheService, pubSubService) {
+const retry = require("retry");
+const base_1 = require("../../base");
+const nestjs_cls_1 = require("nestjs-cls");
+const logger_module_1 = require("../../logger/logger.module");
+const retryOptions = {
+    retries: 32,
+    factor: 2,
+    minTimeout: 1000,
+    maxTimeout: 5000,
+};
+let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthServiceAdapter extends base_1.Base {
+    constructor(baseConfig, logger, cls, cacheService, pubSubService) {
+        super(ClerkAuthServiceAdapter_1.name, baseConfig, logger, cls);
         this.baseConfig = baseConfig;
+        this.logger = logger;
+        this.cls = cls;
         this.cacheService = cacheService;
         this.pubSubService = pubSubService;
     }
@@ -89,6 +103,35 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
         });
     }
     async getClerkUserAndOrganization({ userId, organizationId, }) {
+        const operation = retry.operation(retryOptions);
+        return new Promise((resolve, reject) => {
+            operation.attempt(async (currentAttempt) => {
+                try {
+                    const result = await this._getClerkUserAndOrganization({
+                        userId,
+                        organizationId,
+                    });
+                    resolve(result);
+                }
+                catch (error) {
+                    if (operation.retry(error)) {
+                        this.logWarn({
+                            functionName: this.getClerkUserAndOrganization.name,
+                            suffix: 'retry',
+                            data: {
+                                userId,
+                                organizationId,
+                                currentAttempt,
+                            },
+                        });
+                        return;
+                    }
+                    reject(operation.mainError());
+                }
+            });
+        });
+    }
+    async _getClerkUserAndOrganization({ userId, organizationId, }) {
         const [clerkUser, clerkOrganization] = await Promise.all([
             express_1.clerkClient.users.getUser(userId),
             express_1.clerkClient.organizations.getOrganization({
@@ -101,6 +144,33 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
         };
     }
     async getClerkOrganization({ organizationId, }) {
+        const operation = retry.operation(retryOptions);
+        return new Promise((resolve, reject) => {
+            operation.attempt(async (currentAttempt) => {
+                try {
+                    const clerkOrganization = await this._getClerkOrganization({
+                        organizationId,
+                    });
+                    resolve(clerkOrganization);
+                }
+                catch (error) {
+                    if (operation.retry(error)) {
+                        this.logWarn({
+                            functionName: this.getClerkUserAndOrganization.name,
+                            suffix: 'retry',
+                            data: {
+                                organizationId,
+                                currentAttempt,
+                            },
+                        });
+                        return;
+                    }
+                    reject(operation.mainError());
+                }
+            });
+        });
+    }
+    async _getClerkOrganization({ organizationId, }) {
         return await express_1.clerkClient.organizations.getOrganization({
             organizationId,
         });
@@ -155,11 +225,12 @@ let ClerkAuthServiceAdapter = class ClerkAuthServiceAdapter {
     }
 };
 exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter;
-exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter = __decorate([
+exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
-    __param(1, (0, common_1.Inject)(cache_service_port_1.CACHE_SERVICE_PORT)),
-    __param(2, (0, common_1.Inject)(pub_sub_service_port_1.PUB_SUB_SERVICE_PORT)),
-    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, Object])
+    __param(1, (0, common_1.Inject)(logger_module_1.LOGGER_SERVICE_PORT)),
+    __param(3, (0, common_1.Inject)(cache_service_port_1.CACHE_SERVICE_PORT)),
+    __param(4, (0, common_1.Inject)(pub_sub_service_port_1.PUB_SUB_SERVICE_PORT)),
+    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, Object])
 ], ClerkAuthServiceAdapter);
 //# sourceMappingURL=clerk-auth-service.adapter.js.map

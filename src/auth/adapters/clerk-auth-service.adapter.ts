@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { clerkClient, Organization, User, verifyToken } from '@clerk/express';
 import { AuthServicePort } from '../ports/auth-service.port';
 import { AuthUserEntity } from '../entities/auth-user.entity';
@@ -15,17 +15,32 @@ import {
   CacheServicePort,
 } from '../../cache/ports/cache-service.port';
 import { Duration } from 'luxon';
+import * as retry from 'retry';
+import { Base } from '../../base';
+import { ClsService } from 'nestjs-cls';
+import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
+
+const retryOptions = {
+  retries: 32,
+  factor: 2,
+  minTimeout: 1000,
+  maxTimeout: 5000,
+};
 
 @Injectable()
-export class ClerkAuthServiceAdapter implements AuthServicePort {
+export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
   constructor(
     @Inject(BASE_CONFIG)
-    private readonly baseConfig: BaseConfigEntity,
+    protected readonly baseConfig: BaseConfigEntity,
+    @Inject(LOGGER_SERVICE_PORT) protected readonly logger: LoggerService,
+    protected readonly cls: ClsService,
     @Inject(CACHE_SERVICE_PORT)
     private readonly cacheService: CacheServicePort,
     @Inject(PUB_SUB_SERVICE_PORT)
     private readonly pubSubService: PubSubServicePort,
-  ) {}
+  ) {
+    super(ClerkAuthServiceAdapter.name, baseConfig, logger, cls);
+  }
 
   async verifyToken(token: string): Promise<AuthUserEntity> {
     const jwt = await verifyToken(token, {
@@ -122,6 +137,45 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
     clerkUser: User;
     clerkOrganization: Organization;
   }> {
+    const operation = retry.operation(retryOptions);
+
+    return new Promise((resolve, reject) => {
+      operation.attempt(async (currentAttempt) => {
+        try {
+          const result = await this._getClerkUserAndOrganization({
+            userId,
+            organizationId,
+          });
+          resolve(result);
+        } catch (error) {
+          if (operation.retry(error as Error)) {
+            this.logWarn({
+              functionName: this.getClerkUserAndOrganization.name,
+              suffix: 'retry',
+              data: {
+                userId,
+                organizationId,
+                currentAttempt,
+              },
+            });
+            return;
+          }
+          reject(operation.mainError());
+        }
+      });
+    });
+  }
+
+  private async _getClerkUserAndOrganization({
+    userId,
+    organizationId,
+  }: {
+    userId: string;
+    organizationId: string;
+  }): Promise<{
+    clerkUser: User;
+    clerkOrganization: Organization;
+  }> {
     const [clerkUser, clerkOrganization] = await Promise.all([
       clerkClient.users.getUser(userId),
       clerkClient.organizations.getOrganization({
@@ -136,6 +190,38 @@ export class ClerkAuthServiceAdapter implements AuthServicePort {
   }
 
   private async getClerkOrganization({
+    organizationId,
+  }: {
+    organizationId: string;
+  }): Promise<Organization> {
+    const operation = retry.operation(retryOptions);
+
+    return new Promise((resolve, reject) => {
+      operation.attempt(async (currentAttempt) => {
+        try {
+          const clerkOrganization = await this._getClerkOrganization({
+            organizationId,
+          });
+          resolve(clerkOrganization);
+        } catch (error) {
+          if (operation.retry(error as Error)) {
+            this.logWarn({
+              functionName: this.getClerkUserAndOrganization.name,
+              suffix: 'retry',
+              data: {
+                organizationId,
+                currentAttempt,
+              },
+            });
+            return;
+          }
+          reject(operation.mainError());
+        }
+      });
+    });
+  }
+
+  private async _getClerkOrganization({
     organizationId,
   }: {
     organizationId: string;
