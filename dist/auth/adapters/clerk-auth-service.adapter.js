@@ -91,6 +91,7 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
                         name: parentOrganization.name,
                         sharedContacts: parentOrganization.publicMetadata.sharedContacts,
                         sharedSubcategories: parentOrganization.publicMetadata.sharedSubcategories,
+                        sharedTags: parentOrganization.publicMetadata.sharedTags,
                     }
                     : null,
                 children: childrenOrganizations

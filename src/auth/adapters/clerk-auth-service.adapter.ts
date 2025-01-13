@@ -115,6 +115,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
               name: parentOrganization.name,
               sharedContacts: parentOrganization.publicMetadata!.sharedContacts as boolean,
               sharedSubcategories: parentOrganization.publicMetadata!.sharedSubcategories as boolean,
+              sharedTags: parentOrganization.publicMetadata!.sharedTags as boolean,
             }
           : null,
         children: childrenOrganizations

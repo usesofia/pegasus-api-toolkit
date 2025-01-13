@@ -22,6 +22,7 @@ exports.AuthUserEntitySchema = zod_1.z.object({
             name: zod_1.z.string(),
             sharedContacts: zod_1.z.boolean(),
             sharedSubcategories: zod_1.z.boolean(),
+            sharedTags: zod_1.z.boolean(),
         }).nullish(),
         children: zod_1.z.array(zod_1.z.object({
             id: zod_1.z.string(),
