@@ -8,7 +8,7 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
     primaryPhoneNumber: z.ZodString;
     firstName: z.ZodString;
     lastName: z.ZodString;
-    organization: z.ZodObject<{
+    organization: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         id: z.ZodString;
         name: z.ZodString;
         role: z.ZodNativeEnum<typeof OrganizationRole>;
@@ -74,14 +74,14 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
             name: string;
             id: string;
         }[] | null | undefined;
-    }>;
+    }>>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     primaryEmail: string;
     primaryPhoneNumber: string;
     firstName: string;
     lastName: string;
-    organization: {
+    organization?: {
         type: OrganizationType;
         name: string;
         id: string;
@@ -97,14 +97,14 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
             name: string;
             id: string;
         }[] | null | undefined;
-    };
+    } | null | undefined;
 }, {
     id: string;
     primaryEmail: string;
     primaryPhoneNumber: string;
     firstName: string;
     lastName: string;
-    organization: {
+    organization?: {
         type: OrganizationType;
         name: string;
         id: string;
@@ -120,7 +120,7 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
             name: string;
             id: string;
         }[] | null | undefined;
-    };
+    } | null | undefined;
 }>;
 declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
     id: string;
@@ -128,7 +128,7 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
     primaryPhoneNumber: string;
     firstName: string;
     lastName: string;
-    organization: {
+    organization?: {
         type: OrganizationType;
         name: string;
         id: string;
@@ -144,14 +144,14 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
             name: string;
             id: string;
         }[] | null | undefined;
-    };
+    } | null | undefined;
 }, z.ZodObjectDef<{
     id: z.ZodString;
     primaryEmail: z.ZodString;
     primaryPhoneNumber: z.ZodString;
     firstName: z.ZodString;
     lastName: z.ZodString;
-    organization: z.ZodObject<{
+    organization: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         id: z.ZodString;
         name: z.ZodString;
         role: z.ZodNativeEnum<typeof OrganizationRole>;
@@ -217,14 +217,14 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
             name: string;
             id: string;
         }[] | null | undefined;
-    }>;
+    }>>>;
 }, "strip", z.ZodTypeAny>, {
     id: string;
     primaryEmail: string;
     primaryPhoneNumber: string;
     firstName: string;
     lastName: string;
-    organization: {
+    organization?: {
         type: OrganizationType;
         name: string;
         id: string;
@@ -240,7 +240,7 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
             name: string;
             id: string;
         }[] | null | undefined;
-    };
+    } | null | undefined;
 }>;
 export declare class AuthUserEntity extends AuthUserEntity_base {
     static build(input: z.infer<typeof AuthUserEntitySchema>): AuthUserEntity;

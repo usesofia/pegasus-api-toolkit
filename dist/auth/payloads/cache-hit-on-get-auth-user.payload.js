@@ -6,8 +6,8 @@ const zod_1 = require("zod");
 const entity_utils_1 = require("../../utils/entity.utils");
 const CacheHitOnGetAuthUserPayloadSchema = zod_1.z.object({
     userId: zod_1.z.string(),
-    organizationId: zod_1.z.string(),
-    organizationRole: zod_1.z.string(),
+    organizationId: zod_1.z.string().nullish(),
+    organizationRole: zod_1.z.string().nullish(),
 });
 class CacheHitOnGetAuthUserPayload extends (0, nestjs_zod_1.createZodDto)(CacheHitOnGetAuthUserPayloadSchema) {
     static build(input) {

@@ -27,7 +27,7 @@ export const AuthUserEntitySchema = z.object({
       id: z.string(),
       name: z.string(),
     })).nullish(),
-  }),
+  }).nullish(),
 });
 
 export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {

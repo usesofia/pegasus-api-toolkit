@@ -49,8 +49,8 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
 
     const user = await this.getUser({
       userId: jwt.sub,
-      organizationId: jwt.org_id!,
-      organizationRole: jwt.org_role!,
+      organizationId: jwt.org_id,
+      organizationRole: jwt.org_role,
     });
 
     return user;
@@ -63,8 +63,8 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     ignoreCache,
   }: {
     userId: string;
-    organizationId: string;
-    organizationRole: string;
+    organizationId?: string;
+    organizationRole?: string;
     ignoreCache?: boolean;
   }): Promise<AuthUserEntity> {
     const { clerkUser, clerkOrganization } =
@@ -77,55 +77,66 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
 
     let parentOrganization: Organization | null = null;
 
-    if (clerkOrganization.publicMetadata!.parent) {
-      parentOrganization = await this.getCachedClerkOrganization({
-        organizationId: clerkOrganization.publicMetadata!.parent as string,
-        ignoreCache,
+    if (clerkOrganization) {
+      if (clerkOrganization.publicMetadata!.parent) {
+        parentOrganization = await this.getCachedClerkOrganization({
+          organizationId: clerkOrganization.publicMetadata!.parent as string,
+          ignoreCache,
+        });
+      }
+  
+      let childrenOrganizations: Organization[] | null = null;
+  
+      if (clerkOrganization.publicMetadata!.children) {
+        childrenOrganizations = await Promise.all(
+          (clerkOrganization.publicMetadata!.children as string[]).map((child) =>
+            this.getCachedClerkOrganization({
+              organizationId: child as string,
+              ignoreCache,
+            }),
+          ),
+        );
+      }
+  
+      return AuthUserEntity.build({
+        id: clerkUser.id,
+        primaryEmail: clerkUser.emailAddresses[0].emailAddress,
+        primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
+        firstName: clerkUser.firstName!,
+        lastName: clerkUser.lastName!,
+        organization: {
+          id: clerkOrganization.id,
+          name: clerkOrganization.name,
+          role: organizationRole as OrganizationRole,
+          type: clerkOrganization.publicMetadata!
+            .type as OrganizationType,
+          parent: parentOrganization
+            ? {
+                id: parentOrganization.id,
+                name: parentOrganization.name,
+                sharedContacts: parentOrganization.publicMetadata!.sharedContacts as boolean,
+                sharedSubcategories: parentOrganization.publicMetadata!.sharedSubcategories as boolean,
+                sharedTags: parentOrganization.publicMetadata!.sharedTags as boolean,
+              }
+            : null,
+          children: childrenOrganizations
+            ? childrenOrganizations.map((child) => ({
+                id: child.id,
+                name: child.name,
+              }))
+            : null,
+        },
+      });
+    } else {
+      return AuthUserEntity.build({
+        id: clerkUser.id,
+        primaryEmail: clerkUser.emailAddresses[0].emailAddress,
+        primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
+        firstName: clerkUser.firstName!,
+        lastName: clerkUser.lastName!,
+        organization: null,
       });
     }
-
-    let childrenOrganizations: Organization[] | null = null;
-
-    if (clerkOrganization.publicMetadata!.children) {
-      childrenOrganizations = await Promise.all(
-        (clerkOrganization.publicMetadata!.children as string[]).map((child) =>
-          this.getCachedClerkOrganization({
-            organizationId: child as string,
-            ignoreCache,
-          }),
-        ),
-      );
-    }
-
-    return AuthUserEntity.build({
-      id: clerkUser.id,
-      primaryEmail: clerkUser.emailAddresses[0].emailAddress,
-      primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
-      firstName: clerkUser.firstName!,
-      lastName: clerkUser.lastName!,
-      organization: {
-        id: clerkOrganization.id,
-        name: clerkOrganization.name,
-        role: organizationRole as OrganizationRole,
-        type: clerkOrganization.publicMetadata!
-          .type as OrganizationType,
-        parent: parentOrganization
-          ? {
-              id: parentOrganization.id,
-              name: parentOrganization.name,
-              sharedContacts: parentOrganization.publicMetadata!.sharedContacts as boolean,
-              sharedSubcategories: parentOrganization.publicMetadata!.sharedSubcategories as boolean,
-              sharedTags: parentOrganization.publicMetadata!.sharedTags as boolean,
-            }
-          : null,
-        children: childrenOrganizations
-          ? childrenOrganizations.map((child) => ({
-              id: child.id,
-              name: child.name,
-            }))
-          : null,
-      },
-    });
   }
 
   private async getClerkUserAndOrganization({
@@ -133,10 +144,10 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     organizationId,
   }: {
     userId: string;
-    organizationId: string;
+    organizationId?: string;
   }): Promise<{
     clerkUser: User;
-    clerkOrganization: Organization;
+    clerkOrganization?: Organization;
   }> {
     const operation = retry.operation(retryOptions);
 
@@ -157,6 +168,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
                 userId,
                 organizationId,
                 currentAttempt,
+                error,
               },
             });
             return;
@@ -172,16 +184,18 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     organizationId,
   }: {
     userId: string;
-    organizationId: string;
+    organizationId?: string;
   }): Promise<{
     clerkUser: User;
-    clerkOrganization: Organization;
+    clerkOrganization?: Organization;
   }> {
     const [clerkUser, clerkOrganization] = await Promise.all([
       clerkClient.users.getUser(userId),
-      clerkClient.organizations.getOrganization({
-        organizationId,
-      }),
+      organizationId
+          ? clerkClient.organizations.getOrganization({
+              organizationId,
+            })
+          : undefined,
     ]);
 
     return {
@@ -212,6 +226,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
               data: {
                 organizationId,
                 currentAttempt,
+                error,
               },
             });
             return;
@@ -239,12 +254,12 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     ignoreCache = false,
   }: {
     userId: string;
-    organizationId: string;
-    organizationRole: string;
+    organizationId?: string;
+    organizationRole?: string;
     ignoreCache?: boolean;
   }): Promise<{
     clerkUser: User;
-    clerkOrganization: Organization;
+    clerkOrganization?: Organization;
   }> {
     const cacheKey = `${this.constructor.name}.getCachedClerkUserAndOrganization(${JSON.stringify(
       {

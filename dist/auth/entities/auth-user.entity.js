@@ -28,7 +28,7 @@ exports.AuthUserEntitySchema = zod_1.z.object({
             id: zod_1.z.string(),
             name: zod_1.z.string(),
         })).nullish(),
-    }),
+    }).nullish(),
 });
 class AuthUserEntity extends (0, nestjs_zod_1.createZodDto)(exports.AuthUserEntitySchema) {
     static build(input) {

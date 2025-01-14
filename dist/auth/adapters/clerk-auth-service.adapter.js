@@ -60,48 +60,60 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
             ignoreCache,
         });
         let parentOrganization = null;
-        if (clerkOrganization.publicMetadata.parent) {
-            parentOrganization = await this.getCachedClerkOrganization({
-                organizationId: clerkOrganization.publicMetadata.parent,
-                ignoreCache,
+        if (clerkOrganization) {
+            if (clerkOrganization.publicMetadata.parent) {
+                parentOrganization = await this.getCachedClerkOrganization({
+                    organizationId: clerkOrganization.publicMetadata.parent,
+                    ignoreCache,
+                });
+            }
+            let childrenOrganizations = null;
+            if (clerkOrganization.publicMetadata.children) {
+                childrenOrganizations = await Promise.all(clerkOrganization.publicMetadata.children.map((child) => this.getCachedClerkOrganization({
+                    organizationId: child,
+                    ignoreCache,
+                })));
+            }
+            return auth_user_entity_1.AuthUserEntity.build({
+                id: clerkUser.id,
+                primaryEmail: clerkUser.emailAddresses[0].emailAddress,
+                primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
+                firstName: clerkUser.firstName,
+                lastName: clerkUser.lastName,
+                organization: {
+                    id: clerkOrganization.id,
+                    name: clerkOrganization.name,
+                    role: organizationRole,
+                    type: clerkOrganization.publicMetadata
+                        .type,
+                    parent: parentOrganization
+                        ? {
+                            id: parentOrganization.id,
+                            name: parentOrganization.name,
+                            sharedContacts: parentOrganization.publicMetadata.sharedContacts,
+                            sharedSubcategories: parentOrganization.publicMetadata.sharedSubcategories,
+                            sharedTags: parentOrganization.publicMetadata.sharedTags,
+                        }
+                        : null,
+                    children: childrenOrganizations
+                        ? childrenOrganizations.map((child) => ({
+                            id: child.id,
+                            name: child.name,
+                        }))
+                        : null,
+                },
             });
         }
-        let childrenOrganizations = null;
-        if (clerkOrganization.publicMetadata.children) {
-            childrenOrganizations = await Promise.all(clerkOrganization.publicMetadata.children.map((child) => this.getCachedClerkOrganization({
-                organizationId: child,
-                ignoreCache,
-            })));
+        else {
+            return auth_user_entity_1.AuthUserEntity.build({
+                id: clerkUser.id,
+                primaryEmail: clerkUser.emailAddresses[0].emailAddress,
+                primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
+                firstName: clerkUser.firstName,
+                lastName: clerkUser.lastName,
+                organization: null,
+            });
         }
-        return auth_user_entity_1.AuthUserEntity.build({
-            id: clerkUser.id,
-            primaryEmail: clerkUser.emailAddresses[0].emailAddress,
-            primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
-            firstName: clerkUser.firstName,
-            lastName: clerkUser.lastName,
-            organization: {
-                id: clerkOrganization.id,
-                name: clerkOrganization.name,
-                role: organizationRole,
-                type: clerkOrganization.publicMetadata
-                    .type,
-                parent: parentOrganization
-                    ? {
-                        id: parentOrganization.id,
-                        name: parentOrganization.name,
-                        sharedContacts: parentOrganization.publicMetadata.sharedContacts,
-                        sharedSubcategories: parentOrganization.publicMetadata.sharedSubcategories,
-                        sharedTags: parentOrganization.publicMetadata.sharedTags,
-                    }
-                    : null,
-                children: childrenOrganizations
-                    ? childrenOrganizations.map((child) => ({
-                        id: child.id,
-                        name: child.name,
-                    }))
-                    : null,
-            },
-        });
     }
     async getClerkUserAndOrganization({ userId, organizationId, }) {
         const operation = retry.operation(retryOptions);
@@ -123,6 +135,7 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
                                 userId,
                                 organizationId,
                                 currentAttempt,
+                                error,
                             },
                         });
                         return;
@@ -135,9 +148,11 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
     async _getClerkUserAndOrganization({ userId, organizationId, }) {
         const [clerkUser, clerkOrganization] = await Promise.all([
             express_1.clerkClient.users.getUser(userId),
-            express_1.clerkClient.organizations.getOrganization({
-                organizationId,
-            }),
+            organizationId
+                ? express_1.clerkClient.organizations.getOrganization({
+                    organizationId,
+                })
+                : undefined,
         ]);
         return {
             clerkUser,
@@ -162,6 +177,7 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
                             data: {
                                 organizationId,
                                 currentAttempt,
+                                error,
                             },
                         });
                         return;

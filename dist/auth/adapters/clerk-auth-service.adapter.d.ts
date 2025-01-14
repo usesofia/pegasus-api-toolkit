@@ -16,8 +16,8 @@ export declare class ClerkAuthServiceAdapter extends Base implements AuthService
     verifyToken(token: string): Promise<AuthUserEntity>;
     getUser({ userId, organizationId, organizationRole, ignoreCache, }: {
         userId: string;
-        organizationId: string;
-        organizationRole: string;
+        organizationId?: string;
+        organizationRole?: string;
         ignoreCache?: boolean;
     }): Promise<AuthUserEntity>;
     private getClerkUserAndOrganization;
