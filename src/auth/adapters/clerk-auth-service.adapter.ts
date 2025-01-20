@@ -1,5 +1,4 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { clerkClient, Organization, User, verifyToken } from '@clerk/express';
 import { AuthServicePort } from '../ports/auth-service.port';
 import { AuthUserEntity } from '../entities/auth-user.entity';
 import { BaseConfigEntity, BASE_CONFIG } from '../../config/base-config.entity';
@@ -15,20 +14,16 @@ import {
   CacheServicePort,
 } from '../../cache/ports/cache-service.port';
 import { Duration } from 'luxon';
-import * as retry from 'retry';
 import { Base } from '../../base';
 import { ClsService } from 'nestjs-cls';
 import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
-
-const retryOptions = {
-  retries: 32,
-  factor: 2,
-  minTimeout: 1000,
-  maxTimeout: 5000,
-};
+import { ClerkClient, verifyToken, createClerkClient, ClerkLogger } from '@usesofia/clerk-backend';
+import { Organization, User } from '@clerk/backend';
 
 @Injectable()
-export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
+export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, ClerkLogger {
+  private readonly clerkClient: ClerkClient;
+
   constructor(
     @Inject(BASE_CONFIG)
     protected readonly baseConfig: BaseConfigEntity,
@@ -40,6 +35,41 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     private readonly pubSubService: PubSubServicePort,
   ) {
     super(ClerkAuthServiceAdapter.name, baseConfig, logger, cls);
+    this.clerkClient = createClerkClient({
+      jwtKey: baseConfig.clerk.jwtKey,
+    }, this);
+  }
+  
+  logClerkInput({ functionName, args }: { functionName: string; args: any[] }): void {
+    this.logDebug({
+      functionName,
+      suffix: 'input',
+      data: { args },
+    });
+  }
+
+  logClerkOutput({ functionName, output }: { functionName: string; output: any }): void {
+    this.logDebug({
+      functionName,
+      suffix: 'output',
+      data: { output },
+    });
+  }
+
+  logClerkRetryError({ functionName, currentAttempt, error }: { functionName: string; currentAttempt: number; error: any }): void {
+    this.logWarn({
+      functionName,
+      suffix: 'retry',
+      data: { currentAttempt, error },
+    });
+  }
+
+  logClerkError({ functionName, error }: { functionName: string; error: any }): void {
+    this.logError({
+      functionName,
+      suffix: 'error',
+      data: { error },
+    });
   }
 
   async verifyToken(token: string): Promise<AuthUserEntity> {
@@ -149,50 +179,10 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     clerkUser: User;
     clerkOrganization?: Organization;
   }> {
-    const operation = retry.operation(retryOptions);
-
-    return new Promise((resolve, reject) => {
-      operation.attempt(async (currentAttempt) => {
-        try {
-          const result = await this._getClerkUserAndOrganization({
-            userId,
-            organizationId,
-          });
-          resolve(result);
-        } catch (error) {
-          if (operation.retry(error as Error)) {
-            this.logWarn({
-              functionName: this.getClerkUserAndOrganization.name,
-              suffix: 'retry',
-              data: {
-                userId,
-                organizationId,
-                currentAttempt,
-                error,
-              },
-            });
-            return;
-          }
-          reject(operation.mainError());
-        }
-      });
-    });
-  }
-
-  private async _getClerkUserAndOrganization({
-    userId,
-    organizationId,
-  }: {
-    userId: string;
-    organizationId?: string;
-  }): Promise<{
-    clerkUser: User;
-    clerkOrganization?: Organization;
-  }> {
     const [clerkUser, clerkOrganization] = await Promise.all([
-      clerkClient.users.getUser(userId),
+      this.clerkClient.users.getUser(userId),
       organizationId
-          ? clerkClient.organizations.getOrganization({
+          ? this.clerkClient.organizations.getOrganization({
               organizationId,
             })
           : undefined,
@@ -209,40 +199,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
   }: {
     organizationId: string;
   }): Promise<Organization> {
-    const operation = retry.operation(retryOptions);
-
-    return new Promise((resolve, reject) => {
-      operation.attempt(async (currentAttempt) => {
-        try {
-          const clerkOrganization = await this._getClerkOrganization({
-            organizationId,
-          });
-          resolve(clerkOrganization);
-        } catch (error) {
-          if (operation.retry(error as Error)) {
-            this.logWarn({
-              functionName: this.getClerkUserAndOrganization.name,
-              suffix: 'retry',
-              data: {
-                organizationId,
-                currentAttempt,
-                error,
-              },
-            });
-            return;
-          }
-          reject(operation.mainError());
-        }
-      });
-    });
-  }
-
-  private async _getClerkOrganization({
-    organizationId,
-  }: {
-    organizationId: string;
-  }): Promise<Organization> {
-    return await clerkClient.organizations.getOrganization({
+    return await this.clerkClient.organizations.getOrganization({
       organizationId,
     });
   }

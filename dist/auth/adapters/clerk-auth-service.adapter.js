@@ -15,23 +15,16 @@ var ClerkAuthServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClerkAuthServiceAdapter = void 0;
 const common_1 = require("@nestjs/common");
-const express_1 = require("@clerk/express");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_config_entity_1 = require("../../config/base-config.entity");
 const pub_sub_service_port_1 = require("../../pub-sub/pub-sub-service.port");
 const cache_hit_on_get_auth_user_payload_1 = require("../payloads/cache-hit-on-get-auth-user.payload");
 const cache_service_port_1 = require("../../cache/ports/cache-service.port");
 const luxon_1 = require("luxon");
-const retry = require("retry");
 const base_1 = require("../../base");
 const nestjs_cls_1 = require("nestjs-cls");
 const logger_module_1 = require("../../logger/logger.module");
-const retryOptions = {
-    retries: 32,
-    factor: 2,
-    minTimeout: 1000,
-    maxTimeout: 5000,
-};
+const clerk_backend_1 = require("@usesofia/clerk-backend");
 let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, cacheService, pubSubService) {
         super(ClerkAuthServiceAdapter_1.name, baseConfig, logger, cls);
@@ -40,9 +33,40 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         this.cls = cls;
         this.cacheService = cacheService;
         this.pubSubService = pubSubService;
+        this.clerkClient = (0, clerk_backend_1.createClerkClient)({
+            jwtKey: baseConfig.clerk.jwtKey,
+        }, this);
+    }
+    logClerkInput({ functionName, args }) {
+        this.logDebug({
+            functionName,
+            suffix: 'input',
+            data: { args },
+        });
+    }
+    logClerkOutput({ functionName, output }) {
+        this.logDebug({
+            functionName,
+            suffix: 'output',
+            data: { output },
+        });
+    }
+    logClerkRetryError({ functionName, currentAttempt, error }) {
+        this.logWarn({
+            functionName,
+            suffix: 'retry',
+            data: { currentAttempt, error },
+        });
+    }
+    logClerkError({ functionName, error }) {
+        this.logError({
+            functionName,
+            suffix: 'error',
+            data: { error },
+        });
     }
     async verifyToken(token) {
-        const jwt = await (0, express_1.verifyToken)(token, {
+        const jwt = await (0, clerk_backend_1.verifyToken)(token, {
             jwtKey: this.baseConfig.clerk.jwtKey,
         });
         const user = await this.getUser({
@@ -116,40 +140,10 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         }
     }
     async getClerkUserAndOrganization({ userId, organizationId, }) {
-        const operation = retry.operation(retryOptions);
-        return new Promise((resolve, reject) => {
-            operation.attempt(async (currentAttempt) => {
-                try {
-                    const result = await this._getClerkUserAndOrganization({
-                        userId,
-                        organizationId,
-                    });
-                    resolve(result);
-                }
-                catch (error) {
-                    if (operation.retry(error)) {
-                        this.logWarn({
-                            functionName: this.getClerkUserAndOrganization.name,
-                            suffix: 'retry',
-                            data: {
-                                userId,
-                                organizationId,
-                                currentAttempt,
-                                error,
-                            },
-                        });
-                        return;
-                    }
-                    reject(operation.mainError());
-                }
-            });
-        });
-    }
-    async _getClerkUserAndOrganization({ userId, organizationId, }) {
         const [clerkUser, clerkOrganization] = await Promise.all([
-            express_1.clerkClient.users.getUser(userId),
+            this.clerkClient.users.getUser(userId),
             organizationId
-                ? express_1.clerkClient.organizations.getOrganization({
+                ? this.clerkClient.organizations.getOrganization({
                     organizationId,
                 })
                 : undefined,
@@ -160,35 +154,7 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         };
     }
     async getClerkOrganization({ organizationId, }) {
-        const operation = retry.operation(retryOptions);
-        return new Promise((resolve, reject) => {
-            operation.attempt(async (currentAttempt) => {
-                try {
-                    const clerkOrganization = await this._getClerkOrganization({
-                        organizationId,
-                    });
-                    resolve(clerkOrganization);
-                }
-                catch (error) {
-                    if (operation.retry(error)) {
-                        this.logWarn({
-                            functionName: this.getClerkUserAndOrganization.name,
-                            suffix: 'retry',
-                            data: {
-                                organizationId,
-                                currentAttempt,
-                                error,
-                            },
-                        });
-                        return;
-                    }
-                    reject(operation.mainError());
-                }
-            });
-        });
-    }
-    async _getClerkOrganization({ organizationId, }) {
-        return await express_1.clerkClient.organizations.getOrganization({
+        return await this.clerkClient.organizations.getOrganization({
             organizationId,
         });
     }
