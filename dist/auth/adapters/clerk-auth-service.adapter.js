@@ -34,7 +34,7 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         this.cacheService = cacheService;
         this.pubSubService = pubSubService;
         this.clerkClient = (0, clerk_backend_1.createClerkClient)({
-            jwtKey: baseConfig.clerk.jwtKey,
+            secretKey: baseConfig.clerk.secretKey,
         }, this);
     }
     logClerkInput({ functionName, args }) {

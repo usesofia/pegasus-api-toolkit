@@ -36,7 +36,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
   ) {
     super(ClerkAuthServiceAdapter.name, baseConfig, logger, cls);
     this.clerkClient = createClerkClient({
-      jwtKey: baseConfig.clerk.jwtKey,
+      secretKey: baseConfig.clerk.secretKey,
     }, this);
   }
   
