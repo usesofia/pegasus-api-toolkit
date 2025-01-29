@@ -108,19 +108,6 @@ export class AppExceptionsFilter implements ExceptionFilter {
           'Um ou mais campos são inválidos. Verifique os campos informados e tente novamente.',
         errors: this.getErrors(exception),
       };
-    } else if (exception instanceof UnauthorizedException) {
-      return {
-        statusCode: HttpStatus.UNAUTHORIZED,
-        message:
-          'Você precisa estar autenticado para realizar a chamada em questão.',
-        errors: [],
-      };
-    } else if (exception instanceof ForbiddenException) {
-      return {
-        statusCode: HttpStatus.FORBIDDEN,
-        message: 'Você não tem permissão para realizar a chamada em questão.',
-        errors: [],
-      };
     } else if (exception instanceof HttpException) {
       return {
         statusCode: exception.getStatus(),

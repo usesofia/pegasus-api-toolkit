@@ -95,20 +95,6 @@ let AppExceptionsFilter = class AppExceptionsFilter {
                 errors: this.getErrors(exception),
             };
         }
-        else if (exception instanceof common_1.UnauthorizedException) {
-            return {
-                statusCode: common_1.HttpStatus.UNAUTHORIZED,
-                message: 'Você precisa estar autenticado para realizar a chamada em questão.',
-                errors: [],
-            };
-        }
-        else if (exception instanceof common_1.ForbiddenException) {
-            return {
-                statusCode: common_1.HttpStatus.FORBIDDEN,
-                message: 'Você não tem permissão para realizar a chamada em questão.',
-                errors: [],
-            };
-        }
         else if (exception instanceof common_1.HttpException) {
             return {
                 statusCode: exception.getStatus(),
