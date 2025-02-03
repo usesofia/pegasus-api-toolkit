@@ -228,14 +228,6 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     const cached = await this.cacheService.get(cacheKey);
 
     if (cached && !ignoreCache) {
-      this.pubSubService.unsafePublish({
-        topic: this.baseConfig.pubSub.topics.cacheHitOnGetAuthUser,
-        payload: CacheHitOnGetAuthUserPayload.build({
-          userId,
-          organizationId,
-          organizationRole,
-        }),
-      });
       return JSON.parse(cached);
     }
 

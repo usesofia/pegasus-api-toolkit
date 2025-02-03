@@ -1,6 +1,5 @@
 // Auth
 export * from './auth/auth.module';
-export * from './auth/auth.controller';
 export * from './auth/constants/organization-role.enum';
 export * from './auth/constants/organization-type.enum';
 export * from './auth/decorators/auth-user.decorator';

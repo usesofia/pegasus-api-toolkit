@@ -67,11 +67,6 @@ export const BaseConfigSchema = z.object({
       })
       .optional(),
   }),
-  pubSub: z.object({
-    topics: z.object({
-      cacheHitOnGetAuthUser: z.string(),
-    }),
-  }),
 });
 
 export class BaseConfigEntity extends createZodDto(BaseConfigSchema) {

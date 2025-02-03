@@ -15,7 +15,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./auth/auth.module"), exports);
-__exportStar(require("./auth/auth.controller"), exports);
 __exportStar(require("./auth/constants/organization-role.enum"), exports);
 __exportStar(require("./auth/constants/organization-type.enum"), exports);
 __exportStar(require("./auth/decorators/auth-user.decorator"), exports);

@@ -159,23 +159,6 @@ export declare const BaseConfigSchema: z.ZodObject<{
             ssl?: boolean | undefined;
         } | undefined;
     }>;
-    pubSub: z.ZodObject<{
-        topics: z.ZodObject<{
-            cacheHitOnGetAuthUser: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            cacheHitOnGetAuthUser: string;
-        }, {
-            cacheHitOnGetAuthUser: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        topics: {
-            cacheHitOnGetAuthUser: string;
-        };
-    }, {
-        topics: {
-            cacheHitOnGetAuthUser: string;
-        };
-    }>;
 }, "strip", z.ZodTypeAny, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -221,11 +204,6 @@ export declare const BaseConfigSchema: z.ZodObject<{
             keyPrefix: string;
             ssl: boolean;
         } | undefined;
-    };
-    pubSub: {
-        topics: {
-            cacheHitOnGetAuthUser: string;
-        };
     };
     instanceId?: string | null | undefined;
 }, {
@@ -274,11 +252,6 @@ export declare const BaseConfigSchema: z.ZodObject<{
             ssl?: boolean | undefined;
         } | undefined;
     };
-    pubSub: {
-        topics: {
-            cacheHitOnGetAuthUser: string;
-        };
-    };
     instanceId?: string | null | undefined;
 }>;
 declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
@@ -326,11 +299,6 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             keyPrefix: string;
             ssl: boolean;
         } | undefined;
-    };
-    pubSub: {
-        topics: {
-            cacheHitOnGetAuthUser: string;
-        };
     };
     instanceId?: string | null | undefined;
 }, z.ZodObjectDef<{
@@ -492,23 +460,6 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             ssl?: boolean | undefined;
         } | undefined;
     }>;
-    pubSub: z.ZodObject<{
-        topics: z.ZodObject<{
-            cacheHitOnGetAuthUser: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            cacheHitOnGetAuthUser: string;
-        }, {
-            cacheHitOnGetAuthUser: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        topics: {
-            cacheHitOnGetAuthUser: string;
-        };
-    }, {
-        topics: {
-            cacheHitOnGetAuthUser: string;
-        };
-    }>;
 }, "strip", z.ZodTypeAny>, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -554,11 +505,6 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             keyPrefix: string;
             ssl?: boolean | undefined;
         } | undefined;
-    };
-    pubSub: {
-        topics: {
-            cacheHitOnGetAuthUser: string;
-        };
     };
     instanceId?: string | null | undefined;
 }>;

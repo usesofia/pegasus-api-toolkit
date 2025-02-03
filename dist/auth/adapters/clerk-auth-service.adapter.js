@@ -18,7 +18,6 @@ const common_1 = require("@nestjs/common");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_config_entity_1 = require("../../config/base-config.entity");
 const pub_sub_service_port_1 = require("../../pub-sub/pub-sub-service.port");
-const cache_hit_on_get_auth_user_payload_1 = require("../payloads/cache-hit-on-get-auth-user.payload");
 const cache_service_port_1 = require("../../cache/ports/cache-service.port");
 const luxon_1 = require("luxon");
 const base_1 = require("../../base");
@@ -165,14 +164,6 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         })})`;
         const cached = await this.cacheService.get(cacheKey);
         if (cached && !ignoreCache) {
-            this.pubSubService.unsafePublish({
-                topic: this.baseConfig.pubSub.topics.cacheHitOnGetAuthUser,
-                payload: cache_hit_on_get_auth_user_payload_1.CacheHitOnGetAuthUserPayload.build({
-                    userId,
-                    organizationId,
-                    organizationRole,
-                }),
-            });
             return JSON.parse(cached);
         }
         const { clerkUser, clerkOrganization } = await this.getClerkUserAndOrganization({

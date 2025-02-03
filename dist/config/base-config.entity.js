@@ -60,11 +60,6 @@ exports.BaseConfigSchema = zod_1.z.object({
         })
             .optional(),
     }),
-    pubSub: zod_1.z.object({
-        topics: zod_1.z.object({
-            cacheHitOnGetAuthUser: zod_1.z.string(),
-        }),
-    }),
 });
 class BaseConfigEntity extends (0, nestjs_zod_1.createZodDto)(exports.BaseConfigSchema) {
     static build(input) {
