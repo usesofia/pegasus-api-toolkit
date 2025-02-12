@@ -17,15 +17,14 @@ export const nullishDate = z
       return datetime.isValid;
     },
     {
-      message: 'Data de nascimento deve estar no formato yyyy-MM-dd.',
+      message: 'A data deve estar no formato yyyy-MM-dd.',
     },
   )
   .transform((date) => {
     if (!date) return null;
-    const datetime = DateTime.fromISO(date, {
+    return DateTime.fromISO(date, {
       zone: 'utc',
-    });
-    return datetime.toISODate();
+    }).toJSDate();
   });
 
 export const date = z.string()
@@ -37,12 +36,11 @@ export const date = z.string()
       return datetime.isValid;
     },
     {
-      message: 'Data de nascimento deve estar no formato yyyy-MM-dd.',
+      message: 'A data deve estar no formato yyyy-MM-dd.',
     },
   )
   .transform((date) => {
-    const datetime = DateTime.fromISO(date, {
+    return DateTime.fromISO(date, {
       zone: 'utc',
-    });
-    return datetime.toISODate();
+    }).toJSDate();
   });

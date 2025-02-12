@@ -17,15 +17,14 @@ exports.nullishDate = zod_1.z
     });
     return datetime.isValid;
 }, {
-    message: 'Data de nascimento deve estar no formato yyyy-MM-dd.',
+    message: 'A data deve estar no formato yyyy-MM-dd.',
 })
     .transform((date) => {
     if (!date)
         return null;
-    const datetime = luxon_1.DateTime.fromISO(date, {
+    return luxon_1.DateTime.fromISO(date, {
         zone: 'utc',
-    });
-    return datetime.toISODate();
+    }).toJSDate();
 });
 exports.date = zod_1.z.string()
     .refine((date) => {
@@ -34,12 +33,11 @@ exports.date = zod_1.z.string()
     });
     return datetime.isValid;
 }, {
-    message: 'Data de nascimento deve estar no formato yyyy-MM-dd.',
+    message: 'A data deve estar no formato yyyy-MM-dd.',
 })
     .transform((date) => {
-    const datetime = luxon_1.DateTime.fromISO(date, {
+    return luxon_1.DateTime.fromISO(date, {
         zone: 'utc',
-    });
-    return datetime.toISODate();
+    }).toJSDate();
 });
 //# sourceMappingURL=zod.utils.js.map
