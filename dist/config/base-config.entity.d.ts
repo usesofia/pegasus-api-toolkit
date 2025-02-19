@@ -34,14 +34,17 @@ export declare const BaseConfigSchema: z.ZodObject<{
         level: z.ZodEnum<["log", "error", "warn", "debug"]>;
         consoleLog: z.ZodBoolean;
         betterStackSourceToken: z.ZodString;
+        betterStackEndpoint: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         level: "log" | "error" | "warn" | "debug";
         consoleLog: boolean;
         betterStackSourceToken: string;
+        betterStackEndpoint?: string | undefined;
     }, {
         level: "log" | "error" | "warn" | "debug";
         consoleLog: boolean;
         betterStackSourceToken: string;
+        betterStackEndpoint?: string | undefined;
     }>;
     gcp: z.ZodObject<{
         location: z.ZodString;
@@ -174,6 +177,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
         level: "log" | "error" | "warn" | "debug";
         consoleLog: boolean;
         betterStackSourceToken: string;
+        betterStackEndpoint?: string | undefined;
     };
     gcp: {
         location: string;
@@ -221,6 +225,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
         level: "log" | "error" | "warn" | "debug";
         consoleLog: boolean;
         betterStackSourceToken: string;
+        betterStackEndpoint?: string | undefined;
     };
     gcp: {
         location: string;
@@ -269,6 +274,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         level: "log" | "error" | "warn" | "debug";
         consoleLog: boolean;
         betterStackSourceToken: string;
+        betterStackEndpoint?: string | undefined;
     };
     gcp: {
         location: string;
@@ -335,14 +341,17 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         level: z.ZodEnum<["log", "error", "warn", "debug"]>;
         consoleLog: z.ZodBoolean;
         betterStackSourceToken: z.ZodString;
+        betterStackEndpoint: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
         level: "log" | "error" | "warn" | "debug";
         consoleLog: boolean;
         betterStackSourceToken: string;
+        betterStackEndpoint?: string | undefined;
     }, {
         level: "log" | "error" | "warn" | "debug";
         consoleLog: boolean;
         betterStackSourceToken: string;
+        betterStackEndpoint?: string | undefined;
     }>;
     gcp: z.ZodObject<{
         location: z.ZodString;
@@ -475,6 +484,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         level: "log" | "error" | "warn" | "debug";
         consoleLog: boolean;
         betterStackSourceToken: string;
+        betterStackEndpoint?: string | undefined;
     };
     gcp: {
         location: string;

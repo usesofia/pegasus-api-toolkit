@@ -52,6 +52,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
                 target: '@logtail/pino',
                 options: {
                     sourceToken: baseConfig.logger.betterStackSourceToken,
+                    endpoint: baseConfig.logger.betterStackEndpoint,
                     options: {
                         batchInterval: 100,
                         retryCount: 16,

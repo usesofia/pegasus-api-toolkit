@@ -34,6 +34,7 @@ export const BaseConfigSchema = z.object({
     level: z.enum(['log', 'error', 'warn', 'debug']),
     consoleLog: z.boolean(),
     betterStackSourceToken: z.string(),
+    betterStackEndpoint: z.string().optional(),
   }),
   gcp: z.object({
     location: z.string(),

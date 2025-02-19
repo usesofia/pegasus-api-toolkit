@@ -27,6 +27,7 @@ exports.BaseConfigSchema = zod_1.z.object({
         level: zod_1.z.enum(['log', 'error', 'warn', 'debug']),
         consoleLog: zod_1.z.boolean(),
         betterStackSourceToken: zod_1.z.string(),
+        betterStackEndpoint: zod_1.z.string().optional(),
     }),
     gcp: zod_1.z.object({
         location: zod_1.z.string(),
