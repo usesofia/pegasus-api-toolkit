@@ -80,6 +80,8 @@ import {
     },
   ],
   controllers: [],
-  exports: [],
+  exports: [
+    AUTH_SERVICE_PORT,
+  ],
 })
 export class AuthModule {}
