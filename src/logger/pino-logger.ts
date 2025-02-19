@@ -46,11 +46,11 @@ export class PinoLoggerAdapter implements LoggerService {
         target: '@logtail/pino',
         options: {
           sourceToken: baseConfig.logger.betterStackSourceToken,
-          endpoint: baseConfig.logger.betterStackEndpoint,
           options: {
             batchInterval: 100,
             retryCount: 16,
             retryBackoff: 400,
+            endpoint: baseConfig.logger.betterStackEndpoint,
           },
         },
       },
