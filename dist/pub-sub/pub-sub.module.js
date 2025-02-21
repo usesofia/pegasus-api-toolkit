@@ -22,8 +22,17 @@ exports.PubSubModule = PubSubModule = __decorate([
     (0, common_1.Module)({
         imports: [gcp_pub_sub_module_1.GcpPubSubModule, mongodb_pub_sub_event_module_1.MongoDbPubSubEventModule],
         providers: [
+            gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter,
+            mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter,
             {
-                provide: pub_sub_service_port_1.PUB_SUB_SERVICE_PORT, useClass: (0, environment_utils_1.isLocalEnvironment)() || (0, environment_utils_1.isIntegrationTestEnvironment)() ? mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter : gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter
+                provide: pub_sub_service_port_1.PUB_SUB_SERVICE_PORT,
+                useFactory: (gcpPubSubServiceAdapter, mongoDbPubSubServiceAdapter) => {
+                    if ((0, environment_utils_1.isLocalEnvironment)() || (0, environment_utils_1.isIntegrationTestEnvironment)()) {
+                        return mongoDbPubSubServiceAdapter;
+                    }
+                    return gcpPubSubServiceAdapter;
+                },
+                inject: [gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter, mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter],
             },
         ],
         exports: [pub_sub_service_port_1.PUB_SUB_SERVICE_PORT],

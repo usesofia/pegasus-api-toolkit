@@ -10,10 +10,17 @@ import { MongoDbPubSubEventModule } from './mongodb-pub-sub-event.module';
 @Module({
   imports: [GcpPubSubModule, MongoDbPubSubEventModule],
   providers: [
-    
+    GcpPubSubServiceAdapter,
+    MongoDbPubSubServiceAdapter,
     {
-      provide: PUB_SUB_SERVICE_PORT, useClass:
-        isLocalEnvironment() || isIntegrationTestEnvironment() ? MongoDbPubSubServiceAdapter : GcpPubSubServiceAdapter
+      provide: PUB_SUB_SERVICE_PORT,
+      useFactory: (gcpPubSubServiceAdapter: GcpPubSubServiceAdapter, mongoDbPubSubServiceAdapter: MongoDbPubSubServiceAdapter) => {
+        if (isLocalEnvironment() || isIntegrationTestEnvironment()) {
+          return mongoDbPubSubServiceAdapter;
+        }
+        return gcpPubSubServiceAdapter;
+      },
+      inject: [GcpPubSubServiceAdapter, MongoDbPubSubServiceAdapter],
     },
   ],
   exports: [PUB_SUB_SERVICE_PORT],

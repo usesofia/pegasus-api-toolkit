@@ -19,7 +19,7 @@ function getEnvironment() {
         case 'integration-test':
             return Environment.INTEGRATION_TEST;
         default:
-            throw new Error('Invalid environment.');
+            throw new Error(`Invalid environment: ${process.env.ENV}`);
     }
 }
 function isLocalEnvironment() {
