@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var ClerkAuthServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClerkAuthServiceAdapter = void 0;
+exports.ClerkAuthServiceAdapter = exports.CLERK_VERIFY_TOKEN = exports.CLERK_CLIENT = void 0;
 const common_1 = require("@nestjs/common");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_config_entity_1 = require("../../config/base-config.entity");
@@ -24,17 +24,19 @@ const base_1 = require("../../base");
 const nestjs_cls_1 = require("nestjs-cls");
 const logger_module_1 = require("../../logger/logger.module");
 const clerk_backend_1 = require("@usesofia/clerk-backend");
+const log_utils_1 = require("../../utils/log.utils");
+exports.CLERK_CLIENT = Symbol('ClerkClient');
+exports.CLERK_VERIFY_TOKEN = Symbol('ClerkVerifyToken');
 let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthServiceAdapter extends base_1.Base {
-    constructor(baseConfig, logger, cls, cacheService, pubSubService) {
+    constructor(baseConfig, logger, cls, cacheService, pubSubService, clerkClient, clerkVerifyToken) {
         super(ClerkAuthServiceAdapter_1.name, baseConfig, logger, cls);
         this.baseConfig = baseConfig;
         this.logger = logger;
         this.cls = cls;
         this.cacheService = cacheService;
         this.pubSubService = pubSubService;
-        this.clerkClient = (0, clerk_backend_1.createClerkClient)({
-            secretKey: baseConfig.clerk.secretKey,
-        }, this);
+        this.clerkClient = clerkClient;
+        this.clerkVerifyToken = clerkVerifyToken;
     }
     logClerkInput({ functionName, args }) {
         this.logDebug({
@@ -65,9 +67,7 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         });
     }
     async verifyToken(token) {
-        const jwt = await (0, clerk_backend_1.verifyToken)(token, {
-            jwtKey: this.baseConfig.clerk.jwtKey,
-        });
+        const jwt = await this.clerkVerifyToken(token);
         const user = await this.getUser({
             userId: jwt.sub,
             organizationId: jwt.org_id,
@@ -199,12 +199,50 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
     }
 };
 exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter;
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ClerkAuthServiceAdapter.prototype, "verifyToken", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ClerkAuthServiceAdapter.prototype, "getUser", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ClerkAuthServiceAdapter.prototype, "getClerkUserAndOrganization", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ClerkAuthServiceAdapter.prototype, "getClerkOrganization", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ClerkAuthServiceAdapter.prototype, "getCachedClerkUserAndOrganization", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ClerkAuthServiceAdapter.prototype, "getCachedClerkOrganization", null);
 exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
     __param(1, (0, common_1.Inject)(logger_module_1.LOGGER_SERVICE_PORT)),
     __param(3, (0, common_1.Inject)(cache_service_port_1.CACHE_SERVICE_PORT)),
     __param(4, (0, common_1.Inject)(pub_sub_service_port_1.PUB_SUB_SERVICE_PORT)),
-    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, Object])
+    __param(5, (0, common_1.Inject)(exports.CLERK_CLIENT)),
+    __param(6, (0, common_1.Inject)(exports.CLERK_VERIFY_TOKEN)),
+    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, Object, clerk_backend_1.ClerkClient, Function])
 ], ClerkAuthServiceAdapter);
 //# sourceMappingURL=clerk-auth-service.adapter.js.map

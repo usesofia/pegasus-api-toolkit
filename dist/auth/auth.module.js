@@ -16,6 +16,7 @@ const gcp_service_account_guard_1 = require("./guards/gcp-service-account.guard"
 const base_config_entity_1 = require("../config/base-config.entity");
 const organization_roles_guard_1 = require("./guards/organization-roles.guard");
 const organization_types_guard_1 = require("./guards/organization-types.guard");
+const clerk_backend_1 = require("@usesofia/clerk-backend");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -40,6 +41,7 @@ exports.AuthModule = AuthModule = __decorate([
                 provide: organization_types_guard_1.ORGANIZATION_TYPES_GUARD,
                 useClass: organization_types_guard_1.OrganizationTypesGuard,
             },
+            clerk_auth_service_adapter_1.ClerkAuthServiceAdapter,
             {
                 provide: auth_service_port_1.AUTH_SERVICE_PORT,
                 useClass: clerk_auth_service_adapter_1.ClerkAuthServiceAdapter,
@@ -77,6 +79,19 @@ exports.AuthModule = AuthModule = __decorate([
                     return null;
                 },
                 inject: [base_config_entity_1.BASE_CONFIG, gcp_service_account_guard_1.GCP_SERVICE_ACCOUNT_GUARD],
+            },
+            {
+                provide: clerk_auth_service_adapter_1.CLERK_CLIENT,
+                useFactory: (baseConfig, clerkAuthServiceAdapter) => {
+                    return (0, clerk_backend_1.createClerkClient)({
+                        secretKey: baseConfig.clerk.secretKey,
+                    }, clerkAuthServiceAdapter);
+                },
+                inject: [base_config_entity_1.BASE_CONFIG, clerk_auth_service_adapter_1.ClerkAuthServiceAdapter],
+            },
+            {
+                provide: clerk_auth_service_adapter_1.CLERK_VERIFY_TOKEN,
+                useValue: clerk_backend_1.verifyToken,
             },
         ],
         controllers: [],

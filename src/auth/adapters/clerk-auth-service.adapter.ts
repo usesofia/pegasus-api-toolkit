@@ -8,7 +8,6 @@ import {
   PubSubServicePort,
   PUB_SUB_SERVICE_PORT,
 } from '../../pub-sub/pub-sub-service.port';
-import { CacheHitOnGetAuthUserPayload } from '../payloads/cache-hit-on-get-auth-user.payload';
 import {
   CACHE_SERVICE_PORT,
   CacheServicePort,
@@ -17,13 +16,21 @@ import { Duration } from 'luxon';
 import { Base } from '../../base';
 import { ClsService } from 'nestjs-cls';
 import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
-import { ClerkClient, verifyToken, createClerkClient, ClerkLogger } from '@usesofia/clerk-backend';
+import { ClerkClient, ClerkLogger } from '@usesofia/clerk-backend';
 import { Organization, User } from '@clerk/backend';
+import { Log } from '../../utils/log.utils';
+
+type ClerkVerifyToken = (token: string) => Promise<{
+  sub: string;
+  org_id?: string;
+  org_role?: string;
+}>;
+
+export const CLERK_CLIENT = Symbol('ClerkClient');
+export const CLERK_VERIFY_TOKEN = Symbol('ClerkVerifyToken');
 
 @Injectable()
 export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, ClerkLogger {
-  private readonly clerkClient: ClerkClient;
-
   constructor(
     @Inject(BASE_CONFIG)
     protected readonly baseConfig: BaseConfigEntity,
@@ -33,11 +40,12 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     private readonly cacheService: CacheServicePort,
     @Inject(PUB_SUB_SERVICE_PORT)
     private readonly pubSubService: PubSubServicePort,
+    @Inject(CLERK_CLIENT)
+    private readonly clerkClient: ClerkClient,
+    @Inject(CLERK_VERIFY_TOKEN)
+    private readonly clerkVerifyToken: ClerkVerifyToken,
   ) {
     super(ClerkAuthServiceAdapter.name, baseConfig, logger, cls);
-    this.clerkClient = createClerkClient({
-      secretKey: baseConfig.clerk.secretKey,
-    }, this);
   }
   
   logClerkInput({ functionName, args }: { functionName: string; args: any[] }): void {
@@ -72,10 +80,9 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     });
   }
 
+  @Log()
   async verifyToken(token: string): Promise<AuthUserEntity> {
-    const jwt = await verifyToken(token, {
-      jwtKey: this.baseConfig.clerk.jwtKey,
-    });
+    const jwt = await this.clerkVerifyToken(token);
 
     const user = await this.getUser({
       userId: jwt.sub,
@@ -86,6 +93,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     return user;
   }
 
+  @Log()
   async getUser({
     userId,
     organizationId,
@@ -169,6 +177,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     }
   }
 
+  @Log()
   private async getClerkUserAndOrganization({
     userId,
     organizationId,
@@ -194,6 +203,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     };
   }
 
+  @Log()
   private async getClerkOrganization({
     organizationId,
   }: {
@@ -204,6 +214,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     });
   }
 
+  @Log()
   private async getCachedClerkUserAndOrganization({
     userId,
     organizationId,
@@ -254,6 +265,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     };
   }
 
+  @Log()
   private async getCachedClerkOrganization({
     organizationId,
     ignoreCache = false,

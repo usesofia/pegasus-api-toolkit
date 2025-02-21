@@ -44,5 +44,6 @@ export * from './utils/entity.utils';
 export * from './utils/log.utils';
 export * from './utils/zod.utils';
 export * from './utils/channel.utils';
+export * from './utils/clerk.utils';
 export * from './base';
 export * from './app-exceptions.filter';
