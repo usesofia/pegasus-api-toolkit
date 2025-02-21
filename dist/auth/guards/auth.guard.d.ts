@@ -8,8 +8,8 @@ export declare class AuthGuard extends Base implements CanActivate {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
     protected readonly cls: ClsService;
-    private reflector;
-    private readonly authService;
+    protected readonly reflector: Reflector;
+    protected readonly authService: AuthServicePort;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, reflector: Reflector, authService: AuthServicePort);
     private extractTokenFromHeader;
     canActivate(context: ExecutionContext): Promise<boolean>;

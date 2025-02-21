@@ -1,21 +1,42 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, Inject, LoggerService } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthUserEntity } from '../entities/auth-user.entity';
 import { ORGANIZATION_ROLES_KEY } from '../decorators/organization-roles.decorator';
+import { AuthGuard } from './auth.guard';
+import { BASE_CONFIG, BaseConfigEntity } from '../../config/base-config.entity';
+import { ClsService } from 'nestjs-cls';
+import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
+import { AUTH_SERVICE_PORT, AuthServicePort } from '../ports/auth-service.port';
 
 @Injectable()
-export class OrganizationRolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+export class OrganizationRolesGuard extends AuthGuard implements CanActivate {
+  constructor(
+    @Inject(BASE_CONFIG) protected readonly baseConfig: BaseConfigEntity,
+    @Inject(LOGGER_SERVICE_PORT) protected readonly logger: LoggerService,
+    protected readonly cls: ClsService,
+    protected readonly reflector: Reflector,
+    @Inject(AUTH_SERVICE_PORT)
+    protected readonly authService: AuthServicePort,
+  ) {
+    super(baseConfig, logger, cls, reflector, authService);
+  }
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const allowedRoles = this.reflector.get<string[]>(
       ORGANIZATION_ROLES_KEY,
       context.getHandler(),
     );
+    
     if (!allowedRoles) {
       return true;
     }
-    const { user } = context.switchToHttp().getRequest();
+
+    let { user } = context.switchToHttp().getRequest();
+
+    if(!user) {
+      await super.canActivate(context);
+      user = context.switchToHttp().getRequest().user;
+    }
 
     const userOrgRole = (user as AuthUserEntity).organization!.role;
     

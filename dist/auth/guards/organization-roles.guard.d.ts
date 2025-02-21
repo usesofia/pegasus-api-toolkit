@@ -1,8 +1,16 @@
-import { CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, LoggerService } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-export declare class OrganizationRolesGuard implements CanActivate {
-    private reflector;
-    constructor(reflector: Reflector);
-    canActivate(context: ExecutionContext): boolean;
+import { AuthGuard } from './auth.guard';
+import { BaseConfigEntity } from '../../config/base-config.entity';
+import { ClsService } from 'nestjs-cls';
+import { AuthServicePort } from '../ports/auth-service.port';
+export declare class OrganizationRolesGuard extends AuthGuard implements CanActivate {
+    protected readonly baseConfig: BaseConfigEntity;
+    protected readonly logger: LoggerService;
+    protected readonly cls: ClsService;
+    protected readonly reflector: Reflector;
+    protected readonly authService: AuthServicePort;
+    constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, reflector: Reflector, authService: AuthServicePort);
+    canActivate(context: ExecutionContext): Promise<boolean>;
 }
 export declare const ORGANIZATION_ROLES_GUARD: unique symbol;

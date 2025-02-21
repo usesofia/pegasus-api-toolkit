@@ -20,9 +20,9 @@ export class AuthGuard extends Base implements CanActivate {
     @Inject(BASE_CONFIG) protected readonly baseConfig: BaseConfigEntity,
     @Inject(LOGGER_SERVICE_PORT) protected readonly logger: LoggerService,
     protected readonly cls: ClsService,
-    private reflector: Reflector,
+    protected readonly reflector: Reflector,
     @Inject(AUTH_SERVICE_PORT)
-    private readonly authService: AuthServicePort,
+    protected readonly authService: AuthServicePort,
   ) {
     super(AuthGuard.name, baseConfig, logger, cls);
   }
