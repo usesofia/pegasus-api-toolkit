@@ -31,11 +31,6 @@ const memberUsers = [
     TestUser.JOANA,
 ];
 
-const groupOrganizations = [
-    TestOrganization.VETTOR_BPO,
-    TestOrganization.NAGUMO_SUPERMERCADOS,
-]
-
 const processToken = (token: string): [TestUser, TestOrganization | undefined] => {
     const splitedToken = token.split(':');
 

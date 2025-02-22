@@ -22,7 +22,6 @@ const sensitiveFields = [
     'passwordHash',
     'accessToken',
     'refreshToken',
-    'code',
     'token',
 ];
 const getStringfyReplacer = () => {

@@ -16,21 +16,13 @@ import { Duration } from 'luxon';
 import { Base } from '../../base';
 import { ClsService } from 'nestjs-cls';
 import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
-import { ClerkClient, ClerkLogger } from '@usesofia/clerk-backend';
+import { ClerkClient } from '@usesofia/clerk-backend';
 import { Organization, User } from '@clerk/backend';
 import { Log } from '../../utils/log.utils';
-
-type ClerkVerifyToken = (token: string) => Promise<{
-  sub: string;
-  org_id?: string;
-  org_role?: string;
-}>;
-
-export const CLERK_CLIENT = Symbol('ClerkClient');
-export const CLERK_VERIFY_TOKEN = Symbol('ClerkVerifyToken');
+import { CLERK_CLIENT, CLERK_VERIFY_TOKEN, ClerkVerifyToken } from '../constants/clerk.constants';
 
 @Injectable()
-export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, ClerkLogger {
+export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
   constructor(
     @Inject(BASE_CONFIG)
     protected readonly baseConfig: BaseConfigEntity,
@@ -46,38 +38,6 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort, Cl
     private readonly clerkVerifyToken: ClerkVerifyToken,
   ) {
     super(ClerkAuthServiceAdapter.name, baseConfig, logger, cls);
-  }
-  
-  logClerkInput({ functionName, args }: { functionName: string; args: any[] }): void {
-    this.logDebug({
-      functionName,
-      suffix: 'input',
-      data: { args },
-    });
-  }
-
-  logClerkOutput({ functionName, output }: { functionName: string; output: any }): void {
-    this.logDebug({
-      functionName,
-      suffix: 'output',
-      data: { output },
-    });
-  }
-
-  logClerkRetryError({ functionName, currentAttempt, error }: { functionName: string; currentAttempt: number; error: any }): void {
-    this.logWarn({
-      functionName,
-      suffix: 'retry',
-      data: { currentAttempt, error },
-    });
-  }
-
-  logClerkError({ functionName, error }: { functionName: string; error: any }): void {
-    this.logError({
-      functionName,
-      suffix: 'error',
-      data: { error },
-    });
   }
 
   @Log()

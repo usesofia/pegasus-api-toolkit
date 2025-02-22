@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { CLERK_CLIENT, CLERK_VERIFY_TOKEN, ClerkAuthServiceAdapter } from './adapters/clerk-auth-service.adapter';
+import { ClerkAuthServiceAdapter } from './adapters/clerk-auth-service.adapter';
 import { AUTH_SERVICE_PORT } from './ports/auth-service.port';
 import { AUTH_GUARD, AuthGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
@@ -17,6 +17,8 @@ import {
   OrganizationTypesGuard,
 } from './guards/organization-types.guard';
 import { createClerkClient, verifyToken } from '@usesofia/clerk-backend';
+import { CLERK_CLIENT, CLERK_VERIFY_TOKEN } from './constants/clerk.constants';
+import { ClerkLoggerServiceAdapter } from './adapters/clerk-logger-service.adapter';
 
 @Global()
 @Module({
@@ -80,18 +82,19 @@ import { createClerkClient, verifyToken } from '@usesofia/clerk-backend';
       },
       inject: [BASE_CONFIG, GCP_SERVICE_ACCOUNT_GUARD],
     },
+    ClerkLoggerServiceAdapter,
     {
       provide: CLERK_CLIENT,
-      useFactory: (baseConfig: BaseConfigEntity, clerkAuthServiceAdapter: ClerkAuthServiceAdapter) => {
+      useFactory: (baseConfig: BaseConfigEntity, clerkLoggerServiceAdapter: ClerkLoggerServiceAdapter) => {
         return createClerkClient({
           secretKey: baseConfig.clerk.secretKey,
-        }, clerkAuthServiceAdapter);
+        }, clerkLoggerServiceAdapter);
       },
-      inject: [BASE_CONFIG, ClerkAuthServiceAdapter],
+      inject: [BASE_CONFIG, ClerkLoggerServiceAdapter],
     },
     {
       provide: CLERK_VERIFY_TOKEN,
-      useValue: verifyToken,
+      useFactory: () => verifyToken,
     },
   ],
   controllers: [],

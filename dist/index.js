@@ -31,6 +31,8 @@ __exportStar(require("./auth/guards/organization-types.guard"), exports);
 __exportStar(require("./auth/payloads/cache-hit-on-get-auth-user.payload"), exports);
 __exportStar(require("./auth/ports/auth-service.port"), exports);
 __exportStar(require("./auth/adapters/clerk-auth-service.adapter"), exports);
+__exportStar(require("./auth/adapters/clerk-logger-service.adapter"), exports);
+__exportStar(require("./auth/constants/clerk.constants"), exports);
 __exportStar(require("./cache/cache.module"), exports);
 __exportStar(require("./cache/adapters/memory-cache-service.adapter"), exports);
 __exportStar(require("./cache/adapters/redis-cache-service.adapter"), exports);

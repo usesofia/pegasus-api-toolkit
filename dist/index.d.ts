@@ -15,6 +15,8 @@ export * from './auth/guards/organization-types.guard';
 export * from './auth/payloads/cache-hit-on-get-auth-user.payload';
 export * from './auth/ports/auth-service.port';
 export * from './auth/adapters/clerk-auth-service.adapter';
+export * from './auth/adapters/clerk-logger-service.adapter';
+export * from './auth/constants/clerk.constants';
 export * from './cache/cache.module';
 export * from './cache/adapters/memory-cache-service.adapter';
 export * from './cache/adapters/redis-cache-service.adapter';

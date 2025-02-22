@@ -7,7 +7,6 @@ const sensitiveFields = [
   'passwordHash',
   'accessToken',
   'refreshToken',
-  'code',
   'token',
 ];
 

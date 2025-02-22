@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var ClerkAuthServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClerkAuthServiceAdapter = exports.CLERK_VERIFY_TOKEN = exports.CLERK_CLIENT = void 0;
+exports.ClerkAuthServiceAdapter = void 0;
 const common_1 = require("@nestjs/common");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_config_entity_1 = require("../../config/base-config.entity");
@@ -25,8 +25,7 @@ const nestjs_cls_1 = require("nestjs-cls");
 const logger_module_1 = require("../../logger/logger.module");
 const clerk_backend_1 = require("@usesofia/clerk-backend");
 const log_utils_1 = require("../../utils/log.utils");
-exports.CLERK_CLIENT = Symbol('ClerkClient');
-exports.CLERK_VERIFY_TOKEN = Symbol('ClerkVerifyToken');
+const clerk_constants_1 = require("../constants/clerk.constants");
 let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, cacheService, pubSubService, clerkClient, clerkVerifyToken) {
         super(ClerkAuthServiceAdapter_1.name, baseConfig, logger, cls);
@@ -37,34 +36,6 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         this.pubSubService = pubSubService;
         this.clerkClient = clerkClient;
         this.clerkVerifyToken = clerkVerifyToken;
-    }
-    logClerkInput({ functionName, args }) {
-        this.logDebug({
-            functionName,
-            suffix: 'input',
-            data: { args },
-        });
-    }
-    logClerkOutput({ functionName, output }) {
-        this.logDebug({
-            functionName,
-            suffix: 'output',
-            data: { output },
-        });
-    }
-    logClerkRetryError({ functionName, currentAttempt, error }) {
-        this.logWarn({
-            functionName,
-            suffix: 'retry',
-            data: { currentAttempt, error },
-        });
-    }
-    logClerkError({ functionName, error }) {
-        this.logError({
-            functionName,
-            suffix: 'error',
-            data: { error },
-        });
     }
     async verifyToken(token) {
         const jwt = await this.clerkVerifyToken(token);
@@ -241,8 +212,8 @@ exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter = ClerkAuthServiceAdap
     __param(1, (0, common_1.Inject)(logger_module_1.LOGGER_SERVICE_PORT)),
     __param(3, (0, common_1.Inject)(cache_service_port_1.CACHE_SERVICE_PORT)),
     __param(4, (0, common_1.Inject)(pub_sub_service_port_1.PUB_SUB_SERVICE_PORT)),
-    __param(5, (0, common_1.Inject)(exports.CLERK_CLIENT)),
-    __param(6, (0, common_1.Inject)(exports.CLERK_VERIFY_TOKEN)),
+    __param(5, (0, common_1.Inject)(clerk_constants_1.CLERK_CLIENT)),
+    __param(6, (0, common_1.Inject)(clerk_constants_1.CLERK_VERIFY_TOKEN)),
     __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, Object, clerk_backend_1.ClerkClient, Function])
 ], ClerkAuthServiceAdapter);
 //# sourceMappingURL=clerk-auth-service.adapter.js.map
