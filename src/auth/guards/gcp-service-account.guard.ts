@@ -71,4 +71,3 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
 }
 
 export const GCP_SERVICE_ACCOUNT_GUARD = Symbol('GcpServiceAccountGuard');
-

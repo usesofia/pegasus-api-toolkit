@@ -1,4 +1,10 @@
-import { Global, Module, Inject, OnApplicationShutdown, LoggerService } from '@nestjs/common';
+import {
+  Global,
+  Module,
+  Inject,
+  OnApplicationShutdown,
+  LoggerService,
+} from '@nestjs/common';
 import { RedisCacheServiceAdapter } from './adapters/redis-cache-service.adapter';
 import { CACHE_SERVICE_PORT } from './ports/cache-service.port';
 import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
@@ -37,9 +43,7 @@ const REDIS = Symbol('Redis');
   exports: [CACHE_SERVICE_PORT],
 })
 export class CacheModule implements OnApplicationShutdown {
-  constructor(
-    @Inject(REDIS) private readonly redis: Redis | null,
-  ) {}
+  constructor(@Inject(REDIS) private readonly redis: Redis | null) {}
 
   async onApplicationShutdown() {
     if (this.redis) {

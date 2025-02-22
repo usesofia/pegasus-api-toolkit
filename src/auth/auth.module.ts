@@ -85,10 +85,16 @@ import { ClerkLoggerServiceAdapter } from './adapters/clerk-logger-service.adapt
     ClerkLoggerServiceAdapter,
     {
       provide: CLERK_CLIENT,
-      useFactory: (baseConfig: BaseConfigEntity, clerkLoggerServiceAdapter: ClerkLoggerServiceAdapter) => {
-        return createClerkClient({
-          secretKey: baseConfig.clerk.secretKey,
-        }, clerkLoggerServiceAdapter);
+      useFactory: (
+        baseConfig: BaseConfigEntity,
+        clerkLoggerServiceAdapter: ClerkLoggerServiceAdapter,
+      ) => {
+        return createClerkClient(
+          {
+            secretKey: baseConfig.clerk.secretKey,
+          },
+          clerkLoggerServiceAdapter,
+        );
       },
       inject: [BASE_CONFIG, ClerkLoggerServiceAdapter],
     },
@@ -98,8 +104,6 @@ import { ClerkLoggerServiceAdapter } from './adapters/clerk-logger-service.adapt
     },
   ],
   controllers: [],
-  exports: [
-    AUTH_SERVICE_PORT,
-  ],
+  exports: [AUTH_SERVICE_PORT],
 })
 export class AuthModule {}

@@ -38,17 +38,15 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     );
   }
 
-  async publish(
-    {
-      topic,
-      payload,
-      correlationId,
-    }: {
-      topic: string;
-      payload: Record<string, any>;
-      correlationId?: string;
-    },
-  ): Promise<void> {
+  async publish({
+    topic,
+    payload,
+    correlationId,
+  }: {
+    topic: string;
+    payload: Record<string, any>;
+    correlationId?: string;
+  }): Promise<void> {
     const messageId = await this.pubSub
       .topic(topic)
       .publishMessage({ json: payload });

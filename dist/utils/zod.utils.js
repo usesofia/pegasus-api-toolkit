@@ -26,7 +26,8 @@ exports.nullishDate = zod_1.z
         zone: 'utc',
     }).toJSDate();
 });
-exports.date = zod_1.z.string()
+exports.date = zod_1.z
+    .string()
     .refine((date) => {
     const datetime = luxon_1.DateTime.fromISO(date, {
         zone: 'utc',

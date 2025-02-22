@@ -11,23 +11,31 @@ export const AuthUserEntitySchema = z.object({
   primaryPhoneNumber: z.string(),
   firstName: z.string(),
   lastName: z.string(),
-  organization: z.object({
-    id: z.string(),
-    name: z.string(),
-    role: z.nativeEnum(OrganizationRole),
-    type: z.nativeEnum(OrganizationType),
-    parent: z.object({
+  organization: z
+    .object({
       id: z.string(),
       name: z.string(),
-      sharedContacts: z.boolean(),
-      sharedSubcategories: z.boolean(),
-      sharedTags: z.boolean(),
-    }).nullish(),
-    children: z.array(z.object({
-      id: z.string(),
-      name: z.string(),
-    })).nullish(),
-  }).nullish(),
+      role: z.nativeEnum(OrganizationRole),
+      type: z.nativeEnum(OrganizationType),
+      parent: z
+        .object({
+          id: z.string(),
+          name: z.string(),
+          sharedContacts: z.boolean(),
+          sharedSubcategories: z.boolean(),
+          sharedTags: z.boolean(),
+        })
+        .nullish(),
+      children: z
+        .array(
+          z.object({
+            id: z.string(),
+            name: z.string(),
+          }),
+        )
+        .nullish(),
+    })
+    .nullish(),
 });
 
 export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {
@@ -48,6 +56,6 @@ export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {
         role: OrganizationRole.ADMIN,
         type: OrganizationType.LEAF,
       },
-    })
+    });
   }
 }

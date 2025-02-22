@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 export declare const CHANNEL_TYPES: {
     readonly WEB_APP: "WEB_APP";
     readonly WHATSAPP: "WHATSAPP";

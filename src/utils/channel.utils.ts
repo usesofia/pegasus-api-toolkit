@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const CHANNEL_TYPES = {
   WEB_APP: 'WEB_APP',
@@ -7,4 +7,6 @@ export const CHANNEL_TYPES = {
 
 export type ChannelType = keyof typeof CHANNEL_TYPES;
 
-export const channel = z.nativeEnum(CHANNEL_TYPES).describe('Canal de origem da operação');
+export const channel = z
+  .nativeEnum(CHANNEL_TYPES)
+  .describe('Canal de origem da operação');

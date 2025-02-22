@@ -214,7 +214,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     }
   }
 
-  
   /**
    * Partially updates a document by ID.
    */

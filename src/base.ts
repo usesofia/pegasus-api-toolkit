@@ -115,7 +115,13 @@ export class Base {
     data: any;
     correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'debug', suffix, data, correlationId });
+    this.logLevel({
+      functionName,
+      level: 'debug',
+      suffix,
+      data,
+      correlationId,
+    });
   }
 
   logError({
@@ -129,7 +135,13 @@ export class Base {
     data: any;
     correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'error', suffix, data, correlationId });
+    this.logLevel({
+      functionName,
+      level: 'error',
+      suffix,
+      data,
+      correlationId,
+    });
   }
 
   logWarn({
@@ -157,7 +169,13 @@ export class Base {
     data: any;
     correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'fatal', suffix, data, correlationId });
+    this.logLevel({
+      functionName,
+      level: 'fatal',
+      suffix,
+      data,
+      correlationId,
+    });
   }
 
   logVerbose({
@@ -171,6 +189,12 @@ export class Base {
     data: any;
     correlationId?: string;
   }) {
-    this.logLevel({ functionName, level: 'verbose', suffix, data, correlationId });
+    this.logLevel({
+      functionName,
+      level: 'verbose',
+      suffix,
+      data,
+      correlationId,
+    });
   }
 }

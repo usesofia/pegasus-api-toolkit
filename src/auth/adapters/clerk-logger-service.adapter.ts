@@ -1,9 +1,9 @@
-import { Inject, Injectable, LoggerService } from "@nestjs/common";
-import { ClerkLogger } from "@usesofia/clerk-backend";
-import { Base } from "../../base";
-import { BASE_CONFIG, BaseConfigEntity } from "../../config/base-config.entity";
-import { LOGGER_SERVICE_PORT } from "../../logger/logger.module";
-import { ClsService } from "nestjs-cls";
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { ClerkLogger } from '@usesofia/clerk-backend';
+import { Base } from '../../base';
+import { BASE_CONFIG, BaseConfigEntity } from '../../config/base-config.entity';
+import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
@@ -16,7 +16,13 @@ export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
     super(ClerkLoggerServiceAdapter.name, baseConfig, logger, cls);
   }
 
-  logClerkInput({ functionName, args }: { functionName: string; args: any[] }): void {
+  logClerkInput({
+    functionName,
+    args,
+  }: {
+    functionName: string;
+    args: any[];
+  }): void {
     this.logDebug({
       functionName,
       suffix: 'input',
@@ -24,7 +30,13 @@ export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
     });
   }
 
-  logClerkOutput({ functionName, output }: { functionName: string; output: any }): void {
+  logClerkOutput({
+    functionName,
+    output,
+  }: {
+    functionName: string;
+    output: any;
+  }): void {
     this.logDebug({
       functionName,
       suffix: 'output',
@@ -32,7 +44,15 @@ export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
     });
   }
 
-  logClerkRetryError({ functionName, currentAttempt, error }: { functionName: string; currentAttempt: number; error: any }): void {
+  logClerkRetryError({
+    functionName,
+    currentAttempt,
+    error,
+  }: {
+    functionName: string;
+    currentAttempt: number;
+    error: any;
+  }): void {
     this.logWarn({
       functionName,
       suffix: 'retry',
@@ -40,7 +60,13 @@ export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
     });
   }
 
-  logClerkError({ functionName, error }: { functionName: string; error: any }): void {
+  logClerkError({
+    functionName,
+    error,
+  }: {
+    functionName: string;
+    error: any;
+  }): void {
     this.logError({
       functionName,
       suffix: 'error',

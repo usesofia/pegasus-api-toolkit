@@ -15,7 +15,11 @@ import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
 import { ClerkClient } from '@usesofia/clerk-backend';
 import { Organization, User } from '@clerk/backend';
 import { Log } from '../../utils/log.utils';
-import { CLERK_CLIENT, CLERK_VERIFY_TOKEN, ClerkVerifyToken } from '../constants/clerk.constants';
+import {
+  CLERK_CLIENT,
+  CLERK_VERIFY_TOKEN,
+  ClerkVerifyToken,
+} from '../constants/clerk.constants';
 
 @Injectable()
 export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
@@ -76,20 +80,21 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
           ignoreCache,
         });
       }
-  
+
       let childrenOrganizations: Organization[] | null = null;
-  
+
       if (clerkOrganization.publicMetadata!.children) {
         childrenOrganizations = await Promise.all(
-          (clerkOrganization.publicMetadata!.children as string[]).map((child) =>
-            this.getCachedClerkOrganization({
-              organizationId: child as string,
-              ignoreCache,
-            }),
+          (clerkOrganization.publicMetadata!.children as string[]).map(
+            (child) =>
+              this.getCachedClerkOrganization({
+                organizationId: child as string,
+                ignoreCache,
+              }),
           ),
         );
       }
-  
+
       return AuthUserEntity.build({
         id: clerkUser.id,
         primaryEmail: clerkUser.emailAddresses[0].emailAddress,
@@ -100,15 +105,17 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
           id: clerkOrganization.id,
           name: clerkOrganization.name,
           role: organizationRole as OrganizationRole,
-          type: clerkOrganization.publicMetadata!
-            .type as OrganizationType,
+          type: clerkOrganization.publicMetadata!.type as OrganizationType,
           parent: parentOrganization
             ? {
                 id: parentOrganization.id,
                 name: parentOrganization.name,
-                sharedContacts: parentOrganization.publicMetadata!.sharedContacts as boolean,
-                sharedSubcategories: parentOrganization.publicMetadata!.sharedSubcategories as boolean,
-                sharedTags: parentOrganization.publicMetadata!.sharedTags as boolean,
+                sharedContacts: parentOrganization.publicMetadata!
+                  .sharedContacts as boolean,
+                sharedSubcategories: parentOrganization.publicMetadata!
+                  .sharedSubcategories as boolean,
+                sharedTags: parentOrganization.publicMetadata!
+                  .sharedTags as boolean,
               }
             : null,
           children: childrenOrganizations
@@ -145,10 +152,10 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     const [clerkUser, clerkOrganization] = await Promise.all([
       this.clerkClient.users.getUser(userId),
       organizationId
-          ? this.clerkClient.organizations.getOrganization({
-              organizationId,
-            })
-          : undefined,
+        ? this.clerkClient.organizations.getOrganization({
+            organizationId,
+          })
+        : undefined,
     ]);
 
     return {

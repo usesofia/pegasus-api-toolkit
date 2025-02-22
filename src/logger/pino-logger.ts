@@ -159,7 +159,7 @@ export class PinoLoggerAdapter implements LoggerService {
   async flush(): Promise<void> {
     await new Promise<void>((resolve, reject) => {
       this.remoteLogger.flush((error?: Error) => {
-        if(error) reject(error);
+        if (error) reject(error);
         resolve();
       });
     });

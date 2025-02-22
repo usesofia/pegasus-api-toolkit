@@ -27,7 +27,8 @@ export const nullishDate = z
     }).toJSDate();
   });
 
-export const date = z.string()
+export const date = z
+  .string()
   .refine(
     (date) => {
       const datetime = DateTime.fromISO(date, {

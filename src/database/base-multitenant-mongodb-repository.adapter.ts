@@ -257,7 +257,11 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     previousSession?: BaseSessionPort;
   }): Promise<TEntity | null> {
     try {
-      return await this.partialUpdateOrThrow({ requester, request, previousSession });
+      return await this.partialUpdateOrThrow({
+        requester,
+        request,
+        previousSession,
+      });
     } catch (error) {
       if (error instanceof NotFoundException) {
         return null;
@@ -290,7 +294,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       throw new NotFoundException('Recurso não encontrado.');
     }
   }
-  
+
   /**
    * Removes a document by ID.
    */

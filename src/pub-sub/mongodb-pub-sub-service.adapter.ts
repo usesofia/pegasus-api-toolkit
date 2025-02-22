@@ -19,7 +19,10 @@ interface PublishBufferItem {
 }
 
 @Injectable()
-export class MongoDbPubSubServiceAdapter extends Base implements PubSubServicePort {
+export class MongoDbPubSubServiceAdapter
+  extends Base
+  implements PubSubServicePort
+{
   private publishBuffer: PublishBufferItem[] = [];
   private publishBufferFlushInterval: NodeJS.Timeout;
 

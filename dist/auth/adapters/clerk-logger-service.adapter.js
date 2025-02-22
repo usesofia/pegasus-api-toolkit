@@ -26,28 +26,28 @@ let ClerkLoggerServiceAdapter = ClerkLoggerServiceAdapter_1 = class ClerkLoggerS
         this.logger = logger;
         this.cls = cls;
     }
-    logClerkInput({ functionName, args }) {
+    logClerkInput({ functionName, args, }) {
         this.logDebug({
             functionName,
             suffix: 'input',
             data: { args },
         });
     }
-    logClerkOutput({ functionName, output }) {
+    logClerkOutput({ functionName, output, }) {
         this.logDebug({
             functionName,
             suffix: 'output',
             data: { output },
         });
     }
-    logClerkRetryError({ functionName, currentAttempt, error }) {
+    logClerkRetryError({ functionName, currentAttempt, error, }) {
         this.logWarn({
             functionName,
             suffix: 'retry',
             data: { currentAttempt, error },
         });
     }
-    logClerkError({ functionName, error }) {
+    logClerkError({ functionName, error, }) {
         this.logError({
             functionName,
             suffix: 'error',

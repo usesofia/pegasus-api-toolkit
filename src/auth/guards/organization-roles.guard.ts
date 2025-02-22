@@ -1,4 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext, Inject, LoggerService } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  LoggerService,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthUserEntity } from '../entities/auth-user.entity';
 import { ORGANIZATION_ROLES_KEY } from '../decorators/organization-roles.decorator';
@@ -26,20 +32,20 @@ export class OrganizationRolesGuard extends AuthGuard implements CanActivate {
       ORGANIZATION_ROLES_KEY,
       context.getHandler(),
     );
-    
+
     if (!allowedRoles) {
       return true;
     }
 
     let { user } = context.switchToHttp().getRequest();
 
-    if(!user) {
+    if (!user) {
       await super.canActivate(context);
       user = context.switchToHttp().getRequest().user;
     }
 
     const userOrgRole = (user as AuthUserEntity).organization!.role;
-    
+
     if (!userOrgRole) {
       return false;
     }

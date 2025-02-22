@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({
   collection: 'PubSubEvents',
@@ -12,4 +12,6 @@ export class MongoDbPubSubEventModel {
   payload!: Record<string, any>;
 }
 
-export const MongoDbPubSubEventModelSchema = SchemaFactory.createForClass(MongoDbPubSubEventModel);
+export const MongoDbPubSubEventModelSchema = SchemaFactory.createForClass(
+  MongoDbPubSubEventModel,
+);

@@ -22,7 +22,9 @@ export class MemoryCacheServiceAdapter implements CacheServicePort {
       return null;
     }
 
-    const isExpired = record.createdAt.plus({ seconds: record.ttlInSeconds }).diffNow().seconds > 0;
+    const isExpired =
+      record.createdAt.plus({ seconds: record.ttlInSeconds }).diffNow()
+        .seconds > 0;
 
     if (isExpired) {
       delete this.records[key];

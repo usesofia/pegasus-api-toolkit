@@ -24,9 +24,9 @@ exports.MongoDbPubSubEventModule = MongoDbPubSubEventModule = __decorate([
                     return connection.model(exports.PUB_SUB_CONNECTION_MODEL_NAME, mongodb_pub_sub_event_model_1.MongoDbPubSubEventModelSchema);
                 },
                 inject: [primary_mongodb_database_module_1.PRIMARY_MONGOOSE_CONNECTION],
-            }
+            },
         ],
-        exports: [exports.PUB_SUB_EVENT_MODEL]
+        exports: [exports.PUB_SUB_EVENT_MODEL],
     })
 ], MongoDbPubSubEventModule);
 //# sourceMappingURL=mongodb-pub-sub-event.module.js.map

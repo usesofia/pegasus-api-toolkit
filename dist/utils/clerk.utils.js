@@ -28,9 +28,7 @@ var TestUser;
     TestUser["RENATA"] = "RENATA";
     TestUser["FERNANDA"] = "FERNANDA";
 })(TestUser || (exports.TestUser = TestUser = {}));
-const memberUsers = [
-    TestUser.JOANA,
-];
+const memberUsers = [TestUser.JOANA];
 const processToken = (token) => {
     const splitedToken = token.split(':');
     if (splitedToken.length === 1) {
@@ -42,7 +40,9 @@ const processToken = (token) => {
         const organization = TestOrganization[splitedToken[1]];
         switch (organization) {
             case TestOrganization.AMBEV:
-                if (user !== TestUser.JOAO && user !== TestUser.JOANA && user !== TestUser.JULIANA) {
+                if (user !== TestUser.JOAO &&
+                    user !== TestUser.JOANA &&
+                    user !== TestUser.JULIANA) {
                     throw new Error(`Invalid user ${user} for organization ${organization}.`);
                 }
                 break;
@@ -90,15 +90,15 @@ const processToken = (token) => {
         throw new Error(`Invalid token ${token}.`);
     }
 };
-const buildClerkUser = ({ user, }) => {
+const buildClerkUser = ({ user }) => {
     const userId = (0, uuid_1.v4)();
     const emailAddresses = [
         {
             id: (0, uuid_1.v4)(),
             emailAddress: `${user.toString().toLowerCase()}-${userId}@example.com`,
             linkedTo: [],
-            verification: null
-        }
+            verification: null,
+        },
     ];
     const phoneNumbers = [
         {
@@ -107,8 +107,8 @@ const buildClerkUser = ({ user, }) => {
             linkedTo: [],
             verification: null,
             reservedForSecondFactor: false,
-            defaultSecondFactor: false
-        }
+            defaultSecondFactor: false,
+        },
     ];
     const firstName = user.toString().charAt(0).toUpperCase() + user.toString().slice(1);
     const lastName = faker_1.faker.person.lastName();
@@ -148,7 +148,7 @@ const buildClerkUser = ({ user, }) => {
         legalAcceptedAt: 1713542400,
         primaryEmailAddress: emailAddresses[0],
         primaryPhoneNumber: phoneNumbers[0],
-        primaryWeb3Wallet: null
+        primaryWeb3Wallet: null,
     };
     return clerkUser;
 };
@@ -156,7 +156,8 @@ const buildClerkOrganization = ({ organization, }) => {
     const organizationId = (0, uuid_1.v4)();
     const clerkOrganization = {
         id: organizationId,
-        name: organization.toString().charAt(0).toUpperCase() + organization.toString().slice(1),
+        name: organization.toString().charAt(0).toUpperCase() +
+            organization.toString().slice(1),
         slug: organization.toString().toLowerCase() + '-' + organizationId,
         imageUrl: 'https://example.com/image.png',
         hasImage: true,
@@ -165,7 +166,7 @@ const buildClerkOrganization = ({ organization, }) => {
         publicMetadata: {},
         privateMetadata: {},
         maxAllowedMemberships: 100,
-        adminDeleteEnabled: true
+        adminDeleteEnabled: true,
     };
     return clerkOrganization;
 };
@@ -184,27 +185,43 @@ const buildClerkClientMock = () => {
         [TestUser.FERNANDA]: buildClerkUser({ user: TestUser.FERNANDA }),
     };
     const plainClerkOrganizations = {
-        [TestOrganization.AMBEV]: buildClerkOrganization({ organization: TestOrganization.AMBEV }),
-        [TestOrganization.EMBRAER]: buildClerkOrganization({ organization: TestOrganization.EMBRAER }),
-        [TestOrganization.VETTOR_BPO]: buildClerkOrganization({ organization: TestOrganization.VETTOR_BPO }),
-        [TestOrganization.RESERVA_STORE_42]: buildClerkOrganization({ organization: TestOrganization.RESERVA_STORE_42 }),
-        [TestOrganization.CHILLIBEANS_STORE_312]: buildClerkOrganization({ organization: TestOrganization.CHILLIBEANS_STORE_312 }),
-        [TestOrganization.NAGUMO_SUPERMERCADOS]: buildClerkOrganization({ organization: TestOrganization.NAGUMO_SUPERMERCADOS }),
-        [TestOrganization.NAGUMO_STORE_123]: buildClerkOrganization({ organization: TestOrganization.NAGUMO_STORE_123 }),
-        [TestOrganization.NAGUMO_STORE_321]: buildClerkOrganization({ organization: TestOrganization.NAGUMO_STORE_321 }),
+        [TestOrganization.AMBEV]: buildClerkOrganization({
+            organization: TestOrganization.AMBEV,
+        }),
+        [TestOrganization.EMBRAER]: buildClerkOrganization({
+            organization: TestOrganization.EMBRAER,
+        }),
+        [TestOrganization.VETTOR_BPO]: buildClerkOrganization({
+            organization: TestOrganization.VETTOR_BPO,
+        }),
+        [TestOrganization.RESERVA_STORE_42]: buildClerkOrganization({
+            organization: TestOrganization.RESERVA_STORE_42,
+        }),
+        [TestOrganization.CHILLIBEANS_STORE_312]: buildClerkOrganization({
+            organization: TestOrganization.CHILLIBEANS_STORE_312,
+        }),
+        [TestOrganization.NAGUMO_SUPERMERCADOS]: buildClerkOrganization({
+            organization: TestOrganization.NAGUMO_SUPERMERCADOS,
+        }),
+        [TestOrganization.NAGUMO_STORE_123]: buildClerkOrganization({
+            organization: TestOrganization.NAGUMO_STORE_123,
+        }),
+        [TestOrganization.NAGUMO_STORE_321]: buildClerkOrganization({
+            organization: TestOrganization.NAGUMO_STORE_321,
+        }),
     };
     const clerkOrganizations = {
         [TestOrganization.AMBEV]: {
             ...plainClerkOrganizations[TestOrganization.AMBEV],
             publicMetadata: {
-                type: 'LEAF'
-            }
+                type: 'LEAF',
+            },
         },
         [TestOrganization.EMBRAER]: {
             ...plainClerkOrganizations[TestOrganization.EMBRAER],
             publicMetadata: {
-                type: 'LEAF'
-            }
+                type: 'LEAF',
+            },
         },
         [TestOrganization.VETTOR_BPO]: {
             ...plainClerkOrganizations[TestOrganization.VETTOR_BPO],
@@ -213,22 +230,22 @@ const buildClerkClientMock = () => {
                 children: [
                     plainClerkOrganizations[TestOrganization.RESERVA_STORE_42].id,
                     plainClerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312].id,
-                ]
-            }
+                ],
+            },
         },
         [TestOrganization.RESERVA_STORE_42]: {
             ...plainClerkOrganizations[TestOrganization.RESERVA_STORE_42],
             publicMetadata: {
                 type: 'LEAF',
                 parent: plainClerkOrganizations[TestOrganization.VETTOR_BPO].id,
-            }
+            },
         },
         [TestOrganization.CHILLIBEANS_STORE_312]: {
             ...plainClerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312],
             publicMetadata: {
                 type: 'LEAF',
                 parent: plainClerkOrganizations[TestOrganization.VETTOR_BPO].id,
-            }
+            },
         },
         [TestOrganization.NAGUMO_SUPERMERCADOS]: {
             ...plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS],
@@ -237,23 +254,23 @@ const buildClerkClientMock = () => {
                 children: [
                     plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123].id,
                     plainClerkOrganizations[TestOrganization.NAGUMO_STORE_321].id,
-                ]
-            }
+                ],
+            },
         },
         [TestOrganization.NAGUMO_STORE_123]: {
             ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123],
             publicMetadata: {
                 type: 'LEAF',
                 parent: plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS].id,
-            }
+            },
         },
         [TestOrganization.NAGUMO_STORE_321]: {
             ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_321],
             publicMetadata: {
                 type: 'LEAF',
                 parent: plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS].id,
-            }
-        }
+            },
+        },
     };
     return {
         verifyToken: jest.fn().mockImplementation((token) => {
@@ -282,7 +299,9 @@ const buildClerkClientMock = () => {
             }),
         },
         organizations: {
-            getOrganization: jest.fn().mockImplementation(({ organizationId }) => {
+            getOrganization: jest
+                .fn()
+                .mockImplementation(({ organizationId }) => {
                 return Object.values(clerkOrganizations).find((organization) => organization.id === organizationId);
             }),
         },

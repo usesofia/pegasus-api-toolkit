@@ -3,7 +3,10 @@ import { PUB_SUB_SERVICE_PORT } from './pub-sub-service.port';
 import { GcpPubSubServiceAdapter } from './gcp-pub-sub-service.adapter';
 import { GcpPubSubModule } from './gcp-pub-sub.module';
 import { MongoDbPubSubServiceAdapter } from './mongodb-pub-sub-service.adapter';
-import { isIntegrationTestEnvironment, isLocalEnvironment } from '../utils/environment.utils';
+import {
+  isIntegrationTestEnvironment,
+  isLocalEnvironment,
+} from '../utils/environment.utils';
 import { MongoDbPubSubEventModule } from './mongodb-pub-sub-event.module';
 
 @Global()
@@ -14,7 +17,10 @@ import { MongoDbPubSubEventModule } from './mongodb-pub-sub-event.module';
     MongoDbPubSubServiceAdapter,
     {
       provide: PUB_SUB_SERVICE_PORT,
-      useFactory: (gcpPubSubServiceAdapter: GcpPubSubServiceAdapter, mongoDbPubSubServiceAdapter: MongoDbPubSubServiceAdapter) => {
+      useFactory: (
+        gcpPubSubServiceAdapter: GcpPubSubServiceAdapter,
+        mongoDbPubSubServiceAdapter: MongoDbPubSubServiceAdapter,
+      ) => {
         if (isLocalEnvironment() || isIntegrationTestEnvironment()) {
           return mongoDbPubSubServiceAdapter;
         }

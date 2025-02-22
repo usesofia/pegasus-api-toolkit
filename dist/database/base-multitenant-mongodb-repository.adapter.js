@@ -136,7 +136,11 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
     }
     async partialUpdate({ requester, request, previousSession, }) {
         try {
-            return await this.partialUpdateOrThrow({ requester, request, previousSession });
+            return await this.partialUpdateOrThrow({
+                requester,
+                request,
+                previousSession,
+            });
         }
         catch (error) {
             if (error instanceof common_1.NotFoundException) {
