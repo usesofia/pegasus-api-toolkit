@@ -46,13 +46,14 @@ const getStringfyReplacer = () => {
 let PinoLoggerAdapter = class PinoLoggerAdapter {
     constructor(baseConfig) {
         this.baseConfig = baseConfig;
+        this.batchInterval = 100;
         this.remoteLogger = (0, pino_1.default)({
             transport: {
                 target: '@logtail/pino',
                 options: {
                     sourceToken: baseConfig.logger.betterStackSourceToken,
                     options: {
-                        batchInterval: 100,
+                        batchInterval: this.batchInterval,
                         retryCount: 16,
                         retryBackoff: 400,
                         endpoint: baseConfig.logger.betterStackEndpoint,
@@ -148,8 +149,10 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         throw new Error('Not implemented.');
     }
     async flush() {
-        await new Promise((resolve) => {
-            this.remoteLogger.flush((_) => {
+        await new Promise((resolve, reject) => {
+            this.remoteLogger.flush((error) => {
+                if (error)
+                    reject(error);
                 resolve();
             });
         });

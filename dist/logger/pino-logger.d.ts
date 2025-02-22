@@ -6,6 +6,7 @@ export declare class PinoLoggerAdapter implements LoggerService {
     private readonly consoleLogger;
     private readonly shouldConsoleLog;
     private readonly environment;
+    private readonly batchInterval;
     constructor(baseConfig: BaseConfigEntity);
     logLevel(level: LogLevel, message: any, ...optionalParams: any[]): void;
     log(message: any, ...optionalParams: any[]): void;

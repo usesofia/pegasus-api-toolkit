@@ -5,6 +5,7 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
+  OnApplicationShutdown,
 } from '@nestjs/common';
 import { PinoLoggerAdapter } from './pino-logger';
 import * as morgan from 'morgan';
@@ -20,18 +21,29 @@ morgan.token(correlationIdTokenKey, (req: any) => req[correlationIdKey]);
 @Global()
 @Module({
   providers: [
+    PinoLoggerAdapter,
     {
       provide: LOGGER_SERVICE_PORT,
-      useClass: PinoLoggerAdapter,
+      useFactory: (pinoLoggerAdapter: PinoLoggerAdapter) => {
+        return pinoLoggerAdapter;
+      },
+      inject: [PinoLoggerAdapter],
     },
   ],
   exports: [LOGGER_SERVICE_PORT],
 })
-export class LoggerModule implements NestModule {
+export class LoggerModule implements NestModule, OnApplicationShutdown {
   constructor(
+    @Inject(PinoLoggerAdapter)
+    private readonly pinoLoggerAdapter: PinoLoggerAdapter,
     @Inject(LOGGER_SERVICE_PORT)
     private readonly loggerService: LoggerService,
   ) {}
+
+  async onApplicationShutdown() {
+    await this.pinoLoggerAdapter.flush();
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+  }
 
   public configure(consumer: MiddlewareConsumer): void {
     consumer

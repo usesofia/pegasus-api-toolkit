@@ -5,10 +5,6 @@ import { BaseConfigEntity, BASE_CONFIG } from '../../config/base-config.entity';
 import { OrganizationRole } from '../constants/organization-role.enum';
 import { OrganizationType } from '../constants/organization-type.enum';
 import {
-  PubSubServicePort,
-  PUB_SUB_SERVICE_PORT,
-} from '../../pub-sub/pub-sub-service.port';
-import {
   CACHE_SERVICE_PORT,
   CacheServicePort,
 } from '../../cache/ports/cache-service.port';
@@ -30,8 +26,6 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     protected readonly cls: ClsService,
     @Inject(CACHE_SERVICE_PORT)
     private readonly cacheService: CacheServicePort,
-    @Inject(PUB_SUB_SERVICE_PORT)
-    private readonly pubSubService: PubSubServicePort,
     @Inject(CLERK_CLIENT)
     private readonly clerkClient: ClerkClient,
     @Inject(CLERK_VERIFY_TOKEN)

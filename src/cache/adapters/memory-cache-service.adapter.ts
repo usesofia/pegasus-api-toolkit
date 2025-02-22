@@ -1,22 +1,46 @@
 import { CacheServicePort } from '../ports/cache-service.port';
 import { BaseConfigEntity } from '../../config/base-config.entity';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const cache = require('memory-cache-ttl');
+import { DateTime } from 'luxon';
+
+interface CacheRecord {
+  value: string;
+  createdAt: DateTime;
+  ttlInSeconds: number;
+}
 
 export class MemoryCacheServiceAdapter implements CacheServicePort {
+  private records: Record<string, CacheRecord> = {};
+
   constructor(private readonly baseConfig: BaseConfigEntity) {
-    cache.init({ interval: 1 });
+    this.records = {};
   }
 
   async get(key: string): Promise<string | null> {
-    return (cache.get(key) as string) || null;
+    const record = this.records[key];
+
+    if (!record) {
+      return null;
+    }
+
+    const isExpired = record.createdAt.plus({ seconds: record.ttlInSeconds }).diffNow().seconds > 0;
+
+    if (isExpired) {
+      delete this.records[key];
+      return null;
+    }
+
+    return record.value;
   }
 
   async set(key: string, value: string, ttlInSeconds?: number): Promise<void> {
-    cache.set(key, value, ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds);
+    this.records[key] = {
+      value,
+      createdAt: DateTime.now(),
+      ttlInSeconds: ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds,
+    };
   }
 
   async delete(key: string): Promise<void> {
-    cache.del(key);
+    delete this.records[key];
   }
 }

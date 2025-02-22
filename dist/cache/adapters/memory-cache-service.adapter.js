@@ -1,20 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MemoryCacheServiceAdapter = void 0;
-const cache = require('memory-cache-ttl');
+const luxon_1 = require("luxon");
 class MemoryCacheServiceAdapter {
     constructor(baseConfig) {
         this.baseConfig = baseConfig;
-        cache.init({ interval: 1 });
+        this.records = {};
+        this.records = {};
     }
     async get(key) {
-        return cache.get(key) || null;
+        const record = this.records[key];
+        if (!record) {
+            return null;
+        }
+        const isExpired = record.createdAt.plus({ seconds: record.ttlInSeconds }).diffNow().seconds > 0;
+        if (isExpired) {
+            delete this.records[key];
+            return null;
+        }
+        return record.value;
     }
     async set(key, value, ttlInSeconds) {
-        cache.set(key, value, ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds);
+        this.records[key] = {
+            value,
+            createdAt: luxon_1.DateTime.now(),
+            ttlInSeconds: ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds,
+        };
     }
     async delete(key) {
-        cache.del(key);
+        delete this.records[key];
     }
 }
 exports.MemoryCacheServiceAdapter = MemoryCacheServiceAdapter;

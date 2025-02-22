@@ -20,8 +20,13 @@ const correlation_constants_1 = require("../correlation/correlation.constants");
 exports.LOGGER_SERVICE_PORT = Symbol('LoggerServicePort');
 morgan.token(correlation_constants_1.correlationIdTokenKey, (req) => req[correlation_constants_1.correlationIdKey]);
 let LoggerModule = class LoggerModule {
-    constructor(loggerService) {
+    constructor(pinoLoggerAdapter, loggerService) {
+        this.pinoLoggerAdapter = pinoLoggerAdapter;
         this.loggerService = loggerService;
+    }
+    async onApplicationShutdown() {
+        await this.pinoLoggerAdapter.flush();
+        await new Promise((resolve) => setTimeout(resolve, 4000));
     }
     configure(consumer) {
         consumer
@@ -75,14 +80,19 @@ exports.LoggerModule = LoggerModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
         providers: [
+            pino_logger_1.PinoLoggerAdapter,
             {
                 provide: exports.LOGGER_SERVICE_PORT,
-                useClass: pino_logger_1.PinoLoggerAdapter,
+                useFactory: (pinoLoggerAdapter) => {
+                    return pinoLoggerAdapter;
+                },
+                inject: [pino_logger_1.PinoLoggerAdapter],
             },
         ],
         exports: [exports.LOGGER_SERVICE_PORT],
     }),
-    __param(0, (0, common_1.Inject)(exports.LOGGER_SERVICE_PORT)),
-    __metadata("design:paramtypes", [Object])
+    __param(0, (0, common_1.Inject)(pino_logger_1.PinoLoggerAdapter)),
+    __param(1, (0, common_1.Inject)(exports.LOGGER_SERVICE_PORT)),
+    __metadata("design:paramtypes", [pino_logger_1.PinoLoggerAdapter, Object])
 ], LoggerModule);
 //# sourceMappingURL=logger.module.js.map

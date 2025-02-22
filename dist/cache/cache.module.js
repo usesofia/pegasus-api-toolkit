@@ -5,6 +5,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheModule = void 0;
 const common_1 = require("@nestjs/common");
@@ -15,6 +21,14 @@ const memory_cache_service_adapter_1 = require("./adapters/memory-cache-service.
 const ioredis_1 = require("ioredis");
 const REDIS = Symbol('Redis');
 let CacheModule = class CacheModule {
+    constructor(redis) {
+        this.redis = redis;
+    }
+    async onApplicationShutdown() {
+        if (this.redis) {
+            await this.redis.quit();
+        }
+    }
 };
 exports.CacheModule = CacheModule;
 exports.CacheModule = CacheModule = __decorate([
@@ -47,6 +61,8 @@ exports.CacheModule = CacheModule = __decorate([
             },
         ],
         exports: [cache_service_port_1.CACHE_SERVICE_PORT],
-    })
+    }),
+    __param(0, (0, common_1.Inject)(REDIS)),
+    __metadata("design:paramtypes", [Object])
 ], CacheModule);
 //# sourceMappingURL=cache.module.js.map

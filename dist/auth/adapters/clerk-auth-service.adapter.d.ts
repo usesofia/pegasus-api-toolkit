@@ -2,7 +2,6 @@ import { LoggerService } from '@nestjs/common';
 import { AuthServicePort } from '../ports/auth-service.port';
 import { AuthUserEntity } from '../entities/auth-user.entity';
 import { BaseConfigEntity } from '../../config/base-config.entity';
-import { PubSubServicePort } from '../../pub-sub/pub-sub-service.port';
 import { CacheServicePort } from '../../cache/ports/cache-service.port';
 import { Base } from '../../base';
 import { ClsService } from 'nestjs-cls';
@@ -13,10 +12,9 @@ export declare class ClerkAuthServiceAdapter extends Base implements AuthService
     protected readonly logger: LoggerService;
     protected readonly cls: ClsService;
     private readonly cacheService;
-    private readonly pubSubService;
     private readonly clerkClient;
     private readonly clerkVerifyToken;
-    constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cacheService: CacheServicePort, pubSubService: PubSubServicePort, clerkClient: ClerkClient, clerkVerifyToken: ClerkVerifyToken);
+    constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cacheService: CacheServicePort, clerkClient: ClerkClient, clerkVerifyToken: ClerkVerifyToken);
     verifyToken(token: string): Promise<AuthUserEntity>;
     getUser({ userId, organizationId, organizationRole, ignoreCache, }: {
         userId: string;

@@ -17,7 +17,6 @@ exports.ClerkAuthServiceAdapter = void 0;
 const common_1 = require("@nestjs/common");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_config_entity_1 = require("../../config/base-config.entity");
-const pub_sub_service_port_1 = require("../../pub-sub/pub-sub-service.port");
 const cache_service_port_1 = require("../../cache/ports/cache-service.port");
 const luxon_1 = require("luxon");
 const base_1 = require("../../base");
@@ -27,13 +26,12 @@ const clerk_backend_1 = require("@usesofia/clerk-backend");
 const log_utils_1 = require("../../utils/log.utils");
 const clerk_constants_1 = require("../constants/clerk.constants");
 let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthServiceAdapter extends base_1.Base {
-    constructor(baseConfig, logger, cls, cacheService, pubSubService, clerkClient, clerkVerifyToken) {
+    constructor(baseConfig, logger, cls, cacheService, clerkClient, clerkVerifyToken) {
         super(ClerkAuthServiceAdapter_1.name, baseConfig, logger, cls);
         this.baseConfig = baseConfig;
         this.logger = logger;
         this.cls = cls;
         this.cacheService = cacheService;
-        this.pubSubService = pubSubService;
         this.clerkClient = clerkClient;
         this.clerkVerifyToken = clerkVerifyToken;
     }
@@ -211,9 +209,8 @@ exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter = ClerkAuthServiceAdap
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
     __param(1, (0, common_1.Inject)(logger_module_1.LOGGER_SERVICE_PORT)),
     __param(3, (0, common_1.Inject)(cache_service_port_1.CACHE_SERVICE_PORT)),
-    __param(4, (0, common_1.Inject)(pub_sub_service_port_1.PUB_SUB_SERVICE_PORT)),
-    __param(5, (0, common_1.Inject)(clerk_constants_1.CLERK_CLIENT)),
-    __param(6, (0, common_1.Inject)(clerk_constants_1.CLERK_VERIFY_TOKEN)),
-    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, Object, clerk_backend_1.ClerkClient, Function])
+    __param(4, (0, common_1.Inject)(clerk_constants_1.CLERK_CLIENT)),
+    __param(5, (0, common_1.Inject)(clerk_constants_1.CLERK_VERIFY_TOKEN)),
+    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, clerk_backend_1.ClerkClient, Function])
 ], ClerkAuthServiceAdapter);
 //# sourceMappingURL=clerk-auth-service.adapter.js.map
