@@ -15,12 +15,12 @@ export declare class MongoDbPubSubServiceAdapter extends Base implements PubSubS
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, pubSubEventModel: Model<MongoDbPubSubEventModel>);
     publish({ topic, payload, correlationId, }: {
         topic: string;
-        payload: Record<string, any>;
+        payload: Record<string, unknown>;
         correlationId?: string;
     }): Promise<void>;
     unsafePublish({ topic, payload, }: {
         topic: string;
-        payload: Record<string, any>;
+        payload: Record<string, unknown>;
     }): void;
     flushPublishBuffer({ max }: {
         max?: number;

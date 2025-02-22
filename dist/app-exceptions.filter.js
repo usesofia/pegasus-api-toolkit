@@ -47,12 +47,12 @@ let AppExceptionsFilter = class AppExceptionsFilter {
         const { httpAdapter } = this.httpAdapterHost;
         const ctx = host.switchToHttp();
         const { statusCode, message, errors } = this.prepareResponse(exception);
-        if (statusCode === common_1.HttpStatus.INTERNAL_SERVER_ERROR ||
-            statusCode === common_1.HttpStatus.NOT_IMPLEMENTED ||
-            statusCode === common_1.HttpStatus.BAD_GATEWAY ||
-            statusCode === common_1.HttpStatus.SERVICE_UNAVAILABLE ||
-            statusCode === common_1.HttpStatus.GATEWAY_TIMEOUT ||
-            statusCode === common_1.HttpStatus.HTTP_VERSION_NOT_SUPPORTED) {
+        if (statusCode === +common_1.HttpStatus.INTERNAL_SERVER_ERROR ||
+            statusCode === +common_1.HttpStatus.NOT_IMPLEMENTED ||
+            statusCode === +common_1.HttpStatus.BAD_GATEWAY ||
+            statusCode === +common_1.HttpStatus.SERVICE_UNAVAILABLE ||
+            statusCode === +common_1.HttpStatus.GATEWAY_TIMEOUT ||
+            statusCode === +common_1.HttpStatus.HTTP_VERSION_NOT_SUPPORTED) {
             if (exception instanceof Error) {
                 Sentry.captureException(exception, {
                     extra: {
@@ -128,7 +128,7 @@ let AppExceptionsFilter = class AppExceptionsFilter {
                 messages,
             }));
         }
-        catch (_) {
+        catch {
             return [];
         }
     }

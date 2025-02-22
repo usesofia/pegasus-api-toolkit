@@ -19,6 +19,6 @@ export declare class HealthController extends Base {
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService);
     health(): Promise<HealthResponseDto>;
     healthPost(): Promise<HealthResponseDto>;
-    error(): Promise<void>;
+    error(): Promise<never>;
 }
 export {};

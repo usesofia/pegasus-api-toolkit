@@ -68,7 +68,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     });
 
     let saved = await created.save({
-      session: previousSession?.getSession() ?? null,
+      session: previousSession ? previousSession.getSession() as ClientSession : null,
     });
 
     if (request.populate) {
@@ -96,7 +96,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
       })
-      .session(previousSession?.getSession() ?? null);
+      .session(previousSession ? previousSession.getSession() as ClientSession : null);
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -127,7 +127,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
       })
-      .session(previousSession?.getSession() ?? null);
+      .session(previousSession ? previousSession.getSession() as ClientSession : null);
 
     if (!doc) {
       return null;
@@ -225,7 +225,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       return await this._partialUpdate({
         requester,
         request,
-        session: previousSession.getSession(),
+        session: previousSession.getSession() as ClientSession,
       });
     } else {
       const session = await this.model.db.startSession();
@@ -288,7 +288,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
       })
-      .session(previousSession?.getSession() ?? null);
+      .session(previousSession ? previousSession.getSession() as ClientSession : null);
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -313,6 +313,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
       })
-      .session(previousSession?.getSession() ?? null);
+      .session(previousSession ? previousSession.getSession() as ClientSession : null);
   }
 }

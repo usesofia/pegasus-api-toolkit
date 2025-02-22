@@ -4,10 +4,8 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  UnauthorizedException,
   Inject,
   LoggerService,
-  ForbiddenException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import * as Sentry from '@sentry/node';
@@ -50,14 +48,13 @@ export class AppExceptionsFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
 
     const { statusCode, message, errors } = this.prepareResponse(exception);
-
     if (
-      statusCode === HttpStatus.INTERNAL_SERVER_ERROR ||
-      statusCode === HttpStatus.NOT_IMPLEMENTED ||
-      statusCode === HttpStatus.BAD_GATEWAY ||
-      statusCode === HttpStatus.SERVICE_UNAVAILABLE ||
-      statusCode === HttpStatus.GATEWAY_TIMEOUT ||
-      statusCode === HttpStatus.HTTP_VERSION_NOT_SUPPORTED
+      statusCode === +HttpStatus.INTERNAL_SERVER_ERROR ||
+      statusCode === +HttpStatus.NOT_IMPLEMENTED ||
+      statusCode === +HttpStatus.BAD_GATEWAY ||
+      statusCode === +HttpStatus.SERVICE_UNAVAILABLE ||
+      statusCode === +HttpStatus.GATEWAY_TIMEOUT ||
+      statusCode === +HttpStatus.HTTP_VERSION_NOT_SUPPORTED
     ) {
       if (exception instanceof Error) {
         Sentry.captureException(exception, {
@@ -142,7 +139,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
           messages,
         }),
       );
-    } catch (_) {
+    } catch {
       return [];
     }
   }

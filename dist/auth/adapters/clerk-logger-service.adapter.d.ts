@@ -10,19 +10,19 @@ export declare class ClerkLoggerServiceAdapter extends Base implements ClerkLogg
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService);
     logClerkInput({ functionName, args, }: {
         functionName: string;
-        args: any[];
+        args: unknown[];
     }): void;
     logClerkOutput({ functionName, output, }: {
         functionName: string;
-        output: any;
+        output: unknown;
     }): void;
     logClerkRetryError({ functionName, currentAttempt, error, }: {
         functionName: string;
         currentAttempt: number;
-        error: any;
+        error: unknown;
     }): void;
     logClerkError({ functionName, error, }: {
         functionName: string;
-        error: any;
+        error: unknown;
     }): void;
 }

@@ -15,11 +15,11 @@ export class MemoryCacheServiceAdapter implements CacheServicePort {
     this.records = {};
   }
 
-  async get(key: string): Promise<string | null> {
+  get(key: string): Promise<string | null> {
     const record = this.records[key];
 
     if (!record) {
-      return null;
+      return Promise.resolve(null);
     }
 
     const isExpired =
@@ -28,21 +28,24 @@ export class MemoryCacheServiceAdapter implements CacheServicePort {
 
     if (isExpired) {
       delete this.records[key];
-      return null;
+      return Promise.resolve(null);
     }
 
-    return record.value;
+    return Promise.resolve(record.value);
   }
 
-  async set(key: string, value: string, ttlInSeconds?: number): Promise<void> {
+  set(key: string, value: string, ttlInSeconds?: number): Promise<void> {
     this.records[key] = {
       value,
       createdAt: DateTime.now(),
       ttlInSeconds: ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds,
     };
+
+    return Promise.resolve();
   }
 
-  async delete(key: string): Promise<void> {
+  delete(key: string): Promise<void> {
     delete this.records[key];
+    return Promise.resolve();
   }
 }

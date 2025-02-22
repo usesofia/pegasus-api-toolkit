@@ -7,7 +7,7 @@ function createInstance<T extends ZodDto>(c: new () => T): T {
 
 function getStringfyReplacer() {
   const seen = new WeakSet();
-  return (key: any, value: any) => {
+  return (key: string, value: unknown) => {
     if (value instanceof Error) {
       return {
         name: value.name,
@@ -25,6 +25,7 @@ function getStringfyReplacer() {
   };
 }
 
+/* eslint-disable */
 export function safeInstantiateEntity<T extends ZodDto>(
   entityClass: T,
   input: any,
@@ -40,3 +41,4 @@ export function safeInstantiateEntity<T extends ZodDto>(
     throw new InternalServerErrorException(error);
   }
 }
+/* eslint-enable */

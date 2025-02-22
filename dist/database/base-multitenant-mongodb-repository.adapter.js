@@ -35,7 +35,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             ownerOrganization: this.getOwnerOrganization({ requester }),
         });
         let saved = await created.save({
-            session: previousSession?.getSession() ?? null,
+            session: previousSession ? previousSession.getSession() : null,
         });
         if (request.populate) {
             saved = await saved.populate(request.populate.split(','));
@@ -48,7 +48,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
         })
-            .session(previousSession?.getSession() ?? null);
+            .session(previousSession ? previousSession.getSession() : null);
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
@@ -63,7 +63,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
         })
-            .session(previousSession?.getSession() ?? null);
+            .session(previousSession ? previousSession.getSession() : null);
         if (!doc) {
             return null;
         }
@@ -155,7 +155,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
         })
-            .session(previousSession?.getSession() ?? null);
+            .session(previousSession ? previousSession.getSession() : null);
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
@@ -166,7 +166,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
         })
-            .session(previousSession?.getSession() ?? null);
+            .session(previousSession ? previousSession.getSession() : null);
     }
 }
 exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;

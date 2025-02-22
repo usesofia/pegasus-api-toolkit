@@ -15,7 +15,7 @@ interface PublishBufferItem {
   correlationId: string;
   id: string;
   topic: string;
-  payload: Record<string, any>;
+  payload: Record<string, unknown>;
 }
 
 @Injectable()
@@ -37,7 +37,9 @@ export class MongoDbPubSubServiceAdapter
   ) {
     super(MongoDbPubSubServiceAdapter.name, baseConfig, logger, cls);
     this.publishBufferFlushInterval = setInterval(
-      () => this.flushPublishBuffer({ max: 256 }),
+      () => {
+        void this.flushPublishBuffer({ max: 256 });
+      },
       1000,
     );
   }
@@ -48,7 +50,7 @@ export class MongoDbPubSubServiceAdapter
     correlationId,
   }: {
     topic: string;
-    payload: Record<string, any>;
+    payload: Record<string, unknown>;
     correlationId?: string;
   }): Promise<void> {
     const event = new this.pubSubEventModel({
@@ -75,7 +77,7 @@ export class MongoDbPubSubServiceAdapter
     payload,
   }: {
     topic: string;
-    payload: Record<string, any>;
+    payload: Record<string, unknown>;
   }): void {
     if (this.publishBuffer.length >= MAX_PUBLISH_BUFFER_SIZE) {
       throw new Error(

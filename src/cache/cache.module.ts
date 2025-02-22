@@ -3,7 +3,6 @@ import {
   Module,
   Inject,
   OnApplicationShutdown,
-  LoggerService,
 } from '@nestjs/common';
 import { RedisCacheServiceAdapter } from './adapters/redis-cache-service.adapter';
 import { CACHE_SERVICE_PORT } from './ports/cache-service.port';

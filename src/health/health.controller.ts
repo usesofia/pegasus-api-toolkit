@@ -49,7 +49,7 @@ export class HealthController extends Base {
   @Get('/')
   @Log()
   async health(): Promise<HealthResponseDto> {
-    return { status: 'ok' };
+    return Promise.resolve({ status: 'ok' });
   }
 
   @ApiOperation({
@@ -65,7 +65,7 @@ export class HealthController extends Base {
   @Post('/')
   @Log()
   async healthPost(): Promise<HealthResponseDto> {
-    return { status: 'ok' };
+    return Promise.resolve({ status: 'ok' });
   }
 
   @ApiOperation({
@@ -77,6 +77,6 @@ export class HealthController extends Base {
   @Get('/error')
   @Log()
   async error() {
-    throw new Error('Test error.');
+    return Promise.reject(new Error('Test error.'));
   }
 }

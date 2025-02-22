@@ -145,7 +145,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
     fatal(message, ...optionalParams) {
         this.logLevel('fatal', message, ...optionalParams);
     }
-    setLogLevels(_) {
+    setLogLevels() {
         throw new Error('Not implemented.');
     }
     async flush() {

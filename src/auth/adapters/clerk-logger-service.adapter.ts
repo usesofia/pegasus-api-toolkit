@@ -21,7 +21,7 @@ export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
     args,
   }: {
     functionName: string;
-    args: any[];
+    args: unknown[];
   }): void {
     this.logDebug({
       functionName,
@@ -35,7 +35,7 @@ export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
     output,
   }: {
     functionName: string;
-    output: any;
+    output: unknown;
   }): void {
     this.logDebug({
       functionName,
@@ -51,7 +51,7 @@ export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
   }: {
     functionName: string;
     currentAttempt: number;
-    error: any;
+    error: unknown;
   }): void {
     this.logWarn({
       functionName,
@@ -65,7 +65,7 @@ export class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
     error,
   }: {
     functionName: string;
-    error: any;
+    error: unknown;
   }): void {
     this.logError({
       functionName,

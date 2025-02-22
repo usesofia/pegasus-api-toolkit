@@ -1,5 +1,11 @@
 import { LoggerService, MiddlewareConsumer, NestModule, OnApplicationShutdown } from '@nestjs/common';
 import { PinoLoggerAdapter } from './pino-logger';
+import { correlationIdKey } from '../correlation/correlation.constants';
+declare module 'express' {
+    interface Request {
+        [correlationIdKey]: string;
+    }
+}
 export declare const LOGGER_SERVICE_PORT: unique symbol;
 export declare class LoggerModule implements NestModule, OnApplicationShutdown {
     private readonly pinoLoggerAdapter;

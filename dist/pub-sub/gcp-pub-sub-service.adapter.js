@@ -31,7 +31,7 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
         this.cls = cls;
         this.pubSub = pubSub;
         this.publishBuffer = [];
-        this.publishBufferFlushInterval = setInterval(() => this.flushPublishBuffer({ max: 256 }), 1000);
+        this.publishBufferFlushInterval = setInterval(() => void this.flushPublishBuffer({ max: 256 }), 1000);
     }
     async publish({ topic, payload, correlationId, }) {
         const messageId = await this.pubSub

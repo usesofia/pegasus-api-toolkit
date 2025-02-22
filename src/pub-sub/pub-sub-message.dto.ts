@@ -11,6 +11,7 @@ const PubSubMessageBodyDtoSchema = z.object({
   subscription: z.string(),
 });
 
+/* eslint-disable */
 export class PubSubMessageBodyDto extends createZodDto(
   PubSubMessageBodyDtoSchema,
 ) {
@@ -20,3 +21,4 @@ export class PubSubMessageBodyDto extends createZodDto(
     return safeInstantiateEntity(entityClass, parsedData);
   }
 }
+/* eslint-enable */

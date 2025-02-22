@@ -1,13 +1,11 @@
 import {
   Global,
   Inject,
-  LoggerService,
   Module,
   OnApplicationShutdown,
 } from '@nestjs/common';
 import mongoose from 'mongoose';
 import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
-import { LOGGER_SERVICE_PORT } from '../logger/logger.module';
 
 export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
 

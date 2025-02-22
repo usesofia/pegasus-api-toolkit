@@ -111,7 +111,7 @@ const processToken = (
         }
         break;
       default:
-        throw new Error(`Invalid organization ${organization}.`);
+        throw new Error(`Invalid organization ${String(organization)}.`);
     }
 
     return [user, organization];

@@ -6,13 +6,14 @@ import {
   LoggerService,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthUserEntity } from '../entities/auth-user.entity';
+import { AuthUserEntity, AuthUserEntitySchema } from '../entities/auth-user.entity';
 import { ORGANIZATION_ROLES_KEY } from '../decorators/organization-roles.decorator';
 import { AuthGuard } from './auth.guard';
 import { BASE_CONFIG, BaseConfigEntity } from '../../config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
 import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
 import { AUTH_SERVICE_PORT, AuthServicePort } from '../ports/auth-service.port';
+import { z } from 'zod';
 
 @Injectable()
 export class OrganizationRolesGuard extends AuthGuard implements CanActivate {
@@ -37,11 +38,15 @@ export class OrganizationRolesGuard extends AuthGuard implements CanActivate {
       return true;
     }
 
-    let { user } = context.switchToHttp().getRequest();
+    let { user } = context.switchToHttp().getRequest<{
+      user: z.infer<typeof AuthUserEntitySchema>;
+    }>();
 
     if (!user) {
       await super.canActivate(context);
-      user = context.switchToHttp().getRequest().user;
+      user = context.switchToHttp().getRequest<{
+        user: z.infer<typeof AuthUserEntitySchema>;
+      }>().user;
     }
 
     const userOrgRole = (user as AuthUserEntity).organization!.role;

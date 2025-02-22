@@ -48,7 +48,6 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         const { clerkUser, clerkOrganization } = await this.getCachedClerkUserAndOrganization({
             userId,
             organizationId,
-            organizationRole,
             ignoreCache,
         });
         let parentOrganization = null;
@@ -128,7 +127,7 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
             organizationId,
         });
     }
-    async getCachedClerkUserAndOrganization({ userId, organizationId, organizationRole, ignoreCache = false, }) {
+    async getCachedClerkUserAndOrganization({ userId, organizationId, ignoreCache = false, }) {
         const cacheKey = `${this.constructor.name}.getCachedClerkUserAndOrganization(${JSON.stringify({
             userId,
             organizationId,

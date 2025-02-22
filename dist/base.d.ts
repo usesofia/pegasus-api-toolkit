@@ -11,43 +11,43 @@ export declare class Base {
         functionName: string;
         level: LogLevel;
         suffix: string;
-        data: any;
+        data: Record<string, unknown>;
         correlationId?: string;
     }): void;
     log({ functionName, suffix, data, correlationId, }: {
         functionName: string;
         suffix: string;
-        data: any;
+        data: Record<string, unknown>;
         correlationId?: string;
     }): void;
     logDebug({ functionName, suffix, data, correlationId, }: {
         functionName: string;
         suffix: string;
-        data: any;
+        data: Record<string, unknown>;
         correlationId?: string;
     }): void;
     logError({ functionName, suffix, data, correlationId, }: {
         functionName: string;
         suffix: string;
-        data: any;
+        data: Record<string, unknown>;
         correlationId?: string;
     }): void;
     logWarn({ functionName, suffix, data, correlationId, }: {
         functionName: string;
         suffix: string;
-        data: any;
+        data: Record<string, unknown>;
         correlationId?: string;
     }): void;
     logFatal({ functionName, suffix, data, correlationId, }: {
         functionName: string;
         suffix: string;
-        data: any;
+        data: Record<string, unknown>;
         correlationId?: string;
     }): void;
     logVerbose({ functionName, suffix, data, correlationId, }: {
         functionName: string;
         suffix: string;
-        data: any;
+        data: Record<string, unknown>;
         correlationId?: string;
     }): void;
 }

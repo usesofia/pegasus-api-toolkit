@@ -13,7 +13,7 @@ const sensitiveFields = [
 
 const getStringfyReplacer = () => {
   const seen = new WeakSet();
-  return (key: any, value: any) => {
+  return (key: string, value: unknown) => {
     if (value instanceof Error) {
       return {
         name: value.name,
@@ -68,8 +68,8 @@ export class PinoLoggerAdapter implements LoggerService {
     this.environment = baseConfig.env.toString();
   }
 
-  logLevel(level: LogLevel, message: any, ...optionalParams: any[]) {
-    let data: any = {
+  logLevel(level: LogLevel, message: string, ...optionalParams: unknown[]) {
+    let data: Record<string, unknown> = {
       environment: this.environment,
     };
 
@@ -79,13 +79,13 @@ export class PinoLoggerAdapter implements LoggerService {
       !(optionalParams[0] instanceof Error)
     ) {
       data = {
-        ...maskAttribute(
+        ...(maskAttribute(
           JSON.parse(JSON.stringify(optionalParams[0], getStringfyReplacer())),
           sensitiveFields,
           {
             action: MaskActions.MASK,
           },
-        ),
+        ) as Record<string, unknown>),
         environment: this.environment,
       };
     } else if (
@@ -128,31 +128,31 @@ export class PinoLoggerAdapter implements LoggerService {
     }
   }
 
-  log(message: any, ...optionalParams: any[]) {
+  log(message: string, ...optionalParams: unknown[]) {
     this.logLevel('log', message, ...optionalParams);
   }
 
-  error(message: any, ...optionalParams: any[]) {
+  error(message: string, ...optionalParams: unknown[]) {
     this.logLevel('error', message, ...optionalParams);
   }
 
-  warn(message: any, ...optionalParams: any[]) {
+  warn(message: string, ...optionalParams: unknown[]) {
     this.logLevel('warn', message, ...optionalParams);
   }
 
-  debug?(message: any, ...optionalParams: any[]) {
+  debug?(message: string, ...optionalParams: unknown[]) {
     this.logLevel('debug', message, ...optionalParams);
   }
 
-  verbose?(message: any, ...optionalParams: any[]) {
+  verbose?(message: string, ...optionalParams: unknown[]) {
     this.logLevel('verbose', message, ...optionalParams);
   }
 
-  fatal?(message: any, ...optionalParams: any[]) {
+  fatal?(message: string, ...optionalParams: unknown[]) {
     this.logLevel('fatal', message, ...optionalParams);
   }
 
-  setLogLevels?(_: LogLevel[]) {
+  setLogLevels?() {
     throw new Error('Not implemented.');
   }
 

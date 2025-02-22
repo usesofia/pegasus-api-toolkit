@@ -9,7 +9,7 @@ export class MongoDbPubSubEventModel {
   topic!: string;
 
   @Prop({ type: Object })
-  payload!: Record<string, any>;
+  payload!: Record<string, unknown>;
 }
 
 export const MongoDbPubSubEventModelSchema = SchemaFactory.createForClass(

@@ -31,7 +31,9 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
         this.cls = cls;
         this.pubSubEventModel = pubSubEventModel;
         this.publishBuffer = [];
-        this.publishBufferFlushInterval = setInterval(() => this.flushPublishBuffer({ max: 256 }), 1000);
+        this.publishBufferFlushInterval = setInterval(() => {
+            void this.flushPublishBuffer({ max: 256 });
+        }, 1000);
     }
     async publish({ topic, payload, correlationId, }) {
         const event = new this.pubSubEventModel({

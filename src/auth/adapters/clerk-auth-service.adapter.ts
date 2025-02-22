@@ -67,7 +67,6 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
       await this.getCachedClerkUserAndOrganization({
         userId,
         organizationId,
-        organizationRole,
         ignoreCache,
       });
 
@@ -88,7 +87,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
           (clerkOrganization.publicMetadata!.children as string[]).map(
             (child) =>
               this.getCachedClerkOrganization({
-                organizationId: child as string,
+                organizationId: child,
                 ignoreCache,
               }),
           ),
@@ -179,12 +178,10 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
   private async getCachedClerkUserAndOrganization({
     userId,
     organizationId,
-    organizationRole,
     ignoreCache = false,
   }: {
     userId: string;
     organizationId?: string;
-    organizationRole?: string;
     ignoreCache?: boolean;
   }): Promise<{
     clerkUser: User;
@@ -200,7 +197,10 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     const cached = await this.cacheService.get(cacheKey);
 
     if (cached && !ignoreCache) {
-      return JSON.parse(cached);
+      return JSON.parse(cached) as {
+        clerkUser: User;
+        clerkOrganization?: Organization;
+      };
     }
 
     const { clerkUser, clerkOrganization } =
@@ -243,7 +243,7 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     const cached = await this.cacheService.get(cacheKey);
 
     if (cached && !ignoreCache) {
-      return JSON.parse(cached);
+      return JSON.parse(cached) as Organization;
     }
 
     const organization = await this.getClerkOrganization({

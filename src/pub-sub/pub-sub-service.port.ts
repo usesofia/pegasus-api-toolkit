@@ -5,7 +5,7 @@ export interface PubSubServicePort {
     correlationId,
   }: {
     topic: string;
-    payload: Record<string, any>;
+    payload: Record<string, unknown>;
     correlationId?: string;
   }): Promise<void>;
   unsafePublish({
@@ -13,7 +13,7 @@ export interface PubSubServicePort {
     payload,
   }: {
     topic: string;
-    payload: Record<string, any>;
+    payload: Record<string, unknown>;
   }): void;
   flushPublishBuffer({ max }: { max?: number }): Promise<void>;
   stopAutoFlushPublishBuffer(): Promise<void>;

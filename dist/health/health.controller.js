@@ -39,13 +39,13 @@ let HealthController = HealthController_1 = class HealthController extends base_
         this.cls = cls;
     }
     async health() {
-        return { status: 'ok' };
+        return Promise.resolve({ status: 'ok' });
     }
     async healthPost() {
-        return { status: 'ok' };
+        return Promise.resolve({ status: 'ok' });
     }
     async error() {
-        throw new Error('Test error.');
+        return Promise.reject(new Error('Test error.'));
     }
 };
 exports.HealthController = HealthController;

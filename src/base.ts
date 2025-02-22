@@ -21,7 +21,7 @@ export class Base {
     functionName: string;
     level: LogLevel;
     suffix: string;
-    data: any;
+    data: Record<string, unknown>;
     correlationId?: string;
   }) {
     switch (level) {
@@ -92,7 +92,7 @@ export class Base {
   }: {
     functionName: string;
     suffix: string;
-    data: any;
+    data: Record<string, unknown>;
     correlationId?: string;
   }) {
     this.logLevel({
@@ -112,7 +112,7 @@ export class Base {
   }: {
     functionName: string;
     suffix: string;
-    data: any;
+    data: Record<string, unknown>;
     correlationId?: string;
   }) {
     this.logLevel({
@@ -132,7 +132,7 @@ export class Base {
   }: {
     functionName: string;
     suffix: string;
-    data: any;
+    data: Record<string, unknown>;
     correlationId?: string;
   }) {
     this.logLevel({
@@ -152,7 +152,7 @@ export class Base {
   }: {
     functionName: string;
     suffix: string;
-    data: any;
+    data: Record<string, unknown>;
     correlationId?: string;
   }) {
     this.logLevel({ functionName, level: 'warn', suffix, data, correlationId });
@@ -166,7 +166,7 @@ export class Base {
   }: {
     functionName: string;
     suffix: string;
-    data: any;
+    data: Record<string, unknown>;
     correlationId?: string;
   }) {
     this.logLevel({
@@ -186,7 +186,7 @@ export class Base {
   }: {
     functionName: string;
     suffix: string;
-    data: any;
+    data: Record<string, unknown>;
     correlationId?: string;
   }) {
     this.logLevel({

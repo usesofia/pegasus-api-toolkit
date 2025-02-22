@@ -8,28 +8,30 @@ class MemoryCacheServiceAdapter {
         this.records = {};
         this.records = {};
     }
-    async get(key) {
+    get(key) {
         const record = this.records[key];
         if (!record) {
-            return null;
+            return Promise.resolve(null);
         }
         const isExpired = record.createdAt.plus({ seconds: record.ttlInSeconds }).diffNow()
             .seconds > 0;
         if (isExpired) {
             delete this.records[key];
-            return null;
+            return Promise.resolve(null);
         }
-        return record.value;
+        return Promise.resolve(record.value);
     }
-    async set(key, value, ttlInSeconds) {
+    set(key, value, ttlInSeconds) {
         this.records[key] = {
             value,
             createdAt: luxon_1.DateTime.now(),
             ttlInSeconds: ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds,
         };
+        return Promise.resolve();
     }
-    async delete(key) {
+    delete(key) {
         delete this.records[key];
+        return Promise.resolve();
     }
 }
 exports.MemoryCacheServiceAdapter = MemoryCacheServiceAdapter;

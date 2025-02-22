@@ -56,7 +56,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     });
 
     let saved = await created.save({
-      session: previousSession?.getSession() ?? null,
+      session: previousSession ? previousSession.getSession() as ClientSession : null,
     });
 
     if (request.populate) {
@@ -81,7 +81,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       .findOne({
         _id: request.id,
       })
-      .session(previousSession?.getSession() ?? null);
+      .session(previousSession ? previousSession.getSession() as ClientSession : null);
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -109,7 +109,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       .findOne({
         _id: request.id,
       })
-      .session(previousSession?.getSession() ?? null);
+      .session(previousSession ? previousSession.getSession() as ClientSession : null);
 
     if (!doc) {
       return null;
@@ -197,7 +197,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     if (previousSession) {
       return await this._partialUpdate({
         request,
-        session: previousSession.getSession(),
+        session: previousSession.getSession() as ClientSession,
       });
     } else {
       const session = await this.model.db.startSession();
@@ -250,7 +250,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       .findOneAndDelete({
         _id: request.id,
       })
-      .session(previousSession?.getSession() ?? null);
+      .session(previousSession ? previousSession.getSession() as ClientSession : null);
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -272,6 +272,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       .findOneAndDelete({
         _id: request.id,
       })
-      .session(previousSession?.getSession() ?? null);
+      .session(previousSession ? previousSession.getSession() as ClientSession : null);
   }
 }

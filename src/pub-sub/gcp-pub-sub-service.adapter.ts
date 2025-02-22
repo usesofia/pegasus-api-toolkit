@@ -14,7 +14,7 @@ interface PublishBufferItem {
   correlationId: string;
   id: string;
   topic: string;
-  payload: Record<string, any>;
+  payload: Record<string, unknown>;
 }
 
 @Injectable()
@@ -33,7 +33,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
   ) {
     super(GcpPubSubServiceAdapter.name, baseConfig, logger, cls);
     this.publishBufferFlushInterval = setInterval(
-      () => this.flushPublishBuffer({ max: 256 }),
+      () => void this.flushPublishBuffer({ max: 256 }),
       1000,
     );
   }
@@ -44,7 +44,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     correlationId,
   }: {
     topic: string;
-    payload: Record<string, any>;
+    payload: Record<string, unknown>;
     correlationId?: string;
   }): Promise<void> {
     const messageId = await this.pubSub
@@ -67,7 +67,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     payload,
   }: {
     topic: string;
-    payload: Record<string, any>;
+    payload: Record<string, unknown>;
   }): void {
     if (this.publishBuffer.length >= MAX_PUBLISH_BUFFER_SIZE) {
       throw new Error(

@@ -14,12 +14,12 @@ export declare class GcpPubSubServiceAdapter extends Base implements PubSubServi
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, pubSub: PubSub);
     publish({ topic, payload, correlationId, }: {
         topic: string;
-        payload: Record<string, any>;
+        payload: Record<string, unknown>;
         correlationId?: string;
     }): Promise<void>;
     unsafePublish({ topic, payload, }: {
         topic: string;
-        payload: Record<string, any>;
+        payload: Record<string, unknown>;
     }): void;
     flushPublishBuffer({ max }: {
         max?: number;

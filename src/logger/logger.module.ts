@@ -13,10 +13,17 @@ import {
   correlationIdKey,
   correlationIdTokenKey,
 } from '../correlation/correlation.constants';
+import { Request } from 'express';
+
+declare module 'express' {
+  interface Request {
+    [correlationIdKey]: string;
+  }
+}
 
 export const LOGGER_SERVICE_PORT = Symbol('LoggerServicePort');
 
-morgan.token(correlationIdTokenKey, (req: any) => req[correlationIdKey]);
+morgan.token(correlationIdTokenKey, (req: Request) => req[correlationIdKey]);
 
 @Global()
 @Module({
@@ -70,9 +77,9 @@ export class LoggerModule implements NestModule, OnApplicationShutdown {
                   url,
                   statusCodeString,
                   contentLengthString,
-                  _,
+                  ,
                   responseTimeInMsString,
-                  __,
+                  ,
                 ] = message.split(' ');
                 const correlationId = correlationIdWithBrackets.replace(
                   /\[|\]/g,

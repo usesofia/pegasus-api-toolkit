@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { LogLevel } from '@nestjs/common';
 import { Base } from '../base';
 

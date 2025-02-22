@@ -44,7 +44,7 @@ let LoggerModule = class LoggerModule {
         }, {
             stream: {
                 write: (message) => {
-                    const [correlationIdWithBrackets, method, url, statusCodeString, contentLengthString, _, responseTimeInMsString, __,] = message.split(' ');
+                    const [correlationIdWithBrackets, method, url, statusCodeString, contentLengthString, , responseTimeInMsString, ,] = message.split(' ');
                     const correlationId = correlationIdWithBrackets.replace(/\[|\]/g, '');
                     const statusCode = parseInt(statusCodeString);
                     const contentLengthInBytes = contentLengthString
