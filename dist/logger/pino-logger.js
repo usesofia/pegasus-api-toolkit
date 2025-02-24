@@ -56,7 +56,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
                         batchInterval: this.batchInterval,
                         retryCount: 16,
                         retryBackoff: 400,
-                        endpoint: baseConfig.logger.betterStackEndpoint,
+                        endpoint: baseConfig.logger.betterStackEndpoint ?? 'https://in.logs.betterstack.com',
                     },
                 },
             },
