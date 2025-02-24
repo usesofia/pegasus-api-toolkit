@@ -278,6 +278,9 @@ export const buildClerkClientMock = () => {
           plainClerkOrganizations[TestOrganization.RESERVA_STORE_42].id,
           plainClerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312].id,
         ],
+        sharedContacts: false,
+        sharedSubcategories: false,
+        sharedTags: false,
       },
     },
     [TestOrganization.RESERVA_STORE_42]: {
@@ -302,6 +305,9 @@ export const buildClerkClientMock = () => {
           plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123].id,
           plainClerkOrganizations[TestOrganization.NAGUMO_STORE_321].id,
         ],
+        sharedContacts: true,
+        sharedSubcategories: true,
+        sharedTags: true,
       },
     },
     [TestOrganization.NAGUMO_STORE_123]: {
