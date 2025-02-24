@@ -329,6 +329,8 @@ export const buildClerkClientMock = () => {
   };
 
   return {
+    _clerkUsers: clerkUsers,
+    _clerkOrganizations: clerkOrganizations,
     verifyToken: jest.fn().mockImplementation(
       (
         token: string,

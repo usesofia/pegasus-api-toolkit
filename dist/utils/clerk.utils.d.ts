@@ -1,3 +1,4 @@
+import { User, Organization } from '@clerk/backend';
 export declare enum TestOrganization {
     AMBEV = "AMBEV",
     EMBRAER = "EMBRAER",
@@ -22,6 +23,8 @@ export declare enum TestUser {
     FERNANDA = "FERNANDA"
 }
 export declare const buildClerkClientMock: () => {
+    _clerkUsers: Record<TestUser, User>;
+    _clerkOrganizations: Record<TestOrganization, Organization>;
     verifyToken: jest.Mock<any, any, any>;
     users: {
         getUser: jest.Mock<any, any, any>;
