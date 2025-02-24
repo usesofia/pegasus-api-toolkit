@@ -2,6 +2,7 @@ import pino, { Logger } from 'pino';
 import { Inject, Injectable, LoggerService, LogLevel } from '@nestjs/common';
 import { MaskActions, maskAttribute } from 'nested-mask-attributes';
 import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
+import { Environment } from '../utils/environment.utils';
 
 const sensitiveFields = [
   'password',
@@ -37,21 +38,21 @@ export class PinoLoggerAdapter implements LoggerService {
   private readonly consoleLogger: Logger;
   private readonly shouldConsoleLog: boolean;
   private readonly environment: string;
-  private readonly batchInterval: number;
 
   constructor(
     @Inject(BASE_CONFIG) private readonly baseConfig: BaseConfigEntity,
   ) {
-    this.batchInterval = 100;
+    const batchInterval = baseConfig.env === Environment.INTEGRATION_TEST ? 50 : 100;
+    const retryBackoff = baseConfig.env === Environment.INTEGRATION_TEST ? 100 : 400;
     this.remoteLogger = pino({
       transport: {
         target: '@logtail/pino',
         options: {
           sourceToken: baseConfig.logger.betterStackSourceToken,
           options: {
-            batchInterval: this.batchInterval,
+            batchInterval,
             retryCount: 16,
-            retryBackoff: 400,
+            retryBackoff,
             endpoint: baseConfig.logger.betterStackEndpoint ?? 'https://in.logs.betterstack.com',
           },
         },
@@ -157,7 +158,7 @@ export class PinoLoggerAdapter implements LoggerService {
   }
 
   async flush(): Promise<void> {
-    await new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.remoteLogger.flush((error?: Error) => {
         if (error) reject(error);
         resolve();

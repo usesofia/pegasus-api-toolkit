@@ -17,16 +17,20 @@ const common_1 = require("@nestjs/common");
 const pino_logger_1 = require("./pino-logger");
 const morgan = require("morgan");
 const correlation_constants_1 = require("../correlation/correlation.constants");
+const base_config_entity_1 = require("../config/base-config.entity");
+const environment_utils_1 = require("../utils/environment.utils");
 exports.LOGGER_SERVICE_PORT = Symbol('LoggerServicePort');
 morgan.token(correlation_constants_1.correlationIdTokenKey, (req) => req[correlation_constants_1.correlationIdKey]);
 let LoggerModule = class LoggerModule {
-    constructor(pinoLoggerAdapter, loggerService) {
+    constructor(baseConfig, pinoLoggerAdapter, loggerService) {
+        this.baseConfig = baseConfig;
         this.pinoLoggerAdapter = pinoLoggerAdapter;
         this.loggerService = loggerService;
     }
     async onApplicationShutdown() {
         await this.pinoLoggerAdapter.flush();
-        await new Promise((resolve) => setTimeout(resolve, 4000));
+        const delay = this.baseConfig.env === environment_utils_1.Environment.INTEGRATION_TEST ? 2000 : 4000;
+        await new Promise((resolve) => setTimeout(resolve, delay));
     }
     configure(consumer) {
         consumer
@@ -91,8 +95,10 @@ exports.LoggerModule = LoggerModule = __decorate([
         ],
         exports: [exports.LOGGER_SERVICE_PORT],
     }),
-    __param(0, (0, common_1.Inject)(pino_logger_1.PinoLoggerAdapter)),
-    __param(1, (0, common_1.Inject)(exports.LOGGER_SERVICE_PORT)),
-    __metadata("design:paramtypes", [pino_logger_1.PinoLoggerAdapter, Object])
+    __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
+    __param(1, (0, common_1.Inject)(pino_logger_1.PinoLoggerAdapter)),
+    __param(2, (0, common_1.Inject)(exports.LOGGER_SERVICE_PORT)),
+    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity,
+        pino_logger_1.PinoLoggerAdapter, Object])
 ], LoggerModule);
 //# sourceMappingURL=logger.module.js.map

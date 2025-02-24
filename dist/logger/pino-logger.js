@@ -17,6 +17,7 @@ const pino_1 = require("pino");
 const common_1 = require("@nestjs/common");
 const nested_mask_attributes_1 = require("nested-mask-attributes");
 const base_config_entity_1 = require("../config/base-config.entity");
+const environment_utils_1 = require("../utils/environment.utils");
 const sensitiveFields = [
     'password',
     'passwordHash',
@@ -46,16 +47,17 @@ const getStringfyReplacer = () => {
 let PinoLoggerAdapter = class PinoLoggerAdapter {
     constructor(baseConfig) {
         this.baseConfig = baseConfig;
-        this.batchInterval = 100;
+        const batchInterval = baseConfig.env === environment_utils_1.Environment.INTEGRATION_TEST ? 50 : 100;
+        const retryBackoff = baseConfig.env === environment_utils_1.Environment.INTEGRATION_TEST ? 100 : 400;
         this.remoteLogger = (0, pino_1.default)({
             transport: {
                 target: '@logtail/pino',
                 options: {
                     sourceToken: baseConfig.logger.betterStackSourceToken,
                     options: {
-                        batchInterval: this.batchInterval,
+                        batchInterval,
                         retryCount: 16,
-                        retryBackoff: 400,
+                        retryBackoff,
                         endpoint: baseConfig.logger.betterStackEndpoint ?? 'https://in.logs.betterstack.com',
                     },
                 },
@@ -149,7 +151,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         throw new Error('Not implemented.');
     }
     async flush() {
-        await new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.remoteLogger.flush((error) => {
                 if (error)
                     reject(error);
