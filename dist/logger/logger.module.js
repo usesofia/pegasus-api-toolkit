@@ -18,7 +18,6 @@ const pino_logger_1 = require("./pino-logger");
 const morgan = require("morgan");
 const correlation_constants_1 = require("../correlation/correlation.constants");
 const base_config_entity_1 = require("../config/base-config.entity");
-const environment_utils_1 = require("../utils/environment.utils");
 exports.LOGGER_SERVICE_PORT = Symbol('LoggerServicePort');
 morgan.token(correlation_constants_1.correlationIdTokenKey, (req) => req[correlation_constants_1.correlationIdKey]);
 let LoggerModule = class LoggerModule {
@@ -29,8 +28,6 @@ let LoggerModule = class LoggerModule {
     }
     async onApplicationShutdown() {
         await this.pinoLoggerAdapter.flush();
-        const delay = this.baseConfig.env === environment_utils_1.Environment.INTEGRATION_TEST ? 2000 : 4000;
-        await new Promise((resolve) => setTimeout(resolve, delay));
     }
     configure(consumer) {
         consumer

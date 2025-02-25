@@ -2,7 +2,8 @@ import pino, { Logger } from 'pino';
 import { Inject, Injectable, LoggerService, LogLevel } from '@nestjs/common';
 import { MaskActions, maskAttribute } from 'nested-mask-attributes';
 import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
-import { Environment } from '../utils/environment.utils';
+import createBetterStackTransport from './integration-test-better-stack-transport';
+import { Transform } from 'stream';
 
 const sensitiveFields = [
   'password',
@@ -38,27 +39,23 @@ export class PinoLoggerAdapter implements LoggerService {
   private readonly consoleLogger: Logger;
   private readonly shouldConsoleLog: boolean;
   private readonly environment: string;
-
+  private readonly remoteLoggerTransport: Transform;
+  private readonly remoteLoggerTransportClose: () => Promise<void>;
+  
   constructor(
     @Inject(BASE_CONFIG) private readonly baseConfig: BaseConfigEntity,
   ) {
-    const batchInterval = baseConfig.env === Environment.INTEGRATION_TEST ? 50 : 100;
-    const retryBackoff = baseConfig.env === Environment.INTEGRATION_TEST ? 100 : 400;
-    this.remoteLogger = pino({
-      transport: {
-        target: '@logtail/pino',
-        options: {
-          sourceToken: baseConfig.logger.betterStackSourceToken,
-          options: {
-            batchInterval,
-            retryCount: 16,
-            retryBackoff,
-            endpoint: baseConfig.logger.betterStackEndpoint ?? 'https://in.logs.betterstack.com',
-          },
-        },
-      },
-      level: baseConfig.logger.level,
+    const {
+      transport: remoteLoggerTransport,
+      close: remoteLoggerTransportClose,
+    } = createBetterStackTransport({
+      apiToken: baseConfig.logger.betterStackSourceToken,
     });
+    this.remoteLoggerTransport = remoteLoggerTransport;
+    this.remoteLoggerTransportClose = remoteLoggerTransportClose;
+    this.remoteLogger = pino({
+      level: baseConfig.logger.level,
+    }, this.remoteLoggerTransport);
     this.consoleLogger = pino({
       transport: {
         target: 'pino-pretty',
@@ -158,11 +155,6 @@ export class PinoLoggerAdapter implements LoggerService {
   }
 
   async flush(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.remoteLogger.flush((error?: Error) => {
-        if (error) reject(error);
-        resolve();
-      });
-    });
+    await this.remoteLoggerTransportClose();
   }
 }

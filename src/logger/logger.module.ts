@@ -15,7 +15,6 @@ import {
 } from '../correlation/correlation.constants';
 import { Request } from 'express';
 import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
-import { Environment } from '../utils/environment.utils';
 
 declare module 'express' {
   interface Request {
@@ -53,8 +52,6 @@ export class LoggerModule implements NestModule, OnApplicationShutdown {
 
   async onApplicationShutdown() {
     await this.pinoLoggerAdapter.flush();
-    const delay = this.baseConfig.env === Environment.INTEGRATION_TEST ? 2000 : 4000;
-    await new Promise((resolve) => setTimeout(resolve, delay));
   }
 
   public configure(consumer: MiddlewareConsumer): void {
