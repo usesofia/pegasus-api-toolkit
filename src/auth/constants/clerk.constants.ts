@@ -1,4 +1,9 @@
-export type ClerkVerifyToken = (token: string) => Promise<{
+import { VerifyTokenOptions } from "@clerk/backend";
+
+export type ClerkVerifyToken = (
+  token: string,
+  options: VerifyTokenOptions,
+) => Promise<{
   sub: string;
   org_id?: string;
   org_role?: string;

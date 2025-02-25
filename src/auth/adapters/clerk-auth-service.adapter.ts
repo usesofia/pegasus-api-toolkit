@@ -40,7 +40,9 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
 
   @Log()
   async verifyToken(token: string): Promise<AuthUserEntity> {
-    const jwt = await this.clerkVerifyToken(token);
+    const jwt = await this.clerkVerifyToken(token, {
+      jwtKey: this.baseConfig.clerk.secretKey,
+    });
 
     const user = await this.getUser({
       userId: jwt.sub,
