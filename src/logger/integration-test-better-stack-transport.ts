@@ -48,12 +48,12 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
     for (let i = 0; i < logs.length; i += chunkSize) {
       const chunk = logs.slice(i, i + chunkSize);
       await axiosInstance.post('/', JSON.stringify(chunk.map(log => {
-        const { msg, ...rest } = log;
+        const { msg, level, ...rest } = log;
         return {
           dt: log.dt,
-          level: convertLogLevel(log.level),
           message: msg,
-          ...rest
+          level: convertLogLevel(level),
+          ...rest,
         }
       })));
     }
