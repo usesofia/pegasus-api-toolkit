@@ -37,7 +37,7 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
     }
     async verifyToken(token) {
         const jwt = await this.clerkVerifyToken(token, {
-            jwtKey: this.baseConfig.clerk.secretKey,
+            jwtKey: this.baseConfig.clerk.jwtKey,
         });
         const user = await this.getUser({
             userId: jwt.sub,
