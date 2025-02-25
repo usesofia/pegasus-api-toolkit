@@ -142,6 +142,9 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         throw new Error('Not implemented.');
     }
     async flush() {
+        await new Promise((resolve) => {
+            this.remoteLogger.flush(() => resolve(void 0));
+        });
         await this.remoteLoggerTransportClose();
     }
 };
