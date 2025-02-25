@@ -51,12 +51,27 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
         const { msg, ...rest } = log;
         return {
           dt: log.dt,
-          level: log.level,
+          level: convertLogLevel(log.level),
           message: msg,
           ...rest
         }
       })));
     }
+  }
+
+  // Function to convert Pino numerical log levels to string representations
+  function convertLogLevel(level: unknown): string {
+    if (typeof level === 'number') {
+      if (level <= 10) return 'TRACE';
+      if (level <= 20) return 'DEBUG';
+      if (level <= 30) return 'INFO';
+      if (level <= 40) return 'WARN';
+      if (level <= 50) return 'ERROR';
+      return 'FATAL';
+    }
+    
+    // If level is already a string or undefined, return as is or default to INFO
+    return typeof level === 'string' ? level.toUpperCase() : 'INFO';
   }
 
   // Function to flush the buffer

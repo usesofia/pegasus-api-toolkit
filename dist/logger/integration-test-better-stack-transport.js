@@ -24,12 +24,28 @@ function createBetterStackTransportWrapper(options) {
                 const { msg, ...rest } = log;
                 return {
                     dt: log.dt,
-                    level: log.level,
+                    level: convertLogLevel(log.level),
                     message: msg,
                     ...rest
                 };
             })));
         }
+    }
+    function convertLogLevel(level) {
+        if (typeof level === 'number') {
+            if (level <= 10)
+                return 'TRACE';
+            if (level <= 20)
+                return 'DEBUG';
+            if (level <= 30)
+                return 'INFO';
+            if (level <= 40)
+                return 'WARN';
+            if (level <= 50)
+                return 'ERROR';
+            return 'FATAL';
+        }
+        return typeof level === 'string' ? level.toUpperCase() : 'INFO';
     }
     async function flush(force) {
         if (!force && (isFlushing || buffer.length === 0))
