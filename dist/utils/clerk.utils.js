@@ -394,11 +394,13 @@ const buildClerkClientMock = () => {
         }),
     ];
     const clerkInvitesByOrganization = {};
+    const newClerkOrganizations = [];
     return {
         _clerkUsers: clerkUsers,
         _clerkOrganizations: clerkOrganizations,
         _clerkMemberships: clerkMemberships,
         _clerkInvitesByOrganization: clerkInvitesByOrganization,
+        _newClerkOrganizations: newClerkOrganizations,
         verifyToken: jest.fn().mockImplementation((token) => {
             const [user, organization] = processToken(token);
             if (organization) {
@@ -425,11 +427,6 @@ const buildClerkClientMock = () => {
             }),
         },
         organizations: {
-            getOrganization: jest
-                .fn()
-                .mockImplementation(({ organizationId }) => {
-                return Object.values(clerkOrganizations).find((organization) => organization.id === organizationId);
-            }),
             createOrganizationInvitation: jest.fn().mockImplementation(({ organizationId, emailAddress, role, publicMetadata, }) => {
                 const invite = {
                     id: (0, uuid_1.v4)(),
@@ -503,6 +500,81 @@ const buildClerkClientMock = () => {
                 const index = clerkInvitesByOrganization[organizationId].indexOf(invite);
                 clerkInvitesByOrganization[organizationId][index] = newInvite;
                 return newInvite;
+            }),
+            createOrganization: jest.fn().mockImplementation(({ name, createdBy, slug, publicMetadata, }) => {
+                const organization = {
+                    id: (0, uuid_1.v4)(),
+                    name,
+                    slug,
+                    createdBy,
+                    imageUrl: 'https://example.com/image.png',
+                    createdAt: luxon_1.DateTime.now().toMillis(),
+                    updatedAt: luxon_1.DateTime.now().toMillis(),
+                    publicMetadata: publicMetadata || {},
+                    privateMetadata: {},
+                    maxAllowedMemberships: 100,
+                    adminDeleteEnabled: false,
+                };
+                const organizationCandidateWithSameSlug = [...newClerkOrganizations, ...Object.values(clerkOrganizations)].find((organization) => organization.slug === slug);
+                if (organizationCandidateWithSameSlug) {
+                    throw new Error(`Organization with slug ${slug} already exists.`);
+                }
+                newClerkOrganizations.push(organization);
+                return organization;
+            }),
+            getOrganization: jest.fn().mockImplementation(({ organizationId, }) => {
+                const organization = [...newClerkOrganizations, ...Object.values(clerkOrganizations)].find((organization) => organization.id === organizationId);
+                if (!organization) {
+                    throw new Error(`Organization not found for ${organizationId}.`);
+                }
+                return organization;
+            }),
+            updateOrganization: jest.fn().mockImplementation((organizationId, { name, slug, publicMetadata, privateMetadata, }) => {
+                const organization = [...newClerkOrganizations, ...Object.values(clerkOrganizations)].find((organization) => organization.id === organizationId);
+                const isNewOrganization = !!newClerkOrganizations.find((organization) => organization.id === organizationId);
+                if (!organization) {
+                    throw new Error(`Organization not found for ${organizationId}.`);
+                }
+                const newOrganization = {
+                    ...organization,
+                    name: name || organization.name,
+                    slug: slug || organization.slug,
+                    publicMetadata: publicMetadata || organization.publicMetadata,
+                    privateMetadata: privateMetadata || organization.privateMetadata,
+                };
+                if (isNewOrganization) {
+                    const index = newClerkOrganizations.indexOf(organization);
+                    newClerkOrganizations[index] = newOrganization;
+                }
+                else {
+                    const testOrganizationKey = Object.keys(TestOrganization).find((testOrganizationKey) => clerkOrganizations[testOrganizationKey].id === organizationId);
+                    clerkOrganizations[testOrganizationKey] = newOrganization;
+                }
+                return newOrganization;
+            }),
+            updateOrganizationLogo: jest.fn().mockImplementation((organizationId, { file, }) => {
+                const organization = [...newClerkOrganizations, ...Object.values(clerkOrganizations)].find((organization) => organization.id === organizationId);
+                if (!organization) {
+                    throw new Error(`Organization not found for ${organizationId}.`);
+                }
+                const newOrganization = {
+                    ...organization,
+                    imageUrl: `https://example.com/image.png`,
+                };
+                return newOrganization;
+            }),
+            deleteOrganization: jest.fn(),
+            getOrganizationList: jest.fn().mockImplementation(({ query, limit = 100, offset = 0, }) => {
+                const organizations = [...newClerkOrganizations, ...Object.values(clerkOrganizations)];
+                let filteredOrganizations = organizations;
+                if (query) {
+                    filteredOrganizations = organizations.filter((organization) => organization.slug?.toLowerCase().includes(query.toLowerCase()));
+                }
+                const paginatedOrganizations = filteredOrganizations.slice(offset, offset + limit);
+                return {
+                    data: paginatedOrganizations,
+                    totalCount: filteredOrganizations.length,
+                };
             }),
         },
     };
