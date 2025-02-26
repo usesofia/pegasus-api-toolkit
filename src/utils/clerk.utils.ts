@@ -236,7 +236,7 @@ const buildClerkOrganizationMembership = ({
     updatedAt: DateTime.now().toMillis(),
     organization: clerkOrganization,
     publicUserData: {
-      identifier: clerkUser.id,
+      identifier: clerkUser.primaryEmailAddress!.emailAddress,
       firstName: clerkUser.firstName,
       lastName: clerkUser.lastName,
       imageUrl: clerkUser.imageUrl,
