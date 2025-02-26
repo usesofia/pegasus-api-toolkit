@@ -162,7 +162,7 @@ const buildClerkOrganization = ({ organization, }) => {
         id: organizationId,
         name: organization.toString().charAt(0).toUpperCase() +
             organization.toString().slice(1),
-        slug: organization.toString().toLowerCase() + '-' + organizationId,
+        slug: organization.toString().toLowerCase().replaceAll(/[^a-z0-9]/g, '-') + '-' + organizationId,
         imageUrl: 'https://example.com/image.png',
         hasImage: true,
         createdAt: 1713542400,
@@ -424,6 +424,14 @@ const buildClerkClientMock = () => {
         users: {
             getUser: jest.fn().mockImplementation((userId) => {
                 return Object.values(clerkUsers).find((user) => user.id === userId);
+            }),
+            getOrganizationMembershipList: jest.fn().mockImplementation(({ userId, limit = 100, offset = 0, }) => {
+                const memberships = clerkMemberships.filter((membership) => membership.publicUserData?.userId === userId);
+                const paginatedMemberships = memberships.slice(offset, offset + limit);
+                return {
+                    data: paginatedMemberships,
+                    totalCount: memberships.length,
+                };
             }),
         },
         organizations: {
