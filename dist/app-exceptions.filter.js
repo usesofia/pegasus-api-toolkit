@@ -59,7 +59,7 @@ let AppExceptionsFilter = class AppExceptionsFilter {
                         [correlation_constants_1.correlationIdKey]: this.clsService.getId(),
                     },
                 });
-                this.loggerService.error(`[${this.clsService.getId()}] ${exception.message}`, exception);
+                this.loggerService.error(`[${this.clsService.getId()}] ${exception.message}`, { exception });
             }
             else {
                 const errorMessage = `[${this.clsService.getId()}] AppExceptionsFilter.unexpectedError`;
@@ -68,7 +68,7 @@ let AppExceptionsFilter = class AppExceptionsFilter {
                         [correlation_constants_1.correlationIdKey]: this.clsService.getId(),
                     },
                 });
-                this.loggerService.error(errorMessage, exception);
+                this.loggerService.error(errorMessage, { exception, tempTest: 'Hi Lorena v2!' });
             }
         }
         else {

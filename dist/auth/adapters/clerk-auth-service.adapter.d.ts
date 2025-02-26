@@ -6,7 +6,7 @@ import { CacheServicePort } from '../../cache/ports/cache-service.port';
 import { Base } from '../../base';
 import { ClsService } from 'nestjs-cls';
 import { ClerkClient } from '@usesofia/clerk-backend';
-import { ClerkVerifyToken } from '../constants/clerk.constants';
+import { ClerkVerifyToken } from '../../clerk/clerk.constants';
 export declare class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;

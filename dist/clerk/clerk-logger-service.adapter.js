@@ -15,9 +15,9 @@ var ClerkLoggerServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClerkLoggerServiceAdapter = void 0;
 const common_1 = require("@nestjs/common");
-const base_1 = require("../../base");
-const base_config_entity_1 = require("../../config/base-config.entity");
-const logger_module_1 = require("../../logger/logger.module");
+const base_1 = require("../base");
+const base_config_entity_1 = require("../config/base-config.entity");
+const logger_module_1 = require("../logger/logger.module");
 const nestjs_cls_1 = require("nestjs-cls");
 let ClerkLoggerServiceAdapter = ClerkLoggerServiceAdapter_1 = class ClerkLoggerServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls) {

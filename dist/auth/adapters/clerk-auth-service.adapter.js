@@ -24,7 +24,7 @@ const nestjs_cls_1 = require("nestjs-cls");
 const logger_module_1 = require("../../logger/logger.module");
 const clerk_backend_1 = require("@usesofia/clerk-backend");
 const log_utils_1 = require("../../utils/log.utils");
-const clerk_constants_1 = require("../constants/clerk.constants");
+const clerk_constants_1 = require("../../clerk/clerk.constants");
 let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, cacheService, clerkClient, clerkVerifyToken) {
         super(ClerkAuthServiceAdapter_1.name, baseConfig, logger, cls);

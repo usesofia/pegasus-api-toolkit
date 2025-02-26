@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildClerkClientMock = exports.TestUser = exports.TestOrganization = void 0;
 const faker_1 = require("@faker-js/faker");
+const luxon_1 = require("luxon");
 const uuid_1 = require("uuid");
 var TestOrganization;
 (function (TestOrganization) {
@@ -170,6 +171,27 @@ const buildClerkOrganization = ({ organization, }) => {
     };
     return clerkOrganization;
 };
+const buildClerkOrganizationMembership = ({ clerkUser, clerkOrganization, role, }) => {
+    const organizationMembership = {
+        id: (0, uuid_1.v4)(),
+        role,
+        permissions: [],
+        publicMetadata: {},
+        privateMetadata: {},
+        createdAt: luxon_1.DateTime.now().toMillis(),
+        updatedAt: luxon_1.DateTime.now().toMillis(),
+        organization: clerkOrganization,
+        publicUserData: {
+            identifier: clerkUser.id,
+            firstName: clerkUser.firstName,
+            lastName: clerkUser.lastName,
+            imageUrl: clerkUser.imageUrl,
+            hasImage: clerkUser.hasImage,
+            userId: clerkUser.id,
+        },
+    };
+    return organizationMembership;
+};
 const buildClerkClientMock = () => {
     const clerkUsers = {
         [TestUser.JOAO]: buildClerkUser({ user: TestUser.JOAO }),
@@ -278,9 +300,79 @@ const buildClerkClientMock = () => {
             },
         },
     };
+    const clerkMemberships = [
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.JOAO],
+            clerkOrganization: clerkOrganizations[TestOrganization.AMBEV],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.JOANA],
+            clerkOrganization: clerkOrganizations[TestOrganization.AMBEV],
+            role: 'org:member',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.JULIANA],
+            clerkOrganization: clerkOrganizations[TestOrganization.AMBEV],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.MARIA],
+            clerkOrganization: clerkOrganizations[TestOrganization.EMBRAER],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.JULIANA],
+            clerkOrganization: clerkOrganizations[TestOrganization.EMBRAER],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.LUCAS],
+            clerkOrganization: clerkOrganizations[TestOrganization.VETTOR_BPO],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.RONALDO],
+            clerkOrganization: clerkOrganizations[TestOrganization.VETTOR_BPO],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.RONY],
+            clerkOrganization: clerkOrganizations[TestOrganization.RESERVA_STORE_42],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.CAITO],
+            clerkOrganization: clerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.DANIEL],
+            clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.RONALDO],
+            clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.RENATA],
+            clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_STORE_123],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.FERNANDA],
+            clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_STORE_321],
+            role: 'org:admin',
+        }),
+    ];
+    const clerkInvitesByOrganization = {};
     return {
         _clerkUsers: clerkUsers,
         _clerkOrganizations: clerkOrganizations,
+        _clerkMemberships: clerkMemberships,
+        _clerkInvitesByOrganization: clerkInvitesByOrganization,
         verifyToken: jest.fn().mockImplementation((token) => {
             const [user, organization] = processToken(token);
             if (organization) {
@@ -311,6 +403,35 @@ const buildClerkClientMock = () => {
                 .fn()
                 .mockImplementation(({ organizationId }) => {
                 return Object.values(clerkOrganizations).find((organization) => organization.id === organizationId);
+            }),
+            createOrganizationInvitation: jest.fn().mockImplementation(({ organizationId, emailAddress, role, publicMetadata, }) => {
+                const invite = {
+                    id: (0, uuid_1.v4)(),
+                    emailAddress,
+                    role,
+                    organizationId,
+                    createdAt: luxon_1.DateTime.now().toMillis(),
+                    updatedAt: luxon_1.DateTime.now().toMillis(),
+                    status: 'pending',
+                    publicMetadata: publicMetadata || {},
+                    privateMetadata: {},
+                };
+                if (!clerkInvitesByOrganization[organizationId]) {
+                    clerkInvitesByOrganization[organizationId] = [];
+                }
+                if (clerkInvitesByOrganization[organizationId].find((invite) => invite.emailAddress === emailAddress)) {
+                    throw new Error(`Already invited ${emailAddress} to ${organizationId}.`);
+                }
+                clerkInvitesByOrganization[organizationId].push(invite);
+                return invite;
+            }),
+            getOrganizationMembershipList: jest.fn().mockImplementation(({ organizationId, limit = 100, offset = 0, }) => {
+                const memberships = clerkMemberships.filter((membership) => membership.organization.id === organizationId);
+                const paginatedMemberships = memberships.slice(offset, offset + limit);
+                return {
+                    data: paginatedMemberships,
+                    totalCount: memberships.length,
+                };
             }),
         },
     };

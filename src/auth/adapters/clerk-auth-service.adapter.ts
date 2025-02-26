@@ -19,7 +19,7 @@ import {
   CLERK_CLIENT,
   CLERK_VERIFY_TOKEN,
   ClerkVerifyToken,
-} from '../constants/clerk.constants';
+} from '../../clerk/clerk.constants';
 
 @Injectable()
 export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {

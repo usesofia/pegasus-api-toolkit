@@ -4,6 +4,7 @@ import { MaskActions, maskAttribute } from 'nested-mask-attributes';
 import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
 import createBetterStackTransport from './integration-test-better-stack-transport';
 import { Transform } from 'stream';
+import { getStringfyReplacer } from '../utils/json.utils';
 
 const sensitiveFields = [
   'password',
@@ -12,26 +13,6 @@ const sensitiveFields = [
   'refreshToken',
   'token',
 ];
-
-const getStringfyReplacer = () => {
-  const seen = new WeakSet();
-  return (key: string, value: unknown) => {
-    if (value instanceof Error) {
-      return {
-        name: value.name,
-        message: value.message,
-        stack: value.stack,
-      };
-    }
-    if (typeof value === 'object' && value !== null) {
-      if (seen.has(value)) {
-        return;
-      }
-      seen.add(value);
-    }
-    return value;
-  };
-};
 
 @Injectable()
 export class PinoLoggerAdapter implements LoggerService {
@@ -71,28 +52,26 @@ export class PinoLoggerAdapter implements LoggerService {
       environment: this.environment,
     };
 
-    if (
-      optionalParams.length === 1 &&
-      typeof optionalParams[0] === 'object' &&
-      !(optionalParams[0] instanceof Error)
-    ) {
+    if(optionalParams.length > 1) {
+      throw new Error('Invalid number of parameters for log.');
+    }
+
+    if(optionalParams.length === 1) {
       data = {
-        ...(maskAttribute(
-          JSON.parse(JSON.stringify(optionalParams[0], getStringfyReplacer())),
-          sensitiveFields,
-          {
-            action: MaskActions.MASK,
-          },
-        ) as Record<string, unknown>),
+        ...(
+          maskAttribute(
+            JSON.parse(JSON.stringify(optionalParams[0], getStringfyReplacer())),
+            sensitiveFields,
+            {
+              action: MaskActions.MASK,
+            },
+          ) as Record<string, unknown>
+        ),
         environment: this.environment,
       };
-    } else if (
-      optionalParams.length === 1 &&
-      optionalParams[0] instanceof Error
-    ) {
+    } else {
       data = {
         environment: this.environment,
-        err: optionalParams[0],
       };
     }
 

@@ -18,6 +18,7 @@ const common_1 = require("@nestjs/common");
 const nested_mask_attributes_1 = require("nested-mask-attributes");
 const base_config_entity_1 = require("../config/base-config.entity");
 const integration_test_better_stack_transport_1 = require("./integration-test-better-stack-transport");
+const json_utils_1 = require("../utils/json.utils");
 const sensitiveFields = [
     'password',
     'passwordHash',
@@ -25,25 +26,6 @@ const sensitiveFields = [
     'refreshToken',
     'token',
 ];
-const getStringfyReplacer = () => {
-    const seen = new WeakSet();
-    return (key, value) => {
-        if (value instanceof Error) {
-            return {
-                name: value.name,
-                message: value.message,
-                stack: value.stack,
-            };
-        }
-        if (typeof value === 'object' && value !== null) {
-            if (seen.has(value)) {
-                return;
-            }
-            seen.add(value);
-        }
-        return value;
-    };
-};
 let PinoLoggerAdapter = class PinoLoggerAdapter {
     constructor(baseConfig) {
         this.baseConfig = baseConfig;
@@ -68,21 +50,20 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         let data = {
             environment: this.environment,
         };
-        if (optionalParams.length === 1 &&
-            typeof optionalParams[0] === 'object' &&
-            !(optionalParams[0] instanceof Error)) {
+        if (optionalParams.length > 1) {
+            throw new Error('Invalid number of parameters for log.');
+        }
+        if (optionalParams.length === 1) {
             data = {
-                ...(0, nested_mask_attributes_1.maskAttribute)(JSON.parse(JSON.stringify(optionalParams[0], getStringfyReplacer())), sensitiveFields, {
+                ...(0, nested_mask_attributes_1.maskAttribute)(JSON.parse(JSON.stringify(optionalParams[0], (0, json_utils_1.getStringfyReplacer)())), sensitiveFields, {
                     action: nested_mask_attributes_1.MaskActions.MASK,
                 }),
                 environment: this.environment,
             };
         }
-        else if (optionalParams.length === 1 &&
-            optionalParams[0] instanceof Error) {
+        else {
             data = {
                 environment: this.environment,
-                err: optionalParams[0],
             };
         }
         switch (level) {

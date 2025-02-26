@@ -16,9 +16,6 @@ import {
   ORGANIZATION_TYPES_GUARD,
   OrganizationTypesGuard,
 } from './guards/organization-types.guard';
-import { createClerkClient, verifyToken } from '@usesofia/clerk-backend';
-import { CLERK_CLIENT, CLERK_VERIFY_TOKEN } from './constants/clerk.constants';
-import { ClerkLoggerServiceAdapter } from './adapters/clerk-logger-service.adapter';
 
 @Global()
 @Module({
@@ -81,26 +78,6 @@ import { ClerkLoggerServiceAdapter } from './adapters/clerk-logger-service.adapt
         return null;
       },
       inject: [BASE_CONFIG, GCP_SERVICE_ACCOUNT_GUARD],
-    },
-    ClerkLoggerServiceAdapter,
-    {
-      provide: CLERK_CLIENT,
-      useFactory: (
-        baseConfig: BaseConfigEntity,
-        clerkLoggerServiceAdapter: ClerkLoggerServiceAdapter,
-      ) => {
-        return createClerkClient(
-          {
-            secretKey: baseConfig.clerk.secretKey,
-          },
-          clerkLoggerServiceAdapter,
-        );
-      },
-      inject: [BASE_CONFIG, ClerkLoggerServiceAdapter],
-    },
-    {
-      provide: CLERK_VERIFY_TOKEN,
-      useFactory: () => verifyToken,
     },
   ],
   controllers: [],

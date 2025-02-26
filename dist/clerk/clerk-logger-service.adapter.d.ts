@@ -1,7 +1,7 @@
 import { LoggerService } from '@nestjs/common';
 import { ClerkLogger } from '@usesofia/clerk-backend';
-import { Base } from '../../base';
-import { BaseConfigEntity } from '../../config/base-config.entity';
+import { Base } from '../base';
+import { BaseConfigEntity } from '../config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
 export declare class ClerkLoggerServiceAdapter extends Base implements ClerkLogger {
     protected readonly baseConfig: BaseConfigEntity;

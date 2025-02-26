@@ -1,5 +1,7 @@
-import { User, Organization } from '@clerk/backend';
+import { User, Organization, OrganizationInvitation, OrganizationMembershipRole, OrganizationMembership } from '@clerk/backend';
+import { PaginatedResourceResponse } from '@clerk/backend/dist/api/resources/Deserializer';
 import { faker } from '@faker-js/faker';
+import { DateTime } from 'luxon';
 import { v4 } from 'uuid';
 
 export enum TestOrganization {
@@ -215,6 +217,37 @@ const buildClerkOrganization = ({
   return clerkOrganization;
 };
 
+const buildClerkOrganizationMembership = ({
+  clerkUser,
+  clerkOrganization,
+  role,
+}: {
+  clerkUser: User;
+  clerkOrganization: Organization;
+  role: OrganizationMembershipRole;
+}) => {
+  const organizationMembership: OrganizationMembership = {
+    id: v4(),
+    role,
+    permissions: [],
+    publicMetadata: {},
+    privateMetadata: {},
+    createdAt: DateTime.now().toMillis(),
+    updatedAt: DateTime.now().toMillis(),
+    organization: clerkOrganization,
+    publicUserData: {
+      identifier: clerkUser.id,
+      firstName: clerkUser.firstName,
+      lastName: clerkUser.lastName,
+      imageUrl: clerkUser.imageUrl,
+      hasImage: clerkUser.hasImage,
+      userId: clerkUser.id,
+    },
+  };
+
+  return organizationMembership;
+};
+
 export const buildClerkClientMock = () => {
   const clerkUsers: Record<TestUser, User> = {
     [TestUser.JOAO]: buildClerkUser({ user: TestUser.JOAO }),
@@ -328,9 +361,81 @@ export const buildClerkClientMock = () => {
     },
   };
 
+  const clerkMemberships: OrganizationMembership[] = [
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.JOAO],
+      clerkOrganization: clerkOrganizations[TestOrganization.AMBEV],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.JOANA],
+      clerkOrganization: clerkOrganizations[TestOrganization.AMBEV],
+      role: 'org:member',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.JULIANA],
+      clerkOrganization: clerkOrganizations[TestOrganization.AMBEV],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.MARIA],
+      clerkOrganization: clerkOrganizations[TestOrganization.EMBRAER],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.JULIANA],
+      clerkOrganization: clerkOrganizations[TestOrganization.EMBRAER],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.LUCAS],
+      clerkOrganization: clerkOrganizations[TestOrganization.VETTOR_BPO],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.RONALDO],
+      clerkOrganization: clerkOrganizations[TestOrganization.VETTOR_BPO],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.RONY],
+      clerkOrganization: clerkOrganizations[TestOrganization.RESERVA_STORE_42],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.CAITO],
+      clerkOrganization: clerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.DANIEL],
+      clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.RONALDO],
+      clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.RENATA],
+      clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_STORE_123],
+      role: 'org:admin',
+    }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.FERNANDA],
+      clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_STORE_321],
+      role: 'org:admin',
+    }),
+  ];
+
+  const clerkInvitesByOrganization: Record<string, OrganizationInvitation[]> = {}
+
   return {
     _clerkUsers: clerkUsers,
     _clerkOrganizations: clerkOrganizations,
+    _clerkMemberships: clerkMemberships,
+    _clerkInvitesByOrganization: clerkInvitesByOrganization,
     verifyToken: jest.fn().mockImplementation(
       (
         token: string,
@@ -376,6 +481,61 @@ export const buildClerkClientMock = () => {
             );
           },
         ),
+      createOrganizationInvitation: jest.fn().mockImplementation(({
+          organizationId,
+          emailAddress,
+          role,
+          publicMetadata,
+        }: {
+          organizationId: string;
+          emailAddress: string;
+          role: OrganizationMembershipRole;
+          publicMetadata?: OrganizationInvitationPublicMetadata;
+        }): OrganizationInvitation => {
+          const invite = {
+            id: v4(),
+            emailAddress,
+            role,
+            organizationId,
+            createdAt: DateTime.now().toMillis(),
+            updatedAt: DateTime.now().toMillis(),
+            status: 'pending',
+            publicMetadata: publicMetadata || {},
+            privateMetadata: {},
+          } as OrganizationInvitation;
+
+          if (!clerkInvitesByOrganization[organizationId]) {
+            clerkInvitesByOrganization[organizationId] = [];
+          }
+
+          if(clerkInvitesByOrganization[organizationId].find((invite) => invite.emailAddress === emailAddress)) {
+            throw new Error(`Already invited ${emailAddress} to ${organizationId}.`);
+          }
+
+          clerkInvitesByOrganization[organizationId].push(invite);
+
+          return invite;
+      }),
+      getOrganizationMembershipList: jest.fn().mockImplementation(({
+        organizationId,
+        limit = 100,
+        offset = 0,
+      }: {
+        organizationId: string;
+        limit?: number;
+        offset?: number;
+      }): PaginatedResourceResponse<OrganizationMembership[]> => {
+        const memberships = clerkMemberships.filter(
+          (membership) => membership.organization.id === organizationId
+        );
+        
+        const paginatedMemberships = memberships.slice(offset, offset + limit);
+        
+        return {
+          data: paginatedMemberships,
+          totalCount: memberships.length,
+        };
+      }),
     },
   };
 };

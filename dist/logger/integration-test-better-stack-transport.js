@@ -4,6 +4,7 @@ exports.default = createBetterStackTransportWrapper;
 const build = require("pino-abstract-transport");
 const axios_1 = require("axios");
 const axios_retry_1 = require("axios-retry");
+const json_utils_1 = require("../utils/json.utils");
 function createBetterStackTransportWrapper(options) {
     const { apiToken, apiUrl = 'https://in.logs.betterstack.com', flushInterval = 400, maxBuffer = 10000, maxBufferToTriggerFlush = 200, chunkSize = 200, } = options;
     const buffer = [];
@@ -28,7 +29,7 @@ function createBetterStackTransportWrapper(options) {
                     level: convertLogLevel(level),
                     ...rest,
                 };
-            })));
+            }), (0, json_utils_1.getStringfyReplacer)()));
         }
     }
     function convertLogLevel(level) {

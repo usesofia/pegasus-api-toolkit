@@ -1,6 +1,7 @@
 import * as build from 'pino-abstract-transport';
 import axios from 'axios';
 import axiosRetry, {exponentialDelay} from 'axios-retry';
+import { getStringfyReplacer } from '../utils/json.utils';
 
 interface BetterStackTransportOptions {
   apiToken: string;
@@ -47,15 +48,23 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
     // Split logs into chunks according to chunkSize
     for (let i = 0; i < logs.length; i += chunkSize) {
       const chunk = logs.slice(i, i + chunkSize);
-      await axiosInstance.post('/', JSON.stringify(chunk.map(log => {
-        const { msg, level, ...rest } = log;
-        return {
-          dt: log.dt,
-          message: msg,
-          level: convertLogLevel(level),
-          ...rest,
-        }
-      })));
+      await axiosInstance.post(
+        '/', 
+        JSON.stringify(
+          chunk.map(
+            log => {
+              const { msg, level, ...rest } = log;
+              return {
+                dt: log.dt,
+                message: msg,
+                level: convertLogLevel(level),
+                ...rest,
+              }
+            }
+          ),
+          getStringfyReplacer()
+        )
+      );
     }
   }
 
