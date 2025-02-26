@@ -3,6 +3,7 @@ import { PaginatedResourceResponse } from '@clerk/backend/dist/api/resources/Des
 import { faker } from '@faker-js/faker';
 import { DateTime } from 'luxon';
 import { v4 } from 'uuid';
+import { cnpj } from 'cpf-cnpj-validator';
 
 export enum TestOrganization {
   AMBEV = 'AMBEV',
@@ -209,9 +210,11 @@ const buildClerkOrganization = ({
     slug: organization.toString().toLowerCase().replaceAll(/[^a-z0-9]/g, '-') + '-' + organizationId,
     imageUrl: 'https://example.com/image.png',
     hasImage: true,
-    createdAt: 1713542400,
-    updatedAt: 1713542400,
-    publicMetadata: {},
+    createdAt: DateTime.now().toMillis(),
+    updatedAt: DateTime.now().toMillis(),
+    publicMetadata: {
+      document: cnpj.generate().replaceAll(/[^\d]/g, ''),
+    },
     privateMetadata: {},
     maxAllowedMemberships: 100,
     adminDeleteEnabled: true,
@@ -300,18 +303,21 @@ export const buildClerkClientMock = () => {
     [TestOrganization.AMBEV]: {
       ...plainClerkOrganizations[TestOrganization.AMBEV],
       publicMetadata: {
+        ...plainClerkOrganizations[TestOrganization.AMBEV].publicMetadata,
         type: 'LEAF',
       },
     },
     [TestOrganization.EMBRAER]: {
       ...plainClerkOrganizations[TestOrganization.EMBRAER],
       publicMetadata: {
+        ...plainClerkOrganizations[TestOrganization.EMBRAER].publicMetadata,
         type: 'LEAF',
       },
     },
     [TestOrganization.VETTOR_BPO]: {
       ...plainClerkOrganizations[TestOrganization.VETTOR_BPO],
       publicMetadata: {
+        ...plainClerkOrganizations[TestOrganization.VETTOR_BPO].publicMetadata,
         type: 'GROUP',
         children: [
           plainClerkOrganizations[TestOrganization.RESERVA_STORE_42].id,
@@ -325,6 +331,7 @@ export const buildClerkClientMock = () => {
     [TestOrganization.RESERVA_STORE_42]: {
       ...plainClerkOrganizations[TestOrganization.RESERVA_STORE_42],
       publicMetadata: {
+        ...plainClerkOrganizations[TestOrganization.RESERVA_STORE_42].publicMetadata,
         type: 'LEAF',
         parent: plainClerkOrganizations[TestOrganization.VETTOR_BPO].id,
       },
@@ -332,6 +339,7 @@ export const buildClerkClientMock = () => {
     [TestOrganization.CHILLIBEANS_STORE_312]: {
       ...plainClerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312],
       publicMetadata: {
+        ...plainClerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312].publicMetadata,
         type: 'LEAF',
         parent: plainClerkOrganizations[TestOrganization.VETTOR_BPO].id,
       },
@@ -339,6 +347,7 @@ export const buildClerkClientMock = () => {
     [TestOrganization.NAGUMO_SUPERMERCADOS]: {
       ...plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS],
       publicMetadata: {
+        ...plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS].publicMetadata,
         type: 'GROUP',
         children: [
           plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123].id,
@@ -352,6 +361,7 @@ export const buildClerkClientMock = () => {
     [TestOrganization.NAGUMO_STORE_123]: {
       ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123],
       publicMetadata: {
+        ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123].publicMetadata,
         type: 'LEAF',
         parent:
           plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS].id,
@@ -360,6 +370,7 @@ export const buildClerkClientMock = () => {
     [TestOrganization.NAGUMO_STORE_321]: {
       ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_321],
       publicMetadata: {
+        ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_321].publicMetadata,
         type: 'LEAF',
         parent:
           plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS].id,
