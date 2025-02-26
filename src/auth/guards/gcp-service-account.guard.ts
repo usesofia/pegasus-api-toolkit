@@ -32,7 +32,7 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<{
-      user: z.infer<typeof AuthUserEntitySchema>;
+      user: z.input<typeof AuthUserEntitySchema>;
       headers: {
         authorization?: string;
       };

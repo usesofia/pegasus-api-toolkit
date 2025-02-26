@@ -46,7 +46,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
 
   @Log()
   async startSession(): Promise<BaseSessionPort> {
-    return new BaseMongoDbSessionAdapter(await this.model.db.startSession());
+    return new BaseMongoDbSessionAdapter(await this.model.db.startSession(), this.baseConfig, this.logger, this.cls);
   }
 
   /**

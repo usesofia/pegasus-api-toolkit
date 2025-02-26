@@ -27,7 +27,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         return requester.organization.id;
     }
     async startSession() {
-        return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession());
+        return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession(), this.baseConfig, this.logger, this.cls);
     }
     async create({ requester, request, previousSession, }) {
         const created = new this.model({

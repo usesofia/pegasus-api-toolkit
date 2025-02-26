@@ -10,7 +10,7 @@ export const PageInfoEntitySchema = z.object({
 });
 
 export class PageInfoEntity extends createZodDto(PageInfoEntitySchema) {
-  static build(input: z.infer<typeof PageInfoEntitySchema>): PageInfoEntity {
+  static build(input: z.input<typeof PageInfoEntitySchema>): PageInfoEntity {
     return safeInstantiateEntity(PageInfoEntity, input);
   }
 }

@@ -12,6 +12,8 @@ exports.BaseConfigSchema = zod_1.z.object({
     databases: zod_1.z.array(zod_1.z.object({
         type: zod_1.z.enum(['mongodb']),
         uri: zod_1.z.string(),
+        transactionTimeoutInMiliseconds: zod_1.z.number().optional().default(5000),
+        nTransactionRetries: zod_1.z.number().optional().default(7),
     })),
     auth: zod_1.z
         .object({

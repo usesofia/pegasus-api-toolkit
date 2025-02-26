@@ -7,12 +7,18 @@ export declare const BaseConfigSchema: z.ZodObject<{
     databases: z.ZodArray<z.ZodObject<{
         type: z.ZodEnum<["mongodb"]>;
         uri: z.ZodString;
+        transactionTimeoutInMiliseconds: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+        nTransactionRetries: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
     }, "strip", z.ZodTypeAny, {
         type: "mongodb";
         uri: string;
+        transactionTimeoutInMiliseconds: number;
+        nTransactionRetries: number;
     }, {
         type: "mongodb";
         uri: string;
+        transactionTimeoutInMiliseconds?: number | undefined;
+        nTransactionRetries?: number | undefined;
     }>, "many">;
     auth: z.ZodEffects<z.ZodObject<{
         applyAuthGuardToAllRoutes: z.ZodBoolean;
@@ -168,6 +174,8 @@ export declare const BaseConfigSchema: z.ZodObject<{
     databases: {
         type: "mongodb";
         uri: string;
+        transactionTimeoutInMiliseconds: number;
+        nTransactionRetries: number;
     }[];
     auth: {
         applyAuthGuardToAllRoutes: boolean;
@@ -216,6 +224,8 @@ export declare const BaseConfigSchema: z.ZodObject<{
     databases: {
         type: "mongodb";
         uri: string;
+        transactionTimeoutInMiliseconds?: number | undefined;
+        nTransactionRetries?: number | undefined;
     }[];
     auth: {
         applyAuthGuardToAllRoutes: boolean;
@@ -265,6 +275,8 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     databases: {
         type: "mongodb";
         uri: string;
+        transactionTimeoutInMiliseconds: number;
+        nTransactionRetries: number;
     }[];
     auth: {
         applyAuthGuardToAllRoutes: boolean;
@@ -314,12 +326,18 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     databases: z.ZodArray<z.ZodObject<{
         type: z.ZodEnum<["mongodb"]>;
         uri: z.ZodString;
+        transactionTimeoutInMiliseconds: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+        nTransactionRetries: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
     }, "strip", z.ZodTypeAny, {
         type: "mongodb";
         uri: string;
+        transactionTimeoutInMiliseconds: number;
+        nTransactionRetries: number;
     }, {
         type: "mongodb";
         uri: string;
+        transactionTimeoutInMiliseconds?: number | undefined;
+        nTransactionRetries?: number | undefined;
     }>, "many">;
     auth: z.ZodEffects<z.ZodObject<{
         applyAuthGuardToAllRoutes: z.ZodBoolean;
@@ -475,6 +493,8 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     databases: {
         type: "mongodb";
         uri: string;
+        transactionTimeoutInMiliseconds?: number | undefined;
+        nTransactionRetries?: number | undefined;
     }[];
     auth: {
         applyAuthGuardToAllRoutes: boolean;
@@ -519,7 +539,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     instanceId?: string | null | undefined;
 }>;
 export declare class BaseConfigEntity extends BaseConfigEntity_base {
-    static build(input: z.infer<typeof BaseConfigSchema>): BaseConfigEntity;
+    static build(input: z.input<typeof BaseConfigSchema>): BaseConfigEntity;
 }
 export declare const BASE_CONFIG: unique symbol;
 export {};

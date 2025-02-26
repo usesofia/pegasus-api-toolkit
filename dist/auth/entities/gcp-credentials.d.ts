@@ -14,6 +14,6 @@ declare const GcpCredentialsEntity_base: import("nestjs-zod").ZodDto<{
     accessToken: string;
 }>;
 export declare class GcpCredentialsEntity extends GcpCredentialsEntity_base {
-    static build(input: z.infer<typeof GcpCredentialsEntitySchema>): GcpCredentialsEntity;
+    static build(input: z.input<typeof GcpCredentialsEntitySchema>): GcpCredentialsEntity;
 }
 export {};

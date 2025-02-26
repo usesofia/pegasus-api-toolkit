@@ -12,7 +12,7 @@ export class CacheHitOnGetAuthUserPayload extends createZodDto(
   CacheHitOnGetAuthUserPayloadSchema,
 ) {
   static build(
-    input: z.infer<typeof CacheHitOnGetAuthUserPayloadSchema>,
+    input: z.input<typeof CacheHitOnGetAuthUserPayloadSchema>,
   ): CacheHitOnGetAuthUserPayload {
     return safeInstantiateEntity(CacheHitOnGetAuthUserPayload, input);
   }

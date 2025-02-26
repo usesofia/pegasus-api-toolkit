@@ -243,7 +243,7 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
     } | null | undefined;
 }>;
 export declare class AuthUserEntity extends AuthUserEntity_base {
-    static build(input: z.infer<typeof AuthUserEntitySchema>): AuthUserEntity;
+    static build(input: z.input<typeof AuthUserEntitySchema>): AuthUserEntity;
     static buildFromGcpServiceAccount(config: BaseConfigEntity): AuthUserEntity;
 }
 export {};

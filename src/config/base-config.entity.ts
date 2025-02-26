@@ -11,6 +11,8 @@ export const BaseConfigSchema = z.object({
     z.object({
       type: z.enum(['mongodb']),
       uri: z.string(),
+      transactionTimeoutInMiliseconds: z.number().optional().default(5000),
+      nTransactionRetries: z.number().optional().default(7),
     }),
   ),
   auth: z
@@ -71,7 +73,7 @@ export const BaseConfigSchema = z.object({
 });
 
 export class BaseConfigEntity extends createZodDto(BaseConfigSchema) {
-  static build(input: z.infer<typeof BaseConfigSchema>): BaseConfigEntity {
+  static build(input: z.input<typeof BaseConfigSchema>): BaseConfigEntity {
     return safeInstantiateEntity(BaseConfigEntity, input);
   }
 }

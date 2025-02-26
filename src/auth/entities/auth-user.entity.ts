@@ -39,7 +39,7 @@ export const AuthUserEntitySchema = z.object({
 });
 
 export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {
-  static build(input: z.infer<typeof AuthUserEntitySchema>): AuthUserEntity {
+  static build(input: z.input<typeof AuthUserEntitySchema>): AuthUserEntity {
     return safeInstantiateEntity(AuthUserEntity, input);
   }
 

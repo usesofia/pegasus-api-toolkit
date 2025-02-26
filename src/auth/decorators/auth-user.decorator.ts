@@ -5,7 +5,7 @@ import { z } from 'zod';
 export const AuthUser = createParamDecorator(
   (_: unknown, ctx: ExecutionContext): AuthUserEntity => {
     const request = ctx.switchToHttp().getRequest<{
-      user: z.infer<typeof AuthUserEntitySchema>;
+      user: z.input<typeof AuthUserEntitySchema>;
     }>();
     return AuthUserEntity.build(request.user);
   },

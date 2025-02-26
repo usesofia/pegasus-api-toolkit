@@ -32,6 +32,6 @@ declare const PageInfoEntity_base: import("nestjs-zod").ZodDto<{
     totalItems: number;
 }>;
 export declare class PageInfoEntity extends PageInfoEntity_base {
-    static build(input: z.infer<typeof PageInfoEntitySchema>): PageInfoEntity;
+    static build(input: z.input<typeof PageInfoEntitySchema>): PageInfoEntity;
 }
 export {};

@@ -26,6 +26,6 @@ declare const CacheHitOnGetAuthUserPayload_base: import("nestjs-zod").ZodDto<{
     organizationRole?: string | null | undefined;
 }>;
 export declare class CacheHitOnGetAuthUserPayload extends CacheHitOnGetAuthUserPayload_base {
-    static build(input: z.infer<typeof CacheHitOnGetAuthUserPayloadSchema>): CacheHitOnGetAuthUserPayload;
+    static build(input: z.input<typeof CacheHitOnGetAuthUserPayloadSchema>): CacheHitOnGetAuthUserPayload;
 }
 export {};

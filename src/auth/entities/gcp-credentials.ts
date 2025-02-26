@@ -10,7 +10,7 @@ export class GcpCredentialsEntity extends createZodDto(
   GcpCredentialsEntitySchema,
 ) {
   static build(
-    input: z.infer<typeof GcpCredentialsEntitySchema>,
+    input: z.input<typeof GcpCredentialsEntitySchema>,
   ): GcpCredentialsEntity {
     return safeInstantiateEntity(GcpCredentialsEntity, input);
   }

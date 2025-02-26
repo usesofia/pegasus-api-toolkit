@@ -51,7 +51,7 @@ export class AuthGuard extends Base implements CanActivate {
       headers: {
         authorization?: string;
       };
-      user: z.infer<typeof AuthUserEntitySchema>;
+      user: z.input<typeof AuthUserEntitySchema>;
     }>();
     const token = this.extractTokenFromHeader(request);
 

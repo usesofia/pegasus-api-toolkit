@@ -39,13 +39,13 @@ export class OrganizationRolesGuard extends AuthGuard implements CanActivate {
     }
 
     let { user } = context.switchToHttp().getRequest<{
-      user: z.infer<typeof AuthUserEntitySchema>;
+      user: z.input<typeof AuthUserEntitySchema>;
     }>();
 
     if (!user) {
       await super.canActivate(context);
       user = context.switchToHttp().getRequest<{
-        user: z.infer<typeof AuthUserEntitySchema>;
+        user: z.input<typeof AuthUserEntitySchema>;
       }>().user;
     }
 
