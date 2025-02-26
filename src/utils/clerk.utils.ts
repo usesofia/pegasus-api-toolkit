@@ -29,6 +29,7 @@ export enum TestUser {
   FERNANDA = 'FERNANDA',
   PEDRO = 'PEDRO',
   MANOEL = 'MANOEL',
+  PELE = 'PELE',
 }
 
 const memberUsers = [TestUser.JOANA];
@@ -60,7 +61,7 @@ const processToken = (
         break;
 
       case TestOrganization.EMBRAER:
-        if (user !== TestUser.MARIA && user !== TestUser.JULIANA) {
+        if (user !== TestUser.MARIA && user !== TestUser.JULIANA && user !== TestUser.PELE) {
           throw new Error(
             `Invalid user ${user} for organization ${organization}.`,
           );
@@ -265,6 +266,7 @@ export const buildClerkClientMock = () => {
     [TestUser.FERNANDA]: buildClerkUser({ user: TestUser.FERNANDA }),
     [TestUser.PEDRO]: buildClerkUser({ user: TestUser.PEDRO }),
     [TestUser.MANOEL]: buildClerkUser({ user: TestUser.MANOEL }),
+    [TestUser.PELE]: buildClerkUser({ user: TestUser.PELE }),
   };
 
   const plainClerkOrganizations: Record<TestOrganization, Organization> = {
@@ -446,6 +448,11 @@ export const buildClerkClientMock = () => {
       clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_STORE_321],
       role: 'org:admin',
     }),
+    buildClerkOrganizationMembership({
+      clerkUser: clerkUsers[TestUser.PELE],
+      clerkOrganization: clerkOrganizations[TestOrganization.EMBRAER],
+      role: 'org:admin',
+    }),
   ];
 
   const clerkInvitesByOrganization: Record<string, OrganizationInvitation[]> = {}
@@ -598,6 +605,23 @@ export const buildClerkClientMock = () => {
         clerkMemberships[index] = newMembership;
 
         return newMembership;
+      }),
+      deleteOrganizationMembership: jest.fn().mockImplementation(({
+        organizationId,
+        userId,
+      }: {
+        organizationId: string;
+        userId: string;
+      }): void => {
+        const membership = clerkMemberships.find((membership) => membership.organization.id === organizationId && membership.publicUserData?.userId === userId);
+
+        if (!membership) {
+          throw new Error(`Membership not found for ${userId} in ${organizationId}.`);
+        }
+
+        const index = clerkMemberships.indexOf(membership);
+
+        clerkMemberships.splice(index, 1);
       }),
     },
   };
