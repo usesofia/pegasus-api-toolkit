@@ -28,6 +28,8 @@ var TestUser;
     TestUser["DANIEL"] = "DANIEL";
     TestUser["RENATA"] = "RENATA";
     TestUser["FERNANDA"] = "FERNANDA";
+    TestUser["PEDRO"] = "PEDRO";
+    TestUser["MANOEL"] = "MANOEL";
 })(TestUser || (exports.TestUser = TestUser = {}));
 const memberUsers = [TestUser.JOANA];
 const processToken = (token) => {
@@ -68,17 +70,17 @@ const processToken = (token) => {
                 }
                 break;
             case TestOrganization.NAGUMO_SUPERMERCADOS:
-                if (user !== TestUser.DANIEL && user !== TestUser.RONALDO) {
+                if (user !== TestUser.DANIEL && user !== TestUser.RONALDO && user !== TestUser.MANOEL) {
                     throw new Error(`Invalid user ${user} for organization ${organization}.`);
                 }
                 break;
             case TestOrganization.NAGUMO_STORE_123:
-                if (user !== TestUser.RENATA) {
+                if (user !== TestUser.RENATA && user !== TestUser.MANOEL) {
                     throw new Error(`Invalid user ${user} for organization ${organization}.`);
                 }
                 break;
             case TestOrganization.NAGUMO_STORE_321:
-                if (user !== TestUser.FERNANDA) {
+                if (user !== TestUser.FERNANDA && user !== TestUser.MANOEL) {
                     throw new Error(`Invalid user ${user} for organization ${organization}.`);
                 }
                 break;
@@ -205,6 +207,8 @@ const buildClerkClientMock = () => {
         [TestUser.DANIEL]: buildClerkUser({ user: TestUser.DANIEL }),
         [TestUser.RENATA]: buildClerkUser({ user: TestUser.RENATA }),
         [TestUser.FERNANDA]: buildClerkUser({ user: TestUser.FERNANDA }),
+        [TestUser.PEDRO]: buildClerkUser({ user: TestUser.PEDRO }),
+        [TestUser.MANOEL]: buildClerkUser({ user: TestUser.MANOEL }),
     };
     const plainClerkOrganizations = {
         [TestOrganization.AMBEV]: buildClerkOrganization({
@@ -366,6 +370,21 @@ const buildClerkClientMock = () => {
             clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_STORE_321],
             role: 'org:admin',
         }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.MANOEL],
+            clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.MANOEL],
+            clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_STORE_123],
+            role: 'org:admin',
+        }),
+        buildClerkOrganizationMembership({
+            clerkUser: clerkUsers[TestUser.MANOEL],
+            clerkOrganization: clerkOrganizations[TestOrganization.NAGUMO_STORE_321],
+            role: 'org:admin',
+        }),
     ];
     const clerkInvitesByOrganization = {};
     return {
@@ -440,6 +459,19 @@ const buildClerkClientMock = () => {
                     data: paginatedInvitations,
                     totalCount: invitations.length,
                 };
+            }),
+            updateOrganizationMembership: jest.fn().mockImplementation(({ organizationId, userId, role, }) => {
+                const membership = clerkMemberships.find((membership) => membership.organization.id === organizationId && membership.publicUserData?.userId === userId);
+                if (!membership) {
+                    throw new Error(`Membership not found for ${userId} in ${organizationId}.`);
+                }
+                const newMembership = {
+                    ...membership,
+                    role,
+                };
+                const index = clerkMemberships.indexOf(membership);
+                clerkMemberships[index] = newMembership;
+                return newMembership;
             }),
         },
     };

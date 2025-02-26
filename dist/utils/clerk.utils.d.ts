@@ -20,7 +20,9 @@ export declare enum TestUser {
     CAITO = "CAITO",
     DANIEL = "DANIEL",
     RENATA = "RENATA",
-    FERNANDA = "FERNANDA"
+    FERNANDA = "FERNANDA",
+    PEDRO = "PEDRO",
+    MANOEL = "MANOEL"
 }
 export declare const buildClerkClientMock: () => {
     _clerkUsers: Record<TestUser, User>;
@@ -36,5 +38,6 @@ export declare const buildClerkClientMock: () => {
         createOrganizationInvitation: jest.Mock<any, any, any>;
         getOrganizationMembershipList: jest.Mock<any, any, any>;
         getOrganizationInvitationList: jest.Mock<any, any, any>;
+        updateOrganizationMembership: jest.Mock<any, any, any>;
     };
 };
