@@ -536,6 +536,24 @@ export const buildClerkClientMock = () => {
           totalCount: memberships.length,
         };
       }),
+      getOrganizationInvitationList: jest.fn().mockImplementation(({
+        organizationId,
+        limit = 100,
+        offset = 0,
+      }: {
+        organizationId: string;
+        limit?: number;
+        offset?: number;
+      }): PaginatedResourceResponse<OrganizationInvitation[]> => {
+        const invitations = clerkInvitesByOrganization[organizationId] ?? [];
+
+        const paginatedInvitations = invitations.slice(offset, offset + limit);
+
+        return {
+          data: paginatedInvitations,
+          totalCount: invitations.length,
+        };
+      }),
     },
   };
 };
