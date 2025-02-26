@@ -623,6 +623,37 @@ export const buildClerkClientMock = () => {
 
         clerkMemberships.splice(index, 1);
       }),
+      revokeOrganizationInvitation: jest.fn().mockImplementation(({
+        organizationId,
+        invitationId,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        requestingUserId,
+      }: {
+        organizationId: string;
+        invitationId: string;
+        requestingUserId: string;
+      }): OrganizationInvitation => {
+        const invite = clerkInvitesByOrganization[organizationId].find((invite) => invite.id === invitationId);
+
+        if (!invite) {
+          throw new Error(`Invitation not found for ${invitationId} in ${organizationId}.`);
+        }
+
+        if(invite.status !== 'pending') {
+          throw new Error(`Invitation is not pending for ${invitationId} in ${organizationId}.`);
+        }
+
+        const newInvite = {
+          ...invite,
+          status: 'revoked',
+        } as OrganizationInvitation;
+
+        const index = clerkInvitesByOrganization[organizationId].indexOf(invite);
+
+        clerkInvitesByOrganization[organizationId][index] = newInvite;
+
+        return newInvite;
+      }),
     },
   };
 };
