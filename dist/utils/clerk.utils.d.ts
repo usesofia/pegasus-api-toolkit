@@ -49,5 +49,6 @@ export declare const buildClerkClientMock: () => {
         updateOrganizationLogo: jest.Mock<any, any, any>;
         deleteOrganization: jest.Mock<any, any, any>;
         getOrganizationList: jest.Mock<any, any, any>;
+        deleteOrganizationLogo: jest.Mock<any, any, any>;
     };
 };

@@ -595,6 +595,7 @@ const buildClerkClientMock = () => {
                     totalCount: filteredOrganizations.length,
                 };
             }),
+            deleteOrganizationLogo: jest.fn(),
         },
     };
 };
