@@ -2,7 +2,7 @@ import { ClientSession } from 'mongoose';
 import { BaseSessionPort, TransactionOptions } from './base-session.port';
 import { Base } from '../base';
 import { BaseConfigEntity } from '../config/base-config.entity';
-import { LoggerService } from '@nestjs/common';
+import { HttpException, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 
 export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
@@ -30,7 +30,9 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
     }
 
     let attempt = 1;
+
     const maxNAttempts = options?.nRetries ?? mongoDbConfig.nTransactionRetries;
+    const maxDelayBetweenAttempts = options?.maxDelayBetweenAttempts ?? mongoDbConfig.maxDelayBetweenTransactionAttempts;
 
     let result: T | undefined;
 
@@ -39,8 +41,11 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
         result = await this.session.withTransaction(fn, {
           timeoutMS: options?.timeoutInMiliseconds ?? mongoDbConfig.transactionTimeoutInMiliseconds,
         });
-        break;
+        return result;
       } catch (error) {
+        if (error instanceof HttpException) {
+          throw error;
+        }
         this.logWarn({
           functionName: 'withTransaction',
           suffix: `attemptFailed`,
@@ -51,16 +56,12 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
           },
         });
         attempt++;
-        const delay = Math.min(2000, 100 * Math.pow(2, attempt - 1));
+        const delay = Math.min(maxDelayBetweenAttempts, 100 * Math.pow(2, attempt - 1));
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
 
-    if (!result) {
-      throw new Error('Transaction failed after all attempts.');
-    }
-
-    return result;
+    throw new Error('Transaction failed after all attempts.');
   }
 
   getSession(): ClientSession {

@@ -5,6 +5,7 @@ import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
 import createBetterStackTransport from './integration-test-better-stack-transport';
 import { Transform } from 'stream';
 import { getStringfyReplacer } from '../utils/json.utils';
+import { Environment } from '../utils/environment.utils';
 
 const sensitiveFields = [
   'password',
@@ -52,7 +53,10 @@ export class PinoLoggerAdapter implements LoggerService {
       environment: this.environment,
     };
 
-    if(optionalParams.length > 1) {
+    const isAddressAlreadyInUseOnTest = message.startsWith('Error: listen EADDRINUSE: address already in use') && this.baseConfig.env === Environment.INTEGRATION_TEST;
+
+    if(optionalParams.length > 1 && !isAddressAlreadyInUseOnTest) {
+      console.error({level, message, optionalParams});
       throw new Error('Invalid number of parameters for log.');
     }
 

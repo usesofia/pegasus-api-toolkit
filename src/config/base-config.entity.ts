@@ -13,6 +13,7 @@ export const BaseConfigSchema = z.object({
       uri: z.string(),
       transactionTimeoutInMiliseconds: z.number().optional().default(5000),
       nTransactionRetries: z.number().optional().default(7),
+      maxDelayBetweenTransactionAttempts: z.number().optional().default(2000),
     }),
   ),
   auth: z

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseMongoDbSessionAdapter = void 0;
 const base_1 = require("../base");
+const common_1 = require("@nestjs/common");
 class BaseMongoDbSessionAdapter extends base_1.Base {
     constructor(session, baseConfig, logger, cls) {
         super(BaseMongoDbSessionAdapter.name, baseConfig, logger, cls);
@@ -20,15 +21,19 @@ class BaseMongoDbSessionAdapter extends base_1.Base {
         }
         let attempt = 1;
         const maxNAttempts = options?.nRetries ?? mongoDbConfig.nTransactionRetries;
+        const maxDelayBetweenAttempts = options?.maxDelayBetweenAttempts ?? mongoDbConfig.maxDelayBetweenTransactionAttempts;
         let result;
         while (attempt <= maxNAttempts) {
             try {
                 result = await this.session.withTransaction(fn, {
                     timeoutMS: options?.timeoutInMiliseconds ?? mongoDbConfig.transactionTimeoutInMiliseconds,
                 });
-                break;
+                return result;
             }
             catch (error) {
+                if (error instanceof common_1.HttpException) {
+                    throw error;
+                }
                 this.logWarn({
                     functionName: 'withTransaction',
                     suffix: `attemptFailed`,
@@ -39,14 +44,11 @@ class BaseMongoDbSessionAdapter extends base_1.Base {
                     },
                 });
                 attempt++;
-                const delay = Math.min(2000, 100 * Math.pow(2, attempt - 1));
+                const delay = Math.min(maxDelayBetweenAttempts, 100 * Math.pow(2, attempt - 1));
                 await new Promise((resolve) => setTimeout(resolve, delay));
             }
         }
-        if (!result) {
-            throw new Error('Transaction failed after all attempts.');
-        }
-        return result;
+        throw new Error('Transaction failed after all attempts.');
     }
     getSession() {
         return this.session;

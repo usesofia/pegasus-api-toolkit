@@ -14,6 +14,7 @@ exports.BaseConfigSchema = zod_1.z.object({
         uri: zod_1.z.string(),
         transactionTimeoutInMiliseconds: zod_1.z.number().optional().default(5000),
         nTransactionRetries: zod_1.z.number().optional().default(7),
+        maxDelayBetweenTransactionAttempts: zod_1.z.number().optional().default(2000),
     })),
     auth: zod_1.z
         .object({

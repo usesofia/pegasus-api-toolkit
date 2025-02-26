@@ -1,6 +1,7 @@
 export interface TransactionOptions {
     timeoutInMiliseconds?: number;
     nRetries?: number;
+    maxDelayBetweenAttempts?: number;
 }
 export interface BaseSessionPort {
     endSession(): Promise<void>;

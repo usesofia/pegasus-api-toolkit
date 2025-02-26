@@ -19,6 +19,7 @@ const nested_mask_attributes_1 = require("nested-mask-attributes");
 const base_config_entity_1 = require("../config/base-config.entity");
 const integration_test_better_stack_transport_1 = require("./integration-test-better-stack-transport");
 const json_utils_1 = require("../utils/json.utils");
+const environment_utils_1 = require("../utils/environment.utils");
 const sensitiveFields = [
     'password',
     'passwordHash',
@@ -50,7 +51,9 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         let data = {
             environment: this.environment,
         };
-        if (optionalParams.length > 1) {
+        const isAddressAlreadyInUseOnTest = message.startsWith('Error: listen EADDRINUSE: address already in use') && this.baseConfig.env === environment_utils_1.Environment.INTEGRATION_TEST;
+        if (optionalParams.length > 1 && !isAddressAlreadyInUseOnTest) {
+            console.error({ level, message, optionalParams });
             throw new Error('Invalid number of parameters for log.');
         }
         if (optionalParams.length === 1) {
