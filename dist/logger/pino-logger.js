@@ -57,8 +57,14 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
             throw new Error('Invalid number of parameters for log.');
         }
         if (optionalParams.length === 1) {
+            let params = optionalParams[0];
+            if (typeof params !== 'object') {
+                params = {
+                    data: params,
+                };
+            }
             data = {
-                ...(0, nested_mask_attributes_1.maskAttribute)(JSON.parse(JSON.stringify(optionalParams[0], (0, json_utils_1.getStringfyReplacer)())), sensitiveFields, {
+                ...(0, nested_mask_attributes_1.maskAttribute)(JSON.parse(JSON.stringify(params, (0, json_utils_1.getStringfyReplacer)())), sensitiveFields, {
                     action: nested_mask_attributes_1.MaskActions.MASK,
                 }),
                 environment: this.environment,

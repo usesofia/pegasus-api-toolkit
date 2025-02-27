@@ -60,11 +60,18 @@ export class PinoLoggerAdapter implements LoggerService {
       throw new Error('Invalid number of parameters for log.');
     }
 
+
     if(optionalParams.length === 1) {
+      let params = optionalParams[0];
+      if(typeof params !== 'object') {
+        params = {
+          data: params,
+        };
+      }
       data = {
         ...(
           maskAttribute(
-            JSON.parse(JSON.stringify(optionalParams[0], getStringfyReplacer())),
+            JSON.parse(JSON.stringify(params, getStringfyReplacer())),
             sensitiveFields,
             {
               action: MaskActions.MASK,
