@@ -67,12 +67,14 @@ export * from './pub-sub/gcp-pub-sub.module';
 export * from './pub-sub/gcp-pub-sub-service.adapter';
 
 // Utils
-export * from './utils/environment.utils';
-export * from './utils/entity.utils';
-export * from './utils/log.utils';
-export * from './utils/zod.utils';
 export * from './utils/channel.utils';
 export * from './utils/clerk.utils';
+export * from './utils/deep-partial.type';
+export * from './utils/entity.utils';
+export * from './utils/environment.utils';
+export * from './utils/json.utils';
+export * from './utils/log.utils';
+export * from './utils/mongodb.utils';
 
 // Base
 export * from './base';

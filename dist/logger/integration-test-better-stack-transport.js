@@ -5,6 +5,7 @@ const build = require("pino-abstract-transport");
 const axios_1 = require("axios");
 const axios_retry_1 = require("axios-retry");
 const json_utils_1 = require("../utils/json.utils");
+const luxon_1 = require("luxon");
 function createBetterStackTransportWrapper(options) {
     const { apiToken, apiUrl = 'https://in.logs.betterstack.com', flushInterval = 400, maxBuffer = 10000, maxBufferToTriggerFlush = 200, chunkSize = 200, } = options;
     const buffer = [];
@@ -81,7 +82,7 @@ function createBetterStackTransportWrapper(options) {
                 void flush();
             }, flushInterval);
             for await (const obj of source) {
-                const dt = new Date().toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC');
+                const dt = luxon_1.DateTime.utc().toISO();
                 const logEntry = {
                     ...obj,
                     dt,

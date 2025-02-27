@@ -2,6 +2,7 @@ import * as build from 'pino-abstract-transport';
 import axios from 'axios';
 import axiosRetry, {exponentialDelay} from 'axios-retry';
 import { getStringfyReplacer } from '../utils/json.utils';
+import { DateTime } from 'luxon';
 
 interface BetterStackTransportOptions {
   apiToken: string;
@@ -127,7 +128,7 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
         // Process each log
         for await (const obj of source) {
           // Format the date in UTC as required by Better Stack
-          const dt = new Date().toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC');
+          const dt = DateTime.utc().toISO();
           
           // Add timestamp to the log object
           const logEntry = {
