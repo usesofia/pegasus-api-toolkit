@@ -32,6 +32,7 @@ export class PinoLoggerAdapter implements LoggerService {
       close: remoteLoggerTransportClose,
     } = createBetterStackTransport({
       apiToken: baseConfig.logger.betterStackSourceToken,
+      apiUrl: baseConfig.logger.betterStackEndpoint,
     });
     this.remoteLoggerTransport = remoteLoggerTransport;
     this.remoteLoggerTransportClose = remoteLoggerTransportClose;

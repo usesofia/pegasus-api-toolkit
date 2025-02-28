@@ -32,6 +32,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         this.baseConfig = baseConfig;
         const { transport: remoteLoggerTransport, close: remoteLoggerTransportClose, } = (0, integration_test_better_stack_transport_1.default)({
             apiToken: baseConfig.logger.betterStackSourceToken,
+            apiUrl: baseConfig.logger.betterStackEndpoint,
         });
         this.remoteLoggerTransport = remoteLoggerTransport;
         this.remoteLoggerTransportClose = remoteLoggerTransportClose;
