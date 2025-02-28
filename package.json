@@ -8,6 +8,9 @@
     "access": "public"
   },
   "license": "UNLICENSED",
+  "engines": {
+    "node": "20.x"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
