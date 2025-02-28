@@ -52,5 +52,6 @@ export * from './utils/environment.utils';
 export * from './utils/json.utils';
 export * from './utils/log.utils';
 export * from './utils/mongodb.utils';
+export * from './utils/test.utils';
 export * from './base';
 export * from './app-exceptions.filter';
