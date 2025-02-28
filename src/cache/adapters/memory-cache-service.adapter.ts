@@ -1,5 +1,5 @@
-import { CacheServicePort } from '../ports/cache-service.port';
-import { BaseConfigEntity } from '../../config/base-config.entity';
+import { CacheServicePort } from '@app/cache/ports/cache-service.port';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { DateTime } from 'luxon';
 
 interface CacheRecord {

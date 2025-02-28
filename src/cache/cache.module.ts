@@ -4,10 +4,10 @@ import {
   Inject,
   OnApplicationShutdown,
 } from '@nestjs/common';
-import { RedisCacheServiceAdapter } from './adapters/redis-cache-service.adapter';
-import { CACHE_SERVICE_PORT } from './ports/cache-service.port';
-import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
-import { MemoryCacheServiceAdapter } from './adapters/memory-cache-service.adapter';
+import { RedisCacheServiceAdapter } from '@app/cache/adapters/redis-cache-service.adapter';
+import { CACHE_SERVICE_PORT } from '@app/cache/ports/cache-service.port';
+import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
+import { MemoryCacheServiceAdapter } from '@app/cache/adapters/memory-cache-service.adapter';
 import Redis from 'ioredis';
 
 const REDIS = Symbol('Redis');

@@ -5,7 +5,7 @@ import {
   OnApplicationShutdown,
 } from '@nestjs/common';
 import mongoose from 'mongoose';
-import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 
 export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
 

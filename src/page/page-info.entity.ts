@@ -1,6 +1,6 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { safeInstantiateEntity } from '../utils/entity.utils';
+import { safeInstantiateEntity } from '@app/utils/entity.utils';
 
 export const PageInfoEntitySchema = z.object({
   pageIndex: z.number(),

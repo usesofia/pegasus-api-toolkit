@@ -1,7 +1,7 @@
 import { ClientSession } from 'mongoose';
-import { BaseSessionPort, TransactionOptions } from './base-session.port';
-import { Base } from '../base';
-import { BaseConfigEntity } from '../config/base-config.entity';
+import { BaseSessionPort, TransactionOptions } from '@app/database/base-session.port';
+import { Base } from '@app/base';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { HttpException, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 

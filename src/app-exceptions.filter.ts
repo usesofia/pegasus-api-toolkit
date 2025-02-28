@@ -11,10 +11,10 @@ import { HttpAdapterHost } from '@nestjs/core';
 import * as Sentry from '@sentry/node';
 import { ZodValidationException, createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { LOGGER_SERVICE_PORT } from './logger/logger.module';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { ClsService } from 'nestjs-cls';
-import { correlationIdKey } from './correlation/correlation.constants';
-import { safeInstantiateEntity } from './utils/entity.utils';
+import { correlationIdKey } from '@app/correlation/correlation.constants';
+import { safeInstantiateEntity } from '@app/utils/entity.utils';
 
 const FieldErrorEntitySchema = z.object({
   fieldPath: z.string(),

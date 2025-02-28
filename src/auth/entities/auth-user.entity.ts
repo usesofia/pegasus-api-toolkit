@@ -1,9 +1,9 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { OrganizationRole } from '../constants/organization-role.enum';
-import { OrganizationType } from '../constants/organization-type.enum';
-import { safeInstantiateEntity } from '../../utils/entity.utils';
-import { BaseConfigEntity } from '../../config/base-config.entity';
+import { OrganizationRole } from '@app/auth/constants/organization-role.enum';
+import { OrganizationType } from '@app/auth/constants/organization-type.enum';
+import { safeInstantiateEntity } from '@app/utils/entity.utils';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 
 export const AuthUserEntitySchema = z.object({
   id: z.string(),

@@ -1,6 +1,6 @@
 import { LoggerService } from '@nestjs/common';
 import { BaseConfigEntity } from '../config/base-config.entity';
-import { PubSubServicePort } from './pub-sub-service.port';
+import { PubSubServicePort } from '../pub-sub/pub-sub-service.port';
 import { PubSub } from '@google-cloud/pubsub';
 import { ClsService } from 'nestjs-cls';
 import { Base } from '../base';

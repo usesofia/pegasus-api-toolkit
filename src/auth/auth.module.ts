@@ -1,21 +1,21 @@
 import { Global, Module } from '@nestjs/common';
-import { ClerkAuthServiceAdapter } from './adapters/clerk-auth-service.adapter';
-import { AUTH_SERVICE_PORT } from './ports/auth-service.port';
-import { AUTH_GUARD, AuthGuard } from './guards/auth.guard';
+import { ClerkAuthServiceAdapter } from '@app/auth/adapters/clerk-auth-service.adapter';
+import { AUTH_SERVICE_PORT } from '@app/auth/ports/auth-service.port';
+import { AUTH_GUARD, AuthGuard } from '@app/auth/guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import {
   GCP_SERVICE_ACCOUNT_GUARD,
   GcpServiceAccountGuard,
-} from './guards/gcp-service-account.guard';
-import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
+} from '@app/auth/guards/gcp-service-account.guard';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import {
   ORGANIZATION_ROLES_GUARD,
   OrganizationRolesGuard,
-} from './guards/organization-roles.guard';
+} from '@app/auth/guards/organization-roles.guard';
 import {
   ORGANIZATION_TYPES_GUARD,
   OrganizationTypesGuard,
-} from './guards/organization-types.guard';
+} from '@app/auth/guards/organization-types.guard';
 
 @Global()
 @Module({

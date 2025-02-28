@@ -1,6 +1,6 @@
 import { LoggerService } from '@nestjs/common';
-import { AuthServicePort } from '../ports/auth-service.port';
-import { AuthUserEntity } from '../entities/auth-user.entity';
+import { AuthServicePort } from '../../auth/ports/auth-service.port';
+import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
 import { BaseConfigEntity } from '../../config/base-config.entity';
 import { CacheServicePort } from '../../cache/ports/cache-service.port';
 import { Base } from '../../base';

@@ -6,13 +6,13 @@ import {
   LoggerService,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthUserEntity, AuthUserEntitySchema } from '../entities/auth-user.entity';
-import { ORGANIZATION_ROLES_KEY } from '../decorators/organization-roles.decorator';
-import { AuthGuard } from './auth.guard';
-import { BASE_CONFIG, BaseConfigEntity } from '../../config/base-config.entity';
+import { AuthUserEntity, AuthUserEntitySchema } from '@app/auth/entities/auth-user.entity';
+import { ORGANIZATION_ROLES_KEY } from '@app/auth/decorators/organization-roles.decorator';
+import { AuthGuard } from '@app/auth/guards/auth.guard';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
-import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
-import { AUTH_SERVICE_PORT, AuthServicePort } from '../ports/auth-service.port';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
+import { AUTH_SERVICE_PORT, AuthServicePort } from '@app/auth/ports/auth-service.port';
 import { z } from 'zod';
 
 @Injectable()

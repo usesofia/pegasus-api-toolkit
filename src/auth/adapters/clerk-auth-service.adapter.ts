@@ -1,25 +1,25 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { AuthServicePort } from '../ports/auth-service.port';
-import { AuthUserEntity } from '../entities/auth-user.entity';
-import { BaseConfigEntity, BASE_CONFIG } from '../../config/base-config.entity';
-import { OrganizationRole } from '../constants/organization-role.enum';
-import { OrganizationType } from '../constants/organization-type.enum';
+import { AuthServicePort } from '@app/auth/ports/auth-service.port';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
+import { OrganizationRole } from '@app/auth/constants/organization-role.enum';
+import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 import {
   CACHE_SERVICE_PORT,
   CacheServicePort,
-} from '../../cache/ports/cache-service.port';
+} from '@app/cache/ports/cache-service.port';
 import { Duration } from 'luxon';
-import { Base } from '../../base';
+import { Base } from '@app/base';
 import { ClsService } from 'nestjs-cls';
-import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { ClerkClient } from '@usesofia/clerk-backend';
 import { Organization, User } from '@clerk/backend';
-import { Log } from '../../utils/log.utils';
+import { Log } from '@app/utils/log.utils';
 import {
   CLERK_CLIENT,
   CLERK_VERIFY_TOKEN,
   ClerkVerifyToken,
-} from '../../clerk/clerk.constants';
+} from '@app/clerk/clerk.constants';
 
 @Injectable()
 export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {

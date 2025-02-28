@@ -1,7 +1,7 @@
 import { createClerkClient, verifyToken } from "@usesofia/clerk-backend";
-import { ClerkLoggerServiceAdapter } from "./clerk-logger-service.adapter";
-import { CLERK_CLIENT, CLERK_VERIFY_TOKEN } from "./clerk.constants";
-import { BASE_CONFIG, BaseConfigEntity } from "../config/base-config.entity";
+import { ClerkLoggerServiceAdapter } from "@app/clerk/clerk-logger-service.adapter";
+import { CLERK_CLIENT, CLERK_VERIFY_TOKEN } from "@app/clerk/clerk.constants";
+import { BASE_CONFIG, BaseConfigEntity } from "@app/config/base-config.entity";
 import { Module, Global } from "@nestjs/common";
 
 @Global()

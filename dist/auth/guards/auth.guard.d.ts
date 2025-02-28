@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, LoggerService } from '@nestjs/common';
-import { AuthServicePort } from '../ports/auth-service.port';
+import { AuthServicePort } from '../../auth/ports/auth-service.port';
 import { Reflector } from '@nestjs/core';
 import { BaseConfigEntity } from '../../config/base-config.entity';
 import { ClsService } from 'nestjs-cls';

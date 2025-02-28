@@ -4,8 +4,8 @@ import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '../config/base-config.entity';
 import { AuthUserEntity } from '../auth/entities/auth-user.entity';
 import { Base } from '../base';
-import { BaseSessionPort } from './base-session.port';
-import { BaseSessionStarterPort } from './base-session-starter.port';
+import { BaseSessionPort } from '../database/base-session.port';
+import { BaseSessionStarterPort } from '../database/base-session-starter.port';
 export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc extends Document, TEntity, TCreateRequest extends {
     data: Partial<TDoc>;
 }, TFindOneRequest extends {

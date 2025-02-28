@@ -20,7 +20,7 @@ const config = compat.extends(
 
 export default [
     {
-        ignores: ['tsconfig.json', '**/.eslintrc.js', 'eslint.config.mjs', '**/dist', '**/test', '**/node_modules', '**/coverage', '**/*.js'],
+        ignores: ['tsconfig.json', 'eslint.config.mjs', '**/dist', '**/test', '**/node_modules', '**/coverage', '**/*.js'],
     },
     ...config,
     {
@@ -44,6 +44,10 @@ export default [
             },
         },
 
-        rules: {},
+        rules: {
+            "no-restricted-imports": ["error", {
+                "patterns": [".*", "src/*", "test/*"]
+            }],
+        },
     }
 ];

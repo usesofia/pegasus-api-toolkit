@@ -1,6 +1,6 @@
 import { Connection } from 'mongoose';
-import { PRIMARY_MONGOOSE_CONNECTION } from '../database/primary-mongodb-database.module';
-import { MongoDbPubSubEventModelSchema } from './mongodb-pub-sub-event.model';
+import { PRIMARY_MONGOOSE_CONNECTION } from '@app/database/primary-mongodb-database.module';
+import { MongoDbPubSubEventModelSchema } from '@app/pub-sub/mongodb-pub-sub-event.model';
 import { Module } from '@nestjs/common';
 
 export const PUB_SUB_EVENT_MODEL = Symbol('PubSubEventModel');

@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { LogLevel } from '@nestjs/common';
-import { Base } from '../base';
+import { Base } from '@app/base';
 
 export function Log(level: LogLevel = 'log') {
   return function (

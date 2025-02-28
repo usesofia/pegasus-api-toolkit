@@ -8,12 +8,12 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { OAuth2Client } from 'google-auth-library';
-import { BaseConfigEntity, BASE_CONFIG } from '../../config/base-config.entity';
+import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
-import { IGNORE_GCP_SERVICE_ACCOUNT_GUARD_KEY } from '../decorators/ignore-gcp-service-account-guard.decorator';
-import { LOGGER_SERVICE_PORT } from '../../logger/logger.module';
-import { Base } from '../../base';
-import { AuthUserEntity, AuthUserEntitySchema } from '../entities/auth-user.entity';
+import { IGNORE_GCP_SERVICE_ACCOUNT_GUARD_KEY } from '@app/auth/decorators/ignore-gcp-service-account-guard.decorator';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
+import { Base } from '@app/base';
+import { AuthUserEntity, AuthUserEntitySchema } from '@app/auth/entities/auth-user.entity';
 import { z } from 'zod';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { createZodDto, ZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { safeInstantiateEntity } from '../utils/entity.utils';
+import { safeInstantiateEntity } from '@app/utils/entity.utils';
 
 const PubSubMessageBodyDtoSchema = z.object({
   message: z.object({

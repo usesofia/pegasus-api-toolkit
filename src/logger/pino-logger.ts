@@ -1,11 +1,11 @@
 import pino, { Logger } from 'pino';
 import { Inject, Injectable, LoggerService, LogLevel } from '@nestjs/common';
 import { MaskActions, maskAttribute } from 'nested-mask-attributes';
-import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
-import createBetterStackTransport from './integration-test-better-stack-transport';
+import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
+import createBetterStackTransport from '@app/logger/integration-test-better-stack-transport';
 import { Transform } from 'stream';
-import { getStringfyReplacer } from '../utils/json.utils';
-import { Environment } from '../utils/environment.utils';
+import { getStringfyReplacer } from '@app/utils/json.utils';
+import { Environment } from '@app/utils/environment.utils';
 
 const sensitiveFields = [
   'password',

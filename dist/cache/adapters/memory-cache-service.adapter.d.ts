@@ -1,4 +1,4 @@
-import { CacheServicePort } from '../ports/cache-service.port';
+import { CacheServicePort } from '../../cache/ports/cache-service.port';
 import { BaseConfigEntity } from '../../config/base-config.entity';
 export declare class MemoryCacheServiceAdapter implements CacheServicePort {
     private readonly baseConfig;

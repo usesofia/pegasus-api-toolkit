@@ -1,14 +1,14 @@
 import { Model, Document, ClientSession } from 'mongoose';
 import { NotFoundException, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
-import { BaseConfigEntity } from '../config/base-config.entity';
-import { Base } from '../base';
-import { Log } from '../utils/log.utils';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { Base } from '@app/base';
+import { Log } from '@app/utils/log.utils';
 import { DeepMergeLeafURI, deepmergeCustom } from 'deepmerge-ts';
-import { BaseSessionPort } from './base-session.port';
-import { BaseMongoDbSessionAdapter } from './base-mongodb-session.adapter';
-import { BaseSessionStarterPort } from './base-session-starter.port';
-import { DeepPartial } from '../utils/deep-partial.type';
+import { BaseSessionPort } from '@app/database/base-session.port';
+import { BaseMongoDbSessionAdapter } from '@app/database/base-mongodb-session.adapter';
+import { BaseSessionStarterPort } from '@app/database/base-session-starter.port';
+import { DeepPartial } from '@app/utils/deep-partial.type';
 
 export abstract class BaseDefaultMongoDbRepositoryAdapter<
     TDoc extends Document,
