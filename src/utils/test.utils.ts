@@ -10,7 +10,6 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 import * as portfinder from 'portfinder';
 import { MongoClient } from 'mongodb';
 import { EventEmitter } from 'events';
-import { expect } from '@jest/globals';
 import { LoggerModule } from '@app/logger/logger.module';
 import { correlationIdHeaderKey, correlationIdKey } from '@app/correlation/correlation.constants';
 import { PrimaryMongoDbDatabaseModule } from '@app/database/primary-mongodb-database.module';

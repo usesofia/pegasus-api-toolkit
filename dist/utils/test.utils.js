@@ -12,7 +12,6 @@ const platform_fastify_1 = require("@nestjs/platform-fastify");
 const portfinder = require("portfinder");
 const mongodb_1 = require("mongodb");
 const events_1 = require("events");
-const globals_1 = require("@jest/globals");
 const logger_module_1 = require("../logger/logger.module");
 const correlation_constants_1 = require("../correlation/correlation.constants");
 const primary_mongodb_database_module_1 = require("../database/primary-mongodb-database.module");
@@ -82,7 +81,7 @@ class InstanceFixture {
         throw new Error('Failed to start app.');
     }
     getCurrentCorrelationId() {
-        return globals_1.expect.getState().currentTestName?.split('|')[1].trim() ?? (0, uuid_1.v4)();
+        return expect.getState().currentTestName?.split('|')[1].trim() ?? (0, uuid_1.v4)();
     }
     async teardown() {
         await this.app.close();
