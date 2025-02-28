@@ -1,13 +1,13 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
-import { PubSubServicePort } from './pub-sub-service.port';
-import { LOGGER_SERVICE_PORT } from '../logger/logger.module';
+import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
+import { PubSubServicePort } from '@app/pub-sub/pub-sub-service.port';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { ClsService } from 'nestjs-cls';
 import { v4 as uuidv4 } from 'uuid';
-import { Base } from '../base';
+import { Base } from '@app/base';
 import { Model } from 'mongoose';
-import { MongoDbPubSubEventModel } from './mongodb-pub-sub-event.model';
-import { PUB_SUB_EVENT_MODEL } from './mongodb-pub-sub-event.module';
+import { MongoDbPubSubEventModel } from '@app/pub-sub/mongodb-pub-sub-event.model';
+import { PUB_SUB_EVENT_MODEL } from '@app/pub-sub/mongodb-pub-sub-event.module';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 

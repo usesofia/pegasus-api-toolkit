@@ -1,7 +1,7 @@
 import * as build from 'pino-abstract-transport';
 import axios from 'axios';
 import axiosRetry, {exponentialDelay} from 'axios-retry';
-import { getStringfyReplacer } from '../utils/json.utils';
+import { getStringfyReplacer } from '@app/utils/json.utils';
 import { DateTime } from 'luxon';
 
 interface BetterStackTransportOptions {

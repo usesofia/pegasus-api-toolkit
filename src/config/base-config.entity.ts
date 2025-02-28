@@ -1,7 +1,7 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { Environment } from '../utils/environment.utils';
-import { safeInstantiateEntity } from '../utils/entity.utils';
+import { Environment } from '@app/utils/environment.utils';
+import { safeInstantiateEntity } from '@app/utils/entity.utils';
 
 export const BaseConfigSchema = z.object({
   env: z.nativeEnum(Environment),

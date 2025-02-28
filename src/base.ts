@@ -1,7 +1,7 @@
 import { LoggerService, LogLevel } from '@nestjs/common';
-import { BaseConfigEntity } from './config/base-config.entity';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
-import { correlationIdKey } from './correlation/correlation.constants';
+import { correlationIdKey } from '@app/correlation/correlation.constants';
 
 export class Base {
   constructor(

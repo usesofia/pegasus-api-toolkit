@@ -1,13 +1,13 @@
 import { Global, Module, OnApplicationShutdown } from '@nestjs/common';
-import { PUB_SUB_SERVICE_PORT } from './pub-sub-service.port';
-import { GcpPubSubServiceAdapter } from './gcp-pub-sub-service.adapter';
-import { GcpPubSubModule } from './gcp-pub-sub.module';
-import { MongoDbPubSubServiceAdapter } from './mongodb-pub-sub-service.adapter';
+import { PUB_SUB_SERVICE_PORT } from '@app/pub-sub/pub-sub-service.port';
+import { GcpPubSubServiceAdapter } from '@app/pub-sub/gcp-pub-sub-service.adapter';
+import { GcpPubSubModule } from '@app/pub-sub/gcp-pub-sub.module';
+import { MongoDbPubSubServiceAdapter } from '@app/pub-sub/mongodb-pub-sub-service.adapter';
 import {
   isIntegrationTestEnvironment,
   isLocalEnvironment,
-} from '../utils/environment.utils';
-import { MongoDbPubSubEventModule } from './mongodb-pub-sub-event.module';
+} from '@app/utils/environment.utils';
+import { MongoDbPubSubEventModule } from '@app/pub-sub/mongodb-pub-sub-event.module';
 
 @Global()
 @Module({

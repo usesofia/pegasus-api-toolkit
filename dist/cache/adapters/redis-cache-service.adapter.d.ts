@@ -1,6 +1,6 @@
 import { Redis } from 'ioredis';
-import { BaseConfigEntity } from '../../config/base-config.entity';
-import { CacheServicePort } from '../ports/cache-service.port';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { CacheServicePort } from '@app/cache/ports/cache-service.port';
 export declare class RedisCacheServiceAdapter implements CacheServicePort {
     private readonly baseConfig;
     private readonly redis;

@@ -18,10 +18,10 @@ const core_1 = require("@nestjs/core");
 const Sentry = require("@sentry/node");
 const nestjs_zod_1 = require("nestjs-zod");
 const zod_1 = require("zod");
-const logger_module_1 = require("./logger/logger.module");
 const nestjs_cls_1 = require("nestjs-cls");
 const correlation_constants_1 = require("./correlation/correlation.constants");
 const entity_utils_1 = require("./utils/entity.utils");
+const logger_module_1 = require("./logger/logger.module");
 const FieldErrorEntitySchema = zod_1.z.object({
     fieldPath: zod_1.z.string(),
     messages: zod_1.z.array(zod_1.z.string()),

@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { OrganizationType } from '../constants/organization-type.enum';
+import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 
 export const ORGANIZATION_TYPES_KEY = 'organizationTypes';
 export const OrganizationTypes = (...types: OrganizationType[]) =>

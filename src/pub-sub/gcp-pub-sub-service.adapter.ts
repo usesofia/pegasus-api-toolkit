@@ -1,12 +1,12 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { BaseConfigEntity, BASE_CONFIG } from '../config/base-config.entity';
-import { PubSubServicePort } from './pub-sub-service.port';
+import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
+import { PubSubServicePort } from '@app/pub-sub/pub-sub-service.port';
 import { PubSub } from '@google-cloud/pubsub';
-import { LOGGER_SERVICE_PORT } from '../logger/logger.module';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { ClsService } from 'nestjs-cls';
 import { v4 as uuidv4 } from 'uuid';
-import { GCP_PUB_SUB } from './gcp-pub-sub.module';
-import { Base } from '../base';
+import { GCP_PUB_SUB } from '@app/pub-sub/gcp-pub-sub.module';
+import { Base } from '@app/base';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 

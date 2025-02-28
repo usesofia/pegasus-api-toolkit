@@ -7,14 +7,14 @@ import {
   NestModule,
   OnApplicationShutdown,
 } from '@nestjs/common';
-import { PinoLoggerAdapter } from './pino-logger';
+import { PinoLoggerAdapter } from '@app/logger/pino-logger';
 import * as morgan from 'morgan';
 import {
   correlationIdKey,
   correlationIdTokenKey,
-} from '../correlation/correlation.constants';
+} from '@app/correlation/correlation.constants';
 import { Request } from 'express';
-import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 
 declare module 'express' {
   interface Request {

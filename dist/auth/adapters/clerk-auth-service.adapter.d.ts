@@ -1,12 +1,12 @@
 import { LoggerService } from '@nestjs/common';
-import { AuthServicePort } from '../ports/auth-service.port';
-import { AuthUserEntity } from '../entities/auth-user.entity';
-import { BaseConfigEntity } from '../../config/base-config.entity';
-import { CacheServicePort } from '../../cache/ports/cache-service.port';
-import { Base } from '../../base';
+import { AuthServicePort } from '@app/auth/ports/auth-service.port';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { CacheServicePort } from '@app/cache/ports/cache-service.port';
+import { Base } from '@app/base';
 import { ClsService } from 'nestjs-cls';
 import { ClerkClient } from '@usesofia/clerk-backend';
-import { ClerkVerifyToken } from '../../clerk/clerk.constants';
+import { ClerkVerifyToken } from '@app/clerk/clerk.constants';
 export declare class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;

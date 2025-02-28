@@ -8,13 +8,13 @@ import {
 } from '@nestjs/swagger';
 import { z } from 'zod';
 import { createZodDto } from 'nestjs-zod';
-import { IgnoreGcpServiceAccountGuard } from '../auth/decorators/ignore-gcp-service-account-guard.decorator';
-import { ExceptionResponseEntity } from '../app-exceptions.filter';
-import { Base } from '../base';
-import { LOGGER_SERVICE_PORT } from '../logger/logger.module';
-import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
-import { IgnoreAuthGuard } from '../auth/decorators/ignore-auth-guard.decorator';
-import { Log } from '../utils/log.utils';
+import { IgnoreGcpServiceAccountGuard } from '@app/auth/decorators/ignore-gcp-service-account-guard.decorator';
+import { ExceptionResponseEntity } from '@app/app-exceptions.filter';
+import { Base } from '@app/base';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
+import { IgnoreAuthGuard } from '@app/auth/decorators/ignore-auth-guard.decorator';
+import { Log } from '@app/utils/log.utils';
 
 const HealthResponseDtoSchema = z.object({
   status: z.string(),

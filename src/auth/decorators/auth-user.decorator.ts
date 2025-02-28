@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { AuthUserEntity, AuthUserEntitySchema } from '../entities/auth-user.entity';
+import { AuthUserEntity, AuthUserEntitySchema } from '@app/auth/entities/auth-user.entity';
 import { z } from 'zod';
 
 export const AuthUser = createParamDecorator(

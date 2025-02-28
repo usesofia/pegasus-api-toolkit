@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Environment } from '../utils/environment.utils';
+import { Environment } from '@app/utils/environment.utils';
 export declare const BaseConfigSchema: z.ZodObject<{
     env: z.ZodNativeEnum<typeof Environment>;
     nodeEnv: z.ZodEnum<["development", "production"]>;

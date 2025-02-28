@@ -1,8 +1,8 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ClerkLogger } from '@usesofia/clerk-backend';
-import { Base } from '../base';
-import { BASE_CONFIG, BaseConfigEntity } from '../config/base-config.entity';
-import { LOGGER_SERVICE_PORT } from '../logger/logger.module';
+import { Base } from '@app/base';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { ClsService } from 'nestjs-cls';
 
 @Injectable()
