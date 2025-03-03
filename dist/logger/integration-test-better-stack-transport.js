@@ -30,7 +30,7 @@ function createBetterStackTransportWrapper(options) {
                     level: convertLogLevel(level),
                     ...rest,
                 };
-            }), (0, json_utils_1.getStringfyReplacer)()));
+            }), (0, json_utils_1.getJsonStringfyReplacer)()));
         }
     }
     function convertLogLevel(level) {

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStringfyReplacer = void 0;
-const getStringfyReplacer = () => {
+exports.getJsonStringfyReplacer = getJsonStringfyReplacer;
+exports.getJsonParseReviver = getJsonParseReviver;
+function getJsonStringfyReplacer() {
     const seen = new WeakSet();
     return (key, value) => {
         if (value instanceof Error) {
@@ -11,6 +12,9 @@ const getStringfyReplacer = () => {
                 stack: value.stack,
             };
         }
+        if (typeof value === 'bigint') {
+            return value.toString() + 'n';
+        }
         if (typeof value === 'object' && value !== null) {
             if (seen.has(value)) {
                 return;
@@ -19,6 +23,13 @@ const getStringfyReplacer = () => {
         }
         return value;
     };
-};
-exports.getStringfyReplacer = getStringfyReplacer;
+}
+function getJsonParseReviver() {
+    return (key, value) => {
+        if (typeof value === 'string' && value.endsWith('n')) {
+            return BigInt(value.slice(0, -1));
+        }
+        return value;
+    };
+}
 //# sourceMappingURL=json.utils.js.map

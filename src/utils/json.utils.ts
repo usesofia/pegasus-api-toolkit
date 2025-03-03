@@ -1,4 +1,4 @@
-export const getStringfyReplacer = () => {
+export function getJsonStringfyReplacer() {
     const seen = new WeakSet();
     return (key: string, value: unknown) => {
         if (value instanceof Error) {
@@ -8,6 +8,9 @@ export const getStringfyReplacer = () => {
                 stack: value.stack,
             };
         }
+        if (typeof value === 'bigint') {
+            return value.toString() + 'n';
+        }
         if (typeof value === 'object' && value !== null) {
             if (seen.has(value)) {
                 return;
@@ -16,4 +19,13 @@ export const getStringfyReplacer = () => {
         }
         return value;
     };
-};
+}
+
+export function getJsonParseReviver() {
+    return (key: string, value: unknown) => {
+        if (typeof value === 'string' && value.endsWith('n')) {
+            return BigInt(value.slice(0, -1));
+        }
+        return value;
+    };
+}

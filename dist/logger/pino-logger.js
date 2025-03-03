@@ -65,7 +65,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
                 };
             }
             data = {
-                ...(0, nested_mask_attributes_1.maskAttribute)(JSON.parse(JSON.stringify(params, (0, json_utils_1.getStringfyReplacer)())), sensitiveFields, {
+                ...(0, nested_mask_attributes_1.maskAttribute)(JSON.parse(JSON.stringify(params, (0, json_utils_1.getJsonStringfyReplacer)()), (0, json_utils_1.getJsonParseReviver)()), sensitiveFields, {
                     action: nested_mask_attributes_1.MaskActions.MASK,
                 }),
                 environment: this.environment,

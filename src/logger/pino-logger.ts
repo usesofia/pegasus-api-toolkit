@@ -4,7 +4,7 @@ import { MaskActions, maskAttribute } from 'nested-mask-attributes';
 import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
 import createBetterStackTransport from '@app/logger/integration-test-better-stack-transport';
 import { Transform } from 'stream';
-import { getStringfyReplacer } from '@app/utils/json.utils';
+import { getJsonParseReviver, getJsonStringfyReplacer } from '@app/utils/json.utils';
 import { Environment } from '@app/utils/environment.utils';
 
 const sensitiveFields = [
@@ -72,7 +72,7 @@ export class PinoLoggerAdapter implements LoggerService {
       data = {
         ...(
           maskAttribute(
-            JSON.parse(JSON.stringify(params, getStringfyReplacer())),
+            JSON.parse(JSON.stringify(params, getJsonStringfyReplacer()), getJsonParseReviver()),
             sensitiveFields,
             {
               action: MaskActions.MASK,
