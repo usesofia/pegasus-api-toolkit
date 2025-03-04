@@ -27,7 +27,6 @@ class BaseMongoDbSessionAdapter extends base_1.Base {
             try {
                 result = await this.session.withTransaction(fn, {
                     timeoutMS: options?.timeoutInMiliseconds ?? mongoDbConfig.transactionTimeoutInMiliseconds,
-                    readConcern: options?.readConcern,
                 });
                 return result;
             }

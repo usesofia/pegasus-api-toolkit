@@ -24,7 +24,17 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         this.model = model;
     }
     async startSession() {
-        return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession(), this.baseConfig, this.logger, this.cls);
+        return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession({
+            defaultTransactionOptions: {
+                writeConcern: {
+                    w: 'majority',
+                    j: true,
+                },
+                readConcern: {
+                    level: 'snapshot',
+                },
+            },
+        }), this.baseConfig, this.logger, this.cls);
     }
     async create({ request, previousSession, }) {
         const created = new this.model({
