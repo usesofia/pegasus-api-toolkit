@@ -7,3 +7,10 @@ export const coercedBoolean = z.preprocess((val) => {
   }
   return val;
 }, z.coerce.boolean());
+
+export const coercedBigInt = z.preprocess((val) => {
+  if (typeof val === "string") {
+    return BigInt(val);
+  }
+  return val;
+}, z.coerce.bigint());

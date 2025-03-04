@@ -9,7 +9,7 @@ export function getJsonStringfyReplacer() {
             };
         }
         if (typeof value === 'bigint') {
-            return value.toString() + 'n';
+            return value.toString();
         }
         if (typeof value === 'object' && value !== null) {
             if (seen.has(value)) {
@@ -23,9 +23,6 @@ export function getJsonStringfyReplacer() {
 
 export function getJsonParseReviver() {
     return (key: string, value: unknown) => {
-        if (typeof value === 'string' && /^\d+n$/.test(value)) {
-            return BigInt(value.slice(0, -1));
-        }
         return value;
     };
 }
