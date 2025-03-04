@@ -76,6 +76,7 @@ export * from '@app/utils/json.utils';
 export * from '@app/utils/log.utils';
 export * from '@app/utils/mongodb.utils';
 export * from '@app/utils/test.utils';
+export * from '@app/utils/zod.utils';
 
 // Base
 export * from '@app/base';
