@@ -40,6 +40,7 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
       try {
         result = await this.session.withTransaction(fn, {
           timeoutMS: options?.timeoutInMiliseconds ?? mongoDbConfig.transactionTimeoutInMiliseconds,
+          readConcern: options?.readConcern,
         });
         return result;
       } catch (error) {
