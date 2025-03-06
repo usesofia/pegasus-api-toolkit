@@ -54,13 +54,18 @@ exports.BaseConfigSchema = zod_1.z.object({
         jwtKey: zod_1.z.string(),
     }),
     cache: zod_1.z.object({
-        type: zod_1.z.enum(['redis', 'memory']),
+        type: zod_1.z.enum(['redis', 'memory', 'mongodb']),
         ttlInSeconds: zod_1.z.number(),
         redis: zod_1.z
             .object({
             url: zod_1.z.string(),
             keyPrefix: zod_1.z.string(),
             ssl: zod_1.z.boolean().optional().default(true),
+        })
+            .optional(),
+        mongodb: zod_1.z
+            .object({
+            keyPrefix: zod_1.z.string(),
         })
             .optional(),
     }),

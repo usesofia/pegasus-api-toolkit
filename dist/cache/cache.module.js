@@ -18,7 +18,10 @@ const redis_cache_service_adapter_1 = require("./adapters/redis-cache-service.ad
 const cache_service_port_1 = require("./ports/cache-service.port");
 const base_config_entity_1 = require("../config/base-config.entity");
 const memory_cache_service_adapter_1 = require("./adapters/memory-cache-service.adapter");
+const mongodb_cache_service_adapter_1 = require("./adapters/mongodb-cache-service.adapter");
+const primary_mongodb_database_module_1 = require("../database/primary-mongodb-database.module");
 const ioredis_1 = require("ioredis");
+const cache_controller_1 = require("./cache.controller");
 const REDIS = Symbol('Redis');
 let CacheModule = class CacheModule {
     constructor(redis) {
@@ -34,6 +37,7 @@ exports.CacheModule = CacheModule;
 exports.CacheModule = CacheModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
+        controllers: [cache_controller_1.CacheController],
         providers: [
             {
                 provide: REDIS,
@@ -49,15 +53,20 @@ exports.CacheModule = CacheModule = __decorate([
             },
             {
                 provide: cache_service_port_1.CACHE_SERVICE_PORT,
-                useFactory: (baseConfig, redis) => {
+                useFactory: async (baseConfig, redis, mongoConnection) => {
                     if (baseConfig.cache.type === 'redis') {
                         return new redis_cache_service_adapter_1.RedisCacheServiceAdapter(baseConfig, redis);
+                    }
+                    else if (baseConfig.cache.type === 'mongodb') {
+                        const cacheService = new mongodb_cache_service_adapter_1.MongoDbCacheServiceAdapter(baseConfig, mongoConnection);
+                        await cacheService.createTTLIndex();
+                        return cacheService;
                     }
                     else {
                         return new memory_cache_service_adapter_1.MemoryCacheServiceAdapter(baseConfig);
                     }
                 },
-                inject: [base_config_entity_1.BASE_CONFIG, REDIS],
+                inject: [base_config_entity_1.BASE_CONFIG, REDIS, primary_mongodb_database_module_1.PRIMARY_MONGOOSE_CONNECTION],
             },
         ],
         exports: [cache_service_port_1.CACHE_SERVICE_PORT],

@@ -61,13 +61,18 @@ export const BaseConfigSchema = z.object({
     jwtKey: z.string(),
   }),
   cache: z.object({
-    type: z.enum(['redis', 'memory']),
+    type: z.enum(['redis', 'memory', 'mongodb']),
     ttlInSeconds: z.number(),
     redis: z
       .object({
         url: z.string(),
         keyPrefix: z.string(),
         ssl: z.boolean().optional().default(true),
+      })
+      .optional(),
+    mongodb: z
+      .object({
+        keyPrefix: z.string(),
       })
       .optional(),
   }),

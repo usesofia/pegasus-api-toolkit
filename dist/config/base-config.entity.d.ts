@@ -139,7 +139,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
         jwtKey: string;
     }>;
     cache: z.ZodObject<{
-        type: z.ZodEnum<["redis", "memory"]>;
+        type: z.ZodEnum<["redis", "memory", "mongodb"]>;
         ttlInSeconds: z.ZodNumber;
         redis: z.ZodOptional<z.ZodObject<{
             url: z.ZodString;
@@ -154,17 +154,30 @@ export declare const BaseConfigSchema: z.ZodObject<{
             keyPrefix: string;
             ssl?: boolean | undefined;
         }>>;
+        mongodb: z.ZodOptional<z.ZodObject<{
+            keyPrefix: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            keyPrefix: string;
+        }, {
+            keyPrefix: string;
+        }>>;
     }, "strip", z.ZodTypeAny, {
-        type: "redis" | "memory";
+        type: "mongodb" | "redis" | "memory";
         ttlInSeconds: number;
+        mongodb?: {
+            keyPrefix: string;
+        } | undefined;
         redis?: {
             url: string;
             keyPrefix: string;
             ssl: boolean;
         } | undefined;
     }, {
-        type: "redis" | "memory";
+        type: "mongodb" | "redis" | "memory";
         ttlInSeconds: number;
+        mongodb?: {
+            keyPrefix: string;
+        } | undefined;
         redis?: {
             url: string;
             keyPrefix: string;
@@ -213,8 +226,11 @@ export declare const BaseConfigSchema: z.ZodObject<{
         jwtKey: string;
     };
     cache: {
-        type: "redis" | "memory";
+        type: "mongodb" | "redis" | "memory";
         ttlInSeconds: number;
+        mongodb?: {
+            keyPrefix: string;
+        } | undefined;
         redis?: {
             url: string;
             keyPrefix: string;
@@ -264,8 +280,11 @@ export declare const BaseConfigSchema: z.ZodObject<{
         jwtKey: string;
     };
     cache: {
-        type: "redis" | "memory";
+        type: "mongodb" | "redis" | "memory";
         ttlInSeconds: number;
+        mongodb?: {
+            keyPrefix: string;
+        } | undefined;
         redis?: {
             url: string;
             keyPrefix: string;
@@ -316,8 +335,11 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         jwtKey: string;
     };
     cache: {
-        type: "redis" | "memory";
+        type: "mongodb" | "redis" | "memory";
         ttlInSeconds: number;
+        mongodb?: {
+            keyPrefix: string;
+        } | undefined;
         redis?: {
             url: string;
             keyPrefix: string;
@@ -464,7 +486,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         jwtKey: string;
     }>;
     cache: z.ZodObject<{
-        type: z.ZodEnum<["redis", "memory"]>;
+        type: z.ZodEnum<["redis", "memory", "mongodb"]>;
         ttlInSeconds: z.ZodNumber;
         redis: z.ZodOptional<z.ZodObject<{
             url: z.ZodString;
@@ -479,17 +501,30 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             keyPrefix: string;
             ssl?: boolean | undefined;
         }>>;
+        mongodb: z.ZodOptional<z.ZodObject<{
+            keyPrefix: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            keyPrefix: string;
+        }, {
+            keyPrefix: string;
+        }>>;
     }, "strip", z.ZodTypeAny, {
-        type: "redis" | "memory";
+        type: "mongodb" | "redis" | "memory";
         ttlInSeconds: number;
+        mongodb?: {
+            keyPrefix: string;
+        } | undefined;
         redis?: {
             url: string;
             keyPrefix: string;
             ssl: boolean;
         } | undefined;
     }, {
-        type: "redis" | "memory";
+        type: "mongodb" | "redis" | "memory";
         ttlInSeconds: number;
+        mongodb?: {
+            keyPrefix: string;
+        } | undefined;
         redis?: {
             url: string;
             keyPrefix: string;
@@ -538,8 +573,11 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         jwtKey: string;
     };
     cache: {
-        type: "redis" | "memory";
+        type: "mongodb" | "redis" | "memory";
         ttlInSeconds: number;
+        mongodb?: {
+            keyPrefix: string;
+        } | undefined;
         redis?: {
             url: string;
             keyPrefix: string;
