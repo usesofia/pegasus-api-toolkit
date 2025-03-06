@@ -1,40 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthUserEntity = exports.AuthUserEntitySchema = void 0;
+exports.AuthUserEntity = exports.AuthUserEntitySchema = exports.OrganizationSchema = void 0;
 const nestjs_zod_1 = require("nestjs-zod");
 const zod_1 = require("zod");
 const organization_role_enum_1 = require("../constants/organization-role.enum");
 const organization_type_enum_1 = require("../constants/organization-type.enum");
 const entity_utils_1 = require("../../utils/entity.utils");
+exports.OrganizationSchema = zod_1.z
+    .object({
+    id: zod_1.z.string(),
+    name: zod_1.z.string(),
+    role: zod_1.z.nativeEnum(organization_role_enum_1.OrganizationRole),
+    type: zod_1.z.nativeEnum(organization_type_enum_1.OrganizationType),
+    parent: zod_1.z
+        .object({
+        id: zod_1.z.string(),
+        name: zod_1.z.string(),
+        sharedContacts: zod_1.z.boolean(),
+        sharedSubcategories: zod_1.z.boolean(),
+        sharedTags: zod_1.z.boolean(),
+    })
+        .nullish(),
+    children: zod_1.z
+        .array(zod_1.z.object({
+        id: zod_1.z.string(),
+        name: zod_1.z.string(),
+    }))
+        .nullish(),
+});
 exports.AuthUserEntitySchema = zod_1.z.object({
     id: zod_1.z.string(),
     primaryEmail: zod_1.z.string().email(),
     primaryPhoneNumber: zod_1.z.string(),
     firstName: zod_1.z.string(),
     lastName: zod_1.z.string(),
-    organization: zod_1.z
-        .object({
-        id: zod_1.z.string(),
-        name: zod_1.z.string(),
-        role: zod_1.z.nativeEnum(organization_role_enum_1.OrganizationRole),
-        type: zod_1.z.nativeEnum(organization_type_enum_1.OrganizationType),
-        parent: zod_1.z
-            .object({
-            id: zod_1.z.string(),
-            name: zod_1.z.string(),
-            sharedContacts: zod_1.z.boolean(),
-            sharedSubcategories: zod_1.z.boolean(),
-            sharedTags: zod_1.z.boolean(),
-        })
-            .nullish(),
-        children: zod_1.z
-            .array(zod_1.z.object({
-            id: zod_1.z.string(),
-            name: zod_1.z.string(),
-        }))
-            .nullish(),
-    })
-        .nullish(),
+    organization: exports.OrganizationSchema.nullish(),
 });
 class AuthUserEntity extends (0, nestjs_zod_1.createZodDto)(exports.AuthUserEntitySchema) {
     static build(input) {
@@ -54,6 +54,12 @@ class AuthUserEntity extends (0, nestjs_zod_1.createZodDto)(exports.AuthUserEnti
                 type: organization_type_enum_1.OrganizationType.LEAF,
             },
         });
+    }
+    getOrganizationOrThrow() {
+        if (!this.organization) {
+            throw new Error('Organization not defined for the auth user.');
+        }
+        return this.organization;
     }
 }
 exports.AuthUserEntity = AuthUserEntity;
