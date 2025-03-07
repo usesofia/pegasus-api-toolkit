@@ -19,6 +19,7 @@ const pub_sub_module_1 = require("../pub-sub/pub-sub.module");
 const cache_module_1 = require("../cache/cache.module");
 const clerk_module_1 = require("../clerk/clerk.module");
 const auth_module_1 = require("../auth/auth.module");
+const setup_utils_1 = require("./setup.utils");
 events_1.EventEmitter.defaultMaxListeners = 128;
 class InstanceFixture {
     constructor({ app, request, mongoClient, }) {
@@ -54,10 +55,21 @@ class InstanceFixture {
         }
         return moduleRef;
     }
-    static async build({ moduleRef, fastifyOptions, setupApp, }) {
+    static async build({ moduleRef, fastifyOptions, }) {
         const testModule = await moduleRef.compile();
         const app = testModule.createNestApplication(new platform_fastify_1.FastifyAdapter(fastifyOptions));
-        setupApp({ app, initSentry: false });
+        (0, setup_utils_1.setupApp)({
+            app,
+            version: '1.0.0',
+            swaggerDocument: {
+                info: {
+                    title: 'Test',
+                    version: '1.0.0',
+                    description: 'Test',
+                },
+                openapi: '3.0.0',
+            },
+        });
         const maxRetries = 16;
         let lastError = null;
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -73,7 +85,7 @@ class InstanceFixture {
                 lastError = error;
                 if (attempt === maxRetries) {
                     console.error(lastError);
-                    throw new Error(`Failed to start app after ${maxRetries} attempts. Last error: ${lastError.message}`);
+                    throw new Error(`Failed to start app after ${maxRetries} attempts. Last error: ${lastError.message}.`);
                 }
                 await new Promise((resolve) => setTimeout(resolve, 100));
             }

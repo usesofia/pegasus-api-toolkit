@@ -17,6 +17,7 @@ import { PubSubModule } from '@app/pub-sub/pub-sub.module';
 import { CacheModule } from '@app/cache/cache.module';
 import { ClerkModule } from '@app/clerk/clerk.module';
 import { AuthModule } from '@app/auth/auth.module';
+import { setupApp } from '@app/utils/setup.utils';
 
 EventEmitter.defaultMaxListeners = 128;
 
@@ -82,26 +83,29 @@ export class InstanceFixture {
   static async build({
     moduleRef,
     fastifyOptions,
-    setupApp,
   }: {
     moduleRef: TestingModuleBuilder;
     fastifyOptions: {
       bodyLimit: number;
     };
-    setupApp: ({
-      app,
-      initSentry,
-    }: {
-      app: NestFastifyApplication;
-      initSentry?: boolean;
-    }) => void;
   }): Promise<InstanceFixture> {
     const testModule = await moduleRef.compile();
     const app = testModule.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(fastifyOptions),
     );
 
-    setupApp({ app, initSentry: false });
+    setupApp({
+      app,
+      version: '1.0.0',
+      swaggerDocument: {
+        info: {
+          title: 'Test',
+          version: '1.0.0',
+          description: 'Test',
+        },
+        openapi: '3.0.0',
+      },
+    });
 
     const maxRetries = 16;
     let lastError: Error | null = null;
@@ -119,7 +123,7 @@ export class InstanceFixture {
         if (attempt === maxRetries) {
           console.error(lastError);
           throw new Error(
-            `Failed to start app after ${maxRetries} attempts. Last error: ${lastError.message}`,
+            `Failed to start app after ${maxRetries} attempts. Last error: ${lastError.message}.`,
           );
         }
         // Wait for a short time before retrying
