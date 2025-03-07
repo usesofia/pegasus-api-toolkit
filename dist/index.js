@@ -68,6 +68,7 @@ __exportStar(require("./utils/environment.utils"), exports);
 __exportStar(require("./utils/json.utils"), exports);
 __exportStar(require("./utils/log.utils"), exports);
 __exportStar(require("./utils/mongodb.utils"), exports);
+__exportStar(require("./utils/setup.utils"), exports);
 __exportStar(require("./utils/test.utils"), exports);
 __exportStar(require("./utils/zod.utils"), exports);
 __exportStar(require("./base"), exports);
