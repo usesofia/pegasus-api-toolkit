@@ -55,9 +55,9 @@ class InstanceFixture {
         }
         return moduleRef;
     }
-    static async build({ moduleRef, fastifyOptions, }) {
+    static async build({ moduleRef, }) {
         const testModule = await moduleRef.compile();
-        const app = testModule.createNestApplication(new platform_fastify_1.FastifyAdapter(fastifyOptions));
+        const app = testModule.createNestApplication(new platform_fastify_1.FastifyAdapter(setup_utils_1.fastifyOptions));
         (0, setup_utils_1.setupApp)({
             app,
             version: '1.0.0',

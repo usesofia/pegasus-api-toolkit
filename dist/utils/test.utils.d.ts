@@ -15,11 +15,8 @@ export declare class InstanceFixture {
         modules: Array<Type | DynamicModule>;
         log?: boolean;
     }): TestingModuleBuilder;
-    static build({ moduleRef, fastifyOptions, }: {
+    static build({ moduleRef, }: {
         moduleRef: TestingModuleBuilder;
-        fastifyOptions: {
-            bodyLimit: number;
-        };
     }): Promise<InstanceFixture>;
     getCurrentCorrelationId(): string;
     teardown(): Promise<void>;

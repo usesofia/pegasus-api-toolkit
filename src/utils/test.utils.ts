@@ -17,7 +17,7 @@ import { PubSubModule } from '@app/pub-sub/pub-sub.module';
 import { CacheModule } from '@app/cache/cache.module';
 import { ClerkModule } from '@app/clerk/clerk.module';
 import { AuthModule } from '@app/auth/auth.module';
-import { setupApp } from '@app/utils/setup.utils';
+import { fastifyOptions, setupApp } from '@app/utils/setup.utils';
 
 EventEmitter.defaultMaxListeners = 128;
 
@@ -82,12 +82,8 @@ export class InstanceFixture {
 
   static async build({
     moduleRef,
-    fastifyOptions,
   }: {
     moduleRef: TestingModuleBuilder;
-    fastifyOptions: {
-      bodyLimit: number;
-    };
   }): Promise<InstanceFixture> {
     const testModule = await moduleRef.compile();
     const app = testModule.createNestApplication<NestFastifyApplication>(
