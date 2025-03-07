@@ -88,14 +88,20 @@ export class InstanceFixture {
     fastifyOptions: {
       bodyLimit: number;
     };
-    setupApp: (app: NestFastifyApplication) => void;
+    setupApp: ({
+      app,
+      initSentry,
+    }: {
+      app: INestApplication;
+      initSentry?: boolean;
+    }) => void;
   }): Promise<InstanceFixture> {
     const testModule = await moduleRef.compile();
     const app = testModule.createNestApplication<NestFastifyApplication>(
       new FastifyAdapter(fastifyOptions),
     );
 
-    setupApp(app);
+    setupApp({ app, initSentry: false });
 
     const maxRetries = 16;
     let lastError: Error | null = null;

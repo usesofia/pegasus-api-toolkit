@@ -57,7 +57,7 @@ class InstanceFixture {
     static async build({ moduleRef, fastifyOptions, setupApp, }) {
         const testModule = await moduleRef.compile();
         const app = testModule.createNestApplication(new platform_fastify_1.FastifyAdapter(fastifyOptions));
-        setupApp(app);
+        setupApp({ app, initSentry: false });
         const maxRetries = 16;
         let lastError = null;
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
