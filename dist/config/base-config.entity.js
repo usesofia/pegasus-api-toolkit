@@ -69,6 +69,10 @@ exports.BaseConfigSchema = zod_1.z.object({
         })
             .optional(),
     }),
+    sentry: zod_1.z.object({
+        enabled: zod_1.z.boolean(),
+        dsn: zod_1.z.string().optional(),
+    }),
 });
 class BaseConfigEntity extends (0, nestjs_zod_1.createZodDto)(exports.BaseConfigSchema) {
     static build(input) {

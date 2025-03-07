@@ -76,6 +76,10 @@ export const BaseConfigSchema = z.object({
       })
       .optional(),
   }),
+  sentry: z.object({
+    enabled: z.boolean(),
+    dsn: z.string().optional(),
+  }),
 });
 
 export class BaseConfigEntity extends createZodDto(BaseConfigSchema) {

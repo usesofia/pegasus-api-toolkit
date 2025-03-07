@@ -184,6 +184,16 @@ export declare const BaseConfigSchema: z.ZodObject<{
             ssl?: boolean | undefined;
         } | undefined;
     }>;
+    sentry: z.ZodObject<{
+        enabled: z.ZodBoolean;
+        dsn: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        enabled: boolean;
+        dsn?: string | undefined;
+    }, {
+        enabled: boolean;
+        dsn?: string | undefined;
+    }>;
 }, "strip", z.ZodTypeAny, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -236,6 +246,10 @@ export declare const BaseConfigSchema: z.ZodObject<{
             keyPrefix: string;
             ssl: boolean;
         } | undefined;
+    };
+    sentry: {
+        enabled: boolean;
+        dsn?: string | undefined;
     };
     instanceId?: string | null | undefined;
 }, {
@@ -291,6 +305,10 @@ export declare const BaseConfigSchema: z.ZodObject<{
             ssl?: boolean | undefined;
         } | undefined;
     };
+    sentry: {
+        enabled: boolean;
+        dsn?: string | undefined;
+    };
     instanceId?: string | null | undefined;
 }>;
 declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
@@ -345,6 +363,10 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             keyPrefix: string;
             ssl: boolean;
         } | undefined;
+    };
+    sentry: {
+        enabled: boolean;
+        dsn?: string | undefined;
     };
     instanceId?: string | null | undefined;
 }, z.ZodObjectDef<{
@@ -531,6 +553,16 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             ssl?: boolean | undefined;
         } | undefined;
     }>;
+    sentry: z.ZodObject<{
+        enabled: z.ZodBoolean;
+        dsn: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        enabled: boolean;
+        dsn?: string | undefined;
+    }, {
+        enabled: boolean;
+        dsn?: string | undefined;
+    }>;
 }, "strip", z.ZodTypeAny>, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -583,6 +615,10 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             keyPrefix: string;
             ssl?: boolean | undefined;
         } | undefined;
+    };
+    sentry: {
+        enabled: boolean;
+        dsn?: string | undefined;
     };
     instanceId?: string | null | undefined;
 }>;
