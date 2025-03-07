@@ -1,6 +1,7 @@
 import { INestApplication, DynamicModule, Type } from '@nestjs/common';
 import * as supertest from 'supertest';
 import { TestingModuleBuilder } from '@nestjs/testing';
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { MongoClient } from 'mongodb';
 export declare class InstanceFixture {
     app: INestApplication;
@@ -21,7 +22,7 @@ export declare class InstanceFixture {
             bodyLimit: number;
         };
         setupApp: ({ app, initSentry, }: {
-            app: INestApplication;
+            app: NestFastifyApplication;
             initSentry?: boolean;
         }) => void;
     }): Promise<InstanceFixture>;

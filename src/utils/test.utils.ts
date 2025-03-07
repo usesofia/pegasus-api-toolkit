@@ -92,7 +92,7 @@ export class InstanceFixture {
       app,
       initSentry,
     }: {
-      app: INestApplication;
+      app: NestFastifyApplication;
       initSentry?: boolean;
     }) => void;
   }): Promise<InstanceFixture> {
