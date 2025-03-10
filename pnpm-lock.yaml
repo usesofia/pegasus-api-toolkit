@@ -23,6 +23,9 @@ importers:
       '@google-cloud/pubsub':
         specifier: ^4.10.0
         version: 4.10.0
+      '@google-cloud/tasks':
+        specifier: ^5.5.2
+        version: 5.5.2
       '@jest/globals':
         specifier: ^29.7.0
         version: 29.7.0
@@ -456,6 +459,10 @@ packages:
   '@google-cloud/pubsub@4.10.0':
     resolution: {integrity: sha512-HLlIA8qGr6PxAnjK4YjSi2swqEiXjGAC2Tj9GHMNYFtL4uubTIJLHv4CtbJ/Gzem5Cb1HRjuubt/H0oTuRLV0g==}
     engines: {node: '>=14.0.0'}
+
+  '@google-cloud/tasks@5.5.2':
+    resolution: {integrity: sha512-F934h4rI3OLlEVgzthDzE5RDQqT2brlq+BeD15eHNBi4sGMTdaz/b4y3eMFxJvB2hZk5mEKlLnsb9Pt2EcmNSQ==}
+    engines: {node: '>=v14'}
 
   '@grpc/grpc-js@1.12.6':
     resolution: {integrity: sha512-JXUj6PI0oqqzTGvKtzOkxtpsyPRNsrmhh41TtIz/zEB6J+AUiZZ0dxWzcMwO9Ns5rmSPuMdghlTbUuqIM48d3Q==}
@@ -3993,6 +4000,13 @@ snapshots:
       is-stream-ended: 0.1.4
       lodash.snakecase: 4.1.1
       p-defer: 3.0.0
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  '@google-cloud/tasks@5.5.2':
+    dependencies:
+      google-gax: 4.4.1
     transitivePeerDependencies:
       - encoding
       - supports-color

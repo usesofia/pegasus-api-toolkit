@@ -204,6 +204,16 @@ export declare const BaseConfigSchema: z.ZodObject<{
         title: string;
         description: string;
     }>;
+    microservices: z.ZodArray<z.ZodObject<{
+        name: z.ZodString;
+        baseUrl: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        name: string;
+        baseUrl: string;
+    }, {
+        name: string;
+        baseUrl: string;
+    }>, "many">;
 }, "strip", z.ZodTypeAny, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -265,6 +275,10 @@ export declare const BaseConfigSchema: z.ZodObject<{
         title: string;
         description: string;
     };
+    microservices: {
+        name: string;
+        baseUrl: string;
+    }[];
     instanceId?: string | null | undefined;
 }, {
     env: Environment;
@@ -327,6 +341,10 @@ export declare const BaseConfigSchema: z.ZodObject<{
         title: string;
         description: string;
     };
+    microservices: {
+        name: string;
+        baseUrl: string;
+    }[];
     instanceId?: string | null | undefined;
 }>;
 declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
@@ -390,6 +408,10 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         title: string;
         description: string;
     };
+    microservices: {
+        name: string;
+        baseUrl: string;
+    }[];
     instanceId?: string | null | undefined;
 }, z.ZodObjectDef<{
     env: z.ZodNativeEnum<typeof Environment>;
@@ -595,6 +617,16 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         title: string;
         description: string;
     }>;
+    microservices: z.ZodArray<z.ZodObject<{
+        name: z.ZodString;
+        baseUrl: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        name: string;
+        baseUrl: string;
+    }, {
+        name: string;
+        baseUrl: string;
+    }>, "many">;
 }, "strip", z.ZodTypeAny>, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -656,6 +688,10 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         title: string;
         description: string;
     };
+    microservices: {
+        name: string;
+        baseUrl: string;
+    }[];
     instanceId?: string | null | undefined;
 }>;
 export declare class BaseConfigEntity extends BaseConfigEntity_base {

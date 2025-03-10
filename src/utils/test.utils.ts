@@ -18,6 +18,7 @@ import { CacheModule } from '@app/cache/cache.module';
 import { ClerkModule } from '@app/clerk/clerk.module';
 import { AuthModule } from '@app/auth/auth.module';
 import { fastifyOptions, setupApp } from '@app/utils/setup.utils';
+import { TasksModule } from '@app/tasks/tasks.module';
 
 EventEmitter.defaultMaxListeners = 128;
 
@@ -66,6 +67,7 @@ export class InstanceFixture {
         }),
         PrimaryMongoDbDatabaseModule,
         PubSubModule,
+        TasksModule,
         CacheModule,
         ClerkModule,
         AuthModule,

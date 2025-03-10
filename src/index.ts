@@ -66,6 +66,13 @@ export * from '@app/pub-sub/pub-sub-service.port';
 export * from '@app/pub-sub/gcp-pub-sub.module';
 export * from '@app/pub-sub/gcp-pub-sub-service.adapter';
 
+// Tasks
+export * from '@app/tasks/task.entity';
+export * from '@app/tasks/tasks.module';
+export * from '@app/tasks/tasks-service.port';
+export * from '@app/tasks/gcp-tasks-service.adapter';
+export * from '@app/tasks/mongodb-tasks-service.adapter';
+
 // Utils
 export * from '@app/utils/channel.utils';
 export * from '@app/utils/clerk.utils';

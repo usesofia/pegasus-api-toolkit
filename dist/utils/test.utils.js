@@ -20,6 +20,7 @@ const cache_module_1 = require("../cache/cache.module");
 const clerk_module_1 = require("../clerk/clerk.module");
 const auth_module_1 = require("../auth/auth.module");
 const setup_utils_1 = require("./setup.utils");
+const tasks_module_1 = require("../tasks/tasks.module");
 events_1.EventEmitter.defaultMaxListeners = 128;
 class InstanceFixture {
     constructor({ app, request, mongoClient, }) {
@@ -44,6 +45,7 @@ class InstanceFixture {
                 }),
                 primary_mongodb_database_module_1.PrimaryMongoDbDatabaseModule,
                 pub_sub_module_1.PubSubModule,
+                tasks_module_1.TasksModule,
                 cache_module_1.CacheModule,
                 clerk_module_1.ClerkModule,
                 auth_module_1.AuthModule,
