@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthUserEntity = exports.AuthUserEntitySchema = exports.OrganizationSchema = void 0;
+exports.AuthUserEntity = exports.AuthUserEntitySchema = exports.OrganizationEntity = exports.OrganizationSchema = void 0;
 const nestjs_zod_1 = require("nestjs-zod");
 const zod_1 = require("zod");
 const organization_role_enum_1 = require("../constants/organization-role.enum");
@@ -28,6 +28,12 @@ exports.OrganizationSchema = zod_1.z
     }))
         .nullish(),
 });
+class OrganizationEntity extends (0, nestjs_zod_1.createZodDto)(exports.OrganizationSchema) {
+    static build(input) {
+        return (0, entity_utils_1.safeInstantiateEntity)(OrganizationEntity, input);
+    }
+}
+exports.OrganizationEntity = OrganizationEntity;
 exports.AuthUserEntitySchema = zod_1.z.object({
     id: zod_1.z.string(),
     primaryEmail: zod_1.z.string().email(),
@@ -59,7 +65,7 @@ class AuthUserEntity extends (0, nestjs_zod_1.createZodDto)(exports.AuthUserEnti
         if (!this.organization) {
             throw new Error('Organization not defined for the auth user.');
         }
-        return this.organization;
+        return OrganizationEntity.build(this.organization);
     }
 }
 exports.AuthUserEntity = AuthUserEntity;

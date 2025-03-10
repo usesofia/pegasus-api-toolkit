@@ -30,6 +30,12 @@ export const OrganizationSchema = z
       .nullish(),
   });
 
+export class OrganizationEntity extends createZodDto(OrganizationSchema) {
+  static build(input: z.input<typeof OrganizationSchema>): OrganizationEntity {
+    return safeInstantiateEntity(OrganizationEntity, input);
+  }
+}
+
 export const AuthUserEntitySchema = z.object({
   id: z.string(),
   primaryEmail: z.string().email(),
@@ -60,10 +66,10 @@ export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {
     });
   }
 
-  getOrganizationOrThrow(): z.infer<typeof OrganizationSchema> {
+  getOrganizationOrThrow(): OrganizationEntity {
     if (!this.organization) {
       throw new Error('Organization not defined for the auth user.');
     }
-    return this.organization;
+    return OrganizationEntity.build(this.organization);
   }
 }

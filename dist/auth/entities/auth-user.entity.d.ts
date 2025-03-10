@@ -69,6 +69,76 @@ export declare const OrganizationSchema: z.ZodObject<{
         id: string;
     }[] | null | undefined;
 }>;
+declare const OrganizationEntity_base: import("nestjs-zod").ZodDto<{
+    type: OrganizationType;
+    name: string;
+    id: string;
+    role: OrganizationRole;
+    parent?: {
+        name: string;
+        id: string;
+        sharedContacts: boolean;
+        sharedSubcategories: boolean;
+        sharedTags: boolean;
+    } | null | undefined;
+    children?: {
+        name: string;
+        id: string;
+    }[] | null | undefined;
+}, z.ZodObjectDef<{
+    id: z.ZodString;
+    name: z.ZodString;
+    role: z.ZodNativeEnum<typeof OrganizationRole>;
+    type: z.ZodNativeEnum<typeof OrganizationType>;
+    parent: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        sharedContacts: z.ZodBoolean;
+        sharedSubcategories: z.ZodBoolean;
+        sharedTags: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        name: string;
+        id: string;
+        sharedContacts: boolean;
+        sharedSubcategories: boolean;
+        sharedTags: boolean;
+    }, {
+        name: string;
+        id: string;
+        sharedContacts: boolean;
+        sharedSubcategories: boolean;
+        sharedTags: boolean;
+    }>>>;
+    children: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        name: string;
+        id: string;
+    }, {
+        name: string;
+        id: string;
+    }>, "many">>>;
+}, "strip", z.ZodTypeAny>, {
+    type: OrganizationType;
+    name: string;
+    id: string;
+    role: OrganizationRole;
+    parent?: {
+        name: string;
+        id: string;
+        sharedContacts: boolean;
+        sharedSubcategories: boolean;
+        sharedTags: boolean;
+    } | null | undefined;
+    children?: {
+        name: string;
+        id: string;
+    }[] | null | undefined;
+}>;
+export declare class OrganizationEntity extends OrganizationEntity_base {
+    static build(input: z.input<typeof OrganizationSchema>): OrganizationEntity;
+}
 export declare const AuthUserEntitySchema: z.ZodObject<{
     id: z.ZodString;
     primaryEmail: z.ZodString;
@@ -312,6 +382,6 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
 export declare class AuthUserEntity extends AuthUserEntity_base {
     static build(input: z.input<typeof AuthUserEntitySchema>): AuthUserEntity;
     static buildFromGcpServiceAccount(config: BaseConfigEntity): AuthUserEntity;
-    getOrganizationOrThrow(): z.infer<typeof OrganizationSchema>;
+    getOrganizationOrThrow(): OrganizationEntity;
 }
 export {};
