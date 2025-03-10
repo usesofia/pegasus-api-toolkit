@@ -5,7 +5,7 @@ import { getJsonStringfyReplacer } from '@app/utils/json.utils';
 import { NestApplicationOptions, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
-import { OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { ClsService } from 'nestjs-cls';
@@ -15,11 +15,9 @@ import { AppExceptionsFilter } from '@app/app-exceptions.filter';
 export function setupApp({
   app,
   version,
-  swaggerDocument,
 }: {
   app: NestFastifyApplication;
   version: string;
-  swaggerDocument: Omit<OpenAPIObject, "paths">;
 }) {
   // Configure the FastifyAdapter to use JSON.stringify for serialization
   app.getHttpAdapter().getInstance().setReplySerializer(
@@ -39,7 +37,9 @@ export function setupApp({
   app.enableCors();
   app.enableShutdownHooks();
   patchNestJsSwagger();
+  
   const baseConfig = app.get<BaseConfigEntity>(BASE_CONFIG);
+  
   if (baseConfig.sentry.enabled) {
     Sentry.init({
       dsn: baseConfig.sentry.dsn,
@@ -50,6 +50,12 @@ export function setupApp({
       profilesSampleRate: 0.05,
     });
   }
+
+  const swaggerDocument = new DocumentBuilder()
+    .setTitle(baseConfig.swagger.title)
+    .setDescription(baseConfig.swagger.description)
+    .setVersion(version)
+    .build();
 
   const document = SwaggerModule.createDocument(app, swaggerDocument);
   SwaggerModule.setup('/external/docs', app, document);

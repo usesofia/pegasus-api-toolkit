@@ -80,6 +80,10 @@ export const BaseConfigSchema = z.object({
     enabled: z.boolean(),
     dsn: z.string().optional(),
   }),
+  swagger: z.object({
+    title: z.string(),
+    description: z.string(),
+  }),
 });
 
 export class BaseConfigEntity extends createZodDto(BaseConfigSchema) {

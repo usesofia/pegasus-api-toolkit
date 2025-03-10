@@ -13,7 +13,7 @@ const profiling_node_1 = require("@sentry/profiling-node");
 const nestjs_cls_1 = require("nestjs-cls");
 const nestjs_zod_1 = require("nestjs-zod");
 const app_exceptions_filter_1 = require("../app-exceptions.filter");
-function setupApp({ app, version, swaggerDocument, }) {
+function setupApp({ app, version, }) {
     app.getHttpAdapter().getInstance().setReplySerializer((data) => JSON.stringify(data, (0, json_utils_1.getJsonStringfyReplacer)()));
     app.useLogger(app.get(logger_module_1.LOGGER_SERVICE_PORT));
     app.useGlobalFilters(new app_exceptions_filter_1.AppExceptionsFilter(app.get(core_1.HttpAdapterHost), app.get(logger_module_1.LOGGER_SERVICE_PORT), app.get(nestjs_cls_1.ClsService)));
@@ -34,6 +34,11 @@ function setupApp({ app, version, swaggerDocument, }) {
             profilesSampleRate: 0.05,
         });
     }
+    const swaggerDocument = new swagger_1.DocumentBuilder()
+        .setTitle(baseConfig.swagger.title)
+        .setDescription(baseConfig.swagger.description)
+        .setVersion(version)
+        .build();
     const document = swagger_1.SwaggerModule.createDocument(app, swaggerDocument);
     swagger_1.SwaggerModule.setup('/external/docs', app, document);
 }

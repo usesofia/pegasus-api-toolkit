@@ -61,14 +61,6 @@ class InstanceFixture {
         (0, setup_utils_1.setupApp)({
             app,
             version: '1.0.0',
-            swaggerDocument: {
-                info: {
-                    title: 'Test',
-                    version: '1.0.0',
-                    description: 'Test',
-                },
-                openapi: '3.0.0',
-            },
         });
         const maxRetries = 16;
         let lastError = null;

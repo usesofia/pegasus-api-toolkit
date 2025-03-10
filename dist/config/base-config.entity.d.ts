@@ -194,6 +194,16 @@ export declare const BaseConfigSchema: z.ZodObject<{
         enabled: boolean;
         dsn?: string | undefined;
     }>;
+    swagger: z.ZodObject<{
+        title: z.ZodString;
+        description: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        title: string;
+        description: string;
+    }, {
+        title: string;
+        description: string;
+    }>;
 }, "strip", z.ZodTypeAny, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -250,6 +260,10 @@ export declare const BaseConfigSchema: z.ZodObject<{
     sentry: {
         enabled: boolean;
         dsn?: string | undefined;
+    };
+    swagger: {
+        title: string;
+        description: string;
     };
     instanceId?: string | null | undefined;
 }, {
@@ -309,6 +323,10 @@ export declare const BaseConfigSchema: z.ZodObject<{
         enabled: boolean;
         dsn?: string | undefined;
     };
+    swagger: {
+        title: string;
+        description: string;
+    };
     instanceId?: string | null | undefined;
 }>;
 declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
@@ -367,6 +385,10 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     sentry: {
         enabled: boolean;
         dsn?: string | undefined;
+    };
+    swagger: {
+        title: string;
+        description: string;
     };
     instanceId?: string | null | undefined;
 }, z.ZodObjectDef<{
@@ -563,6 +585,16 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         enabled: boolean;
         dsn?: string | undefined;
     }>;
+    swagger: z.ZodObject<{
+        title: z.ZodString;
+        description: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        title: string;
+        description: string;
+    }, {
+        title: string;
+        description: string;
+    }>;
 }, "strip", z.ZodTypeAny>, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -619,6 +651,10 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     sentry: {
         enabled: boolean;
         dsn?: string | undefined;
+    };
+    swagger: {
+        title: string;
+        description: string;
     };
     instanceId?: string | null | undefined;
 }>;
