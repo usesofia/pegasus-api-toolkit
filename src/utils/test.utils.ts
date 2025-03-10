@@ -100,13 +100,19 @@ export class InstanceFixture {
     const maxRetries = 16;
     let lastError: Error | null = null;
 
+    const mongoDbUri = process.env.MONGODB_URI ?? process.env.PRIMARY_MONGODB_URI;
+
+    if (!mongoDbUri) {
+      throw new Error('MONGODB_URI or PRIMARY_MONGODB_URI is not set');
+    }
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const port = await portfinder.getPortPromise();
         const url = `http://localhost:${port}`;
         await app.listen(port);
         const request = supertest(url);
-        const mongoClient = new MongoClient(process.env.MONGODB_URI!, {
+        const mongoClient = new MongoClient(mongoDbUri, {
           retryReads: true,
           retryWrites: true,
         });
