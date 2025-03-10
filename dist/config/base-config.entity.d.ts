@@ -3,7 +3,6 @@ import { Environment } from '../utils/environment.utils';
 export declare const BaseConfigSchema: z.ZodObject<{
     env: z.ZodNativeEnum<typeof Environment>;
     nodeEnv: z.ZodEnum<["development", "production"]>;
-    instanceId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     databases: z.ZodArray<z.ZodObject<{
         type: z.ZodEnum<["mongodb"]>;
         uri: z.ZodString;
@@ -289,7 +288,6 @@ export declare const BaseConfigSchema: z.ZodObject<{
     tasks: {
         secret: string;
     };
-    instanceId?: string | null | undefined;
 }, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -358,7 +356,6 @@ export declare const BaseConfigSchema: z.ZodObject<{
     tasks: {
         secret: string;
     };
-    instanceId?: string | null | undefined;
 }>;
 declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     env: Environment;
@@ -428,11 +425,9 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     tasks: {
         secret: string;
     };
-    instanceId?: string | null | undefined;
 }, z.ZodObjectDef<{
     env: z.ZodNativeEnum<typeof Environment>;
     nodeEnv: z.ZodEnum<["development", "production"]>;
-    instanceId: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     databases: z.ZodArray<z.ZodObject<{
         type: z.ZodEnum<["mongodb"]>;
         uri: z.ZodString;
@@ -718,7 +713,6 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     tasks: {
         secret: string;
     };
-    instanceId?: string | null | undefined;
 }>;
 export declare class BaseConfigEntity extends BaseConfigEntity_base {
     static build(input: z.input<typeof BaseConfigSchema>): BaseConfigEntity;

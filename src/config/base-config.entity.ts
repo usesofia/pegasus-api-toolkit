@@ -6,7 +6,6 @@ import { safeInstantiateEntity } from '@app/utils/entity.utils';
 export const BaseConfigSchema = z.object({
   env: z.nativeEnum(Environment),
   nodeEnv: z.enum(['development', 'production']),
-  instanceId: z.string().nullish(),
   databases: z.array(
     z.object({
       type: z.enum(['mongodb']),
