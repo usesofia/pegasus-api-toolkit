@@ -87,9 +87,12 @@ export const BaseConfigSchema = z.object({
   microservices: z.array(
     z.object({
       name: z.string(),
-      baseUrl: z.string(),
+      internalBaseUrl: z.string(),
     }),
   ),
+  tasks: z.object({
+    secret: z.string(),
+  }),
 });
 
 export class BaseConfigEntity extends createZodDto(BaseConfigSchema) {

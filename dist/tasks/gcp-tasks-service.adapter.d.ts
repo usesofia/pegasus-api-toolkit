@@ -11,7 +11,6 @@ export declare class GcpTasksServiceAdapter extends Base implements TasksService
     protected readonly cls: ClsService;
     private readonly cloudTasksClient;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cloudTasksClient: CloudTasksClient);
-    private getToken;
     appendTask({ task, correlationId, }: {
         task: TaskEntity;
         correlationId?: string;

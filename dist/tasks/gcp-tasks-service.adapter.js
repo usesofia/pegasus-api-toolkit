@@ -14,13 +14,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var GcpTasksServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GcpTasksServiceAdapter = void 0;
+const task_queue_guard_1 = require("../auth/guards/task-queue.guard");
 const base_1 = require("../base");
 const base_config_entity_1 = require("../config/base-config.entity");
 const correlation_constants_1 = require("../correlation/correlation.constants");
 const logger_module_1 = require("../logger/logger.module");
 const tasks_1 = require("@google-cloud/tasks");
 const common_1 = require("@nestjs/common");
-const google_auth_library_1 = require("google-auth-library");
 const nestjs_cls_1 = require("nestjs-cls");
 let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, cloudTasksClient) {
@@ -30,25 +30,15 @@ let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAda
         this.cls = cls;
         this.cloudTasksClient = cloudTasksClient;
     }
-    async getToken() {
-        const auth = new google_auth_library_1.GoogleAuth({
-            credentials: this.baseConfig.gcp.credentials,
-            scopes: []
-        });
-        const client = await auth.getIdTokenClient('*');
-        const accessToken = await client.idTokenProvider.fetchIdToken('*');
-        return accessToken;
-    }
     async appendTask({ task, correlationId, }) {
-        const baseUrl = this.baseConfig.microservices.find((m) => m.name === task.microservice)?.baseUrl;
+        const baseUrl = this.baseConfig.microservices.find((m) => m.name === task.microservice)?.internalBaseUrl;
         if (!baseUrl) {
             throw new Error(`Microservice ${task.microservice} not found.`);
         }
-        const url = `${baseUrl}/external/queues/${task.queue}`;
+        const url = `${baseUrl}/internal/queues/${task.queue}`;
         const finalCorrelationId = correlationId ?? this.cls.getId();
-        const token = await this.getToken();
         const headers = {
-            'Authorization': `Bearer ${token}`,
+            [task_queue_guard_1.tasksQueueSecretHeaderKey]: `${this.baseConfig.tasks.secret}`,
             'Content-Type': 'application/json',
             [correlation_constants_1.correlationIdHeaderKey]: finalCorrelationId,
         };

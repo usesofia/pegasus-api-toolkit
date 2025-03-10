@@ -206,14 +206,21 @@ export declare const BaseConfigSchema: z.ZodObject<{
     }>;
     microservices: z.ZodArray<z.ZodObject<{
         name: z.ZodString;
-        baseUrl: z.ZodString;
+        internalBaseUrl: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         name: string;
-        baseUrl: string;
+        internalBaseUrl: string;
     }, {
         name: string;
-        baseUrl: string;
+        internalBaseUrl: string;
     }>, "many">;
+    tasks: z.ZodObject<{
+        secret: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        secret: string;
+    }, {
+        secret: string;
+    }>;
 }, "strip", z.ZodTypeAny, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -277,8 +284,11 @@ export declare const BaseConfigSchema: z.ZodObject<{
     };
     microservices: {
         name: string;
-        baseUrl: string;
+        internalBaseUrl: string;
     }[];
+    tasks: {
+        secret: string;
+    };
     instanceId?: string | null | undefined;
 }, {
     env: Environment;
@@ -343,8 +353,11 @@ export declare const BaseConfigSchema: z.ZodObject<{
     };
     microservices: {
         name: string;
-        baseUrl: string;
+        internalBaseUrl: string;
     }[];
+    tasks: {
+        secret: string;
+    };
     instanceId?: string | null | undefined;
 }>;
 declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
@@ -410,8 +423,11 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     };
     microservices: {
         name: string;
-        baseUrl: string;
+        internalBaseUrl: string;
     }[];
+    tasks: {
+        secret: string;
+    };
     instanceId?: string | null | undefined;
 }, z.ZodObjectDef<{
     env: z.ZodNativeEnum<typeof Environment>;
@@ -619,14 +635,21 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     }>;
     microservices: z.ZodArray<z.ZodObject<{
         name: z.ZodString;
-        baseUrl: z.ZodString;
+        internalBaseUrl: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         name: string;
-        baseUrl: string;
+        internalBaseUrl: string;
     }, {
         name: string;
-        baseUrl: string;
+        internalBaseUrl: string;
     }>, "many">;
+    tasks: z.ZodObject<{
+        secret: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        secret: string;
+    }, {
+        secret: string;
+    }>;
 }, "strip", z.ZodTypeAny>, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -690,8 +713,11 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     };
     microservices: {
         name: string;
-        baseUrl: string;
+        internalBaseUrl: string;
     }[];
+    tasks: {
+        secret: string;
+    };
     instanceId?: string | null | undefined;
 }>;
 export declare class BaseConfigEntity extends BaseConfigEntity_base {

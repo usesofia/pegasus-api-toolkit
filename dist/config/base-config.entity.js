@@ -79,8 +79,11 @@ exports.BaseConfigSchema = zod_1.z.object({
     }),
     microservices: zod_1.z.array(zod_1.z.object({
         name: zod_1.z.string(),
-        baseUrl: zod_1.z.string(),
+        internalBaseUrl: zod_1.z.string(),
     })),
+    tasks: zod_1.z.object({
+        secret: zod_1.z.string(),
+    }),
 });
 class BaseConfigEntity extends (0, nestjs_zod_1.createZodDto)(exports.BaseConfigSchema) {
     static build(input) {
