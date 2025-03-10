@@ -19,6 +19,8 @@ export async function generateSwaggerJson({
 }) {
   const replset = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
   process.env.MONGODB_URI = replset.getUri();
+  process.env.PRIMARY_MONGODB_URI = replset.getUri();
+  process.env.SECONDARY_MONGODB_URI = replset.getUri('secondary');
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,

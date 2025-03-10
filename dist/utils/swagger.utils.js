@@ -11,6 +11,8 @@ const base_config_entity_1 = require("../config/base-config.entity");
 async function generateSwaggerJson({ AppModule, version, }) {
     const replset = await mongodb_memory_server_1.MongoMemoryReplSet.create({ replSet: { count: 1 } });
     process.env.MONGODB_URI = replset.getUri();
+    process.env.PRIMARY_MONGODB_URI = replset.getUri();
+    process.env.SECONDARY_MONGODB_URI = replset.getUri('secondary');
     const app = await core_1.NestFactory.create(AppModule, new platform_fastify_1.FastifyAdapter(), setup_utils_1.appOptions);
     (0, setup_utils_1.setupApp)({ app, version });
     const baseConfig = app.get(base_config_entity_1.BASE_CONFIG);
