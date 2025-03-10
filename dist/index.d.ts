@@ -17,6 +17,7 @@ export * from './auth/ports/auth-service.port';
 export * from './auth/adapters/clerk-auth-service.adapter';
 export * from './clerk/clerk-logger-service.adapter';
 export * from './clerk/clerk.constants';
+export * from './auth/guards/task-queue.guard';
 export * from './cache/cache.module';
 export * from './cache/adapters/memory-cache-service.adapter';
 export * from './cache/adapters/redis-cache-service.adapter';

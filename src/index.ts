@@ -18,6 +18,7 @@ export * from '@app/auth/ports/auth-service.port';
 export * from '@app/auth/adapters/clerk-auth-service.adapter';
 export * from '@app/clerk/clerk-logger-service.adapter';
 export * from '@app/clerk/clerk.constants';
+export * from '@app/auth/guards/task-queue.guard';
 
 // Cache
 export * from '@app/cache/cache.module';
