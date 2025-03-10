@@ -106,7 +106,10 @@ export class InstanceFixture {
         const url = `http://localhost:${port}`;
         await app.listen(port);
         const request = supertest(url);
-        const mongoClient = new MongoClient(process.env.MONGODB_URI!);
+        const mongoClient = new MongoClient(process.env.MONGODB_URI!, {
+          retryReads: true,
+          retryWrites: true,
+        });
         return new InstanceFixture({ app, request, mongoClient });
       } catch (error) {
         lastError = error as Error;
