@@ -54,14 +54,14 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         });
         let parentOrganization = null;
         if (clerkOrganization) {
-            if (clerkOrganization.publicMetadata.parent) {
+            if (clerkOrganization.publicMetadata?.parent) {
                 parentOrganization = await this.getCachedClerkOrganization({
                     organizationId: clerkOrganization.publicMetadata.parent,
                     ignoreCache,
                 });
             }
             let childrenOrganizations = null;
-            if (clerkOrganization.publicMetadata.children) {
+            if (clerkOrganization.publicMetadata?.children) {
                 childrenOrganizations = await Promise.all(clerkOrganization.publicMetadata.children.map((child) => this.getCachedClerkOrganization({
                     organizationId: child,
                     ignoreCache,
@@ -71,23 +71,20 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
                 id: clerkUser.id,
                 primaryEmail: clerkUser.emailAddresses[0].emailAddress,
                 primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
-                firstName: clerkUser.firstName,
-                lastName: clerkUser.lastName,
+                firstName: clerkUser.firstName ?? '',
+                lastName: clerkUser.lastName ?? '',
                 organization: {
                     id: clerkOrganization.id,
                     name: clerkOrganization.name,
                     role: organizationRole,
-                    type: clerkOrganization.publicMetadata.type,
+                    type: clerkOrganization.publicMetadata?.type,
                     parent: parentOrganization
                         ? {
                             id: parentOrganization.id,
                             name: parentOrganization.name,
-                            sharedContacts: parentOrganization.publicMetadata
-                                .sharedContacts,
-                            sharedSubcategories: parentOrganization.publicMetadata
-                                .sharedSubcategories,
-                            sharedTags: parentOrganization.publicMetadata
-                                .sharedTags,
+                            sharedContacts: parentOrganization.publicMetadata?.sharedContacts,
+                            sharedSubcategories: parentOrganization.publicMetadata?.sharedSubcategories,
+                            sharedTags: parentOrganization.publicMetadata?.sharedTags,
                         }
                         : null,
                     children: childrenOrganizations
@@ -104,8 +101,8 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
                 id: clerkUser.id,
                 primaryEmail: clerkUser.emailAddresses[0].emailAddress,
                 primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
-                firstName: clerkUser.firstName,
-                lastName: clerkUser.lastName,
+                firstName: clerkUser.firstName ?? '',
+                lastName: clerkUser.lastName ?? '',
                 organization: null,
             });
         }

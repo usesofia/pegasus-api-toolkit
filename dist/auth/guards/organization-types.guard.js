@@ -32,7 +32,7 @@ let OrganizationTypesGuard = class OrganizationTypesGuard extends auth_guard_1.A
     }
     async canActivate(context) {
         const allowedTypes = this.reflector.get(organization_types_decorator_1.ORGANIZATION_TYPES_KEY, context.getHandler());
-        if (!allowedTypes) {
+        if (!allowedTypes || allowedTypes.length === 0) {
             return true;
         }
         let { user } = context.switchToHttp().getRequest();
@@ -40,7 +40,7 @@ let OrganizationTypesGuard = class OrganizationTypesGuard extends auth_guard_1.A
             await super.canActivate(context);
             user = context.switchToHttp().getRequest().user;
         }
-        const userOrgType = user.organization.type;
+        const userOrgType = user.organization?.type;
         if (!userOrgType) {
             return false;
         }

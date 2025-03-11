@@ -29,17 +29,17 @@ export class OrganizationRolesGuard extends AuthGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const allowedRoles = this.reflector.get<string[]>(
+    const allowedRoles = this.reflector.get<string[] | null | undefined>(
       ORGANIZATION_ROLES_KEY,
       context.getHandler(),
     );
 
-    if (!allowedRoles) {
+    if (!allowedRoles || allowedRoles.length === 0) {
       return true;
     }
 
     let { user } = context.switchToHttp().getRequest<{
-      user: z.input<typeof AuthUserEntitySchema>;
+      user: z.input<typeof AuthUserEntitySchema> | null | undefined;
     }>();
 
     if (!user) {
@@ -49,7 +49,7 @@ export class OrganizationRolesGuard extends AuthGuard implements CanActivate {
       }>().user;
     }
 
-    const userOrgRole = (user as AuthUserEntity).organization!.role;
+    const userOrgRole = (user as AuthUserEntity).organization?.role;
 
     if (!userOrgRole) {
       return false;

@@ -9,14 +9,12 @@ interface CacheRecord {
 }
 
 export class MemoryCacheServiceAdapter implements CacheServicePort {
-  private records: Record<string, CacheRecord> = {};
+  private records = new Map<string, CacheRecord>();
 
-  constructor(private readonly baseConfig: BaseConfigEntity) {
-    this.records = {};
-  }
+  constructor(private readonly baseConfig: BaseConfigEntity) {}
 
   get(key: string): Promise<string | null> {
-    const record = this.records[key];
+    const record = this.records.get(key);
 
     if (!record) {
       return Promise.resolve(null);
@@ -27,7 +25,7 @@ export class MemoryCacheServiceAdapter implements CacheServicePort {
         .seconds > 0;
 
     if (isExpired) {
-      delete this.records[key];
+      this.records.delete(key);
       return Promise.resolve(null);
     }
 
@@ -35,17 +33,17 @@ export class MemoryCacheServiceAdapter implements CacheServicePort {
   }
 
   set(key: string, value: string, ttlInSeconds?: number): Promise<void> {
-    this.records[key] = {
+    this.records.set(key, {
       value,
       createdAt: DateTime.now(),
       ttlInSeconds: ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds,
-    };
+    });
 
     return Promise.resolve();
   }
 
   delete(key: string): Promise<void> {
-    delete this.records[key];
+    this.records.delete(key);
     return Promise.resolve();
   }
 }

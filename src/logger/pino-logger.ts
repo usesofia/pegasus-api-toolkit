@@ -2,7 +2,7 @@ import pino, { Logger } from 'pino';
 import { Inject, Injectable, LoggerService, LogLevel } from '@nestjs/common';
 import { MaskActions, maskAttribute } from 'nested-mask-attributes';
 import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
-import createBetterStackTransport from '@app/logger/integration-test-better-stack-transport';
+import createBetterStackTransport from '@app/logger/better-stack-transport';
 import { Transform } from 'stream';
 import { getJsonParseReviver, getJsonStringfyReplacer } from '@app/utils/json.utils';
 import { Environment } from '@app/utils/environment.utils';
@@ -89,7 +89,7 @@ export class PinoLoggerAdapter implements LoggerService {
 
     switch (level) {
       case 'log':
-        this.remoteLogger.info(data, `${message}`);
+        this.remoteLogger.info(data, message);
         if (this.shouldConsoleLog) this.consoleLogger.info(data, message);
         break;
       case 'error':
@@ -147,7 +147,7 @@ export class PinoLoggerAdapter implements LoggerService {
 
   async flush(): Promise<void> {
     await new Promise((resolve) => {
-      this.remoteLogger.flush(() => resolve(void 0));
+      this.remoteLogger.flush(() => { resolve(void 0); });
     });
     await this.remoteLoggerTransportClose();
   }

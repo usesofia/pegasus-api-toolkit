@@ -39,7 +39,7 @@ let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountG
         if (isIgnoreGcpServiceAccountGuard) {
             return true;
         }
-        if (!authorization || !authorization.startsWith('Bearer ')) {
+        if (!authorization?.startsWith('Bearer ')) {
             throw new common_1.UnauthorizedException();
         }
         const token = authorization.split(' ')[1];

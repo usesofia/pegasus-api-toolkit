@@ -10,7 +10,7 @@ class RedisCacheServiceAdapter {
         return await this.redis.get(key);
     }
     async set(key, value, ttlInSeconds) {
-        await this.redis.set(key, value, 'EX', ttlInSeconds || this.baseConfig.cache.ttlInSeconds);
+        await this.redis.set(key, value, 'EX', ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds);
     }
     async delete(key) {
         await this.redis.del(key);

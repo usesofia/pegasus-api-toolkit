@@ -141,7 +141,7 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
           
           // If buffer has reached the max buffer to trigger flush, flush immediately
           if (buffer.length >= maxBufferToTriggerFlush) {
-            flush().catch(err => {
+            flush().catch((err: unknown) => {
               console.error('Error flushing buffer:', err);
             });
           }

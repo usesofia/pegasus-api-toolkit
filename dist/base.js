@@ -30,18 +30,27 @@ class Base {
                 });
                 break;
             case 'debug':
+                if (!this.logger.debug) {
+                    throw new Error('Logger does not have debug method.');
+                }
                 this.logger.debug(`[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`, {
                     [correlation_constants_1.correlationIdKey]: correlationId ?? this.cls.getId(),
                     ...data,
                 });
                 break;
             case 'verbose':
+                if (!this.logger.verbose) {
+                    throw new Error('Logger does not have verbose method.');
+                }
                 this.logger.verbose(`[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`, {
                     [correlation_constants_1.correlationIdKey]: correlationId ?? this.cls.getId(),
                     ...data,
                 });
                 break;
             case 'fatal':
+                if (!this.logger.fatal) {
+                    throw new Error('Logger does not have fatal method.');
+                }
                 this.logger.fatal(`[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`, {
                     [correlation_constants_1.correlationIdKey]: correlationId ?? this.cls.getId(),
                     ...data,

@@ -37,7 +37,7 @@ export class GcpTasksServiceAdapter extends Base implements TasksServicePort {
     const finalCorrelationId = correlationId ?? this.cls.getId();
 
     const headers = {
-      [tasksQueueSecretHeaderKey]: `${this.baseConfig.tasks.secret}`,
+      [tasksQueueSecretHeaderKey]: this.baseConfig.tasks.secret,
       'Content-Type': 'application/json',
       [correlationIdHeaderKey]: finalCorrelationId,
     }

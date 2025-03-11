@@ -4,19 +4,19 @@ export declare const BaseConfigSchema: z.ZodObject<{
     env: z.ZodNativeEnum<typeof Environment>;
     nodeEnv: z.ZodEnum<["development", "production"]>;
     databases: z.ZodArray<z.ZodObject<{
-        type: z.ZodEnum<["mongodb"]>;
+        type: z.ZodEnum<["mongodb", "postgres"]>;
         uri: z.ZodString;
         transactionTimeoutInMiliseconds: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
         nTransactionRetries: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
         maxDelayBetweenTransactionAttempts: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
     }, "strip", z.ZodTypeAny, {
-        type: "mongodb";
+        type: "mongodb" | "postgres";
         uri: string;
         transactionTimeoutInMiliseconds: number;
         nTransactionRetries: number;
         maxDelayBetweenTransactionAttempts: number;
     }, {
-        type: "mongodb";
+        type: "mongodb" | "postgres";
         uri: string;
         transactionTimeoutInMiliseconds?: number | undefined;
         nTransactionRetries?: number | undefined;
@@ -224,7 +224,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
     env: Environment;
     nodeEnv: "development" | "production";
     databases: {
-        type: "mongodb";
+        type: "mongodb" | "postgres";
         uri: string;
         transactionTimeoutInMiliseconds: number;
         nTransactionRetries: number;
@@ -292,7 +292,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
     env: Environment;
     nodeEnv: "development" | "production";
     databases: {
-        type: "mongodb";
+        type: "mongodb" | "postgres";
         uri: string;
         transactionTimeoutInMiliseconds?: number | undefined;
         nTransactionRetries?: number | undefined;
@@ -361,7 +361,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     env: Environment;
     nodeEnv: "development" | "production";
     databases: {
-        type: "mongodb";
+        type: "mongodb" | "postgres";
         uri: string;
         transactionTimeoutInMiliseconds: number;
         nTransactionRetries: number;
@@ -429,19 +429,19 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     env: z.ZodNativeEnum<typeof Environment>;
     nodeEnv: z.ZodEnum<["development", "production"]>;
     databases: z.ZodArray<z.ZodObject<{
-        type: z.ZodEnum<["mongodb"]>;
+        type: z.ZodEnum<["mongodb", "postgres"]>;
         uri: z.ZodString;
         transactionTimeoutInMiliseconds: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
         nTransactionRetries: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
         maxDelayBetweenTransactionAttempts: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
     }, "strip", z.ZodTypeAny, {
-        type: "mongodb";
+        type: "mongodb" | "postgres";
         uri: string;
         transactionTimeoutInMiliseconds: number;
         nTransactionRetries: number;
         maxDelayBetweenTransactionAttempts: number;
     }, {
-        type: "mongodb";
+        type: "mongodb" | "postgres";
         uri: string;
         transactionTimeoutInMiliseconds?: number | undefined;
         nTransactionRetries?: number | undefined;
@@ -649,7 +649,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     env: Environment;
     nodeEnv: "development" | "production";
     databases: {
-        type: "mongodb";
+        type: "mongodb" | "postgres";
         uri: string;
         transactionTimeoutInMiliseconds?: number | undefined;
         nTransactionRetries?: number | undefined;

@@ -24,8 +24,8 @@ const REDIS = Symbol('Redis');
       provide: REDIS,
       useFactory: (baseConfig: BaseConfigEntity) => {
         if (baseConfig.cache.type === 'redis') {
-          return new Redis(baseConfig.cache.redis!.url, {
-            keyPrefix: baseConfig.cache.redis!.keyPrefix,
+          return new Redis(baseConfig.cache.redis?.url ?? '', {
+            keyPrefix: baseConfig.cache.redis?.keyPrefix ?? '',
           });
         }
         return null;
@@ -39,8 +39,8 @@ const REDIS = Symbol('Redis');
         redis: Redis | null,
         mongoConnection: mongoose.Connection
       ) => {
-        if (baseConfig.cache.type === 'redis') {
-          return new RedisCacheServiceAdapter(baseConfig, redis!);
+        if (baseConfig.cache.type === 'redis' && redis) {
+          return new RedisCacheServiceAdapter(baseConfig, redis);
         } else if (baseConfig.cache.type === 'mongodb') {
           const cacheService = new MongoDbCacheServiceAdapter(baseConfig, mongoConnection);
           await cacheService.createTTLIndex();

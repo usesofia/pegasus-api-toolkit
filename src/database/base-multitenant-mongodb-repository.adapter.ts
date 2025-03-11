@@ -41,7 +41,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   }: {
     requester: AuthUserEntity;
   }): string {
-    return requester.organization!.id;
+    return requester.getOrganizationOrThrow().id;
   }
 
   @Log()

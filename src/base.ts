@@ -53,7 +53,10 @@ export class Base {
         );
         break;
       case 'debug':
-        this.logger.debug!(
+        if(!this.logger.debug) {
+          throw new Error('Logger does not have debug method.');
+        }
+        this.logger.debug(
           `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
             [correlationIdKey]: correlationId ?? this.cls.getId(),
@@ -62,7 +65,10 @@ export class Base {
         );
         break;
       case 'verbose':
-        this.logger.verbose!(
+        if(!this.logger.verbose) {
+          throw new Error('Logger does not have verbose method.');
+        }
+        this.logger.verbose(
           `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
             [correlationIdKey]: correlationId ?? this.cls.getId(),
@@ -71,7 +77,10 @@ export class Base {
         );
         break;
       case 'fatal':
-        this.logger.fatal!(
+        if(!this.logger.fatal) {
+          throw new Error('Logger does not have fatal method.');
+        }
+        this.logger.fatal(
           `[${correlationId ?? this.cls.getId()}] ${this.className}.${functionName}.${suffix}`,
           {
             [correlationIdKey]: correlationId ?? this.cls.getId(),

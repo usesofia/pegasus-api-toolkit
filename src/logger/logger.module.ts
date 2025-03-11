@@ -60,7 +60,7 @@ export class LoggerModule implements NestModule, OnApplicationShutdown {
         morgan(
           (tokens, req, res) => {
             return [
-              `[${tokens[correlationIdTokenKey](req, res)}]`,
+              `[${tokens[correlationIdTokenKey](req, res) ?? ''}]`,
               tokens.method(req, res),
               tokens.url(req, res),
               tokens.status(req, res),

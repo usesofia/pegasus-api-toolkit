@@ -33,7 +33,7 @@ let MongoDbCacheServiceAdapter = class MongoDbCacheServiceAdapter {
         await this.cacheModel.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
     }
     async get(key) {
-        const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix || '';
+        const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix ?? '';
         const finalKey = `${keyPrefix}${key}`;
         const now = new Date();
         const record = await this.cacheModel.findOne({
@@ -46,15 +46,15 @@ let MongoDbCacheServiceAdapter = class MongoDbCacheServiceAdapter {
         return record.value;
     }
     async set(key, value, ttlInSeconds) {
-        const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix || '';
+        const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix ?? '';
         const finalKey = `${keyPrefix}${key}`;
-        const ttl = ttlInSeconds || this.baseConfig.cache.ttlInSeconds;
+        const ttl = ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds;
         const expiresAt = new Date();
         expiresAt.setSeconds(expiresAt.getSeconds() + ttl);
         await this.cacheModel.findOneAndUpdate({ key: finalKey }, { key: finalKey, value, expiresAt }, { upsert: true, new: true });
     }
     async delete(key) {
-        const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix || '';
+        const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix ?? '';
         const finalKey = `${keyPrefix}${key}`;
         await this.cacheModel.deleteOne({ key: finalKey });
     }

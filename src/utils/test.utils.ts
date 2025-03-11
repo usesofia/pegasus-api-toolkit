@@ -45,7 +45,7 @@ export class InstanceFixture {
     modules,
     log = false,
   }: {
-    modules: Array<Type | DynamicModule>;
+    modules: (Type | DynamicModule)[];
     log?: boolean;
   }): TestingModuleBuilder {
     let moduleRef = Test.createTestingModule({
@@ -109,7 +109,7 @@ export class InstanceFixture {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const port = await portfinder.getPortPromise();
-        const url = `http://localhost:${port}`;
+        const url = `http://localhost:${port.toString()}`;
         await app.listen(port);
         const request = supertest(url);
         const mongoClient = new MongoClient(mongoDbUri, {
@@ -122,7 +122,7 @@ export class InstanceFixture {
         if (attempt === maxRetries) {
           console.error(lastError);
           throw new Error(
-            `Failed to start app after ${maxRetries} attempts. Last error: ${lastError.message}.`,
+            `Failed to start app after ${maxRetries.toString()} attempts. Last error: ${lastError.message}.`,
           );
         }
         // Wait for a short time before retrying

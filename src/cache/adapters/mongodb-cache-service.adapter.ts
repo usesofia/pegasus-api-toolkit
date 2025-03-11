@@ -39,7 +39,7 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
   }
 
   async get(key: string): Promise<string | null> {
-    const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix || '';
+    const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix ?? '';
     const finalKey = `${keyPrefix}${key}`;
     const now = new Date();
     const record = await this.cacheModel.findOne({
@@ -55,9 +55,9 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
   }
 
   async set(key: string, value: string, ttlInSeconds?: number): Promise<void> {
-    const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix || '';
+    const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix ?? '';
     const finalKey = `${keyPrefix}${key}`;
-    const ttl = ttlInSeconds || this.baseConfig.cache.ttlInSeconds;
+    const ttl = ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds;
     const expiresAt = new Date();
     expiresAt.setSeconds(expiresAt.getSeconds() + ttl);
 
@@ -69,7 +69,7 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
   }
 
   async delete(key: string): Promise<void> {
-    const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix || '';
+    const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix ?? '';
     const finalKey = `${keyPrefix}${key}`;
     await this.cacheModel.deleteOne({ key: finalKey });
   }

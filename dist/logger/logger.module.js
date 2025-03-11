@@ -33,7 +33,7 @@ let LoggerModule = class LoggerModule {
         consumer
             .apply(morgan((tokens, req, res) => {
             return [
-                `[${tokens[correlation_constants_1.correlationIdTokenKey](req, res)}]`,
+                `[${tokens[correlation_constants_1.correlationIdTokenKey](req, res) ?? ''}]`,
                 tokens.method(req, res),
                 tokens.url(req, res),
                 tokens.status(req, res),

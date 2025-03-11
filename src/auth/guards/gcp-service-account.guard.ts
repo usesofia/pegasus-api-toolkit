@@ -48,7 +48,7 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
       return true;
     }
 
-    if (!authorization || !authorization.startsWith('Bearer ')) {
+    if (!authorization?.startsWith('Bearer ')) {
       throw new UnauthorizedException();
     }
 

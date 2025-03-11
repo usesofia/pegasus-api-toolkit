@@ -17,7 +17,7 @@ export class RedisCacheServiceAdapter implements CacheServicePort {
       key,
       value,
       'EX',
-      ttlInSeconds || this.baseConfig.cache.ttlInSeconds,
+      ttlInSeconds ?? this.baseConfig.cache.ttlInSeconds,
     );
   }
 

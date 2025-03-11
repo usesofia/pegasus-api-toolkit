@@ -8,7 +8,7 @@ export const BaseConfigSchema = z.object({
   nodeEnv: z.enum(['development', 'production']),
   databases: z.array(
     z.object({
-      type: z.enum(['mongodb']),
+      type: z.enum(['mongodb', 'postgres']),
       uri: z.string(),
       transactionTimeoutInMiliseconds: z.number().optional().default(5000),
       nTransactionRetries: z.number().optional().default(7),

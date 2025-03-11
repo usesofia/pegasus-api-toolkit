@@ -29,17 +29,17 @@ export class OrganizationTypesGuard extends AuthGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const allowedTypes = this.reflector.get<string[]>(
+    const allowedTypes = this.reflector.get<string[] | null | undefined>(
       ORGANIZATION_TYPES_KEY,
       context.getHandler(),
     );
 
-    if (!allowedTypes) {
+    if (!allowedTypes || allowedTypes.length === 0) {
       return true;
     }
 
     let { user } = context.switchToHttp().getRequest<{
-      user: z.input<typeof AuthUserEntitySchema>;
+      user: z.input<typeof AuthUserEntitySchema> | null | undefined;
     }>();
 
     if (!user) {
@@ -49,7 +49,7 @@ export class OrganizationTypesGuard extends AuthGuard implements CanActivate {
       }>().user;
     }
 
-    const userOrgType = (user as AuthUserEntity).organization!.type;
+    const userOrgType = (user as AuthUserEntity).organization?.type;
 
     if (!userOrgType) {
       return false;

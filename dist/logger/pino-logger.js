@@ -17,7 +17,7 @@ const pino_1 = require("pino");
 const common_1 = require("@nestjs/common");
 const nested_mask_attributes_1 = require("nested-mask-attributes");
 const base_config_entity_1 = require("../config/base-config.entity");
-const integration_test_better_stack_transport_1 = require("./integration-test-better-stack-transport");
+const better_stack_transport_1 = require("./better-stack-transport");
 const json_utils_1 = require("../utils/json.utils");
 const environment_utils_1 = require("../utils/environment.utils");
 const sensitiveFields = [
@@ -30,7 +30,7 @@ const sensitiveFields = [
 let PinoLoggerAdapter = class PinoLoggerAdapter {
     constructor(baseConfig) {
         this.baseConfig = baseConfig;
-        const { transport: remoteLoggerTransport, close: remoteLoggerTransportClose, } = (0, integration_test_better_stack_transport_1.default)({
+        const { transport: remoteLoggerTransport, close: remoteLoggerTransportClose, } = (0, better_stack_transport_1.default)({
             apiToken: baseConfig.logger.betterStackSourceToken,
             apiUrl: baseConfig.logger.betterStackEndpoint,
         });
@@ -78,7 +78,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         }
         switch (level) {
             case 'log':
-                this.remoteLogger.info(data, `${message}`);
+                this.remoteLogger.info(data, message);
                 if (this.shouldConsoleLog)
                     this.consoleLogger.info(data, message);
                 break;
@@ -134,7 +134,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
     }
     async flush() {
         await new Promise((resolve) => {
-            this.remoteLogger.flush(() => resolve(void 0));
+            this.remoteLogger.flush(() => { resolve(void 0); });
         });
         await this.remoteLoggerTransportClose();
     }

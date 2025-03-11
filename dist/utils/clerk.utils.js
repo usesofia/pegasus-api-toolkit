@@ -188,7 +188,7 @@ const buildClerkOrganizationMembership = ({ clerkUser, clerkOrganization, role, 
         updatedAt: luxon_1.DateTime.now().toMillis(),
         organization: clerkOrganization,
         publicUserData: {
-            identifier: clerkUser.primaryEmailAddress.emailAddress,
+            identifier: clerkUser.primaryEmailAddress?.emailAddress ?? '',
             firstName: clerkUser.firstName,
             lastName: clerkUser.lastName,
             imageUrl: clerkUser.imageUrl,
@@ -404,7 +404,7 @@ const buildClerkClientMock = () => {
             role: 'org:admin',
         }),
     ];
-    const clerkInvitesByOrganization = {};
+    const clerkInvitesByOrganization = new Map();
     const newClerkOrganizations = [];
     return {
         _clerkUsers: clerkUsers,
@@ -455,16 +455,16 @@ const buildClerkClientMock = () => {
                     createdAt: luxon_1.DateTime.now().toMillis(),
                     updatedAt: luxon_1.DateTime.now().toMillis(),
                     status: 'pending',
-                    publicMetadata: publicMetadata || {},
+                    publicMetadata: publicMetadata ?? {},
                     privateMetadata: {},
                 };
-                if (!clerkInvitesByOrganization[organizationId]) {
-                    clerkInvitesByOrganization[organizationId] = [];
+                if (!clerkInvitesByOrganization.has(organizationId)) {
+                    clerkInvitesByOrganization.set(organizationId, []);
                 }
-                if (clerkInvitesByOrganization[organizationId].find((invite) => invite.emailAddress === emailAddress)) {
+                if (clerkInvitesByOrganization.get(organizationId)?.find((invite) => invite.emailAddress === emailAddress)) {
                     throw new Error(`Already invited ${emailAddress} to ${organizationId}.`);
                 }
-                clerkInvitesByOrganization[organizationId].push(invite);
+                clerkInvitesByOrganization.get(organizationId)?.push(invite);
                 return invite;
             }),
             getOrganizationMembershipList: jest.fn().mockImplementation(({ organizationId, limit = 100, offset = 0, }) => {
@@ -476,7 +476,7 @@ const buildClerkClientMock = () => {
                 };
             }),
             getOrganizationInvitationList: jest.fn().mockImplementation(({ organizationId, limit = 100, offset = 0, }) => {
-                const invitations = clerkInvitesByOrganization[organizationId] ?? [];
+                const invitations = clerkInvitesByOrganization.get(organizationId) ?? [];
                 const paginatedInvitations = invitations.slice(offset, offset + limit);
                 return {
                     data: paginatedInvitations,
@@ -505,7 +505,7 @@ const buildClerkClientMock = () => {
                 clerkMemberships.splice(index, 1);
             }),
             revokeOrganizationInvitation: jest.fn().mockImplementation(({ organizationId, invitationId, requestingUserId, }) => {
-                const invite = clerkInvitesByOrganization[organizationId].find((invite) => invite.id === invitationId);
+                const invite = clerkInvitesByOrganization.get(organizationId)?.find((invite) => invite.id === invitationId);
                 if (!invite) {
                     throw new Error(`Invitation not found for ${invitationId} in ${organizationId}.`);
                 }
@@ -516,8 +516,7 @@ const buildClerkClientMock = () => {
                     ...invite,
                     status: 'revoked',
                 };
-                const index = clerkInvitesByOrganization[organizationId].indexOf(invite);
-                clerkInvitesByOrganization[organizationId][index] = newInvite;
+                clerkInvitesByOrganization.set(organizationId, clerkInvitesByOrganization.get(organizationId)?.map((invite) => invite.id === invitationId ? newInvite : invite) ?? []);
                 return newInvite;
             }),
             createOrganization: jest.fn().mockImplementation(({ name, createdBy, slug, publicMetadata, }) => {
@@ -529,7 +528,7 @@ const buildClerkClientMock = () => {
                     imageUrl: 'https://example.com/image.png',
                     createdAt: luxon_1.DateTime.now().toMillis(),
                     updatedAt: luxon_1.DateTime.now().toMillis(),
-                    publicMetadata: publicMetadata || {},
+                    publicMetadata: publicMetadata ?? {},
                     privateMetadata: {},
                     maxAllowedMemberships: 100,
                     adminDeleteEnabled: false,
@@ -556,10 +555,10 @@ const buildClerkClientMock = () => {
                 }
                 const newOrganization = {
                     ...organization,
-                    name: name || organization.name,
-                    slug: slug || organization.slug,
-                    publicMetadata: publicMetadata || organization.publicMetadata,
-                    privateMetadata: privateMetadata || organization.privateMetadata,
+                    name: name ?? organization.name,
+                    slug: slug ?? organization.slug,
+                    publicMetadata: publicMetadata ?? organization.publicMetadata,
+                    privateMetadata: privateMetadata ?? organization.privateMetadata,
                 };
                 if (isNewOrganization) {
                     const index = newClerkOrganizations.indexOf(organization);
@@ -567,6 +566,9 @@ const buildClerkClientMock = () => {
                 }
                 else {
                     const testOrganizationKey = Object.keys(TestOrganization).find((testOrganizationKey) => clerkOrganizations[testOrganizationKey].id === organizationId);
+                    if (!testOrganizationKey) {
+                        throw new Error(`Organization not found for ${organizationId}.`);
+                    }
                     clerkOrganizations[testOrganizationKey] = newOrganization;
                 }
                 return newOrganization;

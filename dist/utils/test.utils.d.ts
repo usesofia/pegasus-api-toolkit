@@ -12,7 +12,7 @@ export declare class InstanceFixture {
         mongoClient: MongoClient;
     });
     static createTestingModule({ modules, log, }: {
-        modules: Array<Type | DynamicModule>;
+        modules: (Type | DynamicModule)[];
         log?: boolean;
     }): TestingModuleBuilder;
     static build({ moduleRef, }: {

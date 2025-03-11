@@ -32,7 +32,7 @@ let OrganizationRolesGuard = class OrganizationRolesGuard extends auth_guard_1.A
     }
     async canActivate(context) {
         const allowedRoles = this.reflector.get(organization_roles_decorator_1.ORGANIZATION_ROLES_KEY, context.getHandler());
-        if (!allowedRoles) {
+        if (!allowedRoles || allowedRoles.length === 0) {
             return true;
         }
         let { user } = context.switchToHttp().getRequest();
@@ -40,7 +40,7 @@ let OrganizationRolesGuard = class OrganizationRolesGuard extends auth_guard_1.A
             await super.canActivate(context);
             user = context.switchToHttp().getRequest().user;
         }
-        const userOrgRole = user.organization.role;
+        const userOrgRole = user.organization?.role;
         if (!userOrgRole) {
             return false;
         }

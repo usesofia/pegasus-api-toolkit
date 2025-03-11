@@ -43,8 +43,8 @@ exports.CacheModule = CacheModule = __decorate([
                 provide: REDIS,
                 useFactory: (baseConfig) => {
                     if (baseConfig.cache.type === 'redis') {
-                        return new ioredis_1.default(baseConfig.cache.redis.url, {
-                            keyPrefix: baseConfig.cache.redis.keyPrefix,
+                        return new ioredis_1.default(baseConfig.cache.redis?.url ?? '', {
+                            keyPrefix: baseConfig.cache.redis?.keyPrefix ?? '',
                         });
                     }
                     return null;
@@ -54,7 +54,7 @@ exports.CacheModule = CacheModule = __decorate([
             {
                 provide: cache_service_port_1.CACHE_SERVICE_PORT,
                 useFactory: async (baseConfig, redis, mongoConnection) => {
-                    if (baseConfig.cache.type === 'redis') {
+                    if (baseConfig.cache.type === 'redis' && redis) {
                         return new redis_cache_service_adapter_1.RedisCacheServiceAdapter(baseConfig, redis);
                     }
                     else if (baseConfig.cache.type === 'mongodb') {

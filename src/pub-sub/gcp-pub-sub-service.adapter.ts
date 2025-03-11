@@ -71,7 +71,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
   }): void {
     if (this.publishBuffer.length >= MAX_PUBLISH_BUFFER_SIZE) {
       throw new Error(
-        `Publish buffer is full. It has ${this.publishBuffer.length} items.`,
+        `Publish buffer is full. It has ${this.publishBuffer.length.toString()} items.`,
       );
     }
     this.publishBuffer.push({

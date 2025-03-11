@@ -1,53 +1,40 @@
-import typescriptEslintEslintPlugin from '@typescript-eslint/eslint-plugin';
-import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all,
-});
-
-const config = compat.extends(
-    'plugin:@typescript-eslint/recommended-type-checked',
-);
-
-export default [
-    {
-        ignores: ['tsconfig.json', 'eslint.config.mjs', '**/dist', '**/test', '**/node_modules', '**/coverage', '**/*.js'],
+import eslint from '@eslint/js';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
+export default tseslint.config(
+  eslint.configs.recommended,
+  tseslint.configs.strictTypeChecked,
+  tseslint.configs.stylisticTypeChecked,
+  eslintConfigPrettier,
+  {
+    rules: {
+      '@typescript-eslint/no-misused-spread': 'off',
+      '@typescript-eslint/no-extraneous-class': 'off',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: ['.*', 'src/*', 'test/*'],
+        },
+      ],
     },
-    ...config,
-    {
-        plugins: {
-            "@typescript-eslint": typescriptEslintEslintPlugin,
-        },
-
-        languageOptions: {
-            globals: {
-                ...globals.node,
-                ...globals.jest,
-            },
-
-            parser: tsParser,
-            ecmaVersion: 5,
-            sourceType: "module",
-
-            parserOptions: {
-                project: './tsconfig.json',
-                tsconfigRootDir: __dirname,
-            },
-        },
-
-        rules: {
-            "no-restricted-imports": ["error", {
-                "patterns": [".*", "src/*", "test/*"]
-            }],
-        },
-    }
-];
+  },
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    ignores: [
+      'tsconfig.json',
+      'eslint.config.mjs',
+      '**/dist',
+      '**/node_modules',
+      '**/coverage',
+      '**/*.js',
+      '**/test/**',
+    ],
+  },
+);

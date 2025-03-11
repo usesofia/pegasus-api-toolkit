@@ -38,7 +38,7 @@ let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAda
         const url = `${baseUrl}/internal/queues/${task.queue}`;
         const finalCorrelationId = correlationId ?? this.cls.getId();
         const headers = {
-            [task_queue_guard_1.tasksQueueSecretHeaderKey]: `${this.baseConfig.tasks.secret}`,
+            [task_queue_guard_1.tasksQueueSecretHeaderKey]: this.baseConfig.tasks.secret,
             'Content-Type': 'application/json',
             [correlation_constants_1.correlationIdHeaderKey]: finalCorrelationId,
         };

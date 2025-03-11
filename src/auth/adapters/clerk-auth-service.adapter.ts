@@ -75,18 +75,18 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     let parentOrganization: Organization | null = null;
 
     if (clerkOrganization) {
-      if (clerkOrganization.publicMetadata!.parent) {
+      if (clerkOrganization.publicMetadata?.parent) {
         parentOrganization = await this.getCachedClerkOrganization({
-          organizationId: clerkOrganization.publicMetadata!.parent as string,
+          organizationId: clerkOrganization.publicMetadata.parent as string,
           ignoreCache,
         });
       }
 
       let childrenOrganizations: Organization[] | null = null;
 
-      if (clerkOrganization.publicMetadata!.children) {
+      if (clerkOrganization.publicMetadata?.children) {
         childrenOrganizations = await Promise.all(
-          (clerkOrganization.publicMetadata!.children as string[]).map(
+          (clerkOrganization.publicMetadata.children as string[]).map(
             (child) =>
               this.getCachedClerkOrganization({
                 organizationId: child,
@@ -100,23 +100,20 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
         id: clerkUser.id,
         primaryEmail: clerkUser.emailAddresses[0].emailAddress,
         primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
-        firstName: clerkUser.firstName!,
-        lastName: clerkUser.lastName!,
+        firstName: clerkUser.firstName ?? '',
+        lastName: clerkUser.lastName ?? '',
         organization: {
           id: clerkOrganization.id,
           name: clerkOrganization.name,
           role: organizationRole as OrganizationRole,
-          type: clerkOrganization.publicMetadata!.type as OrganizationType,
+          type: clerkOrganization.publicMetadata?.type as OrganizationType,
           parent: parentOrganization
             ? {
                 id: parentOrganization.id,
                 name: parentOrganization.name,
-                sharedContacts: parentOrganization.publicMetadata!
-                  .sharedContacts as boolean,
-                sharedSubcategories: parentOrganization.publicMetadata!
-                  .sharedSubcategories as boolean,
-                sharedTags: parentOrganization.publicMetadata!
-                  .sharedTags as boolean,
+                sharedContacts: parentOrganization.publicMetadata?.sharedContacts as boolean,
+                sharedSubcategories: parentOrganization.publicMetadata?.sharedSubcategories as boolean,
+                sharedTags: parentOrganization.publicMetadata?.sharedTags as boolean,
               }
             : null,
           children: childrenOrganizations
@@ -132,8 +129,8 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
         id: clerkUser.id,
         primaryEmail: clerkUser.emailAddresses[0].emailAddress,
         primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
-        firstName: clerkUser.firstName!,
-        lastName: clerkUser.lastName!,
+        firstName: clerkUser.firstName ?? '',
+        lastName: clerkUser.lastName ?? '',
         organization: null,
       });
     }

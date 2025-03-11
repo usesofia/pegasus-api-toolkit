@@ -9,7 +9,7 @@ exports.BaseConfigSchema = zod_1.z.object({
     env: zod_1.z.nativeEnum(environment_utils_1.Environment),
     nodeEnv: zod_1.z.enum(['development', 'production']),
     databases: zod_1.z.array(zod_1.z.object({
-        type: zod_1.z.enum(['mongodb']),
+        type: zod_1.z.enum(['mongodb', 'postgres']),
         uri: zod_1.z.string(),
         transactionTimeoutInMiliseconds: zod_1.z.number().optional().default(5000),
         nTransactionRetries: zod_1.z.number().optional().default(7),

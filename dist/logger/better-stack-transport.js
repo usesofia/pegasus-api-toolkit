@@ -89,7 +89,7 @@ function createBetterStackTransportWrapper(options) {
                 };
                 buffer.push(logEntry);
                 if (buffer.length >= maxBufferToTriggerFlush) {
-                    flush().catch(err => {
+                    flush().catch((err) => {
                         console.error('Error flushing buffer:', err);
                     });
                 }
@@ -97,4 +97,4 @@ function createBetterStackTransportWrapper(options) {
         })
     };
 }
-//# sourceMappingURL=integration-test-better-stack-transport.js.map
+//# sourceMappingURL=better-stack-transport.js.map

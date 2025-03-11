@@ -54,7 +54,7 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
     }
     unsafePublish({ topic, payload, }) {
         if (this.publishBuffer.length >= MAX_PUBLISH_BUFFER_SIZE) {
-            throw new Error(`Publish buffer is full. It has ${this.publishBuffer.length} items.`);
+            throw new Error(`Publish buffer is full. It has ${this.publishBuffer.length.toString()} items.`);
         }
         this.publishBuffer.push({
             correlationId: this.cls.getId(),
