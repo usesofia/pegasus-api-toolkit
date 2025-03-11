@@ -97,6 +97,11 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
     }
     async stopAutoFlushPublishBuffer() {
         clearInterval(this.publishBufferFlushInterval);
+        let attempts = 0;
+        while (this.flushing && attempts < 100) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            attempts++;
+        }
         await this.flushPublishBuffer({});
     }
 };
