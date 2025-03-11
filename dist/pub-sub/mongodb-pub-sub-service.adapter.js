@@ -31,9 +31,10 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
         this.cls = cls;
         this.pubSubEventModel = pubSubEventModel;
         this.publishBuffer = [];
+        this.flushing = false;
         this.publishBufferFlushInterval = setInterval(() => {
             void this.flushPublishBuffer({ max: 256 });
-        }, 1000);
+        }, 400);
     }
     async publish({ topic, payload, correlationId, }) {
         const event = new this.pubSubEventModel({
@@ -67,6 +68,10 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
         if (this.publishBuffer.length === 0) {
             return;
         }
+        if (this.flushing) {
+            return;
+        }
+        this.flushing = true;
         const calculatedMax = max ?? this.publishBuffer.length;
         const itemsToBePublished = this.publishBuffer.slice(0, calculatedMax);
         const successItemIdsPublished = [];
@@ -91,9 +96,15 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
             }
         }));
         this.publishBuffer = this.publishBuffer.filter((item) => !successItemIdsPublished.includes(item.id));
+        this.flushing = false;
     }
     async stopAutoFlushPublishBuffer() {
         clearInterval(this.publishBufferFlushInterval);
+        let attempts = 0;
+        while (this.flushing && attempts < 100) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            attempts++;
+        }
         await this.flushPublishBuffer({});
     }
 };

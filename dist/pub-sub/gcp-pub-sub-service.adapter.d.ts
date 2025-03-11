@@ -11,6 +11,7 @@ export declare class GcpPubSubServiceAdapter extends Base implements PubSubServi
     private readonly pubSub;
     private publishBuffer;
     private publishBufferFlushInterval;
+    private flushing;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, pubSub: PubSub);
     publish({ topic, payload, correlationId, }: {
         topic: string;

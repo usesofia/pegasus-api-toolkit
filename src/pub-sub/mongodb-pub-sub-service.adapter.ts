@@ -25,6 +25,7 @@ export class MongoDbPubSubServiceAdapter
 {
   private publishBuffer: PublishBufferItem[] = [];
   private publishBufferFlushInterval: NodeJS.Timeout;
+  private flushing: boolean;
 
   constructor(
     @Inject(BASE_CONFIG)
@@ -36,11 +37,12 @@ export class MongoDbPubSubServiceAdapter
     private readonly pubSubEventModel: Model<MongoDbPubSubEventModel>,
   ) {
     super(MongoDbPubSubServiceAdapter.name, baseConfig, logger, cls);
+    this.flushing = false;
     this.publishBufferFlushInterval = setInterval(
       () => {
         void this.flushPublishBuffer({ max: 256 });
       },
-      1000,
+      400,
     );
   }
 
@@ -97,6 +99,12 @@ export class MongoDbPubSubServiceAdapter
       return;
     }
 
+    if (this.flushing) {
+      return;
+    }
+
+    this.flushing = true;
+
     const calculatedMax = max ?? this.publishBuffer.length;
 
     const itemsToBePublished = this.publishBuffer.slice(0, calculatedMax);
@@ -127,10 +135,18 @@ export class MongoDbPubSubServiceAdapter
     this.publishBuffer = this.publishBuffer.filter(
       (item) => !successItemIdsPublished.includes(item.id),
     );
+
+    this.flushing = false;
   }
 
   async stopAutoFlushPublishBuffer(): Promise<void> {
     clearInterval(this.publishBufferFlushInterval);
+    // Wait until is flushing is false for 10 seconds at max
+    let attempts = 0;
+    while (this.flushing && attempts < 100) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      attempts++;
+    }
     await this.flushPublishBuffer({});
   }
 }

@@ -31,7 +31,8 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
         this.cls = cls;
         this.pubSub = pubSub;
         this.publishBuffer = [];
-        this.publishBufferFlushInterval = setInterval(() => void this.flushPublishBuffer({ max: 256 }), 1000);
+        this.flushing = false;
+        this.publishBufferFlushInterval = setInterval(() => void this.flushPublishBuffer({ max: 256 }), 400);
     }
     async publish({ topic, payload, correlationId, }) {
         const messageId = await this.pubSub
@@ -63,6 +64,10 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
         if (this.publishBuffer.length === 0) {
             return;
         }
+        if (this.flushing) {
+            return;
+        }
+        this.flushing = true;
         const calculatedMax = max ?? this.publishBuffer.length;
         const itemsToBePublished = this.publishBuffer.slice(0, calculatedMax);
         const successItemIdsPublished = [];
@@ -88,9 +93,15 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
             }
         }));
         this.publishBuffer = this.publishBuffer.filter((item) => !successItemIdsPublished.includes(item.id));
+        this.flushing = false;
     }
     async stopAutoFlushPublishBuffer() {
         clearInterval(this.publishBufferFlushInterval);
+        let attempts = 0;
+        while (this.flushing && attempts < 100) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            attempts++;
+        }
         await this.flushPublishBuffer({});
     }
 };
