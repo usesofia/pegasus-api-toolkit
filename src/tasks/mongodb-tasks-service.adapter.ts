@@ -11,12 +11,14 @@ import { ClsService } from "nestjs-cls";
 interface Task {
   correlationId: string;
   queue: string;
+  microservice: string;
   payload: Record<string, unknown>;
 }
 
 const TaskSchema = new Schema<Task>({
   correlationId: { type: String, required: true },
   queue: { type: String, required: true },
+  microservice: { type: String, required: true },
   payload: { type: Object, required: true },
 }, {
   timestamps: true,
@@ -49,6 +51,7 @@ export class MongodbTasksServiceAdapter extends Base implements TasksServicePort
     await this.taskModel.create({
       correlationId: finalCorrelationId,
       queue: task.queue,
+      microservice: task.microservice,
       payload: task.payload,
     });
   }

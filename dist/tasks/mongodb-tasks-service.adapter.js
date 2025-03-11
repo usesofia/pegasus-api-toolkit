@@ -24,6 +24,7 @@ const nestjs_cls_1 = require("nestjs-cls");
 const TaskSchema = new mongoose_1.Schema({
     correlationId: { type: String, required: true },
     queue: { type: String, required: true },
+    microservice: { type: String, required: true },
     payload: { type: Object, required: true },
 }, {
     timestamps: true,
@@ -42,6 +43,7 @@ let MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = class MongodbTas
         await this.taskModel.create({
             correlationId: finalCorrelationId,
             queue: task.queue,
+            microservice: task.microservice,
             payload: task.payload,
         });
     }
