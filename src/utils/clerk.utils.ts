@@ -466,7 +466,7 @@ export const buildClerkClientMock = () => {
     }),
   ];
 
-  const clerkInvitesByOrganization = new Map<string, OrganizationInvitation[]>();
+  const clerkInvitesByOrganization: Record<string, OrganizationInvitation[]> = {};
 
   const newClerkOrganizations: Organization[] = [];
 
@@ -553,15 +553,15 @@ export const buildClerkClientMock = () => {
             privateMetadata: {},
           } as OrganizationInvitation;
 
-          if (!clerkInvitesByOrganization.has(organizationId)) {
-            clerkInvitesByOrganization.set(organizationId, []);
+          if (!(organizationId in clerkInvitesByOrganization)) {
+            clerkInvitesByOrganization[organizationId] = [];
           }
 
-          if(clerkInvitesByOrganization.get(organizationId)?.find((invite) => invite.emailAddress === emailAddress)) {
+          if(clerkInvitesByOrganization[organizationId].find((invite) => invite.emailAddress === emailAddress)) {
             throw new Error(`Already invited ${emailAddress} to ${organizationId}.`);
           }
 
-          clerkInvitesByOrganization.get(organizationId)?.push(invite);
+          clerkInvitesByOrganization[organizationId].push(invite);
 
           return invite;
       }),
@@ -594,7 +594,7 @@ export const buildClerkClientMock = () => {
         limit?: number;
         offset?: number;
       }): PaginatedResourceResponse<OrganizationInvitation[]> => {
-        const invitations = clerkInvitesByOrganization.get(organizationId) ?? [];
+        const invitations = clerkInvitesByOrganization[organizationId] ?? [];
 
         const paginatedInvitations = invitations.slice(offset, offset + limit);
 
@@ -656,7 +656,7 @@ export const buildClerkClientMock = () => {
         invitationId: string;
         requestingUserId: string;
       }): OrganizationInvitation => {
-        const invite = clerkInvitesByOrganization.get(organizationId)?.find((invite) => invite.id === invitationId);
+        const invite = clerkInvitesByOrganization[organizationId].find((invite) => invite.id === invitationId);
 
         if (!invite) {
           throw new Error(`Invitation not found for ${invitationId} in ${organizationId}.`);
@@ -671,7 +671,13 @@ export const buildClerkClientMock = () => {
           status: 'revoked',
         } as OrganizationInvitation;
 
-        clerkInvitesByOrganization.set(organizationId, clerkInvitesByOrganization.get(organizationId)?.map((invite) => invite.id === invitationId ? newInvite : invite) ?? []);
+        const organizationInvitations = clerkInvitesByOrganization[organizationId] ?? [];
+
+        const index = organizationInvitations.indexOf(invite);
+
+        organizationInvitations[index] = newInvite;
+
+        clerkInvitesByOrganization[organizationId] = organizationInvitations;
 
         return newInvite;
       }),

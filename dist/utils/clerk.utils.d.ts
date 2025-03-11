@@ -29,7 +29,7 @@ export declare const buildClerkClientMock: () => {
     _clerkUsers: Record<TestUser, User>;
     _clerkOrganizations: Record<TestOrganization, Organization>;
     _clerkMemberships: OrganizationMembership[];
-    _clerkInvitesByOrganization: Map<string, OrganizationInvitation[]>;
+    _clerkInvitesByOrganization: Record<string, OrganizationInvitation[]>;
     _newClerkOrganizations: Organization[];
     verifyToken: jest.Mock<any, any, any>;
     users: {
