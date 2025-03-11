@@ -12,22 +12,26 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MongoDbCacheServiceAdapter = void 0;
+exports.MongoDbCacheServiceAdapter = exports.CACHE_RECORD_COLLECTION_NAME = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const base_config_entity_1 = require("../../config/base-config.entity");
 const primary_mongodb_database_module_1 = require("../../database/primary-mongodb-database.module");
 const mongoose_2 = require("mongoose");
+exports.CACHE_RECORD_COLLECTION_NAME = '_CacheRecords';
 const CacheRecordSchema = new mongoose_2.Schema({
     key: { type: String, required: true, index: true },
     value: { type: String, required: true },
     expiresAt: { type: Date, required: true, index: true },
-}, { timestamps: true });
+}, {
+    timestamps: true,
+    collection: exports.CACHE_RECORD_COLLECTION_NAME,
+});
 let MongoDbCacheServiceAdapter = class MongoDbCacheServiceAdapter {
     constructor(baseConfig, connection) {
         this.baseConfig = baseConfig;
         this.connection = connection;
-        this.cacheModel = this.connection.model('CacheRecord', CacheRecordSchema);
+        this.cacheModel = this.connection.model(exports.CACHE_RECORD_COLLECTION_NAME, CacheRecordSchema);
     }
     async createTTLIndex() {
         await this.cacheModel.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
@@ -61,6 +65,7 @@ let MongoDbCacheServiceAdapter = class MongoDbCacheServiceAdapter {
 };
 exports.MongoDbCacheServiceAdapter = MongoDbCacheServiceAdapter;
 exports.MongoDbCacheServiceAdapter = MongoDbCacheServiceAdapter = __decorate([
+    (0, common_1.Injectable)(),
     __param(1, (0, common_1.Inject)(primary_mongodb_database_module_1.PRIMARY_MONGOOSE_CONNECTION)),
     __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity,
         mongoose_1.Connection])

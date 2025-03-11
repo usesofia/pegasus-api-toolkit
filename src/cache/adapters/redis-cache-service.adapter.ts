@@ -1,7 +1,9 @@
 import { Redis } from 'ioredis';
 import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { CacheServicePort } from '@app/cache/ports/cache-service.port';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class RedisCacheServiceAdapter implements CacheServicePort {
   constructor(
     private readonly baseConfig: BaseConfigEntity,

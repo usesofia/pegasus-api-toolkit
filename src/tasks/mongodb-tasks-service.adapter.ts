@@ -8,6 +8,8 @@ import { Inject, Injectable, LoggerService } from "@nestjs/common";
 import { Connection, Model, Schema } from "mongoose";
 import { ClsService } from "nestjs-cls";
 
+export const TASKS_COLLECTION_NAME = '_Tasks';
+
 interface Task {
   correlationId: string;
   queue: string;
@@ -22,6 +24,7 @@ const TaskSchema = new Schema<Task>({
   payload: { type: Object, required: true },
 }, {
   timestamps: true,
+  collection: TASKS_COLLECTION_NAME,
 });
 
 @Injectable()

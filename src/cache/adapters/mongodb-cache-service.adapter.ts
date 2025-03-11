@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Connection } from 'mongoose';
 import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { CacheServicePort } from '@app/cache/ports/cache-service.port';
@@ -11,15 +11,21 @@ interface CacheRecord {
   expiresAt: Date;
 }
 
+export const CACHE_RECORD_COLLECTION_NAME = '_CacheRecords';
+
 const CacheRecordSchema = new Schema<CacheRecord>(
   {
     key: { type: String, required: true, index: true },
     value: { type: String, required: true },
     expiresAt: { type: Date, required: true, index: true },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    collection: CACHE_RECORD_COLLECTION_NAME,
+  },
 );
 
+@Injectable()
 export class MongoDbCacheServiceAdapter implements CacheServicePort {
   private readonly cacheModel;
 
@@ -28,7 +34,10 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
     @Inject(PRIMARY_MONGOOSE_CONNECTION) private readonly connection: Connection,
   ) {
     // Create the model only once per instance
-    this.cacheModel = this.connection.model<CacheRecord>('CacheRecord', CacheRecordSchema);
+    this.cacheModel = this.connection.model<CacheRecord>(
+      CACHE_RECORD_COLLECTION_NAME,
+      CacheRecordSchema,
+    );
   }
 
   async createTTLIndex() {

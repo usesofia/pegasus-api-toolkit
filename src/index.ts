@@ -24,6 +24,7 @@ export * from '@app/auth/guards/task-queue.guard';
 export * from '@app/cache/cache.module';
 export * from '@app/cache/adapters/memory-cache-service.adapter';
 export * from '@app/cache/adapters/redis-cache-service.adapter';
+export * from '@app/cache/adapters/mongodb-cache-service.adapter';
 export * from '@app/cache/ports/cache-service.port';
 
 // Clerk
@@ -66,6 +67,9 @@ export * from '@app/pub-sub/pub-sub-message.dto';
 export * from '@app/pub-sub/pub-sub-service.port';
 export * from '@app/pub-sub/gcp-pub-sub.module';
 export * from '@app/pub-sub/gcp-pub-sub-service.adapter';
+export * from '@app/pub-sub/mongodb-pub-sub-event.model';
+export * from '@app/pub-sub/mongodb-pub-sub-event.module';
+export * from '@app/pub-sub/mongodb-pub-sub-service.adapter';
 
 // Tasks
 export * from '@app/tasks/task.entity';

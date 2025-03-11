@@ -1,3 +1,4 @@
+export declare const PUB_SUB_EVENTS_COLLECTION_NAME = "_PubSubEvents";
 export declare class MongoDbPubSubEventModel {
     topic: string;
     payload: Record<string, unknown>;

@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+export const PUB_SUB_EVENTS_COLLECTION_NAME = '_PubSubEvents';
+
 @Schema({
-  collection: 'PubSubEvents',
+  collection: PUB_SUB_EVENTS_COLLECTION_NAME,
   timestamps: true,
 })
 export class MongoDbPubSubEventModel {

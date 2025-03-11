@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var MongodbTasksServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MongodbTasksServiceAdapter = void 0;
+exports.MongodbTasksServiceAdapter = exports.TASKS_COLLECTION_NAME = void 0;
 const base_1 = require("../base");
 const base_config_entity_1 = require("../config/base-config.entity");
 const primary_mongodb_database_module_1 = require("../database/primary-mongodb-database.module");
@@ -21,6 +21,7 @@ const logger_module_1 = require("../logger/logger.module");
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const nestjs_cls_1 = require("nestjs-cls");
+exports.TASKS_COLLECTION_NAME = '_Tasks';
 const TaskSchema = new mongoose_1.Schema({
     correlationId: { type: String, required: true },
     queue: { type: String, required: true },
@@ -28,6 +29,7 @@ const TaskSchema = new mongoose_1.Schema({
     payload: { type: Object, required: true },
 }, {
     timestamps: true,
+    collection: exports.TASKS_COLLECTION_NAME,
 });
 let MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = class MongodbTasksServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, connection) {

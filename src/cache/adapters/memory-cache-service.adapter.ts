@@ -1,5 +1,6 @@
 import { CacheServicePort } from '@app/cache/ports/cache-service.port';
 import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
 
 interface CacheRecord {
@@ -8,6 +9,7 @@ interface CacheRecord {
   ttlInSeconds: number;
 }
 
+@Injectable()
 export class MemoryCacheServiceAdapter implements CacheServicePort {
   private records = new Map<string, CacheRecord>();
 

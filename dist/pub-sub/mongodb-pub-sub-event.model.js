@@ -9,8 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MongoDbPubSubEventModelSchema = exports.MongoDbPubSubEventModel = void 0;
+exports.MongoDbPubSubEventModelSchema = exports.MongoDbPubSubEventModel = exports.PUB_SUB_EVENTS_COLLECTION_NAME = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
+exports.PUB_SUB_EVENTS_COLLECTION_NAME = '_PubSubEvents';
 let MongoDbPubSubEventModel = class MongoDbPubSubEventModel {
 };
 exports.MongoDbPubSubEventModel = MongoDbPubSubEventModel;
@@ -24,7 +25,7 @@ __decorate([
 ], MongoDbPubSubEventModel.prototype, "payload", void 0);
 exports.MongoDbPubSubEventModel = MongoDbPubSubEventModel = __decorate([
     (0, mongoose_1.Schema)({
-        collection: 'PubSubEvents',
+        collection: exports.PUB_SUB_EVENTS_COLLECTION_NAME,
         timestamps: true,
     })
 ], MongoDbPubSubEventModel);
