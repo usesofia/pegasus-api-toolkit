@@ -19,6 +19,7 @@ import { ClerkModule } from '@app/clerk/clerk.module';
 import { AuthModule } from '@app/auth/auth.module';
 import { fastifyOptions, setupApp } from '@app/utils/setup.utils';
 import { TasksModule } from '@app/tasks/tasks.module';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 
 EventEmitter.defaultMaxListeners = 128;
 
@@ -26,6 +27,7 @@ export class InstanceFixture {
   app: INestApplication;
   request: ReturnType<typeof supertest>;
   mongoClient: MongoClient;
+  baseConfig: BaseConfigEntity;
 
   constructor({
     app,
@@ -39,6 +41,7 @@ export class InstanceFixture {
     this.app = app;
     this.request = request;
     this.mongoClient = mongoClient;
+    this.baseConfig = app.get<BaseConfigEntity>(BASE_CONFIG);
   }
 
   static createTestingModule({

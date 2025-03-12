@@ -2,10 +2,12 @@ import { INestApplication, DynamicModule, Type } from '@nestjs/common';
 import * as supertest from 'supertest';
 import { TestingModuleBuilder } from '@nestjs/testing';
 import { MongoClient } from 'mongodb';
+import { BaseConfigEntity } from '../config/base-config.entity';
 export declare class InstanceFixture {
     app: INestApplication;
     request: ReturnType<typeof supertest>;
     mongoClient: MongoClient;
+    baseConfig: BaseConfigEntity;
     constructor({ app, request, mongoClient, }: {
         app: INestApplication;
         request: ReturnType<typeof supertest>;

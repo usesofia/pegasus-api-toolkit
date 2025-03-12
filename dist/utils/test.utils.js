@@ -21,12 +21,14 @@ const clerk_module_1 = require("../clerk/clerk.module");
 const auth_module_1 = require("../auth/auth.module");
 const setup_utils_1 = require("./setup.utils");
 const tasks_module_1 = require("../tasks/tasks.module");
+const base_config_entity_1 = require("../config/base-config.entity");
 events_1.EventEmitter.defaultMaxListeners = 128;
 class InstanceFixture {
     constructor({ app, request, mongoClient, }) {
         this.app = app;
         this.request = request;
         this.mongoClient = mongoClient;
+        this.baseConfig = app.get(base_config_entity_1.BASE_CONFIG);
     }
     static createTestingModule({ modules, log = false, }) {
         let moduleRef = testing_1.Test.createTestingModule({
