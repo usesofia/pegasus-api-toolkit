@@ -413,7 +413,7 @@ const buildClerkClientMock = () => {
         _clerkMemberships: clerkMemberships,
         _clerkInvitesByOrganization: clerkInvitesByOrganization,
         _newClerkOrganizations: newClerkOrganizations,
-        getAuthUserEntity: jest.fn().mockImplementation(({ token, }) => {
+        getAuthUserEntity: (({ token, }) => {
             const [user, organization] = processToken(token);
             const clerkUser = clerkUsers[user];
             if (organization) {

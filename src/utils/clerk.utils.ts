@@ -479,7 +479,7 @@ export const buildClerkClientMock = () => {
     _clerkMemberships: clerkMemberships,
     _clerkInvitesByOrganization: clerkInvitesByOrganization,
     _newClerkOrganizations: newClerkOrganizations,
-    getAuthUserEntity: jest.fn().mockImplementation(({
+    getAuthUserEntity: (({
       token,
     }: {
       token: string;

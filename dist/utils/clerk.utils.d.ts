@@ -1,4 +1,5 @@
 import { User, Organization, OrganizationInvitation, OrganizationMembership } from '@clerk/backend';
+import { AuthUserEntity } from '../auth/entities/auth-user.entity';
 export declare enum TestOrganization {
     AMBEV = "AMBEV",
     EMBRAER = "EMBRAER",
@@ -31,7 +32,9 @@ export declare const buildClerkClientMock: () => {
     _clerkMemberships: OrganizationMembership[];
     _clerkInvitesByOrganization: Record<string, OrganizationInvitation[]>;
     _newClerkOrganizations: Organization[];
-    getAuthUserEntity: jest.Mock<any, any, any>;
+    getAuthUserEntity: ({ token, }: {
+        token: string;
+    }) => AuthUserEntity;
     verifyToken: jest.Mock<any, any, any>;
     users: {
         getUser: jest.Mock<any, any, any>;
