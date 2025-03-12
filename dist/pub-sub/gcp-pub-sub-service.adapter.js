@@ -22,6 +22,7 @@ const nestjs_cls_1 = require("nestjs-cls");
 const uuid_1 = require("uuid");
 const gcp_pub_sub_module_1 = require("./gcp-pub-sub.module");
 const base_1 = require("../base");
+const correlation_constants_1 = require("../correlation/correlation.constants");
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, pubSub) {
@@ -37,7 +38,13 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
     async publish({ topic, payload, correlationId, }) {
         const messageId = await this.pubSub
             .topic(topic)
-            .publishMessage({ json: payload });
+            .publishMessage({
+            json: payload,
+            attributes: {
+                [correlation_constants_1.correlationIdHeaderKey]: correlationId ?? this.cls.getId(),
+                'Content-Type': 'application/json',
+            },
+        });
         this.log({
             correlationId,
             functionName: 'publish',

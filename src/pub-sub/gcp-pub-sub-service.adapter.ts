@@ -7,6 +7,7 @@ import { ClsService } from 'nestjs-cls';
 import { v4 as uuidv4 } from 'uuid';
 import { GCP_PUB_SUB } from '@app/pub-sub/gcp-pub-sub.module';
 import { Base } from '@app/base';
+import { correlationIdHeaderKey } from '@app/correlation/correlation.constants';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
@@ -51,7 +52,13 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
   }): Promise<void> {
     const messageId = await this.pubSub
       .topic(topic)
-      .publishMessage({ json: payload });
+      .publishMessage({ 
+        json: payload, 
+        attributes: { 
+          [correlationIdHeaderKey]: correlationId ?? this.cls.getId(),
+          'Content-Type': 'application/json',
+        },
+      });
     this.log({
       correlationId,
       functionName: 'publish',

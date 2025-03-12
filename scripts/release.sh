@@ -1,12 +1,12 @@
 echo "Building..."
 pnpm build;
 
-echo "Checking if package.json version is incremented..."
+echo "Checking if package.json version changed..."
 CURRENT_VERSION=$(jq -r '.version' package.json)
 PREVIOUS_VERSION=$(git show HEAD:package.json | jq -r '.version')
 
 if [ "$CURRENT_VERSION" == "$PREVIOUS_VERSION" ]; then
-  echo "Package.json version is not incremented. Current: $CURRENT_VERSION, Previous: $PREVIOUS_VERSION"
+  echo "Package.json version is not changed. Current: $CURRENT_VERSION, Previous: $PREVIOUS_VERSION"
   exit 1
 fi
 
