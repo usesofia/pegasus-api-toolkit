@@ -67,6 +67,17 @@ class AuthUserEntity extends (0, nestjs_zod_1.createZodDto)(exports.AuthUserEnti
         }
         return OrganizationEntity.build(this.organization);
     }
+    toSystem() {
+        return AuthUserEntity.build({
+            ...this,
+            id: 'system',
+            primaryEmail: 'system@usesofia.com',
+            primaryPhoneNumber: '+5511999999999',
+            firstName: 'System',
+            lastName: 'Requester',
+            organization: this.organization,
+        });
+    }
 }
 exports.AuthUserEntity = AuthUserEntity;
 //# sourceMappingURL=auth-user.entity.js.map

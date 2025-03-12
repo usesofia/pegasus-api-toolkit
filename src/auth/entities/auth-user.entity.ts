@@ -72,4 +72,16 @@ export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {
     }
     return OrganizationEntity.build(this.organization);
   }
+
+  toSystem(): AuthUserEntity {
+    return AuthUserEntity.build({
+      ...this,
+      id: 'system',
+      primaryEmail: 'system@usesofia.com',
+      primaryPhoneNumber: '+5511999999999',
+      firstName: 'System',
+      lastName: 'Requester',
+      organization: this.organization,
+    });
+  }
 }

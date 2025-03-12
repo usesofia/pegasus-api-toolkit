@@ -383,5 +383,6 @@ export declare class AuthUserEntity extends AuthUserEntity_base {
     static build(input: z.input<typeof AuthUserEntitySchema>): AuthUserEntity;
     static buildFromGcpServiceAccount(config: BaseConfigEntity): AuthUserEntity;
     getOrganizationOrThrow(): OrganizationEntity;
+    toSystem(): AuthUserEntity;
 }
 export {};
