@@ -31,6 +31,7 @@ export declare const buildClerkClientMock: () => {
     _clerkMemberships: OrganizationMembership[];
     _clerkInvitesByOrganization: Record<string, OrganizationInvitation[]>;
     _newClerkOrganizations: Organization[];
+    getAuthUserEntity: jest.Mock<any, any, any>;
     verifyToken: jest.Mock<any, any, any>;
     users: {
         getUser: jest.Mock<any, any, any>;

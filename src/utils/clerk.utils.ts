@@ -4,6 +4,9 @@ import { faker } from '@faker-js/faker';
 import { DateTime } from 'luxon';
 import { v4 } from 'uuid';
 import { cnpj } from 'cpf-cnpj-validator';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { OrganizationRole } from '@app/auth/constants/organization-role.enum';
+import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 
 export enum TestOrganization {
   AMBEV = 'AMBEV',
@@ -476,6 +479,72 @@ export const buildClerkClientMock = () => {
     _clerkMemberships: clerkMemberships,
     _clerkInvitesByOrganization: clerkInvitesByOrganization,
     _newClerkOrganizations: newClerkOrganizations,
+    getAuthUserEntity: jest.fn().mockImplementation(({
+      token,
+    }: {
+      token: string;
+    }): AuthUserEntity => {
+      const [user, organization] = processToken(token);
+
+      const clerkUser = clerkUsers[user];
+
+      if (organization) {
+        const clerkOrganization = clerkOrganizations[organization];
+
+        const clerkMembership = clerkMemberships.find((membership) => membership.organization.id === clerkOrganization.id && membership.publicUserData?.userId === clerkUser.id);
+
+        if (!clerkMembership) {
+          throw new Error(`Membership not found for ${clerkUser.id} in ${clerkOrganization.id}.`);
+        }
+
+        let parentClerkOrganization: Organization | undefined;
+
+        if (clerkOrganization.publicMetadata?.type === 'GROUP') {
+          const parentClerkOrganizationId = clerkOrganization.publicMetadata.parent;
+          parentClerkOrganization = Object.values(clerkOrganizations).find((organization) => organization.id === parentClerkOrganizationId);
+        }
+
+        let childrenClerkOrganizations: Organization[] | undefined;
+
+        if (clerkOrganization.publicMetadata?.type === 'LEAF') {
+          const childrenClerkOrganizationIds = clerkOrganization.publicMetadata.children as string[];
+          childrenClerkOrganizations = Object.values(clerkOrganizations).filter((organization) => childrenClerkOrganizationIds.includes(organization.id));
+        }
+
+        return AuthUserEntity.build({
+          id: clerkUser.id,
+          primaryEmail: clerkUser.primaryEmailAddress?.emailAddress ?? '',
+          primaryPhoneNumber: clerkUser.primaryPhoneNumber?.phoneNumber ?? '',
+          firstName: clerkUser.firstName ?? '',
+          lastName: clerkUser.lastName ?? '',
+          organization: {
+            id: clerkOrganization.id,
+            name: clerkOrganization.name,
+            role: clerkMembership.role as OrganizationRole,
+            type: clerkOrganization.publicMetadata?.type as OrganizationType,
+            parent: parentClerkOrganization ? {
+              id: parentClerkOrganization.id,
+              name: parentClerkOrganization.name,
+              sharedContacts: parentClerkOrganization.publicMetadata?.sharedContacts as boolean,
+              sharedSubcategories: parentClerkOrganization.publicMetadata?.sharedSubcategories as boolean,
+              sharedTags: parentClerkOrganization.publicMetadata?.sharedTags as boolean,
+            } : undefined,
+            children: childrenClerkOrganizations ? childrenClerkOrganizations.map((child) => ({
+              id: child.id,
+              name: child.name,
+            })) : undefined,
+          },
+        });
+      } else {
+        return AuthUserEntity.build({
+          id: clerkUser.id,
+          primaryEmail: clerkUser.primaryEmailAddress?.emailAddress ?? '',
+          primaryPhoneNumber: clerkUser.primaryPhoneNumber?.phoneNumber ?? '',
+          firstName: clerkUser.firstName ?? '',
+          lastName: clerkUser.lastName ?? '',
+        });
+      }
+    }),
     verifyToken: jest.fn().mockImplementation(
       (
         token: string,

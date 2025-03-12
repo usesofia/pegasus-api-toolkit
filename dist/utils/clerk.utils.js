@@ -5,6 +5,7 @@ const faker_1 = require("@faker-js/faker");
 const luxon_1 = require("luxon");
 const uuid_1 = require("uuid");
 const cpf_cnpj_validator_1 = require("cpf-cnpj-validator");
+const auth_user_entity_1 = require("../auth/entities/auth-user.entity");
 var TestOrganization;
 (function (TestOrganization) {
     TestOrganization["AMBEV"] = "AMBEV";
@@ -412,6 +413,60 @@ const buildClerkClientMock = () => {
         _clerkMemberships: clerkMemberships,
         _clerkInvitesByOrganization: clerkInvitesByOrganization,
         _newClerkOrganizations: newClerkOrganizations,
+        getAuthUserEntity: jest.fn().mockImplementation(({ token, }) => {
+            const [user, organization] = processToken(token);
+            const clerkUser = clerkUsers[user];
+            if (organization) {
+                const clerkOrganization = clerkOrganizations[organization];
+                const clerkMembership = clerkMemberships.find((membership) => membership.organization.id === clerkOrganization.id && membership.publicUserData?.userId === clerkUser.id);
+                if (!clerkMembership) {
+                    throw new Error(`Membership not found for ${clerkUser.id} in ${clerkOrganization.id}.`);
+                }
+                let parentClerkOrganization;
+                if (clerkOrganization.publicMetadata?.type === 'GROUP') {
+                    const parentClerkOrganizationId = clerkOrganization.publicMetadata.parent;
+                    parentClerkOrganization = Object.values(clerkOrganizations).find((organization) => organization.id === parentClerkOrganizationId);
+                }
+                let childrenClerkOrganizations;
+                if (clerkOrganization.publicMetadata?.type === 'LEAF') {
+                    const childrenClerkOrganizationIds = clerkOrganization.publicMetadata.children;
+                    childrenClerkOrganizations = Object.values(clerkOrganizations).filter((organization) => childrenClerkOrganizationIds.includes(organization.id));
+                }
+                return auth_user_entity_1.AuthUserEntity.build({
+                    id: clerkUser.id,
+                    primaryEmail: clerkUser.primaryEmailAddress?.emailAddress ?? '',
+                    primaryPhoneNumber: clerkUser.primaryPhoneNumber?.phoneNumber ?? '',
+                    firstName: clerkUser.firstName ?? '',
+                    lastName: clerkUser.lastName ?? '',
+                    organization: {
+                        id: clerkOrganization.id,
+                        name: clerkOrganization.name,
+                        role: clerkMembership.role,
+                        type: clerkOrganization.publicMetadata?.type,
+                        parent: parentClerkOrganization ? {
+                            id: parentClerkOrganization.id,
+                            name: parentClerkOrganization.name,
+                            sharedContacts: parentClerkOrganization.publicMetadata?.sharedContacts,
+                            sharedSubcategories: parentClerkOrganization.publicMetadata?.sharedSubcategories,
+                            sharedTags: parentClerkOrganization.publicMetadata?.sharedTags,
+                        } : undefined,
+                        children: childrenClerkOrganizations ? childrenClerkOrganizations.map((child) => ({
+                            id: child.id,
+                            name: child.name,
+                        })) : undefined,
+                    },
+                });
+            }
+            else {
+                return auth_user_entity_1.AuthUserEntity.build({
+                    id: clerkUser.id,
+                    primaryEmail: clerkUser.primaryEmailAddress?.emailAddress ?? '',
+                    primaryPhoneNumber: clerkUser.primaryPhoneNumber?.phoneNumber ?? '',
+                    firstName: clerkUser.firstName ?? '',
+                    lastName: clerkUser.lastName ?? '',
+                });
+            }
+        }),
         verifyToken: jest.fn().mockImplementation((token) => {
             const [user, organization] = processToken(token);
             if (organization) {
