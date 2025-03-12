@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var GcpServiceAccountGuard_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GCP_SERVICE_ACCOUNT_GUARD = exports.GcpServiceAccountGuard = void 0;
+exports.GCP_SERVICE_ACCOUNT_GUARD = exports.GcpServiceAccountGuard = exports.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const google_auth_library_1 = require("google-auth-library");
@@ -23,6 +23,8 @@ const ignore_gcp_service_account_guard_decorator_1 = require("../decorators/igno
 const logger_module_1 = require("../../logger/logger.module");
 const base_1 = require("../../base");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
+const environment_utils_1 = require("../../utils/environment.utils");
+exports.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS = 'gcp-service-account-token';
 let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountGuard extends base_1.Base {
     constructor(baseConfig, logger, cls, reflector) {
         super(GcpServiceAccountGuard_1.name, baseConfig, logger, cls);
@@ -43,6 +45,10 @@ let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountG
             throw new common_1.UnauthorizedException();
         }
         const token = authorization.split(' ')[1];
+        if ((0, environment_utils_1.getEnvironment)() === environment_utils_1.Environment.INTEGRATION_TEST && token === exports.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS) {
+            request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
+            return true;
+        }
         const ticket = await this.client.verifyIdToken({
             idToken: token,
         });

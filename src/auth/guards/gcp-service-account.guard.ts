@@ -15,6 +15,9 @@ import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { Base } from '@app/base';
 import { AuthUserEntity, AuthUserEntitySchema } from '@app/auth/entities/auth-user.entity';
 import { z } from 'zod';
+import { Environment, getEnvironment } from '@app/utils/environment.utils';
+
+export const GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS = 'gcp-service-account-token';
 
 @Injectable()
 export class GcpServiceAccountGuard extends Base implements CanActivate {
@@ -53,6 +56,11 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
     }
 
     const token = authorization.split(' ')[1];
+
+    if (getEnvironment() === Environment.INTEGRATION_TEST && token === GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS) {
+      request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
+      return true;
+    }
 
     const ticket = await this.client.verifyIdToken({
       idToken: token,
