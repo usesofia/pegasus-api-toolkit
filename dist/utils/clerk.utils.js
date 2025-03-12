@@ -423,12 +423,12 @@ const buildClerkClientMock = () => {
                     throw new Error(`Membership not found for ${clerkUser.id} in ${clerkOrganization.id}.`);
                 }
                 let parentClerkOrganization;
-                if (clerkOrganization.publicMetadata?.type === 'GROUP') {
+                if (clerkOrganization.publicMetadata?.type === 'LEAF' && clerkOrganization.publicMetadata.parent) {
                     const parentClerkOrganizationId = clerkOrganization.publicMetadata.parent;
                     parentClerkOrganization = Object.values(clerkOrganizations).find((organization) => organization.id === parentClerkOrganizationId);
                 }
                 let childrenClerkOrganizations;
-                if (clerkOrganization.publicMetadata?.type === 'LEAF') {
+                if (clerkOrganization.publicMetadata?.type === 'GROUP') {
                     const childrenClerkOrganizationIds = clerkOrganization.publicMetadata.children;
                     childrenClerkOrganizations = Object.values(clerkOrganizations).filter((organization) => childrenClerkOrganizationIds.includes(organization.id));
                 }

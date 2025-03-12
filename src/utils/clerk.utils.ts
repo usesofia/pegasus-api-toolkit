@@ -499,14 +499,14 @@ export const buildClerkClientMock = () => {
 
         let parentClerkOrganization: Organization | undefined;
 
-        if (clerkOrganization.publicMetadata?.type === 'GROUP') {
+        if (clerkOrganization.publicMetadata?.type === 'LEAF' && clerkOrganization.publicMetadata.parent) {
           const parentClerkOrganizationId = clerkOrganization.publicMetadata.parent;
           parentClerkOrganization = Object.values(clerkOrganizations).find((organization) => organization.id === parentClerkOrganizationId);
         }
 
         let childrenClerkOrganizations: Organization[] | undefined;
 
-        if (clerkOrganization.publicMetadata?.type === 'LEAF') {
+        if (clerkOrganization.publicMetadata?.type === 'GROUP') {
           const childrenClerkOrganizationIds = clerkOrganization.publicMetadata.children as string[];
           childrenClerkOrganizations = Object.values(clerkOrganizations).filter((organization) => childrenClerkOrganizationIds.includes(organization.id));
         }
