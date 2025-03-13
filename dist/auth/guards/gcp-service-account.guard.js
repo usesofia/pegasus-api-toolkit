@@ -49,18 +49,31 @@ let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountG
             request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
             return true;
         }
-        const ticket = await this.client.verifyIdToken({
-            idToken: token,
-        });
-        const payload = ticket.getPayload();
-        if (!payload) {
+        try {
+            const ticket = await this.client.verifyIdToken({
+                idToken: token,
+            });
+            const payload = ticket.getPayload();
+            if (!payload) {
+                throw new common_1.UnauthorizedException();
+            }
+            if (payload.email !== this.baseConfig.gcp.credentials.client_email) {
+                throw new common_1.UnauthorizedException();
+            }
+            request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
+            return true;
+        }
+        catch (error) {
+            this.logWarn({
+                functionName: this.canActivate.name,
+                suffix: 'failedToVerifyGcpServiceAccountToken',
+                data: {
+                    token,
+                    error,
+                },
+            });
             throw new common_1.UnauthorizedException();
         }
-        if (payload.email !== this.baseConfig.gcp.credentials.client_email) {
-            throw new common_1.UnauthorizedException();
-        }
-        request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
-        return true;
     }
 };
 exports.GcpServiceAccountGuard = GcpServiceAccountGuard;

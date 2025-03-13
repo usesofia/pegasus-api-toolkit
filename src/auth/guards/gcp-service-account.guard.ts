@@ -62,23 +62,35 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
       return true;
     }
 
-    const ticket = await this.client.verifyIdToken({
-      idToken: token,
-    });
-
-    const payload = ticket.getPayload();
-
-    if (!payload) {
+    try {
+      const ticket = await this.client.verifyIdToken({
+        idToken: token,
+      });
+  
+      const payload = ticket.getPayload();
+  
+      if (!payload) {
+        throw new UnauthorizedException();
+      }
+  
+      if (payload.email !== this.baseConfig.gcp.credentials.client_email) {
+        throw new UnauthorizedException();
+      }
+  
+      request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
+  
+      return true;
+    } catch (error) {
+      this.logWarn({
+        functionName: this.canActivate.name,
+        suffix: 'failedToVerifyGcpServiceAccountToken',
+        data: {
+          token,
+          error,
+        },
+      });
       throw new UnauthorizedException();
     }
-
-    if (payload.email !== this.baseConfig.gcp.credentials.client_email) {
-      throw new UnauthorizedException();
-    }
-
-    request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
-
-    return true;
   }
 }
 
