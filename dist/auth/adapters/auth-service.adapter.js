@@ -84,9 +84,12 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
                         ? {
                             id: parentOrganization.id,
                             name: parentOrganization.name,
-                            sharedContacts: parentOrganization.publicMetadata?.sharedContacts,
-                            sharedSubcategories: parentOrganization.publicMetadata?.sharedSubcategories,
-                            sharedTags: parentOrganization.publicMetadata?.sharedTags,
+                            sharedContacts: parentOrganization.publicMetadata
+                                ?.sharedContacts,
+                            sharedSubcategories: parentOrganization.publicMetadata
+                                ?.sharedSubcategories,
+                            sharedTags: parentOrganization.publicMetadata
+                                ?.sharedTags,
                         }
                         : null,
                     children: childrenOrganizations
@@ -169,8 +172,16 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
         return organization;
     }
     async generateGcpServiceAccountToken() {
+        const cacheKey = `${this.constructor.name}.generateGcpServiceAccountToken()`;
+        const cached = await this.cacheService.get(cacheKey);
+        if (cached) {
+            return cached;
+        }
         const client = await this.googleAuth.getIdTokenClient('*');
         const accessToken = await client.idTokenProvider.fetchIdToken('*');
+        await this.cacheService.set(cacheKey, accessToken, luxon_1.Duration.fromObject({
+            minutes: 10,
+        }).as('seconds'));
         return accessToken;
     }
 };

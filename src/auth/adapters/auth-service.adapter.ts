@@ -88,12 +88,11 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
 
       if (clerkOrganization.publicMetadata?.children) {
         childrenOrganizations = await Promise.all(
-          (clerkOrganization.publicMetadata.children as string[]).map(
-            (child) =>
-              this.getCachedClerkOrganization({
-                organizationId: child,
-                ignoreCache,
-              }),
+          (clerkOrganization.publicMetadata.children as string[]).map((child) =>
+            this.getCachedClerkOrganization({
+              organizationId: child,
+              ignoreCache,
+            }),
           ),
         );
       }
@@ -113,9 +112,12 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
             ? {
                 id: parentOrganization.id,
                 name: parentOrganization.name,
-                sharedContacts: parentOrganization.publicMetadata?.sharedContacts as boolean,
-                sharedSubcategories: parentOrganization.publicMetadata?.sharedSubcategories as boolean,
-                sharedTags: parentOrganization.publicMetadata?.sharedTags as boolean,
+                sharedContacts: parentOrganization.publicMetadata
+                  ?.sharedContacts as boolean,
+                sharedSubcategories: parentOrganization.publicMetadata
+                  ?.sharedSubcategories as boolean,
+                sharedTags: parentOrganization.publicMetadata
+                  ?.sharedTags as boolean,
               }
             : null,
           children: childrenOrganizations
@@ -263,8 +265,25 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
   }
 
   async generateGcpServiceAccountToken(): Promise<string> {
+    const cacheKey = `${this.constructor.name}.generateGcpServiceAccountToken()`;
+
+    const cached = await this.cacheService.get(cacheKey);
+
+    if (cached) {
+      return cached;
+    }
+
     const client = await this.googleAuth.getIdTokenClient('*');
     const accessToken = await client.idTokenProvider.fetchIdToken('*');
+
+    await this.cacheService.set(
+      cacheKey,
+      accessToken,
+      Duration.fromObject({
+        minutes: 10,
+      }).as('seconds'),
+    );
+
     return accessToken;
   }
 }
