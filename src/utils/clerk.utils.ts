@@ -494,7 +494,7 @@ export const buildClerkClientMock = () => {
       token,
     }: {
       token: string;
-    }): AuthUserEntity => {
+    }): Promise<AuthUserEntity> => {
       const [user, organization] = processToken(token);
 
       const clerkUser = clerkUsers[user];
@@ -522,7 +522,7 @@ export const buildClerkClientMock = () => {
           childrenClerkOrganizations = Object.values(clerkOrganizations).filter((organization) => childrenClerkOrganizationIds.includes(organization.id));
         }
 
-        return AuthUserEntity.build({
+        return Promise.resolve(AuthUserEntity.build({
           id: clerkUser.id,
           primaryEmail: clerkUser.primaryEmailAddress?.emailAddress ?? '',
           primaryPhoneNumber: clerkUser.primaryPhoneNumber?.phoneNumber ?? '',
@@ -545,15 +545,15 @@ export const buildClerkClientMock = () => {
               name: child.name,
             })) : undefined,
           },
-        });
+        }));
       } else {
-        return AuthUserEntity.build({
+        return Promise.resolve(AuthUserEntity.build({
           id: clerkUser.id,
           primaryEmail: clerkUser.primaryEmailAddress?.emailAddress ?? '',
           primaryPhoneNumber: clerkUser.primaryPhoneNumber?.phoneNumber ?? '',
           firstName: clerkUser.firstName ?? '',
           lastName: clerkUser.lastName ?? '',
-        });
+        }));
       }
     }),
     verifyToken: jest.fn().mockImplementation(
