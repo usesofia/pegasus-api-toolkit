@@ -79,6 +79,7 @@ export * from '@app/tasks/gcp-tasks-service.adapter';
 export * from '@app/tasks/mongodb-tasks-service.adapter';
 
 // Utils
+export * from '@app/utils/auth.utils';
 export * from '@app/utils/channel.utils';
 export * from '@app/utils/clerk.utils';
 export * from '@app/utils/deep-partial.type';

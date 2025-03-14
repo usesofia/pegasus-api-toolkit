@@ -199,6 +199,7 @@ const buildClerkOrganizationMembership = ({ clerkUser, clerkOrganization, role, 
     };
     return organizationMembership;
 };
+;
 const buildClerkClientMock = () => {
     const clerkUsers = {
         [TestUser.JOAO]: buildClerkUser({ user: TestUser.JOAO }),

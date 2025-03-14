@@ -257,6 +257,17 @@ const buildClerkOrganizationMembership = ({
   return organizationMembership;
 };
 
+export interface ClerkClientMockSubset {
+  _clerkUsers: Record<TestUser, User>;
+  _clerkOrganizations: Record<TestOrganization, Organization>;
+  getAuthUserEntity: ({ token }: { token: string }) => Promise<AuthUserEntity>;
+  verifyToken: ({ token }: { token: string }) => {
+    sub: string;
+    org_id: string | undefined;
+    org_role: 'org:member' | 'org:admin' | undefined;
+  };
+};
+
 export const buildClerkClientMock = () => {
   const clerkUsers: Record<TestUser, User> = {
     [TestUser.JOAO]: buildClerkUser({ user: TestUser.JOAO }),
