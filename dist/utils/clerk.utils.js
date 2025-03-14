@@ -433,7 +433,7 @@ const buildClerkClientMock = () => {
                     const childrenClerkOrganizationIds = clerkOrganization.publicMetadata.children;
                     childrenClerkOrganizations = Object.values(clerkOrganizations).filter((organization) => childrenClerkOrganizationIds.includes(organization.id));
                 }
-                return Promise.resolve(auth_user_entity_1.AuthUserEntity.build({
+                return auth_user_entity_1.AuthUserEntity.build({
                     id: clerkUser.id,
                     primaryEmail: clerkUser.primaryEmailAddress?.emailAddress ?? '',
                     primaryPhoneNumber: clerkUser.primaryPhoneNumber?.phoneNumber ?? '',
@@ -456,16 +456,16 @@ const buildClerkClientMock = () => {
                             name: child.name,
                         })) : undefined,
                     },
-                }));
+                });
             }
             else {
-                return Promise.resolve(auth_user_entity_1.AuthUserEntity.build({
+                return auth_user_entity_1.AuthUserEntity.build({
                     id: clerkUser.id,
                     primaryEmail: clerkUser.primaryEmailAddress?.emailAddress ?? '',
                     primaryPhoneNumber: clerkUser.primaryPhoneNumber?.phoneNumber ?? '',
                     firstName: clerkUser.firstName ?? '',
                     lastName: clerkUser.lastName ?? '',
-                }));
+                });
             }
         }),
         verifyToken: jest.fn().mockImplementation((token) => {

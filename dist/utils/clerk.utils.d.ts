@@ -31,7 +31,7 @@ export interface ClerkClientMockSubset {
     _clerkOrganizations: Record<TestOrganization, Organization>;
     getAuthUserEntity: ({ token }: {
         token: string;
-    }) => Promise<AuthUserEntity>;
+    }) => AuthUserEntity;
     verifyToken: ({ token }: {
         token: string;
     }) => {
@@ -48,7 +48,7 @@ export declare const buildClerkClientMock: () => {
     _newClerkOrganizations: Organization[];
     getAuthUserEntity: ({ token, }: {
         token: string;
-    }) => Promise<AuthUserEntity>;
+    }) => AuthUserEntity;
     verifyToken: jest.Mock<any, any, any>;
     users: {
         getUser: jest.Mock<any, any, any>;
