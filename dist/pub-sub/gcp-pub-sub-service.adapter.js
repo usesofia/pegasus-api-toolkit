@@ -23,6 +23,7 @@ const uuid_1 = require("uuid");
 const gcp_pub_sub_module_1 = require("./gcp-pub-sub.module");
 const base_1 = require("../base");
 const correlation_constants_1 = require("../correlation/correlation.constants");
+const json_utils_1 = require("../utils/json.utils");
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, pubSub) {
@@ -39,7 +40,7 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
         const messageId = await this.pubSub
             .topic(topic)
             .publishMessage({
-            json: payload,
+            json: JSON.parse(JSON.stringify(payload, (0, json_utils_1.getJsonStringfyReplacer)()), (0, json_utils_1.getJsonParseReviver)()),
             attributes: {
                 [correlation_constants_1.correlationIdHeaderKey]: correlationId ?? this.cls.getId(),
                 'Content-Type': 'application/json',

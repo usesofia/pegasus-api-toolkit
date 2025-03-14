@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { GCP_PUB_SUB } from '@app/pub-sub/gcp-pub-sub.module';
 import { Base } from '@app/base';
 import { correlationIdHeaderKey } from '@app/correlation/correlation.constants';
+import { getJsonParseReviver, getJsonStringfyReplacer } from '@app/utils/json.utils';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
@@ -53,7 +54,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     const messageId = await this.pubSub
       .topic(topic)
       .publishMessage({ 
-        json: payload, 
+        json: JSON.parse(JSON.stringify(payload, getJsonStringfyReplacer()), getJsonParseReviver()), 
         attributes: { 
           [correlationIdHeaderKey]: correlationId ?? this.cls.getId(),
           'Content-Type': 'application/json',
