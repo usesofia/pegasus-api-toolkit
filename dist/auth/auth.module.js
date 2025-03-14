@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const common_1 = require("@nestjs/common");
-const clerk_auth_service_adapter_1 = require("./adapters/clerk-auth-service.adapter");
+const auth_service_adapter_1 = require("./adapters/auth-service.adapter");
 const auth_service_port_1 = require("./ports/auth-service.port");
 const auth_guard_1 = require("./guards/auth.guard");
 const core_1 = require("@nestjs/core");
@@ -16,6 +16,7 @@ const gcp_service_account_guard_1 = require("./guards/gcp-service-account.guard"
 const base_config_entity_1 = require("../config/base-config.entity");
 const organization_roles_guard_1 = require("./guards/organization-roles.guard");
 const organization_types_guard_1 = require("./guards/organization-types.guard");
+const google_auth_library_1 = require("google-auth-library");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -40,10 +41,10 @@ exports.AuthModule = AuthModule = __decorate([
                 provide: organization_types_guard_1.ORGANIZATION_TYPES_GUARD,
                 useClass: organization_types_guard_1.OrganizationTypesGuard,
             },
-            clerk_auth_service_adapter_1.ClerkAuthServiceAdapter,
+            auth_service_adapter_1.AuthServiceAdapter,
             {
                 provide: auth_service_port_1.AUTH_SERVICE_PORT,
-                useClass: clerk_auth_service_adapter_1.ClerkAuthServiceAdapter,
+                useClass: auth_service_adapter_1.AuthServiceAdapter,
             },
             {
                 provide: core_1.APP_GUARD,
@@ -78,6 +79,16 @@ exports.AuthModule = AuthModule = __decorate([
                     return null;
                 },
                 inject: [base_config_entity_1.BASE_CONFIG, gcp_service_account_guard_1.GCP_SERVICE_ACCOUNT_GUARD],
+            },
+            {
+                provide: google_auth_library_1.GoogleAuth,
+                useFactory: (baseConfig) => {
+                    return new google_auth_library_1.GoogleAuth({
+                        credentials: baseConfig.gcp.credentials,
+                        scopes: []
+                    });
+                },
+                inject: [base_config_entity_1.BASE_CONFIG],
             },
         ],
         controllers: [],

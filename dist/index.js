@@ -30,7 +30,7 @@ __exportStar(require("./auth/guards/organization-roles.guard"), exports);
 __exportStar(require("./auth/guards/organization-types.guard"), exports);
 __exportStar(require("./auth/payloads/cache-hit-on-get-auth-user.payload"), exports);
 __exportStar(require("./auth/ports/auth-service.port"), exports);
-__exportStar(require("./auth/adapters/clerk-auth-service.adapter"), exports);
+__exportStar(require("./auth/adapters/auth-service.adapter"), exports);
 __exportStar(require("./clerk/clerk-logger-service.adapter"), exports);
 __exportStar(require("./clerk/clerk.constants"), exports);
 __exportStar(require("./auth/guards/task-queue.guard"), exports);

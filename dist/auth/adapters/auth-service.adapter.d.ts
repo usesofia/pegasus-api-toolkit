@@ -7,14 +7,16 @@ import { Base } from '../../base';
 import { ClsService } from 'nestjs-cls';
 import { ClerkClient } from '@usesofia/clerk-backend';
 import { ClerkVerifyToken } from '../../clerk/clerk.constants';
-export declare class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
+import { GoogleAuth } from 'google-auth-library';
+export declare class AuthServiceAdapter extends Base implements AuthServicePort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
     protected readonly cls: ClsService;
     private readonly cacheService;
     private readonly clerkClient;
     private readonly clerkVerifyToken;
-    constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cacheService: CacheServicePort, clerkClient: ClerkClient, clerkVerifyToken: ClerkVerifyToken);
+    private readonly googleAuth;
+    constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cacheService: CacheServicePort, clerkClient: ClerkClient, clerkVerifyToken: ClerkVerifyToken, googleAuth: GoogleAuth);
     verifyToken(token: string): Promise<AuthUserEntity>;
     getUser({ userId, organizationId, organizationRole, ignoreCache, }: {
         userId: string;
@@ -26,4 +28,5 @@ export declare class ClerkAuthServiceAdapter extends Base implements AuthService
     private getClerkOrganization;
     private getCachedClerkUserAndOrganization;
     private getCachedClerkOrganization;
+    generateGcpServiceAccountToken(): Promise<string>;
 }

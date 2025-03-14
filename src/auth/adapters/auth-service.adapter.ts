@@ -20,9 +20,10 @@ import {
   CLERK_VERIFY_TOKEN,
   ClerkVerifyToken,
 } from '@app/clerk/clerk.constants';
+import { GoogleAuth } from 'google-auth-library';
 
 @Injectable()
-export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
+export class AuthServiceAdapter extends Base implements AuthServicePort {
   constructor(
     @Inject(BASE_CONFIG)
     protected readonly baseConfig: BaseConfigEntity,
@@ -34,8 +35,9 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     private readonly clerkClient: ClerkClient,
     @Inject(CLERK_VERIFY_TOKEN)
     private readonly clerkVerifyToken: ClerkVerifyToken,
+    private readonly googleAuth: GoogleAuth,
   ) {
-    super(ClerkAuthServiceAdapter.name, baseConfig, logger, cls);
+    super(AuthServiceAdapter.name, baseConfig, logger, cls);
   }
 
   @Log()
@@ -258,5 +260,11 @@ export class ClerkAuthServiceAdapter extends Base implements AuthServicePort {
     );
 
     return organization;
+  }
+
+  async generateGcpServiceAccountToken(): Promise<string> {
+    const client = await this.googleAuth.getIdTokenClient('*');
+    const accessToken = await client.idTokenProvider.fetchIdToken('*');
+    return accessToken;
   }
 }

@@ -11,9 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var ClerkAuthServiceAdapter_1;
+var AuthServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClerkAuthServiceAdapter = void 0;
+exports.AuthServiceAdapter = void 0;
 const common_1 = require("@nestjs/common");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_config_entity_1 = require("../../config/base-config.entity");
@@ -25,15 +25,17 @@ const logger_module_1 = require("../../logger/logger.module");
 const clerk_backend_1 = require("@usesofia/clerk-backend");
 const log_utils_1 = require("../../utils/log.utils");
 const clerk_constants_1 = require("../../clerk/clerk.constants");
-let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthServiceAdapter extends base_1.Base {
-    constructor(baseConfig, logger, cls, cacheService, clerkClient, clerkVerifyToken) {
-        super(ClerkAuthServiceAdapter_1.name, baseConfig, logger, cls);
+const google_auth_library_1 = require("google-auth-library");
+let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends base_1.Base {
+    constructor(baseConfig, logger, cls, cacheService, clerkClient, clerkVerifyToken, googleAuth) {
+        super(AuthServiceAdapter_1.name, baseConfig, logger, cls);
         this.baseConfig = baseConfig;
         this.logger = logger;
         this.cls = cls;
         this.cacheService = cacheService;
         this.clerkClient = clerkClient;
         this.clerkVerifyToken = clerkVerifyToken;
+        this.googleAuth = googleAuth;
     }
     async verifyToken(token) {
         const jwt = await this.clerkVerifyToken(token, {
@@ -166,51 +168,56 @@ let ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = class ClerkAuthService
         }).as('seconds'));
         return organization;
     }
+    async generateGcpServiceAccountToken() {
+        const client = await this.googleAuth.getIdTokenClient('*');
+        const accessToken = await client.idTokenProvider.fetchIdToken('*');
+        return accessToken;
+    }
 };
-exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter;
+exports.AuthServiceAdapter = AuthServiceAdapter;
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], ClerkAuthServiceAdapter.prototype, "verifyToken", null);
+], AuthServiceAdapter.prototype, "verifyToken", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ClerkAuthServiceAdapter.prototype, "getUser", null);
+], AuthServiceAdapter.prototype, "getUser", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ClerkAuthServiceAdapter.prototype, "getClerkUserAndOrganization", null);
+], AuthServiceAdapter.prototype, "getClerkUserAndOrganization", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ClerkAuthServiceAdapter.prototype, "getClerkOrganization", null);
+], AuthServiceAdapter.prototype, "getClerkOrganization", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ClerkAuthServiceAdapter.prototype, "getCachedClerkUserAndOrganization", null);
+], AuthServiceAdapter.prototype, "getCachedClerkUserAndOrganization", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ClerkAuthServiceAdapter.prototype, "getCachedClerkOrganization", null);
-exports.ClerkAuthServiceAdapter = ClerkAuthServiceAdapter = ClerkAuthServiceAdapter_1 = __decorate([
+], AuthServiceAdapter.prototype, "getCachedClerkOrganization", null);
+exports.AuthServiceAdapter = AuthServiceAdapter = AuthServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
     __param(1, (0, common_1.Inject)(logger_module_1.LOGGER_SERVICE_PORT)),
     __param(3, (0, common_1.Inject)(cache_service_port_1.CACHE_SERVICE_PORT)),
     __param(4, (0, common_1.Inject)(clerk_constants_1.CLERK_CLIENT)),
     __param(5, (0, common_1.Inject)(clerk_constants_1.CLERK_VERIFY_TOKEN)),
-    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, clerk_backend_1.ClerkClient, Function])
-], ClerkAuthServiceAdapter);
-//# sourceMappingURL=clerk-auth-service.adapter.js.map
+    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, clerk_backend_1.ClerkClient, Function, google_auth_library_1.GoogleAuth])
+], AuthServiceAdapter);
+//# sourceMappingURL=auth-service.adapter.js.map

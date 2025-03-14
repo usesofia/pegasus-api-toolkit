@@ -15,7 +15,7 @@ export * from '@app/auth/guards/organization-roles.guard';
 export * from '@app/auth/guards/organization-types.guard';
 export * from '@app/auth/payloads/cache-hit-on-get-auth-user.payload';
 export * from '@app/auth/ports/auth-service.port';
-export * from '@app/auth/adapters/clerk-auth-service.adapter';
+export * from '@app/auth/adapters/auth-service.adapter';
 export * from '@app/clerk/clerk-logger-service.adapter';
 export * from '@app/clerk/clerk.constants';
 export * from '@app/auth/guards/task-queue.guard';

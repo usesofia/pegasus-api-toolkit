@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { ClerkAuthServiceAdapter } from '@app/auth/adapters/clerk-auth-service.adapter';
+import { AuthServiceAdapter } from '@app/auth/adapters/auth-service.adapter';
 import { AUTH_SERVICE_PORT } from '@app/auth/ports/auth-service.port';
 import { AUTH_GUARD, AuthGuard } from '@app/auth/guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
@@ -16,6 +16,7 @@ import {
   ORGANIZATION_TYPES_GUARD,
   OrganizationTypesGuard,
 } from '@app/auth/guards/organization-types.guard';
+import { GoogleAuth } from 'google-auth-library';
 
 @Global()
 @Module({
@@ -37,10 +38,10 @@ import {
       provide: ORGANIZATION_TYPES_GUARD,
       useClass: OrganizationTypesGuard,
     },
-    ClerkAuthServiceAdapter,
+    AuthServiceAdapter,
     {
       provide: AUTH_SERVICE_PORT,
-      useClass: ClerkAuthServiceAdapter,
+      useClass: AuthServiceAdapter,
     },
     {
       provide: APP_GUARD,
@@ -78,6 +79,16 @@ import {
         return null;
       },
       inject: [BASE_CONFIG, GCP_SERVICE_ACCOUNT_GUARD],
+    },
+    {
+      provide: GoogleAuth,
+      useFactory: (baseConfig: BaseConfigEntity) => {
+        return new GoogleAuth({
+          credentials: baseConfig.gcp.credentials,
+          scopes: []
+        });
+      },
+      inject: [BASE_CONFIG],
     },
   ],
   controllers: [],

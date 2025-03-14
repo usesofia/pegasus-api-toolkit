@@ -13,6 +13,7 @@ export interface AuthServicePort {
     organizationRole: string;
     ignoreCache?: boolean;
   }): Promise<AuthUserEntity>;
+  generateGcpServiceAccountToken(): Promise<string>;
 }
 
 export const AUTH_SERVICE_PORT = Symbol('AuthServicePort');
