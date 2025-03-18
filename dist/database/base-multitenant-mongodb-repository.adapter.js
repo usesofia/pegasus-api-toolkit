@@ -49,6 +49,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             .findOne({
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
+            deletedAt: null,
         })
             .session(previousSession
             ? previousSession.getSession()
@@ -66,6 +67,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             .findOne({
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
+            deletedAt: null,
         })
             .session(previousSession
             ? previousSession.getSession()
@@ -83,6 +85,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             .findOne({
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
+            deletedAt: null,
         })
             .session(session);
         if (!existing) {
@@ -157,10 +160,11 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
     }
     async removeOrThrow({ requester, request, previousSession, }) {
         const doc = await this.model
-            .findOneAndDelete({
+            .findOneAndUpdate({
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
-        })
+            deletedAt: null,
+        }, { $set: { deletedAt: new Date() } })
             .session(previousSession
             ? previousSession.getSession()
             : null);
@@ -170,10 +174,11 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
     }
     async remove({ requester, request, previousSession, }) {
         await this.model
-            .findOneAndDelete({
+            .findOneAndUpdate({
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
-        })
+            deletedAt: null,
+        }, { $set: { deletedAt: new Date() } })
             .session(previousSession
             ? previousSession.getSession()
             : null);

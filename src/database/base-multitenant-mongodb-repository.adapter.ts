@@ -102,6 +102,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       .findOne({
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
+        deletedAt: null,
       })
       .session(
         previousSession
@@ -137,6 +138,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       .findOne({
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
+        deletedAt: null,
       })
       .session(
         previousSession
@@ -169,6 +171,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       .findOne({
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
+        deletedAt: null,
       })
       .session(session);
 
@@ -299,10 +302,14 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     previousSession?: BaseSessionPort;
   }): Promise<void> {
     const doc = await this.model
-      .findOneAndDelete({
-        _id: request.id,
-        ownerOrganization: this.getOwnerOrganization({ requester }),
-      })
+      .findOneAndUpdate(
+        {
+          _id: request.id,
+          ownerOrganization: this.getOwnerOrganization({ requester }),
+          deletedAt: null,
+        },
+        { $set: { deletedAt: new Date() } },
+      )
       .session(
         previousSession
           ? (previousSession.getSession() as ClientSession)
@@ -328,10 +335,14 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     previousSession?: BaseSessionPort;
   }): Promise<void> {
     await this.model
-      .findOneAndDelete({
-        _id: request.id,
-        ownerOrganization: this.getOwnerOrganization({ requester }),
-      })
+      .findOneAndUpdate(
+        {
+          _id: request.id,
+          ownerOrganization: this.getOwnerOrganization({ requester }),
+          deletedAt: null,
+        },
+        { $set: { deletedAt: new Date() } },
+      )
       .session(
         previousSession
           ? (previousSession.getSession() as ClientSession)

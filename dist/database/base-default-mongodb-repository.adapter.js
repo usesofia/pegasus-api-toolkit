@@ -54,6 +54,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         const doc = await this.model
             .findOne({
             _id: request.id,
+            deletedAt: null,
         })
             .session(previousSession
             ? previousSession.getSession()
@@ -70,6 +71,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         const doc = await this.model
             .findOne({
             _id: request.id,
+            deletedAt: null,
         })
             .session(previousSession
             ? previousSession.getSession()
@@ -86,6 +88,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         const existing = await this.model
             .findOne({
             _id: request.id,
+            deletedAt: null,
         })
             .session(session);
         if (!existing) {
@@ -152,9 +155,10 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
     }
     async removeOrThrow({ request, previousSession, }) {
         const doc = await this.model
-            .findOneAndDelete({
+            .findOneAndUpdate({
             _id: request.id,
-        })
+            deletedAt: null,
+        }, { $set: { deletedAt: new Date() } })
             .session(previousSession
             ? previousSession.getSession()
             : null);
@@ -164,9 +168,10 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
     }
     async remove({ request, previousSession, }) {
         await this.model
-            .findOneAndDelete({
+            .findOneAndUpdate({
             _id: request.id,
-        })
+            deletedAt: null,
+        }, { $set: { deletedAt: new Date() } })
             .session(previousSession
             ? previousSession.getSession()
             : null);

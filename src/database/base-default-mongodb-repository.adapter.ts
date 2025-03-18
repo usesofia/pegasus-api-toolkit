@@ -97,6 +97,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     const doc = await this.model
       .findOne({
         _id: request.id,
+        deletedAt: null,
       })
       .session(
         previousSession
@@ -129,6 +130,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     const doc = await this.model
       .findOne({
         _id: request.id,
+        deletedAt: null,
       })
       .session(
         previousSession
@@ -158,6 +160,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     const existing = await this.model
       .findOne({
         _id: request.id,
+        deletedAt: null,
       })
       .session(session);
 
@@ -272,9 +275,13 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     previousSession?: BaseSessionPort;
   }): Promise<void> {
     const doc = await this.model
-      .findOneAndDelete({
-        _id: request.id,
-      })
+      .findOneAndUpdate(
+        {
+          _id: request.id,
+          deletedAt: null,
+        },
+        { $set: { deletedAt: new Date() } },
+      )
       .session(
         previousSession
           ? (previousSession.getSession() as ClientSession)
@@ -298,9 +305,13 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     previousSession?: BaseSessionPort;
   }): Promise<void> {
     await this.model
-      .findOneAndDelete({
-        _id: request.id,
-      })
+      .findOneAndUpdate(
+        {
+          _id: request.id,
+          deletedAt: null,
+        },
+        { $set: { deletedAt: new Date() } },
+      )
       .session(
         previousSession
           ? (previousSession.getSession() as ClientSession)
