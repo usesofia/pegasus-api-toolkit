@@ -14,7 +14,10 @@ const nestjs_cls_1 = require("nestjs-cls");
 const nestjs_zod_1 = require("nestjs-zod");
 const app_exceptions_filter_1 = require("../app-exceptions.filter");
 function setupApp({ app, version, }) {
-    app.getHttpAdapter().getInstance().setReplySerializer((data) => JSON.stringify(data, (0, json_utils_1.getJsonStringfyReplacer)()));
+    app
+        .getHttpAdapter()
+        .getInstance()
+        .setReplySerializer((data) => JSON.stringify(data, (0, json_utils_1.getJsonStringfyReplacer)()));
     app.useLogger(app.get(logger_module_1.LOGGER_SERVICE_PORT));
     app.useGlobalFilters(new app_exceptions_filter_1.AppExceptionsFilter(app.get(core_1.HttpAdapterHost), app.get(logger_module_1.LOGGER_SERVICE_PORT), app.get(nestjs_cls_1.ClsService)));
     app.useGlobalPipes(new nestjs_zod_1.ZodValidationPipe(), new common_1.ValidationPipe({

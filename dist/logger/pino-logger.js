@@ -52,7 +52,8 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         let data = {
             environment: this.environment,
         };
-        const isAddressAlreadyInUseOnTest = message.startsWith('Error: listen EADDRINUSE: address already in use') && this.baseConfig.env === environment_utils_1.Environment.INTEGRATION_TEST;
+        const isAddressAlreadyInUseOnTest = message.startsWith('Error: listen EADDRINUSE: address already in use') &&
+            this.baseConfig.env === environment_utils_1.Environment.INTEGRATION_TEST;
         if (optionalParams.length > 1 && !isAddressAlreadyInUseOnTest) {
             console.error({ level, message, optionalParams });
             throw new Error('Invalid number of parameters for log.');
@@ -134,7 +135,9 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
     }
     async flush() {
         await new Promise((resolve) => {
-            this.remoteLogger.flush(() => { resolve(void 0); });
+            this.remoteLogger.flush(() => {
+                resolve(void 0);
+            });
         });
         await this.remoteLoggerTransportClose();
     }

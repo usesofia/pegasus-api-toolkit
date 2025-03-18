@@ -42,7 +42,7 @@ let MongoDbCacheServiceAdapter = class MongoDbCacheServiceAdapter {
         const now = new Date();
         const record = await this.cacheModel.findOne({
             key: finalKey,
-            expiresAt: { $gt: now }
+            expiresAt: { $gt: now },
         });
         if (!record) {
             return null;

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 export declare const TaskEntitySchema: z.ZodObject<{
     queue: z.ZodString;
     microservice: z.ZodString;

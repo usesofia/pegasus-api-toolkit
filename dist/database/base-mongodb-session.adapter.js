@@ -21,12 +21,14 @@ class BaseMongoDbSessionAdapter extends base_1.Base {
         }
         let attempt = 1;
         const maxNAttempts = options?.nRetries ?? mongoDbConfig.nTransactionRetries;
-        const maxDelayBetweenAttempts = options?.maxDelayBetweenAttempts ?? mongoDbConfig.maxDelayBetweenTransactionAttempts;
+        const maxDelayBetweenAttempts = options?.maxDelayBetweenAttempts ??
+            mongoDbConfig.maxDelayBetweenTransactionAttempts;
         let result;
         while (attempt <= maxNAttempts) {
             try {
                 result = await this.session.withTransaction(fn, {
-                    timeoutMS: options?.timeoutInMiliseconds ?? mongoDbConfig.transactionTimeoutInMiliseconds,
+                    timeoutMS: options?.timeoutInMiliseconds ??
+                        mongoDbConfig.transactionTimeoutInMiliseconds,
                 });
                 return result;
             }

@@ -45,7 +45,8 @@ let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountG
             throw new common_1.UnauthorizedException();
         }
         const token = authorization.split(' ')[1];
-        if ((0, environment_utils_1.getEnvironment)() === environment_utils_1.Environment.INTEGRATION_TEST && token === exports.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS) {
+        if ((0, environment_utils_1.getEnvironment)() === environment_utils_1.Environment.INTEGRATION_TEST &&
+            token === exports.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS) {
             request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
             return true;
         }

@@ -33,7 +33,10 @@ const CacheSetDtoSchema = zod_1.z.object({
 class CacheSetDto extends (0, nestjs_zod_1.createZodDto)(CacheSetDtoSchema) {
 }
 const CacheGetResponseDtoSchema = zod_1.z.object({
-    value: zod_1.z.string().nullable().describe('Cached string value, null if not found'),
+    value: zod_1.z
+        .string()
+        .nullable()
+        .describe('Cached string value, null if not found'),
 });
 class CacheGetResponseDto extends (0, nestjs_zod_1.createZodDto)(CacheGetResponseDtoSchema) {
 }
@@ -58,7 +61,7 @@ exports.CacheController = CacheController;
 __decorate([
     (0, swagger_1.ApiOperation)({
         operationId: 'setCacheValue',
-        summary: 'Set string value in cache with 10-second TTL'
+        summary: 'Set string value in cache with 10-second TTL',
     }),
     (0, swagger_1.ApiBody)({ type: CacheSetDto }),
     (0, swagger_1.ApiOkResponse)({ description: 'Successfully set value in cache' }),
@@ -74,9 +77,12 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({
         operationId: 'getCacheValue',
-        summary: 'Get string value from cache'
+        summary: 'Get string value from cache',
     }),
-    (0, swagger_1.ApiOkResponse)({ type: CacheGetResponseDto, description: 'Returns the cached string value or null if not found/expired' }),
+    (0, swagger_1.ApiOkResponse)({
+        type: CacheGetResponseDto,
+        description: 'Returns the cached string value or null if not found/expired',
+    }),
     (0, ignore_auth_guard_decorator_1.IgnoreAuthGuard)(),
     (0, ignore_gcp_service_account_guard_decorator_1.IgnoreGcpServiceAccountGuard)(),
     (0, common_1.Get)('/external/cache'),

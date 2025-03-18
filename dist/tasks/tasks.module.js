@@ -21,9 +21,7 @@ exports.TasksModule = TasksModule;
 exports.TasksModule = TasksModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
-        imports: [
-            primary_mongodb_database_module_1.PrimaryMongoDbDatabaseModule,
-        ],
+        imports: [primary_mongodb_database_module_1.PrimaryMongoDbDatabaseModule],
         providers: [
             {
                 provide: tasks_service_port_1.TASKS_SERVICE_PORT,

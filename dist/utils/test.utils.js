@@ -40,7 +40,8 @@ class InstanceFixture {
                         mount: true,
                         generateId: true,
                         idGenerator(req) {
-                            req[correlation_constants_1.correlationIdKey] = req.headers[correlation_constants_1.correlationIdHeaderKey] ?? (0, uuid_1.v4)();
+                            req[correlation_constants_1.correlationIdKey] =
+                                req.headers[correlation_constants_1.correlationIdHeaderKey] ?? (0, uuid_1.v4)();
                             return req[correlation_constants_1.correlationIdKey];
                         },
                     },

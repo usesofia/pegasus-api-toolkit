@@ -6,8 +6,7 @@ const zod_1 = require("zod");
 const organization_role_enum_1 = require("../constants/organization-role.enum");
 const organization_type_enum_1 = require("../constants/organization-type.enum");
 const entity_utils_1 = require("../../utils/entity.utils");
-exports.OrganizationSchema = zod_1.z
-    .object({
+exports.OrganizationSchema = zod_1.z.object({
     id: zod_1.z.string(),
     name: zod_1.z.string(),
     role: zod_1.z.nativeEnum(organization_role_enum_1.OrganizationRole),

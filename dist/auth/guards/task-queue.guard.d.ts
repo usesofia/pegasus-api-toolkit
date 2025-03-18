@@ -1,7 +1,7 @@
-import { Base } from "../../base";
-import { BaseConfigEntity } from "../../config/base-config.entity";
-import { CanActivate, ExecutionContext, LoggerService } from "@nestjs/common";
-import { ClsService } from "nestjs-cls";
+import { Base } from '../../base';
+import { BaseConfigEntity } from '../../config/base-config.entity';
+import { CanActivate, ExecutionContext, LoggerService } from '@nestjs/common';
+import { ClsService } from 'nestjs-cls';
 export declare const tasksQueueSecretHeaderKey = "x-tasks-queue-secret";
 export declare class TaskQueueGuard extends Base implements CanActivate {
     protected readonly baseConfig: BaseConfigEntity;

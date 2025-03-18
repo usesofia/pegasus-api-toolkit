@@ -85,7 +85,7 @@ exports.AuthModule = AuthModule = __decorate([
                 useFactory: (baseConfig) => {
                     return new google_auth_library_1.GoogleAuth({
                         credentials: baseConfig.gcp.credentials,
-                        scopes: []
+                        scopes: [],
                     });
                 },
                 inject: [base_config_entity_1.BASE_CONFIG],

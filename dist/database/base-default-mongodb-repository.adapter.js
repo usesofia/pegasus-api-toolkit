@@ -41,7 +41,9 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             ...request.data,
         });
         let saved = await created.save({
-            session: previousSession ? previousSession.getSession() : null,
+            session: previousSession
+                ? previousSession.getSession()
+                : null,
         });
         if (request.populate) {
             saved = await saved.populate(request.populate.split(','));
@@ -53,7 +55,9 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             .findOne({
             _id: request.id,
         })
-            .session(previousSession ? previousSession.getSession() : null);
+            .session(previousSession
+            ? previousSession.getSession()
+            : null);
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
@@ -67,7 +71,9 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             .findOne({
             _id: request.id,
         })
-            .session(previousSession ? previousSession.getSession() : null);
+            .session(previousSession
+            ? previousSession.getSession()
+            : null);
         if (!doc) {
             return null;
         }
@@ -149,7 +155,9 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             .findOneAndDelete({
             _id: request.id,
         })
-            .session(previousSession ? previousSession.getSession() : null);
+            .session(previousSession
+            ? previousSession.getSession()
+            : null);
         if (!doc) {
             throw new common_1.NotFoundException('Recurso não encontrado.');
         }
@@ -159,7 +167,9 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             .findOneAndDelete({
             _id: request.id,
         })
-            .session(previousSession ? previousSession.getSession() : null);
+            .session(previousSession
+            ? previousSession.getSession()
+            : null);
     }
 }
 exports.BaseDefaultMongoDbRepositoryAdapter = BaseDefaultMongoDbRepositoryAdapter;

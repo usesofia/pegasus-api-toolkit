@@ -68,7 +68,10 @@ let AppExceptionsFilter = class AppExceptionsFilter {
                         [correlation_constants_1.correlationIdKey]: this.clsService.getId(),
                     },
                 });
-                this.loggerService.error(errorMessage, { exception, tempTest: 'Hi Lorena v2!' });
+                this.loggerService.error(errorMessage, {
+                    exception,
+                    tempTest: 'Hi Lorena v2!',
+                });
             }
         }
         else {

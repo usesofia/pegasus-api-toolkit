@@ -4,7 +4,9 @@ exports.buildAuthServiceMock = void 0;
 const gcp_service_account_guard_1 = require("../auth/guards/gcp-service-account.guard");
 const buildAuthServiceMock = ({ clerkClientMock, }) => {
     return {
-        generateGcpServiceAccountToken: jest.fn().mockResolvedValue(gcp_service_account_guard_1.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS),
+        generateGcpServiceAccountToken: jest
+            .fn()
+            .mockResolvedValue(gcp_service_account_guard_1.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS),
         verifyToken: clerkClientMock.verifyToken,
         getUser: ({ userId, organizationId, }) => {
             const clerkUser = Object.values(clerkClientMock._clerkUsers).find((user) => user.id === userId);
@@ -24,7 +26,9 @@ const buildAuthServiceMock = ({ clerkClientMock, }) => {
                 if (!testOrganizationKey) {
                     throw new Error(`Organization ${organizationId} not found.`);
                 }
-                return Promise.resolve(clerkClientMock.getAuthUserEntity({ token: `${testUserKey}:${testOrganizationKey}` }));
+                return Promise.resolve(clerkClientMock.getAuthUserEntity({
+                    token: `${testUserKey}:${testOrganizationKey}`,
+                }));
             }
             else {
                 return Promise.resolve(clerkClientMock.getAuthUserEntity({ token: testUserKey }));

@@ -53,7 +53,9 @@ const processToken = (token) => {
                 }
                 break;
             case TestOrganization.EMBRAER:
-                if (user !== TestUser.MARIA && user !== TestUser.JULIANA && user !== TestUser.PELE) {
+                if (user !== TestUser.MARIA &&
+                    user !== TestUser.JULIANA &&
+                    user !== TestUser.PELE) {
                     throw new Error(`Invalid user ${user} for organization ${organization}.`);
                 }
                 break;
@@ -73,7 +75,9 @@ const processToken = (token) => {
                 }
                 break;
             case TestOrganization.NAGUMO_SUPERMERCADOS:
-                if (user !== TestUser.DANIEL && user !== TestUser.RONALDO && user !== TestUser.MANOEL) {
+                if (user !== TestUser.DANIEL &&
+                    user !== TestUser.RONALDO &&
+                    user !== TestUser.MANOEL) {
                     throw new Error(`Invalid user ${user} for organization ${organization}.`);
                 }
                 break;
@@ -164,7 +168,12 @@ const buildClerkOrganization = ({ organization, }) => {
         id: organizationId,
         name: organization.toString().charAt(0).toUpperCase() +
             organization.toString().slice(1),
-        slug: organization.toString().toLowerCase().replaceAll(/[^a-z0-9]/g, '-') + '-' + organizationId,
+        slug: organization
+            .toString()
+            .toLowerCase()
+            .replaceAll(/[^a-z0-9]/g, '-') +
+            '-' +
+            organizationId,
         imageUrl: 'https://example.com/image.png',
         hasImage: true,
         createdAt: luxon_1.DateTime.now().toMillis(),
@@ -199,7 +208,6 @@ const buildClerkOrganizationMembership = ({ clerkUser, clerkOrganization, role, 
     };
     return organizationMembership;
 };
-;
 const buildClerkClientMock = () => {
     const clerkUsers = {
         [TestUser.JOAO]: buildClerkUser({ user: TestUser.JOAO }),
@@ -275,7 +283,8 @@ const buildClerkClientMock = () => {
         [TestOrganization.RESERVA_STORE_42]: {
             ...plainClerkOrganizations[TestOrganization.RESERVA_STORE_42],
             publicMetadata: {
-                ...plainClerkOrganizations[TestOrganization.RESERVA_STORE_42].publicMetadata,
+                ...plainClerkOrganizations[TestOrganization.RESERVA_STORE_42]
+                    .publicMetadata,
                 type: 'LEAF',
                 parent: plainClerkOrganizations[TestOrganization.VETTOR_BPO].id,
             },
@@ -283,7 +292,8 @@ const buildClerkClientMock = () => {
         [TestOrganization.CHILLIBEANS_STORE_312]: {
             ...plainClerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312],
             publicMetadata: {
-                ...plainClerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312].publicMetadata,
+                ...plainClerkOrganizations[TestOrganization.CHILLIBEANS_STORE_312]
+                    .publicMetadata,
                 type: 'LEAF',
                 parent: plainClerkOrganizations[TestOrganization.VETTOR_BPO].id,
             },
@@ -291,7 +301,8 @@ const buildClerkClientMock = () => {
         [TestOrganization.NAGUMO_SUPERMERCADOS]: {
             ...plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS],
             publicMetadata: {
-                ...plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS].publicMetadata,
+                ...plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS]
+                    .publicMetadata,
                 type: 'GROUP',
                 children: [
                     plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123].id,
@@ -305,7 +316,8 @@ const buildClerkClientMock = () => {
         [TestOrganization.NAGUMO_STORE_123]: {
             ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123],
             publicMetadata: {
-                ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123].publicMetadata,
+                ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_123]
+                    .publicMetadata,
                 type: 'LEAF',
                 parent: plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS].id,
             },
@@ -313,7 +325,8 @@ const buildClerkClientMock = () => {
         [TestOrganization.NAGUMO_STORE_321]: {
             ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_321],
             publicMetadata: {
-                ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_321].publicMetadata,
+                ...plainClerkOrganizations[TestOrganization.NAGUMO_STORE_321]
+                    .publicMetadata,
                 type: 'LEAF',
                 parent: plainClerkOrganizations[TestOrganization.NAGUMO_SUPERMERCADOS].id,
             },
@@ -414,23 +427,26 @@ const buildClerkClientMock = () => {
         _clerkMemberships: clerkMemberships,
         _clerkInvitesByOrganization: clerkInvitesByOrganization,
         _newClerkOrganizations: newClerkOrganizations,
-        getAuthUserEntity: (({ token, }) => {
+        getAuthUserEntity: ({ token }) => {
             const [user, organization] = processToken(token);
             const clerkUser = clerkUsers[user];
             if (organization) {
                 const clerkOrganization = clerkOrganizations[organization];
-                const clerkMembership = clerkMemberships.find((membership) => membership.organization.id === clerkOrganization.id && membership.publicUserData?.userId === clerkUser.id);
+                const clerkMembership = clerkMemberships.find((membership) => membership.organization.id === clerkOrganization.id &&
+                    membership.publicUserData?.userId === clerkUser.id);
                 if (!clerkMembership) {
                     throw new Error(`Membership not found for ${clerkUser.id} in ${clerkOrganization.id}.`);
                 }
                 let parentClerkOrganization;
-                if (clerkOrganization.publicMetadata?.type === 'LEAF' && clerkOrganization.publicMetadata.parent) {
+                if (clerkOrganization.publicMetadata?.type === 'LEAF' &&
+                    clerkOrganization.publicMetadata.parent) {
                     const parentClerkOrganizationId = clerkOrganization.publicMetadata.parent;
                     parentClerkOrganization = Object.values(clerkOrganizations).find((organization) => organization.id === parentClerkOrganizationId);
                 }
                 let childrenClerkOrganizations;
                 if (clerkOrganization.publicMetadata?.type === 'GROUP') {
-                    const childrenClerkOrganizationIds = clerkOrganization.publicMetadata.children;
+                    const childrenClerkOrganizationIds = clerkOrganization.publicMetadata
+                        .children;
                     childrenClerkOrganizations = Object.values(clerkOrganizations).filter((organization) => childrenClerkOrganizationIds.includes(organization.id));
                 }
                 return auth_user_entity_1.AuthUserEntity.build({
@@ -444,17 +460,24 @@ const buildClerkClientMock = () => {
                         name: clerkOrganization.name,
                         role: clerkMembership.role,
                         type: clerkOrganization.publicMetadata?.type,
-                        parent: parentClerkOrganization ? {
-                            id: parentClerkOrganization.id,
-                            name: parentClerkOrganization.name,
-                            sharedContacts: parentClerkOrganization.publicMetadata?.sharedContacts,
-                            sharedSubcategories: parentClerkOrganization.publicMetadata?.sharedSubcategories,
-                            sharedTags: parentClerkOrganization.publicMetadata?.sharedTags,
-                        } : undefined,
-                        children: childrenClerkOrganizations ? childrenClerkOrganizations.map((child) => ({
-                            id: child.id,
-                            name: child.name,
-                        })) : undefined,
+                        parent: parentClerkOrganization
+                            ? {
+                                id: parentClerkOrganization.id,
+                                name: parentClerkOrganization.name,
+                                sharedContacts: parentClerkOrganization.publicMetadata
+                                    ?.sharedContacts,
+                                sharedSubcategories: parentClerkOrganization.publicMetadata
+                                    ?.sharedSubcategories,
+                                sharedTags: parentClerkOrganization.publicMetadata
+                                    ?.sharedTags,
+                            }
+                            : undefined,
+                        children: childrenClerkOrganizations
+                            ? childrenClerkOrganizations.map((child) => ({
+                                id: child.id,
+                                name: child.name,
+                            }))
+                            : undefined,
                     },
                 });
             }
@@ -467,7 +490,7 @@ const buildClerkClientMock = () => {
                     lastName: clerkUser.lastName ?? '',
                 });
             }
-        }),
+        },
         verifyToken: jest.fn().mockImplementation((token) => {
             const [user, organization] = processToken(token);
             if (organization) {
@@ -492,7 +515,9 @@ const buildClerkClientMock = () => {
             getUser: jest.fn().mockImplementation((userId) => {
                 return Object.values(clerkUsers).find((user) => user.id === userId);
             }),
-            getOrganizationMembershipList: jest.fn().mockImplementation(({ userId, limit = 100, offset = 0, }) => {
+            getOrganizationMembershipList: jest
+                .fn()
+                .mockImplementation(({ userId, limit = 100, offset = 0, }) => {
                 const memberships = clerkMemberships.filter((membership) => membership.publicUserData?.userId === userId);
                 const paginatedMemberships = memberships.slice(offset, offset + limit);
                 return {
@@ -502,7 +527,9 @@ const buildClerkClientMock = () => {
             }),
         },
         organizations: {
-            createOrganizationInvitation: jest.fn().mockImplementation(({ organizationId, emailAddress, role, publicMetadata, }) => {
+            createOrganizationInvitation: jest
+                .fn()
+                .mockImplementation(({ organizationId, emailAddress, role, publicMetadata, }) => {
                 const invite = {
                     id: (0, uuid_1.v4)(),
                     emailAddress,
@@ -523,7 +550,9 @@ const buildClerkClientMock = () => {
                 clerkInvitesByOrganization[organizationId].push(invite);
                 return invite;
             }),
-            getOrganizationMembershipList: jest.fn().mockImplementation(({ organizationId, limit = 100, offset = 0, }) => {
+            getOrganizationMembershipList: jest
+                .fn()
+                .mockImplementation(({ organizationId, limit = 100, offset = 0, }) => {
                 const memberships = clerkMemberships.filter((membership) => membership.organization.id === organizationId);
                 const paginatedMemberships = memberships.slice(offset, offset + limit);
                 return {
@@ -531,7 +560,9 @@ const buildClerkClientMock = () => {
                     totalCount: memberships.length,
                 };
             }),
-            getOrganizationInvitationList: jest.fn().mockImplementation(({ organizationId, limit = 100, offset = 0, }) => {
+            getOrganizationInvitationList: jest
+                .fn()
+                .mockImplementation(({ organizationId, limit = 100, offset = 0, }) => {
                 const invitations = clerkInvitesByOrganization[organizationId] ?? [];
                 const paginatedInvitations = invitations.slice(offset, offset + limit);
                 return {
@@ -539,8 +570,11 @@ const buildClerkClientMock = () => {
                     totalCount: invitations.length,
                 };
             }),
-            updateOrganizationMembership: jest.fn().mockImplementation(({ organizationId, userId, role, }) => {
-                const membership = clerkMemberships.find((membership) => membership.organization.id === organizationId && membership.publicUserData?.userId === userId);
+            updateOrganizationMembership: jest
+                .fn()
+                .mockImplementation(({ organizationId, userId, role, }) => {
+                const membership = clerkMemberships.find((membership) => membership.organization.id === organizationId &&
+                    membership.publicUserData?.userId === userId);
                 if (!membership) {
                     throw new Error(`Membership not found for ${userId} in ${organizationId}.`);
                 }
@@ -552,8 +586,11 @@ const buildClerkClientMock = () => {
                 clerkMemberships[index] = newMembership;
                 return newMembership;
             }),
-            deleteOrganizationMembership: jest.fn().mockImplementation(({ organizationId, userId, }) => {
-                const membership = clerkMemberships.find((membership) => membership.organization.id === organizationId && membership.publicUserData?.userId === userId);
+            deleteOrganizationMembership: jest
+                .fn()
+                .mockImplementation(({ organizationId, userId, }) => {
+                const membership = clerkMemberships.find((membership) => membership.organization.id === organizationId &&
+                    membership.publicUserData?.userId === userId);
                 if (!membership) {
                     throw new Error(`Membership not found for ${userId} in ${organizationId}.`);
                 }
@@ -578,7 +615,9 @@ const buildClerkClientMock = () => {
                 clerkInvitesByOrganization[organizationId] = organizationInvitations;
                 return newInvite;
             }),
-            createOrganization: jest.fn().mockImplementation(({ name, createdBy, slug, publicMetadata, }) => {
+            createOrganization: jest
+                .fn()
+                .mockImplementation(({ name, createdBy, slug, publicMetadata, }) => {
                 const organization = {
                     id: (0, uuid_1.v4)(),
                     name,
@@ -592,22 +631,33 @@ const buildClerkClientMock = () => {
                     maxAllowedMemberships: 100,
                     adminDeleteEnabled: false,
                 };
-                const organizationCandidateWithSameSlug = [...newClerkOrganizations, ...Object.values(clerkOrganizations)].find((organization) => organization.slug === slug);
+                const organizationCandidateWithSameSlug = [
+                    ...newClerkOrganizations,
+                    ...Object.values(clerkOrganizations),
+                ].find((organization) => organization.slug === slug);
                 if (organizationCandidateWithSameSlug) {
                     throw new Error(`Organization with slug ${slug} already exists.`);
                 }
                 newClerkOrganizations.push(organization);
                 return organization;
             }),
-            getOrganization: jest.fn().mockImplementation(({ organizationId, }) => {
-                const organization = [...newClerkOrganizations, ...Object.values(clerkOrganizations)].find((organization) => organization.id === organizationId);
+            getOrganization: jest
+                .fn()
+                .mockImplementation(({ organizationId }) => {
+                const organization = [
+                    ...newClerkOrganizations,
+                    ...Object.values(clerkOrganizations),
+                ].find((organization) => organization.id === organizationId);
                 if (!organization) {
                     throw new Error(`Organization not found for ${organizationId}.`);
                 }
                 return organization;
             }),
             updateOrganization: jest.fn().mockImplementation((organizationId, { name, slug, publicMetadata, privateMetadata, }) => {
-                const organization = [...newClerkOrganizations, ...Object.values(clerkOrganizations)].find((organization) => organization.id === organizationId);
+                const organization = [
+                    ...newClerkOrganizations,
+                    ...Object.values(clerkOrganizations),
+                ].find((organization) => organization.id === organizationId);
                 const isNewOrganization = !!newClerkOrganizations.find((organization) => organization.id === organizationId);
                 if (!organization) {
                     throw new Error(`Organization not found for ${organizationId}.`);
@@ -624,16 +674,21 @@ const buildClerkClientMock = () => {
                     newClerkOrganizations[index] = newOrganization;
                 }
                 else {
-                    const testOrganizationKey = Object.keys(TestOrganization).find((testOrganizationKey) => clerkOrganizations[testOrganizationKey].id === organizationId);
+                    const testOrganizationKey = Object.keys(TestOrganization).find((testOrganizationKey) => clerkOrganizations[testOrganizationKey]
+                        .id === organizationId);
                     if (!testOrganizationKey) {
                         throw new Error(`Organization not found for ${organizationId}.`);
                     }
-                    clerkOrganizations[testOrganizationKey] = newOrganization;
+                    clerkOrganizations[testOrganizationKey] =
+                        newOrganization;
                 }
                 return newOrganization;
             }),
             updateOrganizationLogo: jest.fn().mockImplementation((organizationId, { file, }) => {
-                const organization = [...newClerkOrganizations, ...Object.values(clerkOrganizations)].find((organization) => organization.id === organizationId);
+                const organization = [
+                    ...newClerkOrganizations,
+                    ...Object.values(clerkOrganizations),
+                ].find((organization) => organization.id === organizationId);
                 if (!organization) {
                     throw new Error(`Organization not found for ${organizationId}.`);
                 }
@@ -644,8 +699,13 @@ const buildClerkClientMock = () => {
                 return newOrganization;
             }),
             deleteOrganization: jest.fn(),
-            getOrganizationList: jest.fn().mockImplementation(({ query, limit = 100, offset = 0, }) => {
-                const organizations = [...newClerkOrganizations, ...Object.values(clerkOrganizations)];
+            getOrganizationList: jest
+                .fn()
+                .mockImplementation(({ query, limit = 100, offset = 0, }) => {
+                const organizations = [
+                    ...newClerkOrganizations,
+                    ...Object.values(clerkOrganizations),
+                ];
                 let filteredOrganizations = organizations;
                 if (query) {
                     filteredOrganizations = organizations.filter((organization) => organization.slug?.toLowerCase().includes(query.toLowerCase()));

@@ -15,14 +15,14 @@ function createBetterStackTransportWrapper(options) {
         baseURL: apiUrl,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiToken}`
-        }
+            Authorization: `Bearer ${apiToken}`,
+        },
     });
     (0, axios_retry_1.default)(axiosInstance, { retries: 16, retryDelay: axios_retry_1.exponentialDelay });
     async function sendLogsWithRetry(logs) {
         for (let i = 0; i < logs.length; i += chunkSize) {
             const chunk = logs.slice(i, i + chunkSize);
-            await axiosInstance.post('/', JSON.stringify(chunk.map(log => {
+            await axiosInstance.post('/', JSON.stringify(chunk.map((log) => {
                 const { msg, level, ...rest } = log;
                 return {
                     dt: log.dt,
@@ -94,7 +94,7 @@ function createBetterStackTransportWrapper(options) {
                     });
                 }
             }
-        })
+        }),
     };
 }
 //# sourceMappingURL=better-stack-transport.js.map
