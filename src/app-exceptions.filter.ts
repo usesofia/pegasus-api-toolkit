@@ -64,7 +64,7 @@ export class AppExceptionsFilter implements ExceptionFilter {
         });
         this.loggerService.error(
           `[${this.clsService.getId()}] ${exception.message}`,
-          {exception},
+          { exception },
         );
       } else {
         const errorMessage = `[${this.clsService.getId()}] AppExceptionsFilter.unexpectedError`;
@@ -73,7 +73,10 @@ export class AppExceptionsFilter implements ExceptionFilter {
             [correlationIdKey]: this.clsService.getId(),
           },
         });
-        this.loggerService.error(errorMessage, {exception, tempTest: 'Hi Lorena v2!'});
+        this.loggerService.error(errorMessage, {
+          exception,
+          tempTest: 'Hi Lorena v2!',
+        });
       }
     } else {
       this.loggerService.log(

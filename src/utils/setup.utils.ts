@@ -20,13 +20,20 @@ export function setupApp({
   version: string;
 }) {
   // Configure the FastifyAdapter to use JSON.stringify for serialization
-  app.getHttpAdapter().getInstance().setReplySerializer(
-    (data: unknown) => JSON.stringify(data, getJsonStringfyReplacer()),
-  );
+  app
+    .getHttpAdapter()
+    .getInstance()
+    .setReplySerializer((data: unknown) =>
+      JSON.stringify(data, getJsonStringfyReplacer()),
+    );
 
   app.useLogger(app.get(LOGGER_SERVICE_PORT));
   app.useGlobalFilters(
-    new AppExceptionsFilter(app.get(HttpAdapterHost), app.get(LOGGER_SERVICE_PORT), app.get(ClsService)),
+    new AppExceptionsFilter(
+      app.get(HttpAdapterHost),
+      app.get(LOGGER_SERVICE_PORT),
+      app.get(ClsService),
+    ),
   );
   app.useGlobalPipes(
     new ZodValidationPipe(),
@@ -37,9 +44,9 @@ export function setupApp({
   app.enableCors();
   app.enableShutdownHooks();
   patchNestJsSwagger();
-  
+
   const baseConfig = app.get<BaseConfigEntity>(BASE_CONFIG);
-  
+
   if (baseConfig.sentry.enabled) {
     Sentry.init({
       dsn: baseConfig.sentry.dsn,

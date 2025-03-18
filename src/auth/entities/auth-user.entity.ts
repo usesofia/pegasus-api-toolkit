@@ -5,30 +5,29 @@ import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 import { safeInstantiateEntity } from '@app/utils/entity.utils';
 import { BaseConfigEntity } from '@app/config/base-config.entity';
 
-export const OrganizationSchema = z
-  .object({
-    id: z.string(),
-    name: z.string(),
-    role: z.nativeEnum(OrganizationRole),
-    type: z.nativeEnum(OrganizationType),
-    parent: z
-      .object({
+export const OrganizationSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  role: z.nativeEnum(OrganizationRole),
+  type: z.nativeEnum(OrganizationType),
+  parent: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      sharedContacts: z.boolean(),
+      sharedSubcategories: z.boolean(),
+      sharedTags: z.boolean(),
+    })
+    .nullish(),
+  children: z
+    .array(
+      z.object({
         id: z.string(),
         name: z.string(),
-        sharedContacts: z.boolean(),
-        sharedSubcategories: z.boolean(),
-        sharedTags: z.boolean(),
-      })
-      .nullish(),
-    children: z
-      .array(
-        z.object({
-          id: z.string(),
-          name: z.string(),
-        }),
-      )
-      .nullish(),
-  });
+      }),
+    )
+    .nullish(),
+});
 
 export class OrganizationEntity extends createZodDto(OrganizationSchema) {
   static build(input: z.input<typeof OrganizationSchema>): OrganizationEntity {

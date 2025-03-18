@@ -13,7 +13,9 @@ export function getEnvironment(): Environment {
     case 'integration-test':
       return Environment.INTEGRATION_TEST;
     default:
-      throw new Error(`Invalid environment: ${(process.env.ENV ?? 'undefined').toString()}`);
+      throw new Error(
+        `Invalid environment: ${(process.env.ENV ?? 'undefined').toString()}`,
+      );
   }
 }
 

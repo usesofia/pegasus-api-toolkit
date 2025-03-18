@@ -1,9 +1,4 @@
-import {
-  Global,
-  Inject,
-  Module,
-  OnApplicationShutdown,
-} from '@nestjs/common';
+import { Global, Inject, Module, OnApplicationShutdown } from '@nestjs/common';
 import mongoose from 'mongoose';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 

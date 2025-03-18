@@ -31,7 +31,8 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
 
   constructor(
     private readonly baseConfig: BaseConfigEntity,
-    @Inject(PRIMARY_MONGOOSE_CONNECTION) private readonly connection: Connection,
+    @Inject(PRIMARY_MONGOOSE_CONNECTION)
+    private readonly connection: Connection,
   ) {
     // Create the model only once per instance
     this.cacheModel = this.connection.model<CacheRecord>(
@@ -43,7 +44,7 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
   async createTTLIndex() {
     await this.cacheModel.collection.createIndex(
       { expiresAt: 1 },
-      { expireAfterSeconds: 0 }
+      { expireAfterSeconds: 0 },
     );
   }
 
@@ -53,7 +54,7 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
     const now = new Date();
     const record = await this.cacheModel.findOne({
       key: finalKey,
-      expiresAt: { $gt: now }
+      expiresAt: { $gt: now },
     });
 
     if (!record) {
@@ -73,7 +74,7 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
     await this.cacheModel.findOneAndUpdate(
       { key: finalKey },
       { key: finalKey, value, expiresAt },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
   }
 

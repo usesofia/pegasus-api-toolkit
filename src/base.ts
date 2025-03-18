@@ -53,7 +53,7 @@ export class Base {
         );
         break;
       case 'debug':
-        if(!this.logger.debug) {
+        if (!this.logger.debug) {
           throw new Error('Logger does not have debug method.');
         }
         this.logger.debug(
@@ -65,7 +65,7 @@ export class Base {
         );
         break;
       case 'verbose':
-        if(!this.logger.verbose) {
+        if (!this.logger.verbose) {
           throw new Error('Logger does not have verbose method.');
         }
         this.logger.verbose(
@@ -77,7 +77,7 @@ export class Base {
         );
         break;
       case 'fatal':
-        if(!this.logger.fatal) {
+        if (!this.logger.fatal) {
           throw new Error('Logger does not have fatal method.');
         }
         this.logger.fatal(

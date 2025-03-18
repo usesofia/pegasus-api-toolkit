@@ -1,6 +1,6 @@
 import * as build from 'pino-abstract-transport';
 import axios from 'axios';
-import axiosRetry, {exponentialDelay} from 'axios-retry';
+import axiosRetry, { exponentialDelay } from 'axios-retry';
 import { getJsonStringfyReplacer } from '@app/utils/json.utils';
 import { DateTime } from 'luxon';
 
@@ -20,7 +20,9 @@ interface LogEntry {
   [key: string]: unknown;
 }
 
-export default function createBetterStackTransportWrapper(options: BetterStackTransportOptions) {
+export default function createBetterStackTransportWrapper(
+  options: BetterStackTransportOptions,
+) {
   const {
     apiToken,
     apiUrl = 'https://in.logs.betterstack.com',
@@ -38,8 +40,8 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
     baseURL: apiUrl,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiToken}`
-    }
+      Authorization: `Bearer ${apiToken}`,
+    },
   });
 
   axiosRetry(axiosInstance, { retries: 16, retryDelay: exponentialDelay });
@@ -50,21 +52,19 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
     for (let i = 0; i < logs.length; i += chunkSize) {
       const chunk = logs.slice(i, i + chunkSize);
       await axiosInstance.post(
-        '/', 
+        '/',
         JSON.stringify(
-          chunk.map(
-            log => {
-              const { msg, level, ...rest } = log;
-              return {
-                dt: log.dt,
-                message: msg,
-                level: convertLogLevel(level),
-                ...rest,
-              }
-            }
-          ),
-          getJsonStringfyReplacer()
-        )
+          chunk.map((log) => {
+            const { msg, level, ...rest } = log;
+            return {
+              dt: log.dt,
+              message: msg,
+              level: convertLogLevel(level),
+              ...rest,
+            };
+          }),
+          getJsonStringfyReplacer(),
+        ),
       );
     }
   }
@@ -79,7 +79,7 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
       if (level <= 50) return 'ERROR';
       return 'FATAL';
     }
-    
+
     // If level is already a string or undefined, return as is or default to INFO
     return typeof level === 'string' ? level.toUpperCase() : 'INFO';
   }
@@ -87,11 +87,11 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
   // Function to flush the buffer
   async function flush(force?: boolean): Promise<void> {
     if (!force && (isFlushing || buffer.length === 0)) return;
-    
+
     isFlushing = true;
     const logs = [...buffer];
     buffer.length = 0; // Clear the buffer
-    
+
     try {
       await sendLogsWithRetry(logs);
     } catch (error) {
@@ -111,41 +111,41 @@ export default function createBetterStackTransportWrapper(options: BetterStackTr
   return {
     // Close function to flush remaining logs and clear timer
     close: async () => {
-        if (timer) {
-          clearInterval(timer);
-          timer = null;
-        }
-        
-        // Attempt to send any remaining logs
-        await flush(true);
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+
+      // Attempt to send any remaining logs
+      await flush(true);
     },
     transport: build(async (source) => {
-        // Start the flush timer
-        timer = setInterval(() => {
-          void flush();
-        }, flushInterval);
-    
-        // Process each log
-        for await (const obj of source) {
-          // Format the date in UTC as required by Better Stack
-          const dt = DateTime.utc().toISO();
-          
-          // Add timestamp to the log object
-          const logEntry = {
-            ...obj,
-            dt,
-          } as LogEntry;
-          
-          // Add to buffer
-          buffer.push(logEntry);
-          
-          // If buffer has reached the max buffer to trigger flush, flush immediately
-          if (buffer.length >= maxBufferToTriggerFlush) {
-            flush().catch((err: unknown) => {
-              console.error('Error flushing buffer:', err);
-            });
-          }
+      // Start the flush timer
+      timer = setInterval(() => {
+        void flush();
+      }, flushInterval);
+
+      // Process each log
+      for await (const obj of source) {
+        // Format the date in UTC as required by Better Stack
+        const dt = DateTime.utc().toISO();
+
+        // Add timestamp to the log object
+        const logEntry = {
+          ...obj,
+          dt,
+        } as LogEntry;
+
+        // Add to buffer
+        buffer.push(logEntry);
+
+        // If buffer has reached the max buffer to trigger flush, flush immediately
+        if (buffer.length >= maxBufferToTriggerFlush) {
+          flush().catch((err: unknown) => {
+            console.error('Error flushing buffer:', err);
+          });
         }
-      })
+      }
+    }),
   };
 }

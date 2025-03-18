@@ -1,9 +1,4 @@
-import {
-  Global,
-  Module,
-  Inject,
-  OnApplicationShutdown,
-} from '@nestjs/common';
+import { Global, Module, Inject, OnApplicationShutdown } from '@nestjs/common';
 import { RedisCacheServiceAdapter } from '@app/cache/adapters/redis-cache-service.adapter';
 import { CACHE_SERVICE_PORT } from '@app/cache/ports/cache-service.port';
 import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
@@ -35,14 +30,17 @@ const REDIS = Symbol('Redis');
     {
       provide: CACHE_SERVICE_PORT,
       useFactory: async (
-        baseConfig: BaseConfigEntity, 
+        baseConfig: BaseConfigEntity,
         redis: Redis | null,
-        mongoConnection: mongoose.Connection
+        mongoConnection: mongoose.Connection,
       ) => {
         if (baseConfig.cache.type === 'redis' && redis) {
           return new RedisCacheServiceAdapter(baseConfig, redis);
         } else if (baseConfig.cache.type === 'mongodb') {
-          const cacheService = new MongoDbCacheServiceAdapter(baseConfig, mongoConnection);
+          const cacheService = new MongoDbCacheServiceAdapter(
+            baseConfig,
+            mongoConnection,
+          );
           await cacheService.createTTLIndex();
           return cacheService;
         } else {
@@ -55,9 +53,7 @@ const REDIS = Symbol('Redis');
   exports: [CACHE_SERVICE_PORT],
 })
 export class CacheModule implements OnApplicationShutdown {
-  constructor(
-    @Inject(REDIS) private readonly redis: Redis | null
-  ) {}
+  constructor(@Inject(REDIS) private readonly redis: Redis | null) {}
 
   async onApplicationShutdown() {
     if (this.redis) {

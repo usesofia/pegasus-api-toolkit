@@ -1,8 +1,17 @@
-import { createParamDecorator, ExecutionContext, PipeTransform } from '@nestjs/common';
-import { AuthUserEntity, AuthUserEntitySchema } from '@app/auth/entities/auth-user.entity';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  PipeTransform,
+} from '@nestjs/common';
+import {
+  AuthUserEntity,
+  AuthUserEntitySchema,
+} from '@app/auth/entities/auth-user.entity';
 import { z } from 'zod';
 
-class AuthUserPipe implements PipeTransform<z.infer<typeof AuthUserEntitySchema>, AuthUserEntity> {
+class AuthUserPipe
+  implements PipeTransform<z.infer<typeof AuthUserEntitySchema>, AuthUserEntity>
+{
   transform(value: z.infer<typeof AuthUserEntitySchema>): AuthUserEntity {
     return AuthUserEntity.build(value);
   }

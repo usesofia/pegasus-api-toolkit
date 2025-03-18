@@ -6,7 +6,10 @@ import {
   LoggerService,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthServicePort, AUTH_SERVICE_PORT } from '@app/auth/ports/auth-service.port';
+import {
+  AuthServicePort,
+  AUTH_SERVICE_PORT,
+} from '@app/auth/ports/auth-service.port';
 import { Reflector } from '@nestjs/core';
 import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
 import { ClsService } from 'nestjs-cls';

@@ -1,4 +1,4 @@
-import { TaskEntity } from "@app/tasks/task.entity";
+import { TaskEntity } from '@app/tasks/task.entity';
 
 export const TASKS_SERVICE_PORT = Symbol('TasksServicePort');
 

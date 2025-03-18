@@ -27,7 +27,7 @@ export async function generateSwaggerJson({
     new FastifyAdapter(),
     appOptions,
   );
-  
+
   setupApp({ app, version });
 
   const baseConfig = app.get<BaseConfigEntity>(BASE_CONFIG);

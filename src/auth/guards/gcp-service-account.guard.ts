@@ -13,7 +13,10 @@ import { ClsService } from 'nestjs-cls';
 import { IGNORE_GCP_SERVICE_ACCOUNT_GUARD_KEY } from '@app/auth/decorators/ignore-gcp-service-account-guard.decorator';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { Base } from '@app/base';
-import { AuthUserEntity, AuthUserEntitySchema } from '@app/auth/entities/auth-user.entity';
+import {
+  AuthUserEntity,
+  AuthUserEntitySchema,
+} from '@app/auth/entities/auth-user.entity';
 import { z } from 'zod';
 import { Environment, getEnvironment } from '@app/utils/environment.utils';
 
@@ -57,7 +60,10 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
 
     const token = authorization.split(' ')[1];
 
-    if (getEnvironment() === Environment.INTEGRATION_TEST && token === GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS) {
+    if (
+      getEnvironment() === Environment.INTEGRATION_TEST &&
+      token === GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS
+    ) {
       request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
       return true;
     }
@@ -66,19 +72,19 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
       const ticket = await this.client.verifyIdToken({
         idToken: token,
       });
-  
+
       const payload = ticket.getPayload();
-  
+
       if (!payload) {
         throw new UnauthorizedException();
       }
-  
+
       if (payload.email !== this.baseConfig.gcp.credentials.client_email) {
         throw new UnauthorizedException();
       }
-  
+
       request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
-  
+
       return true;
     } catch (error) {
       this.logWarn({

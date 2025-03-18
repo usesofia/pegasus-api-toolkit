@@ -37,17 +37,22 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
 
   @Log()
   async startSession(): Promise<BaseSessionPort> {
-    return new BaseMongoDbSessionAdapter(await this.model.db.startSession({
-      defaultTransactionOptions: {
-        writeConcern: {
-          w: 'majority',
-          j: true,
+    return new BaseMongoDbSessionAdapter(
+      await this.model.db.startSession({
+        defaultTransactionOptions: {
+          writeConcern: {
+            w: 'majority',
+            j: true,
+          },
+          readConcern: {
+            level: 'snapshot',
+          },
         },
-        readConcern: {
-          level: 'snapshot',
-        },
-      },
-    }), this.baseConfig, this.logger, this.cls);
+      }),
+      this.baseConfig,
+      this.logger,
+      this.cls,
+    );
   }
 
   /**
@@ -66,7 +71,9 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     });
 
     let saved = await created.save({
-      session: previousSession ? previousSession.getSession() as ClientSession : null,
+      session: previousSession
+        ? (previousSession.getSession() as ClientSession)
+        : null,
     });
 
     if (request.populate) {
@@ -91,7 +98,11 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       .findOne({
         _id: request.id,
       })
-      .session(previousSession ? previousSession.getSession() as ClientSession : null);
+      .session(
+        previousSession
+          ? (previousSession.getSession() as ClientSession)
+          : null,
+      );
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -119,7 +130,11 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       .findOne({
         _id: request.id,
       })
-      .session(previousSession ? previousSession.getSession() as ClientSession : null);
+      .session(
+        previousSession
+          ? (previousSession.getSession() as ClientSession)
+          : null,
+      );
 
     if (!doc) {
       return null;
@@ -260,7 +275,11 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       .findOneAndDelete({
         _id: request.id,
       })
-      .session(previousSession ? previousSession.getSession() as ClientSession : null);
+      .session(
+        previousSession
+          ? (previousSession.getSession() as ClientSession)
+          : null,
+      );
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -282,6 +301,10 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       .findOneAndDelete({
         _id: request.id,
       })
-      .session(previousSession ? previousSession.getSession() as ClientSession : null);
+      .session(
+        previousSession
+          ? (previousSession.getSession() as ClientSession)
+          : null,
+      );
   }
 }

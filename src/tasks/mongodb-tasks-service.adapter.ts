@@ -1,12 +1,12 @@
-import { Base } from "@app/base";
-import { BASE_CONFIG, BaseConfigEntity } from "@app/config/base-config.entity";
-import { PRIMARY_MONGOOSE_CONNECTION } from "@app/database/primary-mongodb-database.module";
-import { LOGGER_SERVICE_PORT } from "@app/logger/logger.module";
-import { TaskEntity } from "@app/tasks/task.entity";
-import { TasksServicePort } from "@app/tasks/tasks-service.port";
-import { Inject, Injectable, LoggerService } from "@nestjs/common";
-import { Connection, Model, Schema } from "mongoose";
-import { ClsService } from "nestjs-cls";
+import { Base } from '@app/base';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
+import { PRIMARY_MONGOOSE_CONNECTION } from '@app/database/primary-mongodb-database.module';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
+import { TaskEntity } from '@app/tasks/task.entity';
+import { TasksServicePort } from '@app/tasks/tasks-service.port';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { Connection, Model, Schema } from 'mongoose';
+import { ClsService } from 'nestjs-cls';
 
 export const TASKS_COLLECTION_NAME = '_Tasks';
 
@@ -17,18 +17,24 @@ interface Task {
   payload: Record<string, unknown>;
 }
 
-const TaskSchema = new Schema<Task>({
-  correlationId: { type: String, required: true },
-  queue: { type: String, required: true },
-  microservice: { type: String, required: true },
-  payload: { type: Object, required: true },
-}, {
-  timestamps: true,
-  collection: TASKS_COLLECTION_NAME,
-});
+const TaskSchema = new Schema<Task>(
+  {
+    correlationId: { type: String, required: true },
+    queue: { type: String, required: true },
+    microservice: { type: String, required: true },
+    payload: { type: Object, required: true },
+  },
+  {
+    timestamps: true,
+    collection: TASKS_COLLECTION_NAME,
+  },
+);
 
 @Injectable()
-export class MongodbTasksServiceAdapter extends Base implements TasksServicePort {
+export class MongodbTasksServiceAdapter
+  extends Base
+  implements TasksServicePort
+{
   private readonly taskModel: Model<Task>;
 
   constructor(
@@ -37,7 +43,8 @@ export class MongodbTasksServiceAdapter extends Base implements TasksServicePort
     @Inject(LOGGER_SERVICE_PORT)
     protected readonly logger: LoggerService,
     protected readonly cls: ClsService,
-    @Inject(PRIMARY_MONGOOSE_CONNECTION) private readonly connection: Connection,
+    @Inject(PRIMARY_MONGOOSE_CONNECTION)
+    private readonly connection: Connection,
   ) {
     super(MongodbTasksServiceAdapter.name, baseConfig, logger, cls);
     this.taskModel = this.connection.model<Task>('Task', TaskSchema);

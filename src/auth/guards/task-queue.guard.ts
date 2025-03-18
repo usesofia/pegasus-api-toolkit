@@ -1,8 +1,15 @@
-import { Base } from "@app/base";
-import { BASE_CONFIG, BaseConfigEntity } from "@app/config/base-config.entity";
-import { LOGGER_SERVICE_PORT } from "@app/logger/logger.module";
-import { CanActivate, ExecutionContext, Inject, Injectable, LoggerService, UnauthorizedException } from "@nestjs/common";
-import { ClsService } from "nestjs-cls";
+import { Base } from '@app/base';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  LoggerService,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ClsService } from 'nestjs-cls';
 
 export const tasksQueueSecretHeaderKey = 'x-tasks-queue-secret';
 

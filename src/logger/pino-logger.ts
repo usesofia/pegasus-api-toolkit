@@ -4,7 +4,10 @@ import { MaskActions, maskAttribute } from 'nested-mask-attributes';
 import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
 import createBetterStackTransport from '@app/logger/better-stack-transport';
 import { Transform } from 'stream';
-import { getJsonParseReviver, getJsonStringfyReplacer } from '@app/utils/json.utils';
+import {
+  getJsonParseReviver,
+  getJsonStringfyReplacer,
+} from '@app/utils/json.utils';
 import { Environment } from '@app/utils/environment.utils';
 
 const sensitiveFields = [
@@ -23,7 +26,7 @@ export class PinoLoggerAdapter implements LoggerService {
   private readonly environment: string;
   private readonly remoteLoggerTransport: Transform;
   private readonly remoteLoggerTransportClose: () => Promise<void>;
-  
+
   constructor(
     @Inject(BASE_CONFIG) private readonly baseConfig: BaseConfigEntity,
   ) {
@@ -36,9 +39,12 @@ export class PinoLoggerAdapter implements LoggerService {
     });
     this.remoteLoggerTransport = remoteLoggerTransport;
     this.remoteLoggerTransportClose = remoteLoggerTransportClose;
-    this.remoteLogger = pino({
-      level: baseConfig.logger.level,
-    }, this.remoteLoggerTransport);
+    this.remoteLogger = pino(
+      {
+        level: baseConfig.logger.level,
+      },
+      this.remoteLoggerTransport,
+    );
     this.consoleLogger = pino({
       transport: {
         target: 'pino-pretty',
@@ -54,31 +60,33 @@ export class PinoLoggerAdapter implements LoggerService {
       environment: this.environment,
     };
 
-    const isAddressAlreadyInUseOnTest = message.startsWith('Error: listen EADDRINUSE: address already in use') && this.baseConfig.env === Environment.INTEGRATION_TEST;
+    const isAddressAlreadyInUseOnTest =
+      message.startsWith('Error: listen EADDRINUSE: address already in use') &&
+      this.baseConfig.env === Environment.INTEGRATION_TEST;
 
-    if(optionalParams.length > 1 && !isAddressAlreadyInUseOnTest) {
-      console.error({level, message, optionalParams});
+    if (optionalParams.length > 1 && !isAddressAlreadyInUseOnTest) {
+      console.error({ level, message, optionalParams });
       throw new Error('Invalid number of parameters for log.');
     }
 
-
-    if(optionalParams.length === 1) {
+    if (optionalParams.length === 1) {
       let params = optionalParams[0];
-      if(typeof params !== 'object') {
+      if (typeof params !== 'object') {
         params = {
           data: params,
         };
       }
       data = {
-        ...(
-          maskAttribute(
-            JSON.parse(JSON.stringify(params, getJsonStringfyReplacer()), getJsonParseReviver()),
-            sensitiveFields,
-            {
-              action: MaskActions.MASK,
-            },
-          ) as Record<string, unknown>
-        ),
+        ...(maskAttribute(
+          JSON.parse(
+            JSON.stringify(params, getJsonStringfyReplacer()),
+            getJsonParseReviver(),
+          ),
+          sensitiveFields,
+          {
+            action: MaskActions.MASK,
+          },
+        ) as Record<string, unknown>),
         environment: this.environment,
       };
     } else {
@@ -147,7 +155,9 @@ export class PinoLoggerAdapter implements LoggerService {
 
   async flush(): Promise<void> {
     await new Promise((resolve) => {
-      this.remoteLogger.flush(() => { resolve(void 0); });
+      this.remoteLogger.flush(() => {
+        resolve(void 0);
+      });
     });
     await this.remoteLoggerTransportClose();
   }

@@ -85,7 +85,7 @@ import { GoogleAuth } from 'google-auth-library';
       useFactory: (baseConfig: BaseConfigEntity) => {
         return new GoogleAuth({
           credentials: baseConfig.gcp.credentials,
-          scopes: []
+          scopes: [],
         });
       },
       inject: [BASE_CONFIG],

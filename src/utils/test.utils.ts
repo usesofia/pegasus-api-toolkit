@@ -6,12 +6,18 @@ import * as supertest from 'supertest';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { ClsModule } from 'nestjs-cls';
 import { v4 } from 'uuid';
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 import * as portfinder from 'portfinder';
 import { MongoClient } from 'mongodb';
 import { EventEmitter } from 'events';
 import { LoggerModule } from '@app/logger/logger.module';
-import { correlationIdHeaderKey, correlationIdKey } from '@app/correlation/correlation.constants';
+import {
+  correlationIdHeaderKey,
+  correlationIdKey,
+} from '@app/correlation/correlation.constants';
 import { PrimaryMongoDbDatabaseModule } from '@app/database/primary-mongodb-database.module';
 import { PubSubModule } from '@app/pub-sub/pub-sub.module';
 import { CacheModule } from '@app/cache/cache.module';
@@ -63,7 +69,8 @@ export class InstanceFixture {
               headers: Record<string, string | undefined>;
               [correlationIdKey]: string;
             }): string {
-              req[correlationIdKey] = req.headers[correlationIdHeaderKey] ?? v4();
+              req[correlationIdKey] =
+                req.headers[correlationIdHeaderKey] ?? v4();
               return req[correlationIdKey];
             },
           },
@@ -103,7 +110,8 @@ export class InstanceFixture {
     const maxRetries = 16;
     let lastError: Error | null = null;
 
-    const mongoDbUri = process.env.MONGODB_URI ?? process.env.PRIMARY_MONGODB_URI;
+    const mongoDbUri =
+      process.env.MONGODB_URI ?? process.env.PRIMARY_MONGODB_URI;
 
     if (!mongoDbUri) {
       throw new Error('MONGODB_URI or PRIMARY_MONGODB_URI is not set');

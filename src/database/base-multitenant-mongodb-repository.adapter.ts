@@ -46,7 +46,12 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
 
   @Log()
   async startSession(): Promise<BaseSessionPort> {
-    return new BaseMongoDbSessionAdapter(await this.model.db.startSession(), this.baseConfig, this.logger, this.cls);
+    return new BaseMongoDbSessionAdapter(
+      await this.model.db.startSession(),
+      this.baseConfig,
+      this.logger,
+      this.cls,
+    );
   }
 
   /**
@@ -68,7 +73,9 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     });
 
     let saved = await created.save({
-      session: previousSession ? previousSession.getSession() as ClientSession : null,
+      session: previousSession
+        ? (previousSession.getSession() as ClientSession)
+        : null,
     });
 
     if (request.populate) {
@@ -96,7 +103,11 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
       })
-      .session(previousSession ? previousSession.getSession() as ClientSession : null);
+      .session(
+        previousSession
+          ? (previousSession.getSession() as ClientSession)
+          : null,
+      );
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -127,7 +138,11 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
       })
-      .session(previousSession ? previousSession.getSession() as ClientSession : null);
+      .session(
+        previousSession
+          ? (previousSession.getSession() as ClientSession)
+          : null,
+      );
 
     if (!doc) {
       return null;
@@ -288,7 +303,11 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
       })
-      .session(previousSession ? previousSession.getSession() as ClientSession : null);
+      .session(
+        previousSession
+          ? (previousSession.getSession() as ClientSession)
+          : null,
+      );
 
     if (!doc) {
       throw new NotFoundException('Recurso não encontrado.');
@@ -313,6 +332,10 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         _id: request.id,
         ownerOrganization: this.getOwnerOrganization({ requester }),
       })
-      .session(previousSession ? previousSession.getSession() as ClientSession : null);
+      .session(
+        previousSession
+          ? (previousSession.getSession() as ClientSession)
+          : null,
+      );
   }
 }
