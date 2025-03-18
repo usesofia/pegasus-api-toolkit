@@ -27,6 +27,24 @@ const sensitiveFields = [
     'refreshToken',
     'token',
 ];
+function toPinoLevel(level) {
+    switch (level) {
+        case 'log':
+            return 'info';
+        case 'error':
+            return 'error';
+        case 'warn':
+            return 'warn';
+        case 'debug':
+            return 'debug';
+        case 'verbose':
+            return 'info';
+        case 'fatal':
+            return 'fatal';
+        default:
+            return 'info';
+    }
+}
 let PinoLoggerAdapter = class PinoLoggerAdapter {
     constructor(baseConfig) {
         this.baseConfig = baseConfig;
@@ -37,13 +55,13 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
         this.remoteLoggerTransport = remoteLoggerTransport;
         this.remoteLoggerTransportClose = remoteLoggerTransportClose;
         this.remoteLogger = (0, pino_1.default)({
-            level: baseConfig.logger.level,
+            level: toPinoLevel(baseConfig.logger.level),
         }, this.remoteLoggerTransport);
         this.consoleLogger = (0, pino_1.default)({
             transport: {
                 target: 'pino-pretty',
             },
-            level: baseConfig.logger.level,
+            level: toPinoLevel(baseConfig.logger.level),
         });
         this.shouldConsoleLog = baseConfig.logger.consoleLog;
         this.environment = baseConfig.env.toString();

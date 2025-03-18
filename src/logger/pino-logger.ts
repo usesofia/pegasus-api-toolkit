@@ -18,6 +18,25 @@ const sensitiveFields = [
   'token',
 ];
 
+function toPinoLevel(level: LogLevel): pino.Level {
+  switch (level) {
+    case 'log':
+      return 'info';
+    case 'error':
+      return 'error';
+    case 'warn':
+      return 'warn';
+    case 'debug':
+      return 'debug';
+    case 'verbose':
+      return 'info';
+    case 'fatal':
+      return 'fatal';
+    default:
+      return 'info';
+  }
+}
+
 @Injectable()
 export class PinoLoggerAdapter implements LoggerService {
   private readonly remoteLogger: Logger;
@@ -41,7 +60,7 @@ export class PinoLoggerAdapter implements LoggerService {
     this.remoteLoggerTransportClose = remoteLoggerTransportClose;
     this.remoteLogger = pino(
       {
-        level: baseConfig.logger.level,
+        level: toPinoLevel(baseConfig.logger.level),
       },
       this.remoteLoggerTransport,
     );
@@ -49,7 +68,7 @@ export class PinoLoggerAdapter implements LoggerService {
       transport: {
         target: 'pino-pretty',
       },
-      level: baseConfig.logger.level,
+      level: toPinoLevel(baseConfig.logger.level),
     });
     this.shouldConsoleLog = baseConfig.logger.consoleLog;
     this.environment = baseConfig.env.toString();
