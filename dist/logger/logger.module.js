@@ -26,9 +26,6 @@ let LoggerModule = class LoggerModule {
         this.pinoLoggerAdapter = pinoLoggerAdapter;
         this.loggerService = loggerService;
     }
-    async onApplicationShutdown() {
-        await this.pinoLoggerAdapter.flush();
-    }
     configure(consumer) {
         consumer
             .apply(morgan((tokens, req, res) => {
@@ -74,6 +71,9 @@ let LoggerModule = class LoggerModule {
             },
         }))
             .forRoutes('*');
+    }
+    async onApplicationShutdown() {
+        await this.pinoLoggerAdapter.flush();
     }
 };
 exports.LoggerModule = LoggerModule;

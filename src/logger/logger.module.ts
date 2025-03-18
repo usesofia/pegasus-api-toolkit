@@ -50,10 +50,6 @@ export class LoggerModule implements NestModule, OnApplicationShutdown {
     private readonly loggerService: LoggerService,
   ) {}
 
-  async onApplicationShutdown() {
-    await this.pinoLoggerAdapter.flush();
-  }
-
   public configure(consumer: MiddlewareConsumer): void {
     consumer
       .apply(
@@ -116,5 +112,9 @@ export class LoggerModule implements NestModule, OnApplicationShutdown {
         ),
       )
       .forRoutes('*');
+  }
+
+  async onApplicationShutdown() {
+    await this.pinoLoggerAdapter.flush();
   }
 }

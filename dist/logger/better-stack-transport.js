@@ -4,8 +4,8 @@ exports.default = createBetterStackTransportWrapper;
 const build = require("pino-abstract-transport");
 const axios_1 = require("axios");
 const axios_retry_1 = require("axios-retry");
-const json_utils_1 = require("../utils/json.utils");
 const luxon_1 = require("luxon");
+const msgpack = require("msgpack-lite");
 function createBetterStackTransportWrapper(options) {
     const { apiToken, apiUrl = 'https://in.logs.betterstack.com', flushInterval = 400, maxBuffer = 10000, maxBufferToTriggerFlush = 200, chunkSize = 200, } = options;
     const buffer = [];
@@ -14,23 +14,29 @@ function createBetterStackTransportWrapper(options) {
     const axiosInstance = axios_1.default.create({
         baseURL: apiUrl,
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/msgpack',
             Authorization: `Bearer ${apiToken}`,
         },
     });
     (0, axios_retry_1.default)(axiosInstance, { retries: 16, retryDelay: axios_retry_1.exponentialDelay });
     async function sendLogsWithRetry(logs) {
-        for (let i = 0; i < logs.length; i += chunkSize) {
-            const chunk = logs.slice(i, i + chunkSize);
-            await axiosInstance.post('/', JSON.stringify(chunk.map((log) => {
-                const { msg, level, ...rest } = log;
-                return {
-                    dt: log.dt,
-                    message: msg,
-                    level: convertLogLevel(level),
-                    ...rest,
-                };
-            }), (0, json_utils_1.getJsonStringfyReplacer)()));
+        const superChunkSize = 32;
+        for (let i = 0; i < logs.length; i += chunkSize * superChunkSize) {
+            const superChunk = logs.slice(i, i + chunkSize * superChunkSize);
+            await Promise.all(Array.from({ length: Math.ceil(superChunk.length / chunkSize) }, (_, index) => {
+                const start = index * chunkSize;
+                const chunk = superChunk.slice(start, start + chunkSize);
+                const encodedChunk = msgpack.encode(chunk.map((log) => {
+                    const { msg, level, ...rest } = log;
+                    return {
+                        dt: log.dt,
+                        message: msg,
+                        level: convertLogLevel(level),
+                        ...rest,
+                    };
+                }));
+                return axiosInstance.post('/', encodedChunk);
+            }));
         }
     }
     function convertLogLevel(level) {

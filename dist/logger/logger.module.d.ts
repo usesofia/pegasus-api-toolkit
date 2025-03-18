@@ -13,6 +13,6 @@ export declare class LoggerModule implements NestModule, OnApplicationShutdown {
     private readonly pinoLoggerAdapter;
     private readonly loggerService;
     constructor(baseConfig: BaseConfigEntity, pinoLoggerAdapter: PinoLoggerAdapter, loggerService: LoggerService);
-    onApplicationShutdown(): Promise<void>;
     configure(consumer: MiddlewareConsumer): void;
+    onApplicationShutdown(): Promise<void>;
 }
