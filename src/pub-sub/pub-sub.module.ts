@@ -1,4 +1,4 @@
-import { Global, LoggerService, Module, OnApplicationShutdown } from '@nestjs/common';
+import { Global, Inject, LoggerService, Module, OnApplicationShutdown } from '@nestjs/common';
 import { PUB_SUB_SERVICE_PORT, PubSubServicePort } from '@app/pub-sub/pub-sub-service.port';
 import { GcpPubSubServiceAdapter } from '@app/pub-sub/gcp-pub-sub-service.adapter';
 import { GCP_PUB_SUB, GcpPubSubModule } from '@app/pub-sub/gcp-pub-sub.module';
@@ -56,6 +56,7 @@ import { PubSub } from '@google-cloud/pubsub';
 })
 export class PubSubModule implements OnApplicationShutdown {
   constructor(
+    @Inject(PUB_SUB_SERVICE_PORT)
     private readonly pubSubService: PubSubServicePort,
   ) {}
 
