@@ -3,7 +3,7 @@
 import { LogLevel } from '@nestjs/common';
 import { Base } from '@app/base';
 
-export function Log(level: LogLevel = 'log') {
+export function Log(level: LogLevel = 'debug') {
   return function (
     target: Base,
     propertyKey: string,
