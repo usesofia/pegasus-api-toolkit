@@ -8,6 +8,7 @@ import { Base } from '@app/base';
 import { Model } from 'mongoose';
 import { MongoDbPubSubEventModel } from '@app/pub-sub/mongodb-pub-sub-event.model';
 import { PUB_SUB_EVENT_MODEL } from '@app/pub-sub/mongodb-pub-sub-event.module';
+import { isIntegrationTestEnvironment, isLocalEnvironment } from '@app/utils/environment.utils';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
@@ -24,8 +25,9 @@ export class MongoDbPubSubServiceAdapter
   implements PubSubServicePort
 {
   private publishBuffer: PublishBufferItem[] = [];
-  private publishBufferFlushInterval: NodeJS.Timeout;
+  private publishBufferFlushInterval: NodeJS.Timeout | undefined;
   private flushing: boolean;
+  private isOn: boolean;
 
   constructor(
     @Inject(BASE_CONFIG)
@@ -37,10 +39,13 @@ export class MongoDbPubSubServiceAdapter
     private readonly pubSubEventModel: Model<MongoDbPubSubEventModel>,
   ) {
     super(MongoDbPubSubServiceAdapter.name, baseConfig, logger, cls);
+    this.isOn = isLocalEnvironment() || isIntegrationTestEnvironment();
     this.flushing = false;
-    this.publishBufferFlushInterval = setInterval(() => {
-      void this.flushPublishBuffer({ max: 256 });
-    }, 400);
+    if(this.isOn) {
+      this.publishBufferFlushInterval = setInterval(() => {
+        void this.flushPublishBuffer({ max: 256 });
+      }, 400);
+    }
   }
 
   async publish({

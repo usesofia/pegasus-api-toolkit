@@ -22,6 +22,7 @@ const uuid_1 = require("uuid");
 const base_1 = require("../base");
 const mongoose_1 = require("mongoose");
 const mongodb_pub_sub_event_module_1 = require("./mongodb-pub-sub-event.module");
+const environment_utils_1 = require("../utils/environment.utils");
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbPubSubServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, pubSubEventModel) {
@@ -31,10 +32,13 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
         this.cls = cls;
         this.pubSubEventModel = pubSubEventModel;
         this.publishBuffer = [];
+        this.isOn = (0, environment_utils_1.isLocalEnvironment)() || (0, environment_utils_1.isIntegrationTestEnvironment)();
         this.flushing = false;
-        this.publishBufferFlushInterval = setInterval(() => {
-            void this.flushPublishBuffer({ max: 256 });
-        }, 400);
+        if (this.isOn) {
+            this.publishBufferFlushInterval = setInterval(() => {
+                void this.flushPublishBuffer({ max: 256 });
+            }, 400);
+        }
     }
     async publish({ topic, payload, correlationId, }) {
         const event = new this.pubSubEventModel({
