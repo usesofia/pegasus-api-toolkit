@@ -17,14 +17,15 @@ const gcp_pub_sub_module_1 = require("./gcp-pub-sub.module");
 const mongodb_pub_sub_service_adapter_1 = require("./mongodb-pub-sub-service.adapter");
 const environment_utils_1 = require("../utils/environment.utils");
 const mongodb_pub_sub_event_module_1 = require("./mongodb-pub-sub-event.module");
+const logger_module_1 = require("../logger/logger.module");
+const base_config_entity_1 = require("../config/base-config.entity");
+const nestjs_cls_1 = require("nestjs-cls");
 let PubSubModule = class PubSubModule {
-    constructor(gcpPubSubServiceAdapter, mongoDbPubSubServiceAdapter) {
-        this.gcpPubSubServiceAdapter = gcpPubSubServiceAdapter;
-        this.mongoDbPubSubServiceAdapter = mongoDbPubSubServiceAdapter;
+    constructor(pubSubService) {
+        this.pubSubService = pubSubService;
     }
     async onApplicationShutdown() {
-        await this.gcpPubSubServiceAdapter.stopAutoFlushPublishBuffer();
-        await this.mongoDbPubSubServiceAdapter.stopAutoFlushPublishBuffer();
+        await this.pubSubService.stopAutoFlushPublishBuffer();
     }
 };
 exports.PubSubModule = PubSubModule;
@@ -33,22 +34,25 @@ exports.PubSubModule = PubSubModule = __decorate([
     (0, common_1.Module)({
         imports: [gcp_pub_sub_module_1.GcpPubSubModule, mongodb_pub_sub_event_module_1.MongoDbPubSubEventModule],
         providers: [
-            gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter,
-            mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter,
             {
                 provide: pub_sub_service_port_1.PUB_SUB_SERVICE_PORT,
-                useFactory: (gcpPubSubServiceAdapter, mongoDbPubSubServiceAdapter) => {
+                useFactory: (baseConfig, logger, cls, pubSubEventModel, pubSub) => {
                     if ((0, environment_utils_1.isLocalEnvironment)() || (0, environment_utils_1.isIntegrationTestEnvironment)()) {
-                        return mongoDbPubSubServiceAdapter;
+                        return new mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter(baseConfig, logger, cls, pubSubEventModel);
                     }
-                    return gcpPubSubServiceAdapter;
+                    return new gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter(baseConfig, logger, cls, pubSub);
                 },
-                inject: [gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter, mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter],
+                inject: [
+                    base_config_entity_1.BASE_CONFIG,
+                    logger_module_1.LOGGER_SERVICE_PORT,
+                    nestjs_cls_1.ClsService,
+                    mongodb_pub_sub_event_module_1.PUB_SUB_EVENT_MODEL,
+                    gcp_pub_sub_module_1.GCP_PUB_SUB,
+                ],
             },
         ],
         exports: [pub_sub_service_port_1.PUB_SUB_SERVICE_PORT],
     }),
-    __metadata("design:paramtypes", [gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter,
-        mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter])
+    __metadata("design:paramtypes", [Object])
 ], PubSubModule);
 //# sourceMappingURL=pub-sub.module.js.map

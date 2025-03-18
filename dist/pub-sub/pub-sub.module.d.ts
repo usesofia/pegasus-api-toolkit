@@ -1,9 +1,7 @@
 import { OnApplicationShutdown } from '@nestjs/common';
-import { GcpPubSubServiceAdapter } from '../pub-sub/gcp-pub-sub-service.adapter';
-import { MongoDbPubSubServiceAdapter } from '../pub-sub/mongodb-pub-sub-service.adapter';
+import { PubSubServicePort } from '../pub-sub/pub-sub-service.port';
 export declare class PubSubModule implements OnApplicationShutdown {
-    private readonly gcpPubSubServiceAdapter;
-    private readonly mongoDbPubSubServiceAdapter;
-    constructor(gcpPubSubServiceAdapter: GcpPubSubServiceAdapter, mongoDbPubSubServiceAdapter: MongoDbPubSubServiceAdapter);
+    private readonly pubSubService;
+    constructor(pubSubService: PubSubServicePort);
     onApplicationShutdown(): Promise<void>;
 }

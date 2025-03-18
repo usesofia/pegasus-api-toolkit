@@ -13,7 +13,6 @@ export declare class MongoDbPubSubServiceAdapter extends Base implements PubSubS
     private publishBuffer;
     private publishBufferFlushInterval;
     private flushing;
-    private isOn;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, pubSubEventModel: Model<MongoDbPubSubEventModel>);
     publish({ topic, payload, correlationId, }: {
         topic: string;
