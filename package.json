@@ -1,6 +1,6 @@
 {
   "name": "@usesofia/pegasus-api-toolkit",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "description": "Um conjunto de ferramentas para desenvolvimento de APIs para o Pegasus.",
   "author": "Sofia",
   "private": false,
@@ -22,7 +22,8 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "release": "./scripts/release.sh"
+    "release": "./scripts/release.sh",
+    "deploy:check": "pnpm lint:fix && pnpm format"
   },
   "dependencies": {
     "@clerk/backend": "1.23.7",

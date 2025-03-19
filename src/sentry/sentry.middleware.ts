@@ -1,4 +1,9 @@
-import { Inject, Injectable, LoggerService, NestMiddleware } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  LoggerService,
+  NestMiddleware,
+} from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import * as Sentry from '@sentry/node';
 import { Base } from '@app/base';

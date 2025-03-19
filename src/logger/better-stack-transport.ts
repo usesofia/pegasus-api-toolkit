@@ -50,31 +50,34 @@ export default function createBetterStackTransportWrapper(
   async function sendLogsWithRetry(logs: LogEntry[]): Promise<void> {
     // Split logs into super chunks for parallel processing
     const superChunkSize = 32;
-    
+
     // First split logs into super chunks
     for (let i = 0; i < logs.length; i += chunkSize * superChunkSize) {
       const superChunk = logs.slice(i, i + chunkSize * superChunkSize);
-      
+
       // Process each super chunk by splitting it into regular chunks and sending in parallel
       await Promise.all(
-        Array.from({ length: Math.ceil(superChunk.length / chunkSize) }, (_, index) => {
-          const start = index * chunkSize;
-          const chunk = superChunk.slice(start, start + chunkSize);
-          
-          const encodedChunk = msgpack.encode(
-            chunk.map((log) => {
-              const { msg, level, ...rest } = log;
-              return {
-                dt: log.dt,
-                message: msg,
-                level: convertLogLevel(level),
-                ...rest,
-              };
-            })
-          );
-          
-          return axiosInstance.post('/', encodedChunk);
-        })
+        Array.from(
+          { length: Math.ceil(superChunk.length / chunkSize) },
+          (_, index) => {
+            const start = index * chunkSize;
+            const chunk = superChunk.slice(start, start + chunkSize);
+
+            const encodedChunk = msgpack.encode(
+              chunk.map((log) => {
+                const { msg, level, ...rest } = log;
+                return {
+                  dt: log.dt,
+                  message: msg,
+                  level: convertLogLevel(level),
+                  ...rest,
+                };
+              }),
+            );
+
+            return axiosInstance.post('/', encodedChunk);
+          },
+        ),
       );
     }
   }

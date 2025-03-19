@@ -1,5 +1,5 @@
-import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { SentryMiddleware } from './sentry.middleware';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { SentryMiddleware } from '@app/sentry/sentry.middleware';
 
 @Module({
   imports: [],

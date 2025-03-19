@@ -1,6 +1,9 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { AuthServicePort } from '@app/auth/ports/auth-service.port';
-import { AuthUserEntity, OrganizationEntity } from '@app/auth/entities/auth-user.entity';
+import {
+  AuthUserEntity,
+  OrganizationEntity,
+} from '@app/auth/entities/auth-user.entity';
 import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
 import { OrganizationRole } from '@app/auth/constants/organization-role.enum';
 import { OrganizationType } from '@app/auth/constants/organization-type.enum';
@@ -57,9 +60,9 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
 
   @Log()
   async getOrganizationEntity({
-      organizationId,
-      organizationRole,
-      ignoreCache = false,
+    organizationId,
+    organizationRole,
+    ignoreCache = false,
   }: {
     organizationId: string;
     organizationRole: OrganizationRole;
@@ -108,13 +111,13 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
             sharedTags: parentOrganization.publicMetadata
               ?.sharedTags as boolean,
           }
-        : null,
+        : undefined,
       children: childrenOrganizations
         ? childrenOrganizations.map((child) => ({
             id: child.id,
             name: child.name,
           }))
-        : null,
+        : undefined,
     });
   }
 
@@ -312,7 +315,9 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
   }
 
   @Log()
-  async getSystemUserForOrganization(organizationId: string): Promise<AuthUserEntity> {
+  async getSystemUserForOrganization(
+    organizationId: string,
+  ): Promise<AuthUserEntity> {
     const organizationEntity = await this.getOrganizationEntity({
       organizationId,
       organizationRole: OrganizationRole.ADMIN,

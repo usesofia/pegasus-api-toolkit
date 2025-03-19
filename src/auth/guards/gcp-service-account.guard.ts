@@ -13,11 +13,6 @@ import { ClsService } from 'nestjs-cls';
 import { IGNORE_GCP_SERVICE_ACCOUNT_GUARD_KEY } from '@app/auth/decorators/ignore-gcp-service-account-guard.decorator';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { Base } from '@app/base';
-import {
-  AuthUserEntity,
-  AuthUserEntitySchema,
-} from '@app/auth/entities/auth-user.entity';
-import { z } from 'zod';
 import { Environment, getEnvironment } from '@app/utils/environment.utils';
 import * as Sentry from '@sentry/node';
 

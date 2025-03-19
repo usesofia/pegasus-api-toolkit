@@ -84,13 +84,13 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
                     sharedTags: parentOrganization.publicMetadata
                         ?.sharedTags,
                 }
-                : null,
+                : undefined,
             children: childrenOrganizations
                 ? childrenOrganizations.map((child) => ({
                     id: child.id,
                     name: child.name,
                 }))
-                : null,
+                : undefined,
         });
     }
     async getUser({ userId, organizationId, organizationRole, ignoreCache, }) {

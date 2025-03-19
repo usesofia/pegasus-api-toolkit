@@ -1,4 +1,3 @@
-import { AuthUserEntity, AuthUserEntitySchema } from '@app/auth/entities/auth-user.entity';
 import { Base } from '@app/base';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
@@ -11,7 +10,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
-import { z } from 'zod';
 import * as Sentry from '@sentry/node';
 export const tasksQueueSecretHeaderKey = 'x-tasks-queue-secret';
 
