@@ -22,6 +22,7 @@ const nestjs_cls_1 = require("nestjs-cls");
 const ignore_auth_guard_decorator_1 = require("../decorators/ignore-auth-guard.decorator");
 const base_1 = require("../../base");
 const logger_module_1 = require("../../logger/logger.module");
+const Sentry = require("@sentry/node");
 let AuthGuard = AuthGuard_1 = class AuthGuard extends base_1.Base {
     constructor(baseConfig, logger, cls, reflector, authService) {
         super(AuthGuard_1.name, baseConfig, logger, cls);
@@ -48,6 +49,11 @@ let AuthGuard = AuthGuard_1 = class AuthGuard extends base_1.Base {
         try {
             const user = await this.authService.verifyToken(token);
             request.user = user;
+            Sentry.setUser({
+                id: user.id,
+                email: user.primaryEmail,
+                organization: user.organization,
+            });
             return true;
         }
         catch (error) {

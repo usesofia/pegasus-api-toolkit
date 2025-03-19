@@ -18,6 +18,7 @@ import { Base } from '@app/base';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { z } from 'zod';
 import { AuthUserEntitySchema } from '@app/auth/entities/auth-user.entity';
+import * as Sentry from '@sentry/node';
 
 @Injectable()
 export class AuthGuard extends Base implements CanActivate {
@@ -65,6 +66,13 @@ export class AuthGuard extends Base implements CanActivate {
     try {
       const user = await this.authService.verifyToken(token);
       request.user = user;
+
+      Sentry.setUser({
+        id: user.id,
+        email: user.primaryEmail,
+        organization: user.organization,
+      });
+
       return true;
     } catch (error) {
       this.logWarn({

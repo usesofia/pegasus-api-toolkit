@@ -19,6 +19,7 @@ import {
 } from '@app/auth/entities/auth-user.entity';
 import { z } from 'zod';
 import { Environment, getEnvironment } from '@app/utils/environment.utils';
+import * as Sentry from '@sentry/node';
 
 export const GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS = 'gcp-service-account-token';
 
@@ -84,6 +85,12 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
       }
 
       request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
+
+      Sentry.setUser({
+        id: request.user.id,
+        email: request.user.primaryEmail,
+        organization: request.user.organization,
+      });
 
       return true;
     } catch (error) {
