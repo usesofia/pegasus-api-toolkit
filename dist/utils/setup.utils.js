@@ -8,8 +8,6 @@ const json_utils_1 = require("./json.utils");
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const swagger_1 = require("@nestjs/swagger");
-const Sentry = require("@sentry/node");
-const profiling_node_1 = require("@sentry/profiling-node");
 const nestjs_cls_1 = require("nestjs-cls");
 const nestjs_zod_1 = require("nestjs-zod");
 const app_exceptions_filter_1 = require("../app-exceptions.filter");
@@ -27,16 +25,6 @@ function setupApp({ app, version, }) {
     app.enableShutdownHooks();
     (0, nestjs_zod_1.patchNestJsSwagger)();
     const baseConfig = app.get(base_config_entity_1.BASE_CONFIG);
-    if (baseConfig.sentry.enabled) {
-        Sentry.init({
-            dsn: baseConfig.sentry.dsn,
-            integrations: [(0, profiling_node_1.nodeProfilingIntegration)()],
-            environment: baseConfig.env,
-            release: version,
-            tracesSampleRate: 0.05,
-            profilesSampleRate: 0.05,
-        });
-    }
     const swaggerDocument = new swagger_1.DocumentBuilder()
         .setTitle(baseConfig.swagger.title)
         .setDescription(baseConfig.swagger.description)

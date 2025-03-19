@@ -6,8 +6,6 @@ import { NestApplicationOptions, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as Sentry from '@sentry/node';
-import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { ClsService } from 'nestjs-cls';
 import { patchNestJsSwagger, ZodValidationPipe } from 'nestjs-zod';
 import { AppExceptionsFilter } from '@app/app-exceptions.filter';
@@ -46,17 +44,6 @@ export function setupApp({
   patchNestJsSwagger();
 
   const baseConfig = app.get<BaseConfigEntity>(BASE_CONFIG);
-
-  if (baseConfig.sentry.enabled) {
-    Sentry.init({
-      dsn: baseConfig.sentry.dsn,
-      integrations: [nodeProfilingIntegration()],
-      environment: baseConfig.env,
-      release: version,
-      tracesSampleRate: 0.05,
-      profilesSampleRate: 0.05,
-    });
-  }
 
   const swaggerDocument = new DocumentBuilder()
     .setTitle(baseConfig.swagger.title)
