@@ -57,22 +57,14 @@ export class AppExceptionsFilter implements ExceptionFilter {
       statusCode === +HttpStatus.HTTP_VERSION_NOT_SUPPORTED
     ) {
       if (exception instanceof Error) {
-        Sentry.captureException(exception, {
-          extra: {
-            [correlationIdKey]: this.clsService.getId(),
-          },
-        });
+        Sentry.captureException(exception);
         this.loggerService.error(
           `[${this.clsService.getId()}] ${exception.message}`,
           { exception },
         );
       } else {
         const errorMessage = `[${this.clsService.getId()}] AppExceptionsFilter.unexpectedError`;
-        Sentry.captureException(new Error(errorMessage), {
-          extra: {
-            [correlationIdKey]: this.clsService.getId(),
-          },
-        });
+        Sentry.captureException(new Error(errorMessage));
         this.loggerService.error(errorMessage, {
           exception,
           tempTest: 'Hi Lorena v2!',
