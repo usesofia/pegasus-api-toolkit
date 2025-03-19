@@ -16,6 +16,9 @@ const sensitiveFields = [
   'accessToken',
   'refreshToken',
   'token',
+  'jwtKey',
+  'secret',
+  'secretKey',
 ];
 
 function toPinoLevel(level: LogLevel): pino.Level {

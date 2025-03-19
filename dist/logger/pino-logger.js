@@ -26,6 +26,9 @@ const sensitiveFields = [
     'accessToken',
     'refreshToken',
     'token',
+    'jwtKey',
+    'secret',
+    'secretKey',
 ];
 function toPinoLevel(level) {
     switch (level) {
