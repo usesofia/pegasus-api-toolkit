@@ -29,7 +29,7 @@ let SentryMiddleware = SentryMiddleware_1 = class SentryMiddleware extends base_
         this.cls = cls;
     }
     use(req, res, next) {
-        Sentry.setTag(correlation_constants_1.correlationIdKey, this.cls.getId());
+        Sentry.setExtra(correlation_constants_1.correlationIdKey, this.cls.getId());
         next();
     }
 };

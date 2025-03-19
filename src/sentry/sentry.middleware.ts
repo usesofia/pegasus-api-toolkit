@@ -18,7 +18,7 @@ export class SentryMiddleware extends Base implements NestMiddleware {
   }
 
   use(req: Request, res: Response, next: NextFunction) {
-    Sentry.setTag(correlationIdKey, this.cls.getId());
+    Sentry.setExtra(correlationIdKey, this.cls.getId());
     next();
   }
 }
