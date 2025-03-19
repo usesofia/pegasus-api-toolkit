@@ -49,6 +49,8 @@ export * from './pub-sub/gcp-pub-sub-service.adapter';
 export * from './pub-sub/mongodb-pub-sub-event.model';
 export * from './pub-sub/mongodb-pub-sub-event.module';
 export * from './pub-sub/mongodb-pub-sub-service.adapter';
+export * from './sentry/sentry.module';
+export * from './sentry/sentry.middleware';
 export * from './tasks/task.entity';
 export * from './tasks/tasks.module';
 export * from './tasks/tasks-service.port';

@@ -71,6 +71,10 @@ export * from '@app/pub-sub/mongodb-pub-sub-event.model';
 export * from '@app/pub-sub/mongodb-pub-sub-event.module';
 export * from '@app/pub-sub/mongodb-pub-sub-service.adapter';
 
+// Sentry
+export * from '@app/sentry/sentry.module';
+export * from '@app/sentry/sentry.middleware';
+
 // Tasks
 export * from '@app/tasks/task.entity';
 export * from '@app/tasks/tasks.module';

@@ -65,6 +65,8 @@ __exportStar(require("./pub-sub/gcp-pub-sub-service.adapter"), exports);
 __exportStar(require("./pub-sub/mongodb-pub-sub-event.model"), exports);
 __exportStar(require("./pub-sub/mongodb-pub-sub-event.module"), exports);
 __exportStar(require("./pub-sub/mongodb-pub-sub-service.adapter"), exports);
+__exportStar(require("./sentry/sentry.module"), exports);
+__exportStar(require("./sentry/sentry.middleware"), exports);
 __exportStar(require("./tasks/task.entity"), exports);
 __exportStar(require("./tasks/tasks.module"), exports);
 __exportStar(require("./tasks/tasks-service.port"), exports);
