@@ -75,10 +75,6 @@ export const BaseConfigSchema = z.object({
       })
       .optional(),
   }),
-  sentry: z.object({
-    enabled: z.boolean(),
-    dsn: z.string().optional(),
-  }),
   swagger: z.object({
     title: z.string(),
     description: z.string(),

@@ -68,10 +68,6 @@ exports.BaseConfigSchema = zod_1.z.object({
         })
             .optional(),
     }),
-    sentry: zod_1.z.object({
-        enabled: zod_1.z.boolean(),
-        dsn: zod_1.z.string().optional(),
-    }),
     swagger: zod_1.z.object({
         title: zod_1.z.string(),
         description: zod_1.z.string(),

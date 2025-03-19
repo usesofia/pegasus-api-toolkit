@@ -183,16 +183,6 @@ export declare const BaseConfigSchema: z.ZodObject<{
             ssl?: boolean | undefined;
         } | undefined;
     }>;
-    sentry: z.ZodObject<{
-        enabled: z.ZodBoolean;
-        dsn: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        enabled: boolean;
-        dsn?: string | undefined;
-    }, {
-        enabled: boolean;
-        dsn?: string | undefined;
-    }>;
     swagger: z.ZodObject<{
         title: z.ZodString;
         description: z.ZodString;
@@ -273,10 +263,6 @@ export declare const BaseConfigSchema: z.ZodObject<{
             ssl: boolean;
         } | undefined;
     };
-    sentry: {
-        enabled: boolean;
-        dsn?: string | undefined;
-    };
     swagger: {
         title: string;
         description: string;
@@ -340,10 +326,6 @@ export declare const BaseConfigSchema: z.ZodObject<{
             keyPrefix: string;
             ssl?: boolean | undefined;
         } | undefined;
-    };
-    sentry: {
-        enabled: boolean;
-        dsn?: string | undefined;
     };
     swagger: {
         title: string;
@@ -409,10 +391,6 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             keyPrefix: string;
             ssl: boolean;
         } | undefined;
-    };
-    sentry: {
-        enabled: boolean;
-        dsn?: string | undefined;
     };
     swagger: {
         title: string;
@@ -608,16 +586,6 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             ssl?: boolean | undefined;
         } | undefined;
     }>;
-    sentry: z.ZodObject<{
-        enabled: z.ZodBoolean;
-        dsn: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        enabled: boolean;
-        dsn?: string | undefined;
-    }, {
-        enabled: boolean;
-        dsn?: string | undefined;
-    }>;
     swagger: z.ZodObject<{
         title: z.ZodString;
         description: z.ZodString;
@@ -697,10 +665,6 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             keyPrefix: string;
             ssl?: boolean | undefined;
         } | undefined;
-    };
-    sentry: {
-        enabled: boolean;
-        dsn?: string | undefined;
     };
     swagger: {
         title: string;
