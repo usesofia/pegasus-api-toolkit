@@ -22,7 +22,6 @@ const nestjs_cls_1 = require("nestjs-cls");
 const ignore_gcp_service_account_guard_decorator_1 = require("../decorators/ignore-gcp-service-account-guard.decorator");
 const logger_module_1 = require("../../logger/logger.module");
 const base_1 = require("../../base");
-const auth_user_entity_1 = require("../entities/auth-user.entity");
 const environment_utils_1 = require("../../utils/environment.utils");
 const Sentry = require("@sentry/node");
 exports.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS = 'gcp-service-account-token';
@@ -48,7 +47,6 @@ let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountG
         const token = authorization.split(' ')[1];
         if ((0, environment_utils_1.getEnvironment)() === environment_utils_1.Environment.INTEGRATION_TEST &&
             token === exports.GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS) {
-            request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
             return true;
         }
         try {
@@ -62,11 +60,9 @@ let GcpServiceAccountGuard = GcpServiceAccountGuard_1 = class GcpServiceAccountG
             if (payload.email !== this.baseConfig.gcp.credentials.client_email) {
                 throw new common_1.UnauthorizedException();
             }
-            request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
             Sentry.setUser({
-                id: request.user.id,
-                email: request.user.primaryEmail,
-                organization: request.user.organization,
+                id: 'gcp',
+                email: 'gcp@usesofia.com',
             });
             return true;
         }

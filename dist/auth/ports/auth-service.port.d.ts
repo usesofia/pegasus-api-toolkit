@@ -7,6 +7,7 @@ export interface AuthServicePort {
         organizationRole: string;
         ignoreCache?: boolean;
     }): Promise<AuthUserEntity>;
+    getSystemUserForOrganization(organizationId: string): Promise<AuthUserEntity>;
     generateGcpServiceAccountToken(): Promise<string>;
 }
 export declare const AUTH_SERVICE_PORT: unique symbol;

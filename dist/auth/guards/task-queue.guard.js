@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var TaskQueueGuard_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskQueueGuard = exports.tasksQueueSecretHeaderKey = void 0;
-const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_1 = require("../../base");
 const base_config_entity_1 = require("../../config/base-config.entity");
 const logger_module_1 = require("../../logger/logger.module");
@@ -35,11 +34,9 @@ let TaskQueueGuard = TaskQueueGuard_1 = class TaskQueueGuard extends base_1.Base
         if (secret !== this.baseConfig.tasks.secret) {
             throw new common_1.UnauthorizedException();
         }
-        request.user = auth_user_entity_1.AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
         Sentry.setUser({
-            id: request.user.id,
-            email: request.user.primaryEmail,
-            organization: request.user.organization,
+            id: 'queue',
+            email: 'queue@usesofia.com',
         });
         return Promise.resolve(true);
     }

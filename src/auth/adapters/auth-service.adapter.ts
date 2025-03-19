@@ -1,6 +1,6 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { AuthServicePort } from '@app/auth/ports/auth-service.port';
-import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { AuthUserEntity, OrganizationEntity } from '@app/auth/entities/auth-user.entity';
 import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
 import { OrganizationRole } from '@app/auth/constants/organization-role.enum';
 import { OrganizationType } from '@app/auth/constants/organization-type.enum';
@@ -56,6 +56,69 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
   }
 
   @Log()
+  async getOrganizationEntity({
+      organizationId,
+      organizationRole,
+      ignoreCache = false,
+  }: {
+    organizationId: string;
+    organizationRole: OrganizationRole;
+    ignoreCache?: boolean;
+  }): Promise<OrganizationEntity> {
+    const clerkOrganization = await this.getCachedClerkOrganization({
+      organizationId,
+      ignoreCache,
+    });
+
+    let parentOrganization: Organization | null = null;
+
+    if (clerkOrganization.publicMetadata?.parent) {
+      parentOrganization = await this.getCachedClerkOrganization({
+        organizationId: clerkOrganization.publicMetadata.parent as string,
+        ignoreCache,
+      });
+    }
+
+    let childrenOrganizations: Organization[] | null = null;
+
+    if (clerkOrganization.publicMetadata?.children) {
+      childrenOrganizations = await Promise.all(
+        (clerkOrganization.publicMetadata.children as string[]).map((child) =>
+          this.getCachedClerkOrganization({
+            organizationId: child,
+            ignoreCache,
+          }),
+        ),
+      );
+    }
+
+    return OrganizationEntity.build({
+      id: clerkOrganization.id,
+      name: clerkOrganization.name,
+      role: organizationRole,
+      type: clerkOrganization.publicMetadata?.type as OrganizationType,
+      parent: parentOrganization
+        ? {
+            id: parentOrganization.id,
+            name: parentOrganization.name,
+            sharedContacts: parentOrganization.publicMetadata
+              ?.sharedContacts as boolean,
+            sharedSubcategories: parentOrganization.publicMetadata
+              ?.sharedSubcategories as boolean,
+            sharedTags: parentOrganization.publicMetadata
+              ?.sharedTags as boolean,
+          }
+        : null,
+      children: childrenOrganizations
+        ? childrenOrganizations.map((child) => ({
+            id: child.id,
+            name: child.name,
+          }))
+        : null,
+    });
+  }
+
+  @Log()
   async getUser({
     userId,
     organizationId,
@@ -74,28 +137,12 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
         ignoreCache,
       });
 
-    let parentOrganization: Organization | null = null;
-
     if (clerkOrganization) {
-      if (clerkOrganization.publicMetadata?.parent) {
-        parentOrganization = await this.getCachedClerkOrganization({
-          organizationId: clerkOrganization.publicMetadata.parent as string,
-          ignoreCache,
-        });
-      }
-
-      let childrenOrganizations: Organization[] | null = null;
-
-      if (clerkOrganization.publicMetadata?.children) {
-        childrenOrganizations = await Promise.all(
-          (clerkOrganization.publicMetadata.children as string[]).map((child) =>
-            this.getCachedClerkOrganization({
-              organizationId: child,
-              ignoreCache,
-            }),
-          ),
-        );
-      }
+      const organizationEntity = await this.getOrganizationEntity({
+        organizationId: clerkOrganization.id,
+        organizationRole: organizationRole as OrganizationRole,
+        ignoreCache,
+      });
 
       return AuthUserEntity.build({
         id: clerkUser.id,
@@ -103,30 +150,7 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
         primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
         firstName: clerkUser.firstName ?? '',
         lastName: clerkUser.lastName ?? '',
-        organization: {
-          id: clerkOrganization.id,
-          name: clerkOrganization.name,
-          role: organizationRole as OrganizationRole,
-          type: clerkOrganization.publicMetadata?.type as OrganizationType,
-          parent: parentOrganization
-            ? {
-                id: parentOrganization.id,
-                name: parentOrganization.name,
-                sharedContacts: parentOrganization.publicMetadata
-                  ?.sharedContacts as boolean,
-                sharedSubcategories: parentOrganization.publicMetadata
-                  ?.sharedSubcategories as boolean,
-                sharedTags: parentOrganization.publicMetadata
-                  ?.sharedTags as boolean,
-              }
-            : null,
-          children: childrenOrganizations
-            ? childrenOrganizations.map((child) => ({
-                id: child.id,
-                name: child.name,
-              }))
-            : null,
-        },
+        organization: organizationEntity,
       });
     } else {
       return AuthUserEntity.build({
@@ -285,5 +309,16 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
     );
 
     return accessToken;
+  }
+
+  @Log()
+  async getSystemUserForOrganization(organizationId: string): Promise<AuthUserEntity> {
+    const organizationEntity = await this.getOrganizationEntity({
+      organizationId,
+      organizationRole: OrganizationRole.ADMIN,
+      ignoreCache: false,
+    });
+
+    return AuthUserEntity.buildSystemUserForOrganization(organizationEntity);
   }
 }

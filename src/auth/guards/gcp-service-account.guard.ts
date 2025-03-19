@@ -39,7 +39,6 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<{
-      user: z.input<typeof AuthUserEntitySchema>;
       headers: {
         authorization?: string;
       };
@@ -65,7 +64,6 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
       getEnvironment() === Environment.INTEGRATION_TEST &&
       token === GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS
     ) {
-      request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
       return true;
     }
 
@@ -84,12 +82,9 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
         throw new UnauthorizedException();
       }
 
-      request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
-
       Sentry.setUser({
-        id: request.user.id,
-        email: request.user.primaryEmail,
-        organization: request.user.organization,
+        id: 'gcp',
+        email: 'gcp@usesofia.com',
       });
 
       return true;

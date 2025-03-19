@@ -1,12 +1,11 @@
 import { z } from 'zod';
 import { OrganizationRole } from '../../auth/constants/organization-role.enum';
 import { OrganizationType } from '../../auth/constants/organization-type.enum';
-import { BaseConfigEntity } from '../../config/base-config.entity';
 export declare const OrganizationSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;
-    role: z.ZodNativeEnum<typeof OrganizationRole>;
     type: z.ZodNativeEnum<typeof OrganizationType>;
+    role: z.ZodNativeEnum<typeof OrganizationRole>;
     parent: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         id: z.ZodString;
         name: z.ZodString;
@@ -88,8 +87,8 @@ declare const OrganizationEntity_base: import("nestjs-zod").ZodDto<{
 }, z.ZodObjectDef<{
     id: z.ZodString;
     name: z.ZodString;
-    role: z.ZodNativeEnum<typeof OrganizationRole>;
     type: z.ZodNativeEnum<typeof OrganizationType>;
+    role: z.ZodNativeEnum<typeof OrganizationRole>;
     parent: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         id: z.ZodString;
         name: z.ZodString;
@@ -148,8 +147,8 @@ export declare const AuthUserEntitySchema: z.ZodObject<{
     organization: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         id: z.ZodString;
         name: z.ZodString;
-        role: z.ZodNativeEnum<typeof OrganizationRole>;
         type: z.ZodNativeEnum<typeof OrganizationType>;
+        role: z.ZodNativeEnum<typeof OrganizationRole>;
         parent: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             id: z.ZodString;
             name: z.ZodString;
@@ -291,8 +290,8 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
     organization: z.ZodOptional<z.ZodNullable<z.ZodObject<{
         id: z.ZodString;
         name: z.ZodString;
-        role: z.ZodNativeEnum<typeof OrganizationRole>;
         type: z.ZodNativeEnum<typeof OrganizationType>;
+        role: z.ZodNativeEnum<typeof OrganizationRole>;
         parent: z.ZodOptional<z.ZodNullable<z.ZodObject<{
             id: z.ZodString;
             name: z.ZodString;
@@ -381,8 +380,8 @@ declare const AuthUserEntity_base: import("nestjs-zod").ZodDto<{
 }>;
 export declare class AuthUserEntity extends AuthUserEntity_base {
     static build(input: z.input<typeof AuthUserEntitySchema>): AuthUserEntity;
-    static buildFromGcpServiceAccount(config: BaseConfigEntity): AuthUserEntity;
     getOrganizationOrThrow(): OrganizationEntity;
     toSystem(): AuthUserEntity;
+    static buildSystemUserForOrganization(organization: OrganizationEntity): AuthUserEntity;
 }
 export {};

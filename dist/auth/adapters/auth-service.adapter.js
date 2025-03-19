@@ -17,6 +17,7 @@ exports.AuthServiceAdapter = void 0;
 const common_1 = require("@nestjs/common");
 const auth_user_entity_1 = require("../entities/auth-user.entity");
 const base_config_entity_1 = require("../../config/base-config.entity");
+const organization_role_enum_1 = require("../constants/organization-role.enum");
 const cache_service_port_1 = require("../../cache/ports/cache-service.port");
 const luxon_1 = require("luxon");
 const base_1 = require("../../base");
@@ -48,57 +49,69 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
         });
         return user;
     }
+    async getOrganizationEntity({ organizationId, organizationRole, ignoreCache = false, }) {
+        const clerkOrganization = await this.getCachedClerkOrganization({
+            organizationId,
+            ignoreCache,
+        });
+        let parentOrganization = null;
+        if (clerkOrganization.publicMetadata?.parent) {
+            parentOrganization = await this.getCachedClerkOrganization({
+                organizationId: clerkOrganization.publicMetadata.parent,
+                ignoreCache,
+            });
+        }
+        let childrenOrganizations = null;
+        if (clerkOrganization.publicMetadata?.children) {
+            childrenOrganizations = await Promise.all(clerkOrganization.publicMetadata.children.map((child) => this.getCachedClerkOrganization({
+                organizationId: child,
+                ignoreCache,
+            })));
+        }
+        return auth_user_entity_1.OrganizationEntity.build({
+            id: clerkOrganization.id,
+            name: clerkOrganization.name,
+            role: organizationRole,
+            type: clerkOrganization.publicMetadata?.type,
+            parent: parentOrganization
+                ? {
+                    id: parentOrganization.id,
+                    name: parentOrganization.name,
+                    sharedContacts: parentOrganization.publicMetadata
+                        ?.sharedContacts,
+                    sharedSubcategories: parentOrganization.publicMetadata
+                        ?.sharedSubcategories,
+                    sharedTags: parentOrganization.publicMetadata
+                        ?.sharedTags,
+                }
+                : null,
+            children: childrenOrganizations
+                ? childrenOrganizations.map((child) => ({
+                    id: child.id,
+                    name: child.name,
+                }))
+                : null,
+        });
+    }
     async getUser({ userId, organizationId, organizationRole, ignoreCache, }) {
         const { clerkUser, clerkOrganization } = await this.getCachedClerkUserAndOrganization({
             userId,
             organizationId,
             ignoreCache,
         });
-        let parentOrganization = null;
         if (clerkOrganization) {
-            if (clerkOrganization.publicMetadata?.parent) {
-                parentOrganization = await this.getCachedClerkOrganization({
-                    organizationId: clerkOrganization.publicMetadata.parent,
-                    ignoreCache,
-                });
-            }
-            let childrenOrganizations = null;
-            if (clerkOrganization.publicMetadata?.children) {
-                childrenOrganizations = await Promise.all(clerkOrganization.publicMetadata.children.map((child) => this.getCachedClerkOrganization({
-                    organizationId: child,
-                    ignoreCache,
-                })));
-            }
+            const organizationEntity = await this.getOrganizationEntity({
+                organizationId: clerkOrganization.id,
+                organizationRole: organizationRole,
+                ignoreCache,
+            });
             return auth_user_entity_1.AuthUserEntity.build({
                 id: clerkUser.id,
                 primaryEmail: clerkUser.emailAddresses[0].emailAddress,
                 primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
                 firstName: clerkUser.firstName ?? '',
                 lastName: clerkUser.lastName ?? '',
-                organization: {
-                    id: clerkOrganization.id,
-                    name: clerkOrganization.name,
-                    role: organizationRole,
-                    type: clerkOrganization.publicMetadata?.type,
-                    parent: parentOrganization
-                        ? {
-                            id: parentOrganization.id,
-                            name: parentOrganization.name,
-                            sharedContacts: parentOrganization.publicMetadata
-                                ?.sharedContacts,
-                            sharedSubcategories: parentOrganization.publicMetadata
-                                ?.sharedSubcategories,
-                            sharedTags: parentOrganization.publicMetadata
-                                ?.sharedTags,
-                        }
-                        : null,
-                    children: childrenOrganizations
-                        ? childrenOrganizations.map((child) => ({
-                            id: child.id,
-                            name: child.name,
-                        }))
-                        : null,
-                },
+                organization: organizationEntity,
             });
         }
         else {
@@ -184,6 +197,14 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
         }).as('seconds'));
         return accessToken;
     }
+    async getSystemUserForOrganization(organizationId) {
+        const organizationEntity = await this.getOrganizationEntity({
+            organizationId,
+            organizationRole: organization_role_enum_1.OrganizationRole.ADMIN,
+            ignoreCache: false,
+        });
+        return auth_user_entity_1.AuthUserEntity.buildSystemUserForOrganization(organizationEntity);
+    }
 };
 exports.AuthServiceAdapter = AuthServiceAdapter;
 __decorate([
@@ -192,6 +213,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AuthServiceAdapter.prototype, "verifyToken", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthServiceAdapter.prototype, "getOrganizationEntity", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
@@ -222,6 +249,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthServiceAdapter.prototype, "getCachedClerkOrganization", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthServiceAdapter.prototype, "getSystemUserForOrganization", null);
 exports.AuthServiceAdapter = AuthServiceAdapter = AuthServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

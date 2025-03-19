@@ -3,13 +3,12 @@ import { z } from 'zod';
 import { OrganizationRole } from '@app/auth/constants/organization-role.enum';
 import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 import { safeInstantiateEntity } from '@app/utils/entity.utils';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
 
 export const OrganizationSchema = z.object({
   id: z.string(),
   name: z.string(),
-  role: z.nativeEnum(OrganizationRole),
   type: z.nativeEnum(OrganizationType),
+  role: z.nativeEnum(OrganizationRole),
   parent: z
     .object({
       id: z.string(),
@@ -49,22 +48,6 @@ export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {
     return safeInstantiateEntity(AuthUserEntity, input);
   }
 
-  static buildFromGcpServiceAccount(config: BaseConfigEntity): AuthUserEntity {
-    return this.build({
-      id: config.gcp.credentials.client_email,
-      primaryEmail: config.gcp.credentials.client_email,
-      primaryPhoneNumber: '+5511999999999',
-      firstName: 'GCP',
-      lastName: 'Service Account',
-      organization: {
-        id: 'system',
-        name: 'System',
-        role: OrganizationRole.ADMIN,
-        type: OrganizationType.LEAF,
-      },
-    });
-  }
-
   getOrganizationOrThrow(): OrganizationEntity {
     if (!this.organization) {
       throw new Error('Organization not defined for the auth user.');
@@ -73,14 +56,21 @@ export class AuthUserEntity extends createZodDto(AuthUserEntitySchema) {
   }
 
   toSystem(): AuthUserEntity {
-    return AuthUserEntity.build({
-      ...this,
+    return AuthUserEntity.buildSystemUserForOrganization(
+      this.getOrganizationOrThrow(),
+    );
+  }
+
+  static buildSystemUserForOrganization(
+    organization: OrganizationEntity,
+  ): AuthUserEntity {
+    return this.build({
       id: 'system',
       primaryEmail: 'system@usesofia.com',
       primaryPhoneNumber: '+5511999999999',
       firstName: 'System',
       lastName: 'Requester',
-      organization: this.organization,
+      organization,
     });
   }
 }

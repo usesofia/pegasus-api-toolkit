@@ -13,6 +13,7 @@ export interface AuthServicePort {
     organizationRole: string;
     ignoreCache?: boolean;
   }): Promise<AuthUserEntity>;
+  getSystemUserForOrganization(organizationId: string): Promise<AuthUserEntity>;
   generateGcpServiceAccountToken(): Promise<string>;
 }
 

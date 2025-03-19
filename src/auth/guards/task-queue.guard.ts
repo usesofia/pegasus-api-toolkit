@@ -27,7 +27,6 @@ export class TaskQueueGuard extends Base implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<{
-      user: z.input<typeof AuthUserEntitySchema>;
       headers: {
         [tasksQueueSecretHeaderKey]: string;
       };
@@ -39,12 +38,9 @@ export class TaskQueueGuard extends Base implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    request.user = AuthUserEntity.buildFromGcpServiceAccount(this.baseConfig);
-
     Sentry.setUser({
-      id: request.user.id,
-      email: request.user.primaryEmail,
-      organization: request.user.organization,
+      id: 'queue',
+      email: 'queue@usesofia.com',
     });
 
     return Promise.resolve(true);

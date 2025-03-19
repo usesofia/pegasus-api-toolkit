@@ -4,25 +4,25 @@ export declare const TaskEntitySchema: z.ZodObject<{
     microservice: z.ZodString;
     payload: z.ZodRecord<z.ZodString, z.ZodAny>;
 }, "strip", z.ZodTypeAny, {
-    payload: Record<string, any>;
     queue: string;
+    payload: Record<string, any>;
     microservice: string;
 }, {
-    payload: Record<string, any>;
     queue: string;
+    payload: Record<string, any>;
     microservice: string;
 }>;
 declare const TaskEntity_base: import("nestjs-zod").ZodDto<{
-    payload: Record<string, any>;
     queue: string;
+    payload: Record<string, any>;
     microservice: string;
 }, z.ZodObjectDef<{
     queue: z.ZodString;
     microservice: z.ZodString;
     payload: z.ZodRecord<z.ZodString, z.ZodAny>;
 }, "strip", z.ZodTypeAny>, {
-    payload: Record<string, any>;
     queue: string;
+    payload: Record<string, any>;
     microservice: string;
 }>;
 export declare class TaskEntity extends TaskEntity_base {

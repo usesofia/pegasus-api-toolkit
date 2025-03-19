@@ -9,8 +9,8 @@ const entity_utils_1 = require("../../utils/entity.utils");
 exports.OrganizationSchema = zod_1.z.object({
     id: zod_1.z.string(),
     name: zod_1.z.string(),
-    role: zod_1.z.nativeEnum(organization_role_enum_1.OrganizationRole),
     type: zod_1.z.nativeEnum(organization_type_enum_1.OrganizationType),
+    role: zod_1.z.nativeEnum(organization_role_enum_1.OrganizationRole),
     parent: zod_1.z
         .object({
         id: zod_1.z.string(),
@@ -45,21 +45,6 @@ class AuthUserEntity extends (0, nestjs_zod_1.createZodDto)(exports.AuthUserEnti
     static build(input) {
         return (0, entity_utils_1.safeInstantiateEntity)(AuthUserEntity, input);
     }
-    static buildFromGcpServiceAccount(config) {
-        return this.build({
-            id: config.gcp.credentials.client_email,
-            primaryEmail: config.gcp.credentials.client_email,
-            primaryPhoneNumber: '+5511999999999',
-            firstName: 'GCP',
-            lastName: 'Service Account',
-            organization: {
-                id: 'system',
-                name: 'System',
-                role: organization_role_enum_1.OrganizationRole.ADMIN,
-                type: organization_type_enum_1.OrganizationType.LEAF,
-            },
-        });
-    }
     getOrganizationOrThrow() {
         if (!this.organization) {
             throw new Error('Organization not defined for the auth user.');
@@ -67,14 +52,16 @@ class AuthUserEntity extends (0, nestjs_zod_1.createZodDto)(exports.AuthUserEnti
         return OrganizationEntity.build(this.organization);
     }
     toSystem() {
-        return AuthUserEntity.build({
-            ...this,
+        return AuthUserEntity.buildSystemUserForOrganization(this.getOrganizationOrThrow());
+    }
+    static buildSystemUserForOrganization(organization) {
+        return this.build({
             id: 'system',
             primaryEmail: 'system@usesofia.com',
             primaryPhoneNumber: '+5511999999999',
             firstName: 'System',
             lastName: 'Requester',
-            organization: this.organization,
+            organization,
         });
     }
 }
