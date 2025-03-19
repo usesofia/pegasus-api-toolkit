@@ -38,17 +38,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   @Log()
   async startSession(): Promise<BaseSessionPort> {
     return new BaseMongoDbSessionAdapter(
-      await this.model.db.startSession({
-        defaultTransactionOptions: {
-          writeConcern: {
-            w: 'majority',
-            j: true,
-          },
-          readConcern: {
-            level: 'snapshot',
-          },
-        },
-      }),
+      await this.model.db.startSession(),
       this.baseConfig,
       this.logger,
       this.cls,
