@@ -8,6 +8,7 @@ var Environment;
 (function (Environment) {
     Environment["LOCAL"] = "local";
     Environment["DEV"] = "dev";
+    Environment["STG"] = "stg";
     Environment["INTEGRATION_TEST"] = "integration-test";
 })(Environment || (exports.Environment = Environment = {}));
 function getEnvironment() {
@@ -16,6 +17,8 @@ function getEnvironment() {
             return Environment.LOCAL;
         case 'dev':
             return Environment.DEV;
+        case 'stg':
+            return Environment.STG;
         case 'integration-test':
             return Environment.INTEGRATION_TEST;
         default:

@@ -18,6 +18,43 @@ import * as Sentry from '@sentry/node';
 
 export const GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS = 'gcp-service-account-token';
 
+export class MockGcpServiceAccountGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest<{
+      headers: {
+        authorization?: string;
+      };
+    }>();
+    const authorization = request.headers.authorization;
+
+    const isIgnoreGcpServiceAccountGuard = this.reflector.get<boolean>(
+      IGNORE_GCP_SERVICE_ACCOUNT_GUARD_KEY,
+      context.getHandler(),
+    );
+
+    if (isIgnoreGcpServiceAccountGuard) {
+      return true;
+    }
+
+    if (!authorization?.startsWith('Bearer ')) {
+      throw new UnauthorizedException();
+    }
+
+    const token = authorization.split(' ')[1];
+
+    if (
+      getEnvironment() === Environment.INTEGRATION_TEST &&
+      token === GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS
+    ) {
+      return true;
+    }
+
+    throw new UnauthorizedException();
+  }
+}
+
 @Injectable()
 export class GcpServiceAccountGuard extends Base implements CanActivate {
   private client: OAuth2Client;
@@ -54,13 +91,6 @@ export class GcpServiceAccountGuard extends Base implements CanActivate {
     }
 
     const token = authorization.split(' ')[1];
-
-    if (
-      getEnvironment() === Environment.INTEGRATION_TEST &&
-      token === GCP_SERVICE_ACCOUNT_TOKEN_FOR_TESTS
-    ) {
-      return true;
-    }
 
     try {
       const ticket = await this.client.verifyIdToken({
