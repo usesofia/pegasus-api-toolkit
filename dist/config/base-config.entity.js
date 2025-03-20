@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BASE_CONFIG = exports.BaseConfigEntity = exports.BaseConfigSchema = void 0;
+const entity_utils_1 = require("../utils/entity.utils");
+const environment_utils_1 = require("../utils/environment.utils");
 const nestjs_zod_1 = require("nestjs-zod");
 const zod_1 = require("zod");
-const environment_utils_1 = require("../utils/environment.utils");
-const entity_utils_1 = require("../utils/entity.utils");
 exports.BaseConfigSchema = zod_1.z.object({
     env: zod_1.z.nativeEnum(environment_utils_1.Environment),
     nodeEnv: zod_1.z.enum(['development', 'production']),
@@ -45,6 +45,16 @@ exports.BaseConfigSchema = zod_1.z.object({
             auth_provider_x509_cert_url: zod_1.z.string(),
             client_x509_cert_url: zod_1.z.string(),
             universe_domain: zod_1.z.string(),
+        }),
+    }),
+    objectStorage: zod_1.z.object({
+        organizationFilesBucket: zod_1.z.object({
+            name: zod_1.z.string(),
+            projectId: zod_1.z.string(),
+            clientEmail: zod_1.z.string(),
+            privateKey: zod_1.z.string(),
+            audience: zod_1.z.string(),
+            subjectTokenType: zod_1.z.string(),
         }),
     }),
     clerk: zod_1.z.object({

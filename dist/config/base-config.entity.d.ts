@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { Environment } from '../utils/environment.utils';
+import { z } from 'zod';
 export declare const BaseConfigSchema: z.ZodObject<{
     env: z.ZodNativeEnum<typeof Environment>;
     nodeEnv: z.ZodEnum<["development", "production"]>;
@@ -124,6 +124,48 @@ export declare const BaseConfigSchema: z.ZodObject<{
             universe_domain: string;
         };
     }>;
+    objectStorage: z.ZodObject<{
+        organizationFilesBucket: z.ZodObject<{
+            name: z.ZodString;
+            projectId: z.ZodString;
+            clientEmail: z.ZodString;
+            privateKey: z.ZodString;
+            audience: z.ZodString;
+            subjectTokenType: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        }, {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        organizationFilesBucket: {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        };
+    }, {
+        organizationFilesBucket: {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        };
+    }>;
     clerk: z.ZodObject<{
         domain: z.ZodString;
         secretKey: z.ZodString;
@@ -246,6 +288,16 @@ export declare const BaseConfigSchema: z.ZodObject<{
             universe_domain: string;
         };
     };
+    objectStorage: {
+        organizationFilesBucket: {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        };
+    };
     clerk: {
         domain: string;
         secretKey: string;
@@ -308,6 +360,16 @@ export declare const BaseConfigSchema: z.ZodObject<{
             auth_provider_x509_cert_url: string;
             client_x509_cert_url: string;
             universe_domain: string;
+        };
+    };
+    objectStorage: {
+        organizationFilesBucket: {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
         };
     };
     clerk: {
@@ -373,6 +435,16 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             auth_provider_x509_cert_url: string;
             client_x509_cert_url: string;
             universe_domain: string;
+        };
+    };
+    objectStorage: {
+        organizationFilesBucket: {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
         };
     };
     clerk: {
@@ -527,6 +599,48 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             universe_domain: string;
         };
     }>;
+    objectStorage: z.ZodObject<{
+        organizationFilesBucket: z.ZodObject<{
+            name: z.ZodString;
+            projectId: z.ZodString;
+            clientEmail: z.ZodString;
+            privateKey: z.ZodString;
+            audience: z.ZodString;
+            subjectTokenType: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        }, {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        organizationFilesBucket: {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        };
+    }, {
+        organizationFilesBucket: {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
+        };
+    }>;
     clerk: z.ZodObject<{
         domain: z.ZodString;
         secretKey: z.ZodString;
@@ -647,6 +761,16 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             auth_provider_x509_cert_url: string;
             client_x509_cert_url: string;
             universe_domain: string;
+        };
+    };
+    objectStorage: {
+        organizationFilesBucket: {
+            name: string;
+            projectId: string;
+            clientEmail: string;
+            privateKey: string;
+            audience: string;
+            subjectTokenType: string;
         };
     };
     clerk: {
