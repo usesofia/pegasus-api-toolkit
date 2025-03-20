@@ -14,9 +14,10 @@ import { Global, Module } from '@nestjs/common';
     {
       provide: TASKS_SERVICE_PORT,
       useClass:
-        getEnvironment() === Environment.DEV
-          ? GcpTasksServiceAdapter
-          : MongodbTasksServiceAdapter,
+        getEnvironment() === Environment.LOCAL ||
+        getEnvironment() === Environment.INTEGRATION_TEST
+          ? MongodbTasksServiceAdapter
+          : GcpTasksServiceAdapter,
     },
     GcpTasksServiceAdapter,
     MongodbTasksServiceAdapter,

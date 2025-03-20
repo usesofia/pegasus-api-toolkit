@@ -25,9 +25,10 @@ exports.TasksModule = TasksModule = __decorate([
         providers: [
             {
                 provide: tasks_service_port_1.TASKS_SERVICE_PORT,
-                useClass: (0, environment_utils_1.getEnvironment)() === environment_utils_1.Environment.DEV
-                    ? gcp_tasks_service_adapter_1.GcpTasksServiceAdapter
-                    : mongodb_tasks_service_adapter_1.MongodbTasksServiceAdapter,
+                useClass: (0, environment_utils_1.getEnvironment)() === environment_utils_1.Environment.LOCAL ||
+                    (0, environment_utils_1.getEnvironment)() === environment_utils_1.Environment.INTEGRATION_TEST
+                    ? mongodb_tasks_service_adapter_1.MongodbTasksServiceAdapter
+                    : gcp_tasks_service_adapter_1.GcpTasksServiceAdapter,
             },
             gcp_tasks_service_adapter_1.GcpTasksServiceAdapter,
             mongodb_tasks_service_adapter_1.MongodbTasksServiceAdapter,
