@@ -1,7 +1,7 @@
+import { safeInstantiateEntity } from '@app/utils/entity.utils';
+import { Environment } from '@app/utils/environment.utils';
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { Environment } from '@app/utils/environment.utils';
-import { safeInstantiateEntity } from '@app/utils/entity.utils';
 
 export const BaseConfigSchema = z.object({
   env: z.nativeEnum(Environment),
@@ -52,6 +52,16 @@ export const BaseConfigSchema = z.object({
       auth_provider_x509_cert_url: z.string(),
       client_x509_cert_url: z.string(),
       universe_domain: z.string(),
+    }),
+  }),
+  objectStorage: z.object({
+    organizationFilesBucket: z.object({
+      name: z.string(),
+      projectId: z.string(),
+      clientEmail: z.string(),
+      privateKey: z.string(),
+      audience: z.string(),
+      subjectTokenType: z.string(),
     }),
   }),
   clerk: z.object({
