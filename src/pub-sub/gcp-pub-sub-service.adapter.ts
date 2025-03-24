@@ -12,6 +12,7 @@ import {
   getJsonParseReviver,
   getJsonStringfyReplacer,
 } from '@app/utils/json.utils';
+import { sendWebsocketMessageTopicName, WebsocketMessageEntity } from '@app/pub-sub/websocket-message.entity';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
@@ -151,5 +152,40 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
       attempts++;
     }
     await this.flushPublishBuffer({});
+  }
+
+  async publishWebsocketMessage({
+    message,
+    correlationId,
+  }: {
+    message: WebsocketMessageEntity;
+    correlationId?: string;
+  }): Promise<void> {
+    await this.publish({
+      topic: sendWebsocketMessageTopicName,
+      payload: {
+        userId: message.userId,
+        organizationId: message.organizationId,
+        event: message.event,
+        data: message.data,
+      },
+      correlationId,
+    });
+  }
+
+  unsafePublishWebsocketMessage({
+    message,
+  }: {
+    message: WebsocketMessageEntity;
+  }): void {
+    this.unsafePublish({
+      topic: sendWebsocketMessageTopicName,
+      payload: {
+        userId: message.userId,
+        organizationId: message.organizationId,
+        event: message.event,
+        data: message.data,
+      },
+    });
   }
 }

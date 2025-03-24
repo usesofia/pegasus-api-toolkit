@@ -22,6 +22,7 @@ const uuid_1 = require("uuid");
 const base_1 = require("../base");
 const mongoose_1 = require("mongoose");
 const mongodb_pub_sub_event_module_1 = require("./mongodb-pub-sub-event.module");
+const websocket_message_entity_1 = require("./websocket-message.entity");
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbPubSubServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, pubSubEventModel) {
@@ -106,6 +107,29 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
             attempts++;
         }
         await this.flushPublishBuffer({});
+    }
+    async publishWebsocketMessage({ message, correlationId, }) {
+        await this.publish({
+            topic: websocket_message_entity_1.sendWebsocketMessageTopicName,
+            payload: {
+                userId: message.userId,
+                organizationId: message.organizationId,
+                event: message.event,
+                data: message.data,
+            },
+            correlationId,
+        });
+    }
+    unsafePublishWebsocketMessage({ message, }) {
+        this.unsafePublish({
+            topic: websocket_message_entity_1.sendWebsocketMessageTopicName,
+            payload: {
+                userId: message.userId,
+                organizationId: message.organizationId,
+                event: message.event,
+                data: message.data,
+            },
+        });
     }
 };
 exports.MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter;

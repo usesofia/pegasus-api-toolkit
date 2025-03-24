@@ -24,6 +24,7 @@ const gcp_pub_sub_module_1 = require("./gcp-pub-sub.module");
 const base_1 = require("../base");
 const correlation_constants_1 = require("../correlation/correlation.constants");
 const json_utils_1 = require("../utils/json.utils");
+const websocket_message_entity_1 = require("./websocket-message.entity");
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, pubSub) {
@@ -109,6 +110,29 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
             attempts++;
         }
         await this.flushPublishBuffer({});
+    }
+    async publishWebsocketMessage({ message, correlationId, }) {
+        await this.publish({
+            topic: websocket_message_entity_1.sendWebsocketMessageTopicName,
+            payload: {
+                userId: message.userId,
+                organizationId: message.organizationId,
+                event: message.event,
+                data: message.data,
+            },
+            correlationId,
+        });
+    }
+    unsafePublishWebsocketMessage({ message, }) {
+        this.unsafePublish({
+            topic: websocket_message_entity_1.sendWebsocketMessageTopicName,
+            payload: {
+                userId: message.userId,
+                organizationId: message.organizationId,
+                event: message.event,
+                data: message.data,
+            },
+        });
     }
 };
 exports.GcpPubSubServiceAdapter = GcpPubSubServiceAdapter;

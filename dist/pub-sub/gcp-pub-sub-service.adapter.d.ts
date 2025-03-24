@@ -4,6 +4,7 @@ import { PubSubServicePort } from '../pub-sub/pub-sub-service.port';
 import { PubSub } from '@google-cloud/pubsub';
 import { ClsService } from 'nestjs-cls';
 import { Base } from '../base';
+import { WebsocketMessageEntity } from '../pub-sub/websocket-message.entity';
 export declare class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
@@ -26,4 +27,11 @@ export declare class GcpPubSubServiceAdapter extends Base implements PubSubServi
         max?: number;
     }): Promise<void>;
     stopAutoFlushPublishBuffer(): Promise<void>;
+    publishWebsocketMessage({ message, correlationId, }: {
+        message: WebsocketMessageEntity;
+        correlationId?: string;
+    }): Promise<void>;
+    unsafePublishWebsocketMessage({ message, }: {
+        message: WebsocketMessageEntity;
+    }): void;
 }

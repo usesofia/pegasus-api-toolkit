@@ -49,6 +49,7 @@ export * from './pub-sub/gcp-pub-sub-service.adapter';
 export * from './pub-sub/mongodb-pub-sub-event.model';
 export * from './pub-sub/mongodb-pub-sub-event.module';
 export * from './pub-sub/mongodb-pub-sub-service.adapter';
+export * from './pub-sub/websocket-message.entity';
 export * from './sentry/sentry.module';
 export * from './sentry/sentry.middleware';
 export * from './tasks/task.entity';

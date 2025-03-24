@@ -8,6 +8,7 @@ import { Base } from '@app/base';
 import { Model } from 'mongoose';
 import { MongoDbPubSubEventModel } from '@app/pub-sub/mongodb-pub-sub-event.model';
 import { PUB_SUB_EVENT_MODEL } from '@app/pub-sub/mongodb-pub-sub-event.module';
+import { sendWebsocketMessageTopicName, WebsocketMessageEntity } from '@app/pub-sub/websocket-message.entity';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
@@ -145,5 +146,40 @@ export class MongoDbPubSubServiceAdapter
       attempts++;
     }
     await this.flushPublishBuffer({});
+  }
+
+  async publishWebsocketMessage({
+    message,
+    correlationId,
+  }: {
+    message: WebsocketMessageEntity;
+    correlationId?: string;
+  }): Promise<void> {
+    await this.publish({
+      topic: sendWebsocketMessageTopicName,
+      payload: {
+        userId: message.userId,
+        organizationId: message.organizationId,
+        event: message.event,
+        data: message.data,
+      },
+      correlationId,
+    });
+  }
+
+  unsafePublishWebsocketMessage({
+    message,
+  }: {
+    message: WebsocketMessageEntity;
+  }): void {
+    this.unsafePublish({
+      topic: sendWebsocketMessageTopicName,
+      payload: {
+        userId: message.userId,
+        organizationId: message.organizationId,
+        event: message.event,
+        data: message.data,
+      },
+    });
   }
 }

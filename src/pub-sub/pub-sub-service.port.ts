@@ -1,3 +1,5 @@
+import { WebsocketMessageEntity } from "@app/pub-sub/websocket-message.entity";
+
 export interface PubSubServicePort {
   publish({
     topic,
@@ -17,6 +19,18 @@ export interface PubSubServicePort {
   }): void;
   flushPublishBuffer({ max }: { max?: number }): Promise<void>;
   stopAutoFlushPublishBuffer(): Promise<void>;
+  publishWebsocketMessage({
+    message,
+    correlationId,
+  }: {
+    message: WebsocketMessageEntity;
+    correlationId?: string;
+  }): Promise<void>;
+  unsafePublishWebsocketMessage({
+    message,
+  }: {
+    message: WebsocketMessageEntity;
+  }): void;
 }
 
 export const PUB_SUB_SERVICE_PORT = Symbol('PubSubServicePort');

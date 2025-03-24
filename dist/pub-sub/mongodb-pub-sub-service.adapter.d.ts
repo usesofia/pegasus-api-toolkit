@@ -5,6 +5,7 @@ import { ClsService } from 'nestjs-cls';
 import { Base } from '../base';
 import { Model } from 'mongoose';
 import { MongoDbPubSubEventModel } from '../pub-sub/mongodb-pub-sub-event.model';
+import { WebsocketMessageEntity } from '../pub-sub/websocket-message.entity';
 export declare class MongoDbPubSubServiceAdapter extends Base implements PubSubServicePort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
@@ -27,4 +28,11 @@ export declare class MongoDbPubSubServiceAdapter extends Base implements PubSubS
         max?: number;
     }): Promise<void>;
     stopAutoFlushPublishBuffer(): Promise<void>;
+    publishWebsocketMessage({ message, correlationId, }: {
+        message: WebsocketMessageEntity;
+        correlationId?: string;
+    }): Promise<void>;
+    unsafePublishWebsocketMessage({ message, }: {
+        message: WebsocketMessageEntity;
+    }): void;
 }

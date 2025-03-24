@@ -70,6 +70,7 @@ export * from '@app/pub-sub/gcp-pub-sub-service.adapter';
 export * from '@app/pub-sub/mongodb-pub-sub-event.model';
 export * from '@app/pub-sub/mongodb-pub-sub-event.module';
 export * from '@app/pub-sub/mongodb-pub-sub-service.adapter';
+export * from '@app/pub-sub/websocket-message.entity';
 
 // Sentry
 export * from '@app/sentry/sentry.module';
