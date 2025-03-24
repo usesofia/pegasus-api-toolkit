@@ -1,3 +1,4 @@
+import { safeInstantiateEntity } from '@app/utils/entity.utils';
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
@@ -12,4 +13,8 @@ const WebsocketMessageEntitySchema = z.object({
 
 export class WebsocketMessageEntity extends createZodDto(
   WebsocketMessageEntitySchema,
-) {}
+) {
+  static build(input: z.input<typeof WebsocketMessageEntitySchema>): WebsocketMessageEntity {
+    return safeInstantiateEntity(WebsocketMessageEntity, input);
+  }
+}
