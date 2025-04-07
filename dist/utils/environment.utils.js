@@ -10,6 +10,7 @@ var Environment;
     Environment["DEV"] = "dev";
     Environment["STG"] = "stg";
     Environment["INTEGRATION_TEST"] = "integration-test";
+    Environment["PROD"] = "prod";
 })(Environment || (exports.Environment = Environment = {}));
 function getEnvironment() {
     switch (process.env.ENV) {
@@ -21,6 +22,8 @@ function getEnvironment() {
             return Environment.STG;
         case 'integration-test':
             return Environment.INTEGRATION_TEST;
+        case 'prod':
+            return Environment.PROD;
         default:
             throw new Error(`Invalid environment: ${(process.env.ENV ?? 'undefined').toString()}`);
     }

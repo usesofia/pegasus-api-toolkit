@@ -3,6 +3,7 @@ export enum Environment {
   DEV = 'dev',
   STG = 'stg',
   INTEGRATION_TEST = 'integration-test',
+  PROD = 'prod',
 }
 
 export function getEnvironment(): Environment {
@@ -15,6 +16,8 @@ export function getEnvironment(): Environment {
       return Environment.STG;
     case 'integration-test':
       return Environment.INTEGRATION_TEST;
+    case 'prod':
+      return Environment.PROD;
     default:
       throw new Error(
         `Invalid environment: ${(process.env.ENV ?? 'undefined').toString()}`,
