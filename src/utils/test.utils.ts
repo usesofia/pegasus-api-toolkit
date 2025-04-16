@@ -30,6 +30,24 @@ import { SentryModule } from '@app/sentry/sentry.module';
 
 EventEmitter.defaultMaxListeners = 128;
 
+export const buildClsModule = () => {
+  return ClsModule.forRoot({
+    global: true,
+    middleware: {
+      mount: true,
+      generateId: true,
+      idGenerator(req: {
+        headers: Record<string, string | undefined>;
+        [correlationIdKey]: string;
+      }): string {
+        req[correlationIdKey] =
+          req.headers[correlationIdHeaderKey] ?? v4();
+        return req[correlationIdKey];
+      },
+    },
+  });
+};
+
 export class InstanceFixture {
   app: INestApplication;
   request: ReturnType<typeof supertest>;
@@ -61,21 +79,7 @@ export class InstanceFixture {
     let moduleRef = Test.createTestingModule({
       imports: [
         LoggerModule,
-        ClsModule.forRoot({
-          global: true,
-          middleware: {
-            mount: true,
-            generateId: true,
-            idGenerator(req: {
-              headers: Record<string, string | undefined>;
-              [correlationIdKey]: string;
-            }): string {
-              req[correlationIdKey] =
-                req.headers[correlationIdHeaderKey] ?? v4();
-              return req[correlationIdKey];
-            },
-          },
-        }),
+        buildClsModule(),
         PrimaryMongoDbDatabaseModule,
         PubSubModule,
         TasksModule,
