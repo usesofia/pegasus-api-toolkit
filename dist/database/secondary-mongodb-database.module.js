@@ -12,12 +12,12 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrimaryMongoDbDatabaseModule = exports.PRIMARY_MONGOOSE_CONNECTION = void 0;
+exports.SecondaryMongoDbDatabaseModule = exports.SECONDARY_MONGOOSE_CONNECTION = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const base_config_entity_1 = require("../config/base-config.entity");
-exports.PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
-let PrimaryMongoDbDatabaseModule = class PrimaryMongoDbDatabaseModule {
+exports.SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection');
+let SecondaryMongoDbDatabaseModule = class SecondaryMongoDbDatabaseModule {
     constructor(connection) {
         this.connection = connection;
     }
@@ -25,27 +25,27 @@ let PrimaryMongoDbDatabaseModule = class PrimaryMongoDbDatabaseModule {
         await this.connection.disconnect();
     }
 };
-exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule;
-exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule = __decorate([
+exports.SecondaryMongoDbDatabaseModule = SecondaryMongoDbDatabaseModule;
+exports.SecondaryMongoDbDatabaseModule = SecondaryMongoDbDatabaseModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
         providers: [
             {
-                provide: exports.PRIMARY_MONGOOSE_CONNECTION,
+                provide: exports.SECONDARY_MONGOOSE_CONNECTION,
                 useFactory: async (baseConfig) => {
                     const mongoDatabases = baseConfig.databases.filter((db) => db.type === 'mongodb');
-                    if (mongoDatabases.length === 0) {
-                        throw new Error('No MongoDB database found.');
+                    if (mongoDatabases.length < 2) {
+                        throw new Error('No secondary MongoDB database found.');
                     }
-                    const primaryMongoDatabase = mongoDatabases[0];
-                    return await mongoose_1.default.connect(primaryMongoDatabase.uri);
+                    const secondaryMongoDatabase = mongoDatabases[1];
+                    return await mongoose_1.default.connect(secondaryMongoDatabase.uri);
                 },
                 inject: [base_config_entity_1.BASE_CONFIG],
             },
         ],
-        exports: [exports.PRIMARY_MONGOOSE_CONNECTION],
+        exports: [exports.SECONDARY_MONGOOSE_CONNECTION],
     }),
-    __param(0, (0, common_1.Inject)(exports.PRIMARY_MONGOOSE_CONNECTION)),
+    __param(0, (0, common_1.Inject)(exports.SECONDARY_MONGOOSE_CONNECTION)),
     __metadata("design:paramtypes", [mongoose_1.default.Mongoose])
-], PrimaryMongoDbDatabaseModule);
-//# sourceMappingURL=primary-mongodb-database.module.js.map
+], SecondaryMongoDbDatabaseModule);
+//# sourceMappingURL=secondary-mongodb-database.module.js.map
