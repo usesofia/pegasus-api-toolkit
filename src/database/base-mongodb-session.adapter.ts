@@ -55,7 +55,10 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
         });
         return result;
       } catch (error) {
-        if (error instanceof HttpException) {
+        if (
+          error instanceof HttpException ||
+          (error instanceof Error && error.name === 'ValidationError')
+        ) {
           throw error;
         }
         this.logWarn({

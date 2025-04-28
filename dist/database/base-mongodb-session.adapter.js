@@ -33,7 +33,8 @@ class BaseMongoDbSessionAdapter extends base_1.Base {
                 return result;
             }
             catch (error) {
-                if (error instanceof common_1.HttpException) {
+                if (error instanceof common_1.HttpException ||
+                    (error instanceof Error && error.name === 'ValidationError')) {
                     throw error;
                 }
                 this.logWarn({
