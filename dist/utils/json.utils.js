@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getJsonStringfyReplacer = getJsonStringfyReplacer;
+exports.getJsonStringifyReplacer = getJsonStringifyReplacer;
 exports.getJsonParseReviver = getJsonParseReviver;
-function getJsonStringfyReplacer() {
+function getJsonStringifyReplacer() {
     const seen = new WeakSet();
-    return (key, value) => {
+    return (_key, value) => {
         if (value instanceof Error) {
             return {
                 name: value.name,
@@ -25,7 +25,7 @@ function getJsonStringfyReplacer() {
     };
 }
 function getJsonParseReviver() {
-    return (key, value) => {
+    return (_key, value) => {
         return value;
     };
 }

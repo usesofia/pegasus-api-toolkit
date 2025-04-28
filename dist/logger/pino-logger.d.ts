@@ -1,5 +1,5 @@
-import { LoggerService, LogLevel } from '@nestjs/common';
 import { BaseConfigEntity } from '../config/base-config.entity';
+import { LoggerService, LogLevel } from '@nestjs/common';
 export declare class PinoLoggerAdapter implements LoggerService {
     private readonly baseConfig;
     private readonly remoteLogger;

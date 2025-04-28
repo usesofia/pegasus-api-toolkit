@@ -1,18 +1,18 @@
-import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
-import { PubSubServicePort } from '@app/pub-sub/pub-sub-service.port';
-import { PubSub } from '@google-cloud/pubsub';
-import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
-import { ClsService } from 'nestjs-cls';
-import { v4 as uuidv4 } from 'uuid';
-import { GCP_PUB_SUB } from '@app/pub-sub/gcp-pub-sub.module';
 import { Base } from '@app/base';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { correlationIdHeaderKey } from '@app/correlation/correlation.constants';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
+import { GCP_PUB_SUB } from '@app/pub-sub/gcp-pub-sub.module';
+import { PubSubServicePort } from '@app/pub-sub/pub-sub-service.port';
+import { sendWebsocketMessageTopicName, WebsocketMessageEntity } from '@app/pub-sub/websocket-message.entity';
 import {
   getJsonParseReviver,
-  getJsonStringfyReplacer,
+  getJsonStringifyReplacer,
 } from '@app/utils/json.utils';
-import { sendWebsocketMessageTopicName, WebsocketMessageEntity } from '@app/pub-sub/websocket-message.entity';
+import { PubSub } from '@google-cloud/pubsub';
+import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { ClsService } from 'nestjs-cls';
+import { v4 as uuidv4 } from 'uuid';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
@@ -57,7 +57,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
   }): Promise<void> {
     const messageId = await this.pubSub.topic(topic).publishMessage({
       json: JSON.parse(
-        JSON.stringify(payload, getJsonStringfyReplacer()),
+        JSON.stringify(payload, getJsonStringifyReplacer()),
         getJsonParseReviver(),
       ),
       attributes: {

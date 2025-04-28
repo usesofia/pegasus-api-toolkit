@@ -14,17 +14,17 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var GcpPubSubServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GcpPubSubServiceAdapter = void 0;
-const common_1 = require("@nestjs/common");
+const base_1 = require("../base");
 const base_config_entity_1 = require("../config/base-config.entity");
-const pubsub_1 = require("@google-cloud/pubsub");
+const correlation_constants_1 = require("../correlation/correlation.constants");
 const logger_module_1 = require("../logger/logger.module");
+const gcp_pub_sub_module_1 = require("./gcp-pub-sub.module");
+const websocket_message_entity_1 = require("./websocket-message.entity");
+const json_utils_1 = require("../utils/json.utils");
+const pubsub_1 = require("@google-cloud/pubsub");
+const common_1 = require("@nestjs/common");
 const nestjs_cls_1 = require("nestjs-cls");
 const uuid_1 = require("uuid");
-const gcp_pub_sub_module_1 = require("./gcp-pub-sub.module");
-const base_1 = require("../base");
-const correlation_constants_1 = require("../correlation/correlation.constants");
-const json_utils_1 = require("../utils/json.utils");
-const websocket_message_entity_1 = require("./websocket-message.entity");
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, pubSub) {
@@ -39,7 +39,7 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
     }
     async publish({ topic, payload, correlationId, }) {
         const messageId = await this.pubSub.topic(topic).publishMessage({
-            json: JSON.parse(JSON.stringify(payload, (0, json_utils_1.getJsonStringfyReplacer)()), (0, json_utils_1.getJsonParseReviver)()),
+            json: JSON.parse(JSON.stringify(payload, (0, json_utils_1.getJsonStringifyReplacer)()), (0, json_utils_1.getJsonParseReviver)()),
             attributes: {
                 [correlation_constants_1.correlationIdHeaderKey]: correlationId ?? this.cls.getId(),
                 'Content-Type': 'application/json',

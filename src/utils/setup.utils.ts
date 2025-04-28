@@ -1,14 +1,14 @@
 /* istanbul ignore file */
+import { AppExceptionsFilter } from '@app/app-exceptions.filter';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
-import { getJsonStringfyReplacer } from '@app/utils/json.utils';
+import { getJsonStringifyReplacer } from '@app/utils/json.utils';
 import { NestApplicationOptions, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ClsService } from 'nestjs-cls';
 import { patchNestJsSwagger, ZodValidationPipe } from 'nestjs-zod';
-import { AppExceptionsFilter } from '@app/app-exceptions.filter';
 
 export function setupApp({
   app,
@@ -22,7 +22,7 @@ export function setupApp({
     .getHttpAdapter()
     .getInstance()
     .setReplySerializer((data: unknown) =>
-      JSON.stringify(data, getJsonStringfyReplacer()),
+      JSON.stringify(data, getJsonStringifyReplacer()),
     );
 
   app.useLogger(app.get(LOGGER_SERVICE_PORT));

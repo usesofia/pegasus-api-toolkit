@@ -1,6 +1,6 @@
-export function getJsonStringfyReplacer() {
+export function getJsonStringifyReplacer() {
   const seen = new WeakSet();
-  return (key: string, value: unknown) => {
+  return (_key: string, value: unknown) => {
     if (value instanceof Error) {
       return {
         name: value.name,
@@ -22,7 +22,7 @@ export function getJsonStringfyReplacer() {
 }
 
 export function getJsonParseReviver() {
-  return (key: string, value: unknown) => {
+  return (_key: string, value: unknown) => {
     return value;
   };
 }

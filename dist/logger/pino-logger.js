@@ -13,13 +13,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PinoLoggerAdapter = void 0;
-const pino_1 = require("pino");
-const common_1 = require("@nestjs/common");
-const nested_mask_attributes_1 = require("nested-mask-attributes");
 const base_config_entity_1 = require("../config/base-config.entity");
 const better_stack_transport_1 = require("./better-stack-transport");
-const json_utils_1 = require("../utils/json.utils");
 const environment_utils_1 = require("../utils/environment.utils");
+const json_utils_1 = require("../utils/json.utils");
+const common_1 = require("@nestjs/common");
+const nested_mask_attributes_1 = require("nested-mask-attributes");
+const pino_1 = require("pino");
 const sensitiveFields = [
     'password',
     'passwordHash',
@@ -87,7 +87,7 @@ let PinoLoggerAdapter = class PinoLoggerAdapter {
                 };
             }
             data = {
-                ...(0, nested_mask_attributes_1.maskAttribute)(JSON.parse(JSON.stringify(params, (0, json_utils_1.getJsonStringfyReplacer)()), (0, json_utils_1.getJsonParseReviver)()), sensitiveFields, {
+                ...(0, nested_mask_attributes_1.maskAttribute)(JSON.parse(JSON.stringify(params, (0, json_utils_1.getJsonStringifyReplacer)()), (0, json_utils_1.getJsonParseReviver)()), sensitiveFields, {
                     action: nested_mask_attributes_1.MaskActions.MASK,
                 }),
                 environment: this.environment,
