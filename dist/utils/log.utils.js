@@ -1,15 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Log = Log;
-function Log(level = 'debug') {
+function Log(level = 'debug', inputLevel = undefined, outputLevel = undefined) {
     return function (target, propertyKey, descriptor) {
         const originalMethod = descriptor.value;
+        const finalInputLevel = inputLevel ?? level;
+        const finalOutputLevel = outputLevel ?? level;
         descriptor.value = function (...args) {
             const instance = this;
             const functionName = propertyKey;
             instance.logLevel({
                 functionName,
-                level,
+                level: finalInputLevel,
                 suffix: 'input',
                 data: { args },
             });
@@ -20,7 +22,7 @@ function Log(level = 'debug') {
                         .then((resolvedResult) => {
                         instance.logLevel({
                             functionName,
-                            level,
+                            level: finalOutputLevel,
                             suffix: 'output',
                             data: { result: resolvedResult },
                         });
@@ -38,7 +40,7 @@ function Log(level = 'debug') {
                 }
                 instance.logLevel({
                     functionName,
-                    level,
+                    level: finalOutputLevel,
                     suffix: 'output',
                     data: { result },
                 });

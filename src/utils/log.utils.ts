@@ -3,13 +3,19 @@
 import { LogLevel } from '@nestjs/common';
 import { Base } from '@app/base';
 
-export function Log(level: LogLevel = 'debug') {
+export function Log(
+  level: LogLevel = 'debug',
+  inputLevel: LogLevel | undefined = undefined,
+  outputLevel: LogLevel | undefined = undefined,
+) {
   return function (
     target: Base,
     propertyKey: string,
     descriptor: PropertyDescriptor,
   ) {
     const originalMethod = descriptor.value;
+    const finalInputLevel = inputLevel ?? level;
+    const finalOutputLevel = outputLevel ?? level;
 
     descriptor.value = function (...args: any[]) {
       const instance = this as Base;
@@ -18,7 +24,7 @@ export function Log(level: LogLevel = 'debug') {
       // Log method call with input parameters
       instance.logLevel({
         functionName,
-        level,
+        level: finalInputLevel,
         suffix: 'input',
         data: { args },
       });
@@ -33,7 +39,7 @@ export function Log(level: LogLevel = 'debug') {
               // Log successful response
               instance.logLevel({
                 functionName,
-                level,
+                level: finalOutputLevel,
                 suffix: 'output',
                 data: { result: resolvedResult },
               });
@@ -54,7 +60,7 @@ export function Log(level: LogLevel = 'debug') {
         // Handle synchronous results
         instance.logLevel({
           functionName,
-          level,
+          level: finalOutputLevel,
           suffix: 'output',
           data: { result },
         });
