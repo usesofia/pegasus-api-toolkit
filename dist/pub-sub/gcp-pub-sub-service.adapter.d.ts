@@ -1,10 +1,10 @@
-import { LoggerService } from '@nestjs/common';
+import { Base } from '../base';
 import { BaseConfigEntity } from '../config/base-config.entity';
 import { PubSubServicePort } from '../pub-sub/pub-sub-service.port';
-import { PubSub } from '@google-cloud/pubsub';
-import { ClsService } from 'nestjs-cls';
-import { Base } from '../base';
 import { WebsocketMessageEntity } from '../pub-sub/websocket-message.entity';
+import { PubSub } from '@google-cloud/pubsub';
+import { LoggerService } from '@nestjs/common';
+import { ClsService } from 'nestjs-cls';
 export declare class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;

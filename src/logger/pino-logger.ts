@@ -1,14 +1,14 @@
-import pino, { Logger } from 'pino';
-import { Inject, Injectable, LoggerService, LogLevel } from '@nestjs/common';
-import { MaskActions, maskAttribute } from 'nested-mask-attributes';
-import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import createBetterStackTransport from '@app/logger/better-stack-transport';
-import { Transform } from 'stream';
+import { Environment } from '@app/utils/environment.utils';
 import {
   getJsonParseReviver,
-  getJsonStringfyReplacer,
+  getJsonStringifyReplacer,
 } from '@app/utils/json.utils';
-import { Environment } from '@app/utils/environment.utils';
+import { Inject, Injectable, LoggerService, LogLevel } from '@nestjs/common';
+import { MaskActions, maskAttribute } from 'nested-mask-attributes';
+import pino, { Logger } from 'pino';
+import { Transform } from 'stream';
 
 const sensitiveFields = [
   'password',
@@ -101,7 +101,7 @@ export class PinoLoggerAdapter implements LoggerService {
       data = {
         ...(maskAttribute(
           JSON.parse(
-            JSON.stringify(params, getJsonStringfyReplacer()),
+            JSON.stringify(params, getJsonStringifyReplacer()),
             getJsonParseReviver(),
           ),
           sensitiveFields,

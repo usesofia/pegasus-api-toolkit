@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fastifyOptions = exports.appOptions = void 0;
 exports.setupApp = setupApp;
+const app_exceptions_filter_1 = require("../app-exceptions.filter");
 const base_config_entity_1 = require("../config/base-config.entity");
 const logger_module_1 = require("../logger/logger.module");
 const json_utils_1 = require("./json.utils");
@@ -10,12 +11,11 @@ const core_1 = require("@nestjs/core");
 const swagger_1 = require("@nestjs/swagger");
 const nestjs_cls_1 = require("nestjs-cls");
 const nestjs_zod_1 = require("nestjs-zod");
-const app_exceptions_filter_1 = require("../app-exceptions.filter");
 function setupApp({ app, version, }) {
     app
         .getHttpAdapter()
         .getInstance()
-        .setReplySerializer((data) => JSON.stringify(data, (0, json_utils_1.getJsonStringfyReplacer)()));
+        .setReplySerializer((data) => JSON.stringify(data, (0, json_utils_1.getJsonStringifyReplacer)()));
     app.useLogger(app.get(logger_module_1.LOGGER_SERVICE_PORT));
     app.useGlobalFilters(new app_exceptions_filter_1.AppExceptionsFilter(app.get(core_1.HttpAdapterHost), app.get(logger_module_1.LOGGER_SERVICE_PORT), app.get(nestjs_cls_1.ClsService)));
     app.useGlobalPipes(new nestjs_zod_1.ZodValidationPipe(), new common_1.ValidationPipe({
