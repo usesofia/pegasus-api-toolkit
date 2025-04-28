@@ -111,7 +111,9 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       );
 
     if (!doc) {
-      throw new NotFoundException('Recurso não encontrado.');
+      throw new NotFoundException(
+        `Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`,
+      );
     }
 
     if (request.populate) {

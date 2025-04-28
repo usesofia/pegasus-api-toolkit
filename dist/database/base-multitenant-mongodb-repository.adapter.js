@@ -55,7 +55,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             ? previousSession.getSession()
             : null);
         if (!doc) {
-            throw new common_1.NotFoundException('Recurso não encontrado.');
+            throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }
         if (request.populate) {
             await doc.populate(request.populate.split(','));
