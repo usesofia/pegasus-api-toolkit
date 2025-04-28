@@ -60,23 +60,25 @@ export class AppExceptionsFilter implements ExceptionFilter {
         Sentry.captureException(exception);
         this.loggerService.error(
           `[${this.clsService.getId()}] ${exception.message}`,
-          { exception },
+          { 
+            exception,
+            [correlationIdKey]: this.clsService.getId(),
+          },
         );
       } else {
         const errorMessage = `[${this.clsService.getId()}] AppExceptionsFilter.unexpectedError`;
         Sentry.captureException(new Error(errorMessage));
         this.loggerService.error(errorMessage, {
           exception,
-          tempTest: 'Hi Lorena v2!',
+          [correlationIdKey]: this.clsService.getId(),
         });
       }
     } else {
       this.loggerService.log(
-        `[${this.clsService.getId()}] AppExceptionsFilter.catch`,
+        `[${this.clsService.getId()}] AppExceptionsFilter.catch '${message}'`,
         {
           [correlationIdKey]: this.clsService.getId(),
           statusCode,
-          message,
           errors,
           exception,
         },
