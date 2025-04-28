@@ -118,8 +118,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       );
     }
 
-    await doc.validate();
-
     if (request.populate) {
       await doc.populate(request.populate.split(','));
     }
@@ -155,8 +153,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     if (!doc) {
       return null;
     }
-
-    await doc.validate();
 
     if (request.populate) {
       await doc.populate(request.populate.split(','));

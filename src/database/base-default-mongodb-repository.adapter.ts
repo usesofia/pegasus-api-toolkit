@@ -103,8 +103,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       );
     }
 
-    await doc.validate();
-
     if (request.populate) {
       await doc.populate(request.populate.split(','));
     }
@@ -137,8 +135,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     if (!doc) {
       return null;
     }
-
-    await doc.validate();
 
     if (request.populate) {
       await doc.populate(request.populate.split(','));

@@ -53,7 +53,6 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         if (!doc) {
             throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }
-        await doc.validate();
         if (request.populate) {
             await doc.populate(request.populate.split(','));
         }
@@ -71,7 +70,6 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         if (!doc) {
             return null;
         }
-        await doc.validate();
         if (request.populate) {
             await doc.populate(request.populate.split(','));
         }
