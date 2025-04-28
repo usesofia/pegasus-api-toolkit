@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Log = Log;
-function Log(level = 'debug', inputLevel = undefined, outputLevel = undefined) {
+function Log(level = 'debug') {
     return function (target, propertyKey, descriptor) {
         const originalMethod = descriptor.value;
-        const finalInputLevel = inputLevel ?? level;
-        const finalOutputLevel = outputLevel ?? level;
+        const finalInputLevel = level === 'controller' ? 'log' : level;
+        const finalOutputLevel = level === 'controller' ? 'debug' : level;
         descriptor.value = function (...args) {
             const instance = this;
             const functionName = propertyKey;

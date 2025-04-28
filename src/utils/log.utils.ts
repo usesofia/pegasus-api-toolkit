@@ -4,9 +4,7 @@ import { LogLevel } from '@nestjs/common';
 import { Base } from '@app/base';
 
 export function Log(
-  level: LogLevel = 'debug',
-  inputLevel: LogLevel | undefined = undefined,
-  outputLevel: LogLevel | undefined = undefined,
+  level: LogLevel | 'controller' = 'debug',
 ) {
   return function (
     target: Base,
@@ -14,8 +12,8 @@ export function Log(
     descriptor: PropertyDescriptor,
   ) {
     const originalMethod = descriptor.value;
-    const finalInputLevel = inputLevel ?? level;
-    const finalOutputLevel = outputLevel ?? level;
+    const finalInputLevel = level === 'controller' ? 'log' : level;
+    const finalOutputLevel = level === 'controller' ? 'debug' : level;
 
     descriptor.value = function (...args: any[]) {
       const instance = this as Base;
