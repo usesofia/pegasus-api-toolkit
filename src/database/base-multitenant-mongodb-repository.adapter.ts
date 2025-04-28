@@ -72,6 +72,8 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       ownerOrganization: this.getOwnerOrganization({ requester }),
     });
 
+    await created.validate();
+
     let saved = await created.save({
       session: previousSession
         ? (previousSession.getSession() as ClientSession)
@@ -116,6 +118,8 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       );
     }
 
+    await doc.validate();
+
     if (request.populate) {
       await doc.populate(request.populate.split(','));
     }
@@ -151,6 +155,8 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     if (!doc) {
       return null;
     }
+
+    await doc.validate();
 
     if (request.populate) {
       await doc.populate(request.populate.split(','));
@@ -192,6 +198,9 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     })(existing.toObject(), request.data);
 
     Object.assign(existing, merged);
+
+    await existing.validate();
+
     await existing.save({ session });
 
     if (request.populate) {

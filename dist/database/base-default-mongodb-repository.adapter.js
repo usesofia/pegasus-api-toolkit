@@ -30,6 +30,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         const created = new this.model({
             ...request.data,
         });
+        await created.validate();
         let saved = await created.save({
             session: previousSession
                 ? previousSession.getSession()
@@ -52,6 +53,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         if (!doc) {
             throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }
+        await doc.validate();
         if (request.populate) {
             await doc.populate(request.populate.split(','));
         }
@@ -69,6 +71,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         if (!doc) {
             return null;
         }
+        await doc.validate();
         if (request.populate) {
             await doc.populate(request.populate.split(','));
         }
@@ -88,6 +91,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             mergeArrays: false,
         })(existing.toObject(), request.data);
         Object.assign(existing, merged);
+        await existing.validate();
         await existing.save({ session });
         if (request.populate) {
             await existing.populate(request.populate.split(','));
