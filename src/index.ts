@@ -42,9 +42,10 @@ export * from '@app/correlation/correlation.constants';
 export * from '@app/database/base-multitenant-mongodb-repository.adapter';
 export * from '@app/database/base-default-mongodb-repository.adapter';
 export * from '@app/database/base-mongodb-session.adapter';
-export * from '@app/database/primary-mongodb-database.module';
 export * from '@app/database/base-session-starter.port';
 export * from '@app/database/base-session.port';
+export * from '@app/database/primary-mongodb-database.module';
+export * from '@app/database/secondary-mongodb-database.module';
 
 // Health
 export * from '@app/health/health.module';

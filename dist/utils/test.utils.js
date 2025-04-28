@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InstanceFixture = void 0;
+exports.InstanceFixture = exports.buildClsModule = void 0;
 const common_1 = require("@nestjs/common");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)({ path: '.env.integration-test' });
@@ -24,6 +24,21 @@ const tasks_module_1 = require("../tasks/tasks.module");
 const base_config_entity_1 = require("../config/base-config.entity");
 const sentry_module_1 = require("../sentry/sentry.module");
 events_1.EventEmitter.defaultMaxListeners = 128;
+const buildClsModule = () => {
+    return nestjs_cls_1.ClsModule.forRoot({
+        global: true,
+        middleware: {
+            mount: true,
+            generateId: true,
+            idGenerator(req) {
+                req[correlation_constants_1.correlationIdKey] =
+                    req.headers[correlation_constants_1.correlationIdHeaderKey] ?? (0, uuid_1.v4)();
+                return req[correlation_constants_1.correlationIdKey];
+            },
+        },
+    });
+};
+exports.buildClsModule = buildClsModule;
 class InstanceFixture {
     constructor({ app, request, mongoClient, }) {
         this.app = app;
@@ -35,18 +50,7 @@ class InstanceFixture {
         let moduleRef = testing_1.Test.createTestingModule({
             imports: [
                 logger_module_1.LoggerModule,
-                nestjs_cls_1.ClsModule.forRoot({
-                    global: true,
-                    middleware: {
-                        mount: true,
-                        generateId: true,
-                        idGenerator(req) {
-                            req[correlation_constants_1.correlationIdKey] =
-                                req.headers[correlation_constants_1.correlationIdHeaderKey] ?? (0, uuid_1.v4)();
-                            return req[correlation_constants_1.correlationIdKey];
-                        },
-                    },
-                }),
+                (0, exports.buildClsModule)(),
                 primary_mongodb_database_module_1.PrimaryMongoDbDatabaseModule,
                 pub_sub_module_1.PubSubModule,
                 tasks_module_1.TasksModule,
