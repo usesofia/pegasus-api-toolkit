@@ -47,8 +47,8 @@ export function Log(
               // Log error if method throws
               instance.logLevel({
                 functionName,
-                level: 'warn',
-                suffix: 'error',
+                level: 'log',
+                suffix: 'treatableError',
                 data: { error },
               });
               throw error;
@@ -67,7 +67,7 @@ export function Log(
         // Log error if synchronous method throws
         instance.logLevel({
           functionName,
-          level: 'warn',
+          level: 'log',
           suffix: 'treatableError',
           data: { error },
         });

@@ -31,8 +31,8 @@ function Log(level = 'debug') {
                         .catch((error) => {
                         instance.logLevel({
                             functionName,
-                            level: 'warn',
-                            suffix: 'error',
+                            level: 'log',
+                            suffix: 'treatableError',
                             data: { error },
                         });
                         throw error;
@@ -49,7 +49,7 @@ function Log(level = 'debug') {
             catch (error) {
                 instance.logLevel({
                     functionName,
-                    level: 'warn',
+                    level: 'log',
                     suffix: 'treatableError',
                     data: { error },
                 });
