@@ -187,7 +187,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             ? previousSession.getSession()
             : null);
     }
-    getTextSearchPipeline({ requester, searchTerm, indexName = 'text_search_index', stringSearchableFields, }) {
+    getTextSearchPipeline({ requester, textSearchTerm, indexName = 'text_search_index', stringSearchableFields, }) {
         return {
             $search: {
                 index: indexName,
@@ -203,14 +203,14 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
                     should: [
                         {
                             text: {
-                                query: searchTerm,
+                                query: textSearchTerm,
                                 path: stringSearchableFields.map(({ path }) => path),
                                 fuzzy: {},
                             },
                         },
                         ...stringSearchableFields
                             .map(({ path, sanitizer }) => {
-                            const sanitized = sanitizer(searchTerm);
+                            const sanitized = sanitizer(textSearchTerm);
                             if (sanitized === undefined || sanitized === '')
                                 return null;
                             return {
@@ -222,12 +222,12 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
                             };
                         })
                             .filter(Boolean),
-                        ...(mongodb_1.ObjectId.isValid(searchTerm)
+                        ...(mongodb_1.ObjectId.isValid(textSearchTerm)
                             ? [
                                 {
                                     equals: {
                                         path: '_id',
-                                        value: mongodb_1.ObjectId.createFromHexString(searchTerm),
+                                        value: mongodb_1.ObjectId.createFromHexString(textSearchTerm),
                                     },
                                 },
                             ]

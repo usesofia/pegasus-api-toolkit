@@ -75,9 +75,9 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
         };
         previousSession?: BaseSessionPort;
     }): Promise<void>;
-    protected getTextSearchPipeline({ requester, searchTerm, indexName, stringSearchableFields, }: {
+    protected getTextSearchPipeline({ requester, textSearchTerm, indexName, stringSearchableFields, }: {
         requester: AuthUserEntity;
-        searchTerm: string;
+        textSearchTerm: string;
         indexName?: string;
         stringSearchableFields: {
             path: string;

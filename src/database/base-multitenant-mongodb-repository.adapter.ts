@@ -362,12 +362,12 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   @Log()
   protected getTextSearchPipeline({
     requester,
-    searchTerm,
+    textSearchTerm,
     indexName = 'text_search_index',
     stringSearchableFields,
   }: {
     requester: AuthUserEntity;
-    searchTerm: string;
+    textSearchTerm: string;
     indexName?: string;
     stringSearchableFields: {
       path: string;
@@ -389,14 +389,14 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
           should: [
             {
               text: {
-                query: searchTerm,
+                query: textSearchTerm,
                 path: stringSearchableFields.map(({ path }) => path),
                 fuzzy: {},
               },
             },
             ...stringSearchableFields
               .map(({ path, sanitizer }) => {
-                const sanitized = sanitizer(searchTerm);
+                const sanitized = sanitizer(textSearchTerm);
                 if (sanitized === undefined || sanitized === '') return null;
                 return {
                   regex: {
@@ -407,12 +407,12 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
                 };
               })
               .filter(Boolean),
-            ...(ObjectId.isValid(searchTerm)
+            ...(ObjectId.isValid(textSearchTerm)
               ? [
                   {
                     equals: {
                       path: '_id',
-                      value: ObjectId.createFromHexString(searchTerm),
+                      value: ObjectId.createFromHexString(textSearchTerm),
                     },
                   },
                 ]
