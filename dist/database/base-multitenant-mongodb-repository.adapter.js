@@ -238,6 +238,25 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             },
         };
     }
+    getSemanticSearchPipeline({ requester, indexName = 'semantic_search_index', queryVector, path, limit, }) {
+        return {
+            $vectorSearch: {
+                index: indexName,
+                path,
+                queryVector,
+                numCandidates: 100,
+                limit,
+                filter: {
+                    $and: [
+                        {
+                            ownerOrganization: this.getOwnerOrganization({ requester }),
+                            deletedAt: null,
+                        },
+                    ],
+                },
+            },
+        };
+    }
 }
 exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;
 __decorate([
@@ -312,4 +331,10 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Object)
 ], BaseMultitenantMongoDbRepositoryAdapter.prototype, "getTextSearchPipeline", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Object)
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "getSemanticSearchPipeline", null);
 //# sourceMappingURL=base-multitenant-mongodb-repository.adapter.js.map

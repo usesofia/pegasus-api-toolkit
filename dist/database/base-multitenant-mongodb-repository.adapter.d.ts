@@ -84,4 +84,11 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
             sanitizer: (rawValue: string | null | undefined) => string | undefined;
         }[];
     }): PipelineStage;
+    protected getSemanticSearchPipeline({ requester, indexName, queryVector, path, limit, }: {
+        requester: AuthUserEntity;
+        indexName?: string;
+        queryVector: number[];
+        path: string;
+        limit: number;
+    }): PipelineStage;
 }

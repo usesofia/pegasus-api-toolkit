@@ -423,4 +423,37 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       },
     } as PipelineStage;
   }
+
+  @Log()
+  protected getSemanticSearchPipeline({
+    requester,
+    indexName = 'semantic_search_index',
+    queryVector,
+    path,
+    limit,
+  }: {
+    requester: AuthUserEntity;
+    indexName?: string;
+    queryVector: number[];
+    path: string;
+    limit: number;
+  }): PipelineStage {
+    return {
+      $vectorSearch: {
+        index: indexName,
+        path,
+        queryVector,
+        numCandidates: 100,
+        limit,
+        filter: {
+          $and: [
+            {
+              ownerOrganization: this.getOwnerOrganization({ requester }),
+              deletedAt: null,
+            },
+          ],
+        },
+      },
+    };
+  }
 }
