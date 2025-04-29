@@ -71,5 +71,7 @@ export * from './utils/setup.utils';
 export * from './utils/swagger.utils';
 export * from './utils/test.utils';
 export * from './utils/zod.utils';
+export * from './utils/regex.utils';
+export * from './utils/openai.utils';
 export * from './base';
 export * from './app-exceptions.filter';

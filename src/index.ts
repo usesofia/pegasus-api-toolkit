@@ -98,6 +98,8 @@ export * from '@app/utils/setup.utils';
 export * from '@app/utils/swagger.utils';
 export * from '@app/utils/test.utils';
 export * from '@app/utils/zod.utils';
+export * from '@app/utils/regex.utils';
+export * from '@app/utils/openai.utils';
 
 // Base
 export * from '@app/base';
