@@ -8,7 +8,7 @@ const buildOpenAiClientMock = () => {
                 return Promise.resolve({
                     data: [
                         {
-                            embedding: Array(1536).fill(0).map(() => Math.random()),
+                            embedding: Array(16).fill(0).map(() => Math.random()),
                             index: 0,
                             object: 'embedding'
                         }
