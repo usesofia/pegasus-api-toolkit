@@ -1,4 +1,4 @@
-import { Model, Document, ClientSession } from 'mongoose';
+import { Model, Document, ClientSession, PipelineStage } from 'mongoose';
 import { NotFoundException, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '@app/config/base-config.entity';
@@ -9,6 +9,8 @@ import { DeepMergeLeafURI, deepmergeCustom } from 'deepmerge-ts';
 import { BaseSessionPort } from '@app/database/base-session.port';
 import { BaseMongoDbSessionAdapter } from '@app/database/base-mongodb-session.adapter';
 import { BaseSessionStarterPort } from '@app/database/base-session-starter.port';
+import { ObjectId } from 'mongodb';
+import { escapeRegex } from '@app/utils/regex.utils';
 
 export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     TDoc extends Document,
@@ -355,5 +357,70 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
           ? (previousSession.getSession() as ClientSession)
           : null,
       );
+  }
+
+  @Log()
+  protected getTextSearchPipeline({
+    requester,
+    searchTerm,
+    indexName = 'text_search_index',
+    stringSearchableFields,
+  }: {
+    requester: AuthUserEntity;
+    searchTerm: string;
+    indexName?: string;
+    stringSearchableFields: {
+      path: string;
+      sanitizer: (rawValue: string | null | undefined) => string | undefined;
+    }[];
+  }): PipelineStage {
+    return {
+      $search: {
+        index: indexName,
+        compound: {
+          filter: [
+            {
+              equals: {
+                path: 'ownerOrganization',
+                value: this.getOwnerOrganization({ requester }),
+              },
+            },
+          ],
+          should: [
+            {
+              text: {
+                query: searchTerm,
+                path: stringSearchableFields.map(({ path }) => path),
+                fuzzy: {},
+              },
+            },
+            ...stringSearchableFields
+              .map(({ path, sanitizer }) => {
+                const sanitized = sanitizer(searchTerm);
+                if (sanitized === undefined || sanitized === '') return null;
+                return {
+                  regex: {
+                    query: `.*${escapeRegex(sanitized)}.*`,
+                    path,
+                    allowAnalyzedField: true,
+                  },
+                };
+              })
+              .filter(Boolean),
+            ...(ObjectId.isValid(searchTerm)
+              ? [
+                  {
+                    equals: {
+                      path: '_id',
+                      value: ObjectId.createFromHexString(searchTerm),
+                    },
+                  },
+                ]
+              : []),
+          ],
+          minimumShouldMatch: 1,
+        },
+      },
+    } as PipelineStage;
   }
 }

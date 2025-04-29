@@ -1,4 +1,4 @@
-import { Model, Document } from 'mongoose';
+import { Model, Document, PipelineStage } from 'mongoose';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '../config/base-config.entity';
@@ -75,4 +75,13 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
         };
         previousSession?: BaseSessionPort;
     }): Promise<void>;
+    protected getTextSearchPipeline({ requester, searchTerm, indexName, stringSearchableFields, }: {
+        requester: AuthUserEntity;
+        searchTerm: string;
+        indexName?: string;
+        stringSearchableFields: {
+            path: string;
+            sanitizer: (rawValue: string | null | undefined) => string | undefined;
+        }[];
+    }): PipelineStage;
 }

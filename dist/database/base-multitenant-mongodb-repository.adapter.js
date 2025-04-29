@@ -15,6 +15,8 @@ const base_1 = require("../base");
 const log_utils_1 = require("../utils/log.utils");
 const deepmerge_ts_1 = require("deepmerge-ts");
 const base_mongodb_session_adapter_1 = require("./base-mongodb-session.adapter");
+const mongodb_1 = require("mongodb");
+const regex_utils_1 = require("../utils/regex.utils");
 class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
     constructor(className, baseConfig, logger, cls, model) {
         super(className, baseConfig, logger, cls);
@@ -185,6 +187,57 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             ? previousSession.getSession()
             : null);
     }
+    getTextSearchPipeline({ requester, searchTerm, indexName = 'text_search_index', stringSearchableFields, }) {
+        return {
+            $search: {
+                index: indexName,
+                compound: {
+                    filter: [
+                        {
+                            equals: {
+                                path: 'ownerOrganization',
+                                value: this.getOwnerOrganization({ requester }),
+                            },
+                        },
+                    ],
+                    should: [
+                        {
+                            text: {
+                                query: searchTerm,
+                                path: stringSearchableFields.map(({ path }) => path),
+                                fuzzy: {},
+                            },
+                        },
+                        ...stringSearchableFields
+                            .map(({ path, sanitizer }) => {
+                            const sanitized = sanitizer(searchTerm);
+                            if (sanitized === undefined || sanitized === '')
+                                return null;
+                            return {
+                                regex: {
+                                    query: `.*${(0, regex_utils_1.escapeRegex)(sanitized)}.*`,
+                                    path,
+                                    allowAnalyzedField: true,
+                                },
+                            };
+                        })
+                            .filter(Boolean),
+                        ...(mongodb_1.ObjectId.isValid(searchTerm)
+                            ? [
+                                {
+                                    equals: {
+                                        path: '_id',
+                                        value: mongodb_1.ObjectId.createFromHexString(searchTerm),
+                                    },
+                                },
+                            ]
+                            : []),
+                    ],
+                    minimumShouldMatch: 1,
+                },
+            },
+        };
+    }
 }
 exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;
 __decorate([
@@ -253,4 +306,10 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], BaseMultitenantMongoDbRepositoryAdapter.prototype, "remove", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Object)
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "getTextSearchPipeline", null);
 //# sourceMappingURL=base-multitenant-mongodb-repository.adapter.js.map
