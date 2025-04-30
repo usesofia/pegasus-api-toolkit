@@ -9,8 +9,10 @@ const json_utils_1 = require("./json.utils");
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const swagger_1 = require("@nestjs/swagger");
+const mongoose_1 = require("mongoose");
 const nestjs_cls_1 = require("nestjs-cls");
 const nestjs_zod_1 = require("nestjs-zod");
+mongoose_1.default.Schema.Types.String.checkRequired((v) => v !== null && v !== undefined);
 function setupApp({ app, version, }) {
     app
         .getHttpAdapter()
