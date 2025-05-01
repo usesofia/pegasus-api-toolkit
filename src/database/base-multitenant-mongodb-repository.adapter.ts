@@ -81,39 +81,16 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       ? (previousSession.getSession() as ClientSession)
       : null;
 
-    const now = new Date();
-
-    // Create document data with owner organization
-    const documentData = {
+    const created = await this.model.insertOne({
       ...request.data,
-      createdAt: now,
-      updatedAt: now,
       ownerOrganization: this.getOwnerOrganization({ requester }),
-    };
-
-    // Ensure _id exists if using a session (important for transactions)
-    if (session && !documentData._id) {
-      documentData._id = new ObjectId();
-    }
-
-    const created = new this.model(
-      documentData,
-      {
-        session,
-      },
-    );
-
-    await created.validate();
-
-    const saved = await created.save({
-      session,
-    });
+    }, { session });
 
     if (request.populate) {
-      await saved.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
+      await created.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
     }
 
-    return this.toEntity(saved);
+    return this.toEntity(created);
   }
 
   /**
@@ -212,8 +189,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     })(existing.toObject(), request.data);
 
     Object.assign(existing, merged);
-
-    await existing.validate();
 
     await existing.save({ session });
 

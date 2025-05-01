@@ -15,7 +15,6 @@ const base_1 = require("../base");
 const log_utils_1 = require("../utils/log.utils");
 const deepmerge_ts_1 = require("deepmerge-ts");
 const base_mongodb_session_adapter_1 = require("./base-mongodb-session.adapter");
-const mongodb_1 = require("mongodb");
 class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
     constructor(className, baseConfig, logger, cls, model) {
         super(className, baseConfig, logger, cls);
@@ -37,26 +36,13 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         const session = previousSession
             ? previousSession.getSession()
             : null;
-        const now = new Date();
-        const documentData = {
+        const created = await this.model.insertOne({
             ...request.data,
-            createdAt: now,
-            updatedAt: now,
-        };
-        if (session && !documentData._id) {
-            documentData._id = new mongodb_1.ObjectId();
-        }
-        const created = new this.model(documentData, {
-            session,
-        });
-        await created.validate();
-        const saved = await created.save({
-            session,
-        });
+        }, { session });
         if (request.populate) {
-            await saved.populate(this.buildPopulatePaths(request.populate, session));
+            await created.populate(this.buildPopulatePaths(request.populate, session));
         }
-        return this.toEntity(saved);
+        return this.toEntity(created);
     }
     async findByIdOrThrow({ request, previousSession, }) {
         const session = previousSession
@@ -97,7 +83,6 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             mergeArrays: false,
         })(existing.toObject(), request.data);
         Object.assign(existing, merged);
-        await existing.validate();
         await existing.save({ session });
         if (request.populate) {
             await existing.populate(this.buildPopulatePaths(request.populate, session));

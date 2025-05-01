@@ -9,7 +9,6 @@ import { BaseSessionPort } from '@app/database/base-session.port';
 import { BaseMongoDbSessionAdapter } from '@app/database/base-mongodb-session.adapter';
 import { BaseSessionStarterPort } from '@app/database/base-session-starter.port';
 import { DeepPartial } from '@app/utils/deep-partial.type';
-import { ObjectId } from 'mongodb';
 
 export abstract class BaseDefaultMongoDbRepositoryAdapter<
     TDoc extends Document,
@@ -69,38 +68,15 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       ? (previousSession.getSession() as ClientSession)
       : null;
 
-    const now = new Date();
-    
-    // Create document data
-    const documentData = {
+    const created = await this.model.insertOne({
       ...request.data,
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    // Ensure _id exists if using a session (important for transactions)
-    if (session && !documentData._id) {
-      documentData._id = new ObjectId();
-    }
-
-    const created = new this.model(
-      documentData,
-      {
-        session,
-      },
-    );
-
-    await created.validate();
-
-    const saved = await created.save({
-      session,
-    });
+    }, { session });
 
     if (request.populate) {
-      await saved.populate(this.buildPopulatePaths(request.populate, session));
+      await created.populate(this.buildPopulatePaths(request.populate, session));
     }
 
-    return this.toEntity(saved);
+    return this.toEntity(created);
   }
 
   /**
@@ -191,8 +167,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     })(existing.toObject(), request.data);
 
     Object.assign(existing, merged);
-
-    await existing.validate();
 
     await existing.save({ session });
 
