@@ -37,8 +37,11 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         const session = previousSession
             ? previousSession.getSession()
             : null;
+        const now = new Date();
         const documentData = {
             ...request.data,
+            createdAt: now,
+            updatedAt: now,
         };
         if (session && !documentData._id) {
             documentData._id = new mongodb_1.ObjectId();

@@ -69,9 +69,13 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       ? (previousSession.getSession() as ClientSession)
       : null;
 
+    const now = new Date();
+    
     // Create document data
     const documentData = {
       ...request.data,
+      createdAt: now,
+      updatedAt: now,
     };
 
     // Ensure _id exists if using a session (important for transactions)

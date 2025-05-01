@@ -81,9 +81,13 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       ? (previousSession.getSession() as ClientSession)
       : null;
 
+    const now = new Date();
+
     // Create document data with owner organization
     const documentData = {
       ...request.data,
+      createdAt: now,
+      updatedAt: now,
       ownerOrganization: this.getOwnerOrganization({ requester }),
     };
 

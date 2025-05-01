@@ -41,8 +41,11 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         const session = previousSession
             ? previousSession.getSession()
             : null;
+        const now = new Date();
         const documentData = {
             ...request.data,
+            createdAt: now,
+            updatedAt: now,
             ownerOrganization: this.getOwnerOrganization({ requester }),
         };
         if (session && !documentData._id) {
