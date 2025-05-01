@@ -41,10 +41,14 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         const session = previousSession
             ? previousSession.getSession()
             : null;
-        const created = new this.model({
+        const documentData = {
             ...request.data,
             ownerOrganization: this.getOwnerOrganization({ requester }),
-        }, {
+        };
+        if (session && !documentData._id) {
+            documentData._id = new mongodb_1.ObjectId();
+        }
+        const created = new this.model(documentData, {
             session,
         });
         await created.validate();

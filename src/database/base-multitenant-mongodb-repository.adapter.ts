@@ -81,11 +81,19 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       ? (previousSession.getSession() as ClientSession)
       : null;
 
+    // Create document data with owner organization
+    const documentData = {
+      ...request.data,
+      ownerOrganization: this.getOwnerOrganization({ requester }),
+    };
+
+    // Ensure _id exists if using a session (important for transactions)
+    if (session && !documentData._id) {
+      documentData._id = new ObjectId();
+    }
+
     const created = new this.model(
-      {
-        ...request.data,
-        ownerOrganization: this.getOwnerOrganization({ requester }),
-      },
+      documentData,
       {
         session,
       },
