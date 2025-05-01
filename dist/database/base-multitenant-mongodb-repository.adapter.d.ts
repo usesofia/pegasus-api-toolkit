@@ -1,4 +1,4 @@
-import { Model, Document, PipelineStage } from 'mongoose';
+import { Model, Document, ClientSession, PipelineStage } from 'mongoose';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '../config/base-config.entity';
@@ -24,6 +24,12 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
         requester: AuthUserEntity;
     }): string;
     startSession(): Promise<BaseSessionPort>;
+    protected buildPopulatePaths(populate: string, session?: ClientSession): {
+        path: string;
+        options: {
+            session: import("mongodb").ClientSession;
+        } | undefined;
+    }[];
     create({ requester, request, previousSession, }: {
         requester: AuthUserEntity;
         request: TCreateRequest & {

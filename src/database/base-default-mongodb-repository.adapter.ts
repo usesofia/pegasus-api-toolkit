@@ -45,6 +45,14 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     );
   }
 
+  @Log()
+  protected buildPopulatePaths(populate: string, session?: ClientSession | null) {
+    return populate.split(',').map((field) => ({
+      path: field.trim(),
+      options: session ? { session } : undefined,
+    }));
+  }
+
   /**
    * Creates a new document in the collection.
    */
@@ -56,20 +64,27 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     request: TCreateRequest & { populate?: string };
     previousSession?: BaseSessionPort;
   }): Promise<TEntity> {
-    const created = new this.model({
-      ...request.data,
-    });
+    const session = previousSession
+      ? (previousSession.getSession() as ClientSession)
+      : null;
+
+    const created = new this.model(
+      {
+        ...request.data,
+      },
+      {
+        session,
+      },
+    );
 
     await created.validate();
 
-    let saved = await created.save({
-      session: previousSession
-        ? (previousSession.getSession() as ClientSession)
-        : null,
+    const saved = await created.save({
+      session,
     });
 
     if (request.populate) {
-      saved = await saved.populate(request.populate.split(','));
+      await saved.populate(this.buildPopulatePaths(request.populate, session));
     }
 
     return this.toEntity(saved);
@@ -86,16 +101,16 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     request: TFindOneRequest & { populate?: string };
     previousSession?: BaseSessionPort;
   }): Promise<TEntity> {
-    const doc = await this.model
-      .findOne({
+    const session = previousSession
+      ? (previousSession.getSession() as ClientSession)
+      : null;
+
+    const doc = await this.model.findOne(
+      {
         _id: request.id,
         deletedAt: null,
-      })
-      .session(
-        previousSession
-          ? (previousSession.getSession() as ClientSession)
-          : null,
-      );
+      },
+    ).session(session);
 
     if (!doc) {
       throw new NotFoundException(
@@ -104,7 +119,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     }
 
     if (request.populate) {
-      await doc.populate(request.populate.split(','));
+      await doc.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
     }
 
     return this.toEntity(doc);
@@ -121,26 +136,14 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     request: TFindOneRequest & { populate?: string };
     previousSession?: BaseSessionPort;
   }): Promise<TEntity | null> {
-    const doc = await this.model
-      .findOne({
-        _id: request.id,
-        deletedAt: null,
-      })
-      .session(
-        previousSession
-          ? (previousSession.getSession() as ClientSession)
-          : null,
-      );
-
-    if (!doc) {
-      return null;
+    try {
+      return await this.findByIdOrThrow({ request, previousSession });
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return null;
+      }
+      throw error;
     }
-
-    if (request.populate) {
-      await doc.populate(request.populate.split(','));
-    }
-
-    return this.toEntity(doc);
   }
 
   @Log()
@@ -151,15 +154,17 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     request: TPartialUpdateRequest & { populate?: string };
     session: ClientSession;
   }): Promise<TEntity> {
-    const existing = await this.model
-      .findOne({
+    const existing = await this.model.findOne(
+      {
         _id: request.id,
         deletedAt: null,
-      })
-      .session(session);
+      },
+    ).session(session);
 
     if (!existing) {
-      throw new NotFoundException('Recurso não encontrado.');
+      throw new NotFoundException(
+        `Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`,
+      );
     }
 
     // Use deepmerge with custom configuration to not merge arrays
@@ -179,7 +184,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     await existing.save({ session });
 
     if (request.populate) {
-      await existing.populate(request.populate.split(','));
+      await existing.populate(this.buildPopulatePaths(request.populate, session));
     }
 
     return this.toEntity(existing);
@@ -271,22 +276,25 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     request: { id: string };
     previousSession?: BaseSessionPort;
   }): Promise<void> {
-    const doc = await this.model
-      .findOneAndUpdate(
-        {
-          _id: request.id,
-          deletedAt: null,
-        },
-        { $set: { deletedAt: new Date() } },
-      )
-      .session(
-        previousSession
-          ? (previousSession.getSession() as ClientSession)
-          : null,
-      );
+    const session = previousSession
+      ? (previousSession.getSession() as ClientSession)
+      : undefined;
+
+    const doc = await this.model.findOneAndUpdate(
+      {
+        _id: request.id,
+        deletedAt: null,
+      },
+      { $set: { deletedAt: new Date() } },
+      {
+        session,
+      },
+    );
 
     if (!doc) {
-      throw new NotFoundException('Recurso não encontrado.');
+      throw new NotFoundException(
+        `Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`,
+      );
     }
   }
 
@@ -301,18 +309,13 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     request: { id: string };
     previousSession?: BaseSessionPort;
   }): Promise<void> {
-    await this.model
-      .findOneAndUpdate(
-        {
-          _id: request.id,
-          deletedAt: null,
-        },
-        { $set: { deletedAt: new Date() } },
-      )
-      .session(
-        previousSession
-          ? (previousSession.getSession() as ClientSession)
-          : null,
-      );
+    try {
+      await this.removeOrThrow({ request, previousSession });
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return;
+      }
+      throw error;
+    }
   }
 }

@@ -26,64 +26,64 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
     async startSession() {
         return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession(), this.baseConfig, this.logger, this.cls);
     }
+    buildPopulatePaths(populate, session) {
+        return populate.split(',').map((field) => ({
+            path: field.trim(),
+            options: session ? { session } : undefined,
+        }));
+    }
     async create({ request, previousSession, }) {
+        const session = previousSession
+            ? previousSession.getSession()
+            : null;
         const created = new this.model({
             ...request.data,
+        }, {
+            session,
         });
         await created.validate();
-        let saved = await created.save({
-            session: previousSession
-                ? previousSession.getSession()
-                : null,
+        const saved = await created.save({
+            session,
         });
         if (request.populate) {
-            saved = await saved.populate(request.populate.split(','));
+            await saved.populate(this.buildPopulatePaths(request.populate, session));
         }
         return this.toEntity(saved);
     }
     async findByIdOrThrow({ request, previousSession, }) {
-        const doc = await this.model
-            .findOne({
+        const session = previousSession
+            ? previousSession.getSession()
+            : null;
+        const doc = await this.model.findOne({
             _id: request.id,
             deletedAt: null,
-        })
-            .session(previousSession
-            ? previousSession.getSession()
-            : null);
+        }).session(session);
         if (!doc) {
             throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }
         if (request.populate) {
-            await doc.populate(request.populate.split(','));
+            await doc.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
         }
         return this.toEntity(doc);
     }
     async findById({ request, previousSession, }) {
-        const doc = await this.model
-            .findOne({
-            _id: request.id,
-            deletedAt: null,
-        })
-            .session(previousSession
-            ? previousSession.getSession()
-            : null);
-        if (!doc) {
-            return null;
+        try {
+            return await this.findByIdOrThrow({ request, previousSession });
         }
-        if (request.populate) {
-            await doc.populate(request.populate.split(','));
+        catch (error) {
+            if (error instanceof common_1.NotFoundException) {
+                return null;
+            }
+            throw error;
         }
-        return this.toEntity(doc);
     }
     async _partialUpdateTransactionFn({ request, session, }) {
-        const existing = await this.model
-            .findOne({
+        const existing = await this.model.findOne({
             _id: request.id,
             deletedAt: null,
-        })
-            .session(session);
+        }).session(session);
         if (!existing) {
-            throw new common_1.NotFoundException('Recurso não encontrado.');
+            throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }
         const merged = (0, deepmerge_ts_1.deepmergeCustom)({
             mergeArrays: false,
@@ -92,7 +92,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         await existing.validate();
         await existing.save({ session });
         if (request.populate) {
-            await existing.populate(request.populate.split(','));
+            await existing.populate(this.buildPopulatePaths(request.populate, session));
         }
         return this.toEntity(existing);
     }
@@ -146,27 +146,29 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         }
     }
     async removeOrThrow({ request, previousSession, }) {
-        const doc = await this.model
-            .findOneAndUpdate({
+        const session = previousSession
+            ? previousSession.getSession()
+            : undefined;
+        const doc = await this.model.findOneAndUpdate({
             _id: request.id,
             deletedAt: null,
-        }, { $set: { deletedAt: new Date() } })
-            .session(previousSession
-            ? previousSession.getSession()
-            : null);
+        }, { $set: { deletedAt: new Date() } }, {
+            session,
+        });
         if (!doc) {
-            throw new common_1.NotFoundException('Recurso não encontrado.');
+            throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }
     }
     async remove({ request, previousSession, }) {
-        await this.model
-            .findOneAndUpdate({
-            _id: request.id,
-            deletedAt: null,
-        }, { $set: { deletedAt: new Date() } })
-            .session(previousSession
-            ? previousSession.getSession()
-            : null);
+        try {
+            await this.removeOrThrow({ request, previousSession });
+        }
+        catch (error) {
+            if (error instanceof common_1.NotFoundException) {
+                return;
+            }
+            throw error;
+        }
     }
 }
 exports.BaseDefaultMongoDbRepositoryAdapter = BaseDefaultMongoDbRepositoryAdapter;
@@ -176,6 +178,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BaseDefaultMongoDbRepositoryAdapter.prototype, "startSession", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], BaseDefaultMongoDbRepositoryAdapter.prototype, "buildPopulatePaths", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),

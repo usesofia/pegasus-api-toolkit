@@ -1,4 +1,4 @@
-import { Model, Document } from 'mongoose';
+import { Model, Document, ClientSession } from 'mongoose';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '../config/base-config.entity';
@@ -21,6 +21,12 @@ export declare abstract class BaseDefaultMongoDbRepositoryAdapter<TDoc extends D
     constructor(className: string, baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, model: Model<TDoc>);
     protected abstract toEntity(doc: TDoc): TEntity;
     startSession(): Promise<BaseSessionPort>;
+    protected buildPopulatePaths(populate: string, session?: ClientSession | null): {
+        path: string;
+        options: {
+            session: import("mongodb").ClientSession;
+        } | undefined;
+    }[];
     create({ request, previousSession, }: {
         request: TCreateRequest & {
             populate?: string;
