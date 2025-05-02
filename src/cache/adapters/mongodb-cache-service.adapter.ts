@@ -42,10 +42,16 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
   }
 
   async createTTLIndex() {
-    await this.cacheModel.collection.createIndex(
-      { expiresAt: 1 },
-      { expireAfterSeconds: 0 },
-    );
+    const indexName = 'ttlIndex';
+
+    const indexExists = await this.cacheModel.collection.indexExists(indexName);
+
+    if (!indexExists) {
+      await this.cacheModel.collection.createIndex(
+        { expiresAt: 1 },
+        { expireAfterSeconds: 0, name: indexName },
+      );
+    }
   }
 
   async get(key: string): Promise<string | null> {
