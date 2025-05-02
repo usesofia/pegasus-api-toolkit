@@ -1,1 +1,3 @@
-export declare function extractTotalFromCountResults(countResults: any[]): number;
+export interface CountReport {
+    total: number;
+}
