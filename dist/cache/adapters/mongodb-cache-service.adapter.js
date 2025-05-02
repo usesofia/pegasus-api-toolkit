@@ -36,15 +36,15 @@ let MongoDbCacheServiceAdapter = class MongoDbCacheServiceAdapter {
     async createTTLIndex() {
         const indexName = 'ttlIndex';
         const db = this.connection.db;
-        if (db) {
-            const collectionExists = await db.listCollections({ name: exports.CACHE_RECORD_COLLECTION_NAME }).hasNext();
-            if (!collectionExists) {
-                await this.cacheModel.create({
-                    key: '_init',
-                    value: 'initialized',
-                    expiresAt: new Date(Date.now() + 60000),
-                });
-            }
+        const collectionExists = db ?
+            await db.listCollections({ name: exports.CACHE_RECORD_COLLECTION_NAME }).hasNext() :
+            false;
+        if (!collectionExists) {
+            await this.cacheModel.create({
+                key: '_init',
+                value: 'initialized',
+                expiresAt: new Date(Date.now() + 60000),
+            });
         }
         const indexExists = await this.cacheModel.collection.indexExists(indexName);
         if (!indexExists) {
