@@ -44,6 +44,20 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
   async createTTLIndex() {
     const indexName = 'ttlIndex';
 
+    // Wait for collection to exist
+    const db = this.connection.db;
+    if (db) {
+      const collectionExists = await db.listCollections({ name: CACHE_RECORD_COLLECTION_NAME }).hasNext();
+      if (!collectionExists) {
+        // Create a document to ensure collection exists
+        await this.cacheModel.create({
+          key: '_init',
+          value: 'initialized',
+          expiresAt: new Date(Date.now() + 60000), // Expires in 1 minute
+        });
+      }
+    }
+
     const indexExists = await this.cacheModel.collection.indexExists(indexName);
 
     if (!indexExists) {
