@@ -22,7 +22,7 @@ exports.CACHE_RECORD_COLLECTION_NAME = '_CacheRecords';
 const CacheRecordSchema = new mongoose_2.Schema({
     key: { type: String, required: true, index: true },
     value: { type: String, required: true },
-    expiresAt: { type: Date, required: true, index: true },
+    expiresAt: { type: Date, required: true },
 }, {
     timestamps: true,
     collection: exports.CACHE_RECORD_COLLECTION_NAME,

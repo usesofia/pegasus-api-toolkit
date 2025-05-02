@@ -17,7 +17,7 @@ const CacheRecordSchema = new Schema<CacheRecord>(
   {
     key: { type: String, required: true, index: true },
     value: { type: String, required: true },
-    expiresAt: { type: Date, required: true, index: true },
+    expiresAt: { type: Date, required: true },
   },
   {
     timestamps: true,
