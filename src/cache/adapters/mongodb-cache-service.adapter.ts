@@ -42,7 +42,6 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
   }
 
   async createTTLIndex() {
-    const indexName = 'ttlIndex';
     const db = this.connection.db;
 
     // First, check if collection exists
@@ -59,15 +58,10 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
       });
     }
 
-    // Now that we're sure the collection exists, check for index
-    const indexExists = await this.cacheModel.collection.indexExists(indexName);
-
-    if (!indexExists) {
-      await this.cacheModel.collection.createIndex(
-        { expiresAt: 1 },
-        { expireAfterSeconds: 0, name: indexName },
-      );
-    }
+    await this.cacheModel.collection.createIndex(
+      { expiresAt: 1 },
+      { expireAfterSeconds: 0},
+    );
   }
 
   async get(key: string): Promise<string | null> {
