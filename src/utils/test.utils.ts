@@ -159,3 +159,7 @@ export class InstanceFixture {
     await this.mongoClient.close();
   }
 }
+
+export const getCurrentCorrelationId = () => {
+  return expect.getState().currentTestName?.split('|')[1].trim() ?? v4();
+};

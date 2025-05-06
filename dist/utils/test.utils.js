@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.InstanceFixture = exports.buildClsModule = void 0;
+exports.getCurrentCorrelationId = exports.InstanceFixture = exports.buildClsModule = void 0;
 const common_1 = require("@nestjs/common");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)({ path: '.env.integration-test' });
@@ -111,4 +111,8 @@ class InstanceFixture {
     }
 }
 exports.InstanceFixture = InstanceFixture;
+const getCurrentCorrelationId = () => {
+    return expect.getState().currentTestName?.split('|')[1].trim() ?? (0, uuid_1.v4)();
+};
+exports.getCurrentCorrelationId = getCurrentCorrelationId;
 //# sourceMappingURL=test.utils.js.map

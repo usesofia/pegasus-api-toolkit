@@ -24,3 +24,4 @@ export declare class InstanceFixture {
     getCurrentCorrelationId(): string;
     teardown(): Promise<void>;
 }
+export declare const getCurrentCorrelationId: () => string;
