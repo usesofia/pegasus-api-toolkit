@@ -37,7 +37,7 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
       throw new Error('MongoDB config not found.');
     }
 
-    let attempt = 1;
+    let attempt = 0;
 
     const maxNAttempts = options?.nRetries ?? mongoDbConfig.nTransactionRetries;
     const maxDelayBetweenAttempts =

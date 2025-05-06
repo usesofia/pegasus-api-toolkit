@@ -19,7 +19,7 @@ class BaseMongoDbSessionAdapter extends base_1.Base {
         if (!mongoDbConfig) {
             throw new Error('MongoDB config not found.');
         }
-        let attempt = 1;
+        let attempt = 0;
         const maxNAttempts = options?.nRetries ?? mongoDbConfig.nTransactionRetries;
         const maxDelayBetweenAttempts = options?.maxDelayBetweenAttempts ??
             mongoDbConfig.maxDelayBetweenTransactionAttempts;
