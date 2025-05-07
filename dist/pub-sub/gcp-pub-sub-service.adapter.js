@@ -21,6 +21,7 @@ const logger_module_1 = require("../logger/logger.module");
 const gcp_pub_sub_module_1 = require("./gcp-pub-sub.module");
 const websocket_message_entity_1 = require("./websocket-message.entity");
 const json_utils_1 = require("../utils/json.utils");
+const log_utils_1 = require("../utils/log.utils");
 const pubsub_1 = require("@google-cloud/pubsub");
 const common_1 = require("@nestjs/common");
 const nestjs_cls_1 = require("nestjs-cls");
@@ -136,6 +137,42 @@ let GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = class GcpPubSubService
     }
 };
 exports.GcpPubSubServiceAdapter = GcpPubSubServiceAdapter;
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], GcpPubSubServiceAdapter.prototype, "publish", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], GcpPubSubServiceAdapter.prototype, "unsafePublish", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], GcpPubSubServiceAdapter.prototype, "flushPublishBuffer", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], GcpPubSubServiceAdapter.prototype, "stopAutoFlushPublishBuffer", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], GcpPubSubServiceAdapter.prototype, "publishWebsocketMessage", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], GcpPubSubServiceAdapter.prototype, "unsafePublishWebsocketMessage", null);
 exports.GcpPubSubServiceAdapter = GcpPubSubServiceAdapter = GcpPubSubServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

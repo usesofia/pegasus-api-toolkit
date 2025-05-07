@@ -18,6 +18,7 @@ const base_1 = require("../base");
 const base_config_entity_1 = require("../config/base-config.entity");
 const primary_mongodb_database_module_1 = require("../database/primary-mongodb-database.module");
 const logger_module_1 = require("../logger/logger.module");
+const log_utils_1 = require("../utils/log.utils");
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const nestjs_cls_1 = require("nestjs-cls");
@@ -109,6 +110,30 @@ let MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = class MongodbTas
     }
 };
 exports.MongodbTasksServiceAdapter = MongodbTasksServiceAdapter;
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MongodbTasksServiceAdapter.prototype, "appendTask", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], MongodbTasksServiceAdapter.prototype, "unsafeAppendTask", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MongodbTasksServiceAdapter.prototype, "flushTasksBuffer", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MongodbTasksServiceAdapter.prototype, "stopAutoFlushTasksBuffer", null);
 exports.MongodbTasksServiceAdapter = MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

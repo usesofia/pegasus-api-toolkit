@@ -19,6 +19,7 @@ const base_1 = require("../base");
 const base_config_entity_1 = require("../config/base-config.entity");
 const correlation_constants_1 = require("../correlation/correlation.constants");
 const logger_module_1 = require("../logger/logger.module");
+const log_utils_1 = require("../utils/log.utils");
 const tasks_1 = require("@google-cloud/tasks");
 const common_1 = require("@nestjs/common");
 const nestjs_cls_1 = require("nestjs-cls");
@@ -114,6 +115,30 @@ let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAda
     }
 };
 exports.GcpTasksServiceAdapter = GcpTasksServiceAdapter;
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], GcpTasksServiceAdapter.prototype, "appendTask", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], GcpTasksServiceAdapter.prototype, "unsafeAppendTask", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], GcpTasksServiceAdapter.prototype, "flushTasksBuffer", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], GcpTasksServiceAdapter.prototype, "stopAutoFlushTasksBuffer", null);
 exports.GcpTasksServiceAdapter = GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

@@ -9,6 +9,7 @@ import {
   getJsonParseReviver,
   getJsonStringifyReplacer,
 } from '@app/utils/json.utils';
+import { Log } from '@app/utils/log.utils';
 import { PubSub } from '@google-cloud/pubsub';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
@@ -46,6 +47,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     );
   }
 
+  @Log()
   async publish({
     topic,
     payload,
@@ -77,6 +79,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     });
   }
 
+  @Log()
   unsafePublish({
     topic,
     payload,
@@ -97,6 +100,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     });
   }
 
+  @Log()
   async flushPublishBuffer({ max }: { max?: number }): Promise<void> {
     if (this.publishBuffer.length === 0) {
       return;
@@ -143,6 +147,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     this.flushing = false;
   }
 
+  @Log()
   async stopAutoFlushPublishBuffer(): Promise<void> {
     clearInterval(this.publishBufferFlushInterval);
     // Wait until is flushing is false for 10 seconds at max
@@ -154,6 +159,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     await this.flushPublishBuffer({});
   }
 
+  @Log()
   async publishWebsocketMessage({
     message,
     correlationId,
@@ -173,6 +179,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     });
   }
 
+  @Log()
   unsafePublishWebsocketMessage({
     message,
   }: {

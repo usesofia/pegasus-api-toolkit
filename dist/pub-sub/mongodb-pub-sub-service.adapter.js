@@ -23,6 +23,7 @@ const base_1 = require("../base");
 const mongoose_1 = require("mongoose");
 const mongodb_pub_sub_event_module_1 = require("./mongodb-pub-sub-event.module");
 const websocket_message_entity_1 = require("./websocket-message.entity");
+const log_utils_1 = require("../utils/log.utils");
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbPubSubServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, pubSubEventModel) {
@@ -134,6 +135,42 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
     }
 };
 exports.MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter;
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MongoDbPubSubServiceAdapter.prototype, "publish", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], MongoDbPubSubServiceAdapter.prototype, "unsafePublish", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MongoDbPubSubServiceAdapter.prototype, "flushPublishBuffer", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MongoDbPubSubServiceAdapter.prototype, "stopAutoFlushPublishBuffer", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MongoDbPubSubServiceAdapter.prototype, "publishWebsocketMessage", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], MongoDbPubSubServiceAdapter.prototype, "unsafePublishWebsocketMessage", null);
 exports.MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

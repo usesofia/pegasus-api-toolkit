@@ -4,6 +4,7 @@ import { PRIMARY_MONGOOSE_CONNECTION } from '@app/database/primary-mongodb-datab
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { TaskEntity } from '@app/tasks/task.entity';
 import { TasksServicePort } from '@app/tasks/tasks-service.port';
+import { Log } from '@app/utils/log.utils';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { Connection, Model, Schema } from 'mongoose';
 import { ClsService } from 'nestjs-cls';
@@ -67,6 +68,7 @@ export class MongodbTasksServiceAdapter
     );
   }
 
+  @Log()
   async appendTask({
     task,
     correlationId,
@@ -83,6 +85,7 @@ export class MongodbTasksServiceAdapter
     });
   }
 
+  @Log()
   unsafeAppendTask({
     task,
   }: {
@@ -100,6 +103,7 @@ export class MongodbTasksServiceAdapter
     });
   }
 
+  @Log()
   async flushTasksBuffer({ max }: { max?: number }): Promise<void> {
     if (this.tasksBuffer.length === 0) {
       return;
@@ -145,6 +149,7 @@ export class MongodbTasksServiceAdapter
     this.flushing = false;
   }
 
+  @Log()
   async stopAutoFlushTasksBuffer(): Promise<void> {
     clearInterval(this.tasksBufferFlushInterval);
     // Wait until is flushing is false for 10 seconds at max
