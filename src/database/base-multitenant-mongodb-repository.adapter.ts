@@ -446,6 +446,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     };
   }
 
+  @Log()
   async findAllWithOutdatedMarkdownEmbedding({
     limit,
     deltaDurationToConsiderAsOutdated,
