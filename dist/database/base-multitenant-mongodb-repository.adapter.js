@@ -259,11 +259,14 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         const outdateds = await this.model.find({
             $or: [
                 {
-                    markdownEmbeddingUpdatedAt: null,
+                    $or: [
+                        { markdownEmbeddingUpdatedAt: null },
+                        { markdownEmbeddingUpdatedAt: { $exists: false } }
+                    ],
                     updatedAt: { $lt: thresholdDate }
                 },
                 {
-                    markdownEmbeddingUpdatedAt: { $ne: null },
+                    markdownEmbeddingUpdatedAt: { $ne: null, $exists: true },
                     $expr: {
                         $and: [
                             { $gt: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },

@@ -465,14 +465,17 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
 
     const outdateds = await this.model.find({
       $or: [
-        // Condition 1: markdownEmbeddingUpdatedAt is null and updatedAt is older than threshold
+        // Condition 1: markdownEmbeddingUpdatedAt is null or undefined and updatedAt is older than threshold
         {
-          markdownEmbeddingUpdatedAt: null,
+          $or: [
+            { markdownEmbeddingUpdatedAt: null },
+            { markdownEmbeddingUpdatedAt: { $exists: false } }
+          ],
           updatedAt: { $lt: thresholdDate }
         },
         // Condition 2: markdownEmbeddingUpdatedAt is older than updatedAt with minimum delta duration
         {
-          markdownEmbeddingUpdatedAt: { $ne: null },
+          markdownEmbeddingUpdatedAt: { $ne: null, $exists: true },
           $expr: {
             $and: [
               { $gt: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
