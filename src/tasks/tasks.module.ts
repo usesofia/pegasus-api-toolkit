@@ -1,11 +1,14 @@
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
-import { PrimaryMongoDbDatabaseModule } from '@app/database/primary-mongodb-database.module';
+import { PRIMARY_MONGOOSE_CONNECTION, PrimaryMongoDbDatabaseModule } from '@app/database/primary-mongodb-database.module';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { GcpTasksServiceAdapter } from '@app/tasks/gcp-tasks-service.adapter';
 import { MongodbTasksServiceAdapter } from '@app/tasks/mongodb-tasks-service.adapter';
 import { TASKS_SERVICE_PORT, TasksServicePort } from '@app/tasks/tasks-service.port';
 import { Environment, getEnvironment } from '@app/utils/environment.utils';
 import { CloudTasksClient } from '@google-cloud/tasks';
-import { Global, Inject, Module, OnApplicationShutdown } from '@nestjs/common';
+import { Global, Inject, LoggerService, Module, OnApplicationShutdown } from '@nestjs/common';
+import { Connection } from 'mongoose';
+import { ClsService } from 'nestjs-cls';
 
 @Global()
 @Module({
@@ -13,14 +16,20 @@ import { Global, Inject, Module, OnApplicationShutdown } from '@nestjs/common';
   providers: [
     {
       provide: TASKS_SERVICE_PORT,
-      useClass:
-        getEnvironment() === Environment.LOCAL ||
-        getEnvironment() === Environment.INTEGRATION_TEST
-          ? MongodbTasksServiceAdapter
-          : GcpTasksServiceAdapter,
+      useFactory: (
+        baseConfig: BaseConfigEntity,
+        logger: LoggerService,
+        cls: ClsService,
+        cloudTasksClient: CloudTasksClient,
+        connection: Connection,
+      ) => {
+        return getEnvironment() === Environment.LOCAL ||
+          getEnvironment() === Environment.INTEGRATION_TEST
+          ? new MongodbTasksServiceAdapter(baseConfig, logger, cls, connection)
+          : new GcpTasksServiceAdapter(baseConfig, logger, cls, cloudTasksClient);
+      },
+      inject: [BASE_CONFIG, LOGGER_SERVICE_PORT, ClsService, CloudTasksClient, PRIMARY_MONGOOSE_CONNECTION],
     },
-    GcpTasksServiceAdapter,
-    MongodbTasksServiceAdapter,
     {
       provide: CloudTasksClient,
       useFactory: (baseConfig: BaseConfigEntity) => {
