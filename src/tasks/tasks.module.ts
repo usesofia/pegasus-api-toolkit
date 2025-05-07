@@ -5,7 +5,7 @@ import { MongodbTasksServiceAdapter } from '@app/tasks/mongodb-tasks-service.ada
 import { TASKS_SERVICE_PORT, TasksServicePort } from '@app/tasks/tasks-service.port';
 import { Environment, getEnvironment } from '@app/utils/environment.utils';
 import { CloudTasksClient } from '@google-cloud/tasks';
-import { Global, Inject, Module } from '@nestjs/common';
+import { Global, Inject, Module, OnApplicationShutdown } from '@nestjs/common';
 
 @Global()
 @Module({
@@ -34,7 +34,7 @@ import { Global, Inject, Module } from '@nestjs/common';
   ],
   exports: [TASKS_SERVICE_PORT],
 })
-export class TasksModule {
+export class TasksModule implements OnApplicationShutdown {
   constructor(
     @Inject(TASKS_SERVICE_PORT)
     private readonly tasksService: TasksServicePort,
