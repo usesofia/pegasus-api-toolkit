@@ -23,7 +23,7 @@ const tasks_1 = require("@google-cloud/tasks");
 const common_1 = require("@nestjs/common");
 const nestjs_cls_1 = require("nestjs-cls");
 const uuid_1 = require("uuid");
-const MAX_TASKS_BUFFER_SIZE = 4096;
+const MAX_TASKS_BUFFER_SIZE = 16 * 1024;
 let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, cloudTasksClient) {
         super(GcpTasksServiceAdapter_1.name, baseConfig, logger, cls);

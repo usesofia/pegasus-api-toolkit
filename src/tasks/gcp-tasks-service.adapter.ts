@@ -10,7 +10,7 @@ import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { v4 as uuidv4 } from 'uuid';
 
-const MAX_TASKS_BUFFER_SIZE = 4096;
+const MAX_TASKS_BUFFER_SIZE = 16 * 1024;
 
 interface TaskBufferItem {
   correlationId: string;
