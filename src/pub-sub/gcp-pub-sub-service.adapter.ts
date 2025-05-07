@@ -41,7 +41,7 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     super(GcpPubSubServiceAdapter.name, baseConfig, logger, cls);
     this.flushing = false;
     this.publishBufferFlushInterval = setInterval(
-      () => void this.flushPublishBuffer({ max: 256 }),
+      () => void this.flushPublishBuffer({ max: 512 }),
       400,
     );
   }

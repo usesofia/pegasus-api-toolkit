@@ -2,10 +2,10 @@ import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { PrimaryMongoDbDatabaseModule } from '@app/database/primary-mongodb-database.module';
 import { GcpTasksServiceAdapter } from '@app/tasks/gcp-tasks-service.adapter';
 import { MongodbTasksServiceAdapter } from '@app/tasks/mongodb-tasks-service.adapter';
-import { TASKS_SERVICE_PORT } from '@app/tasks/tasks-service.port';
+import { TASKS_SERVICE_PORT, TasksServicePort } from '@app/tasks/tasks-service.port';
 import { Environment, getEnvironment } from '@app/utils/environment.utils';
 import { CloudTasksClient } from '@google-cloud/tasks';
-import { Global, Module } from '@nestjs/common';
+import { Global, Inject, Module } from '@nestjs/common';
 
 @Global()
 @Module({
@@ -34,4 +34,13 @@ import { Global, Module } from '@nestjs/common';
   ],
   exports: [TASKS_SERVICE_PORT],
 })
-export class TasksModule {}
+export class TasksModule {
+  constructor(
+    @Inject(TASKS_SERVICE_PORT)
+    private readonly tasksService: TasksServicePort,
+  ) {}
+
+  async onApplicationShutdown() {
+    await this.tasksService.stopAutoFlushTasksBuffer();
+  }
+}

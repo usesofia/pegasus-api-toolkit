@@ -22,6 +22,8 @@ const logger_module_1 = require("../logger/logger.module");
 const tasks_1 = require("@google-cloud/tasks");
 const common_1 = require("@nestjs/common");
 const nestjs_cls_1 = require("nestjs-cls");
+const uuid_1 = require("uuid");
+const MAX_TASKS_BUFFER_SIZE = 4096;
 let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, cloudTasksClient) {
         super(GcpTasksServiceAdapter_1.name, baseConfig, logger, cls);
@@ -29,6 +31,9 @@ let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAda
         this.logger = logger;
         this.cls = cls;
         this.cloudTasksClient = cloudTasksClient;
+        this.tasksBuffer = [];
+        this.flushing = false;
+        this.tasksBufferFlushInterval = setInterval(() => void this.flushTasksBuffer({ max: 512 }), 400);
     }
     async appendTask({ task, correlationId, }) {
         const baseUrl = this.baseConfig.microservices.find((m) => m.name === task.microservice)?.internalBaseUrl;
@@ -53,6 +58,59 @@ let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAda
                 },
             },
         });
+    }
+    unsafeAppendTask({ task, }) {
+        if (this.tasksBuffer.length >= MAX_TASKS_BUFFER_SIZE) {
+            throw new Error(`Tasks buffer is full. It has ${this.tasksBuffer.length.toString()} items.`);
+        }
+        this.tasksBuffer.push({
+            correlationId: this.cls.getId(),
+            id: (0, uuid_1.v4)(),
+            task,
+        });
+    }
+    async flushTasksBuffer({ max }) {
+        if (this.tasksBuffer.length === 0) {
+            return;
+        }
+        if (this.flushing) {
+            return;
+        }
+        this.flushing = true;
+        const calculatedMax = max ?? this.tasksBuffer.length;
+        const itemsToBeProcessed = this.tasksBuffer.slice(0, calculatedMax);
+        const successItemIdsProcessed = [];
+        await Promise.all(itemsToBeProcessed.map(async (item) => {
+            try {
+                await this.appendTask({
+                    task: item.task,
+                    correlationId: item.correlationId,
+                });
+                successItemIdsProcessed.push(item.id);
+            }
+            catch (error) {
+                this.logWarn({
+                    correlationId: item.correlationId,
+                    functionName: 'flushTasksBuffer',
+                    suffix: 'itemFailedToBeProcessed',
+                    data: {
+                        error,
+                        item,
+                    },
+                });
+            }
+        }));
+        this.tasksBuffer = this.tasksBuffer.filter((item) => !successItemIdsProcessed.includes(item.id));
+        this.flushing = false;
+    }
+    async stopAutoFlushTasksBuffer() {
+        clearInterval(this.tasksBufferFlushInterval);
+        let attempts = 0;
+        while (this.flushing && attempts < 100) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            attempts++;
+        }
+        await this.flushTasksBuffer({});
     }
 };
 exports.GcpTasksServiceAdapter = GcpTasksServiceAdapter;

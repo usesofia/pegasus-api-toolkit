@@ -5,4 +5,11 @@ export interface TasksServicePort {
         task: TaskEntity;
         correlationId?: string;
     }): Promise<void>;
+    unsafeAppendTask({ task, }: {
+        task: TaskEntity;
+    }): void;
+    flushTasksBuffer({ max }: {
+        max?: number;
+    }): Promise<void>;
+    stopAutoFlushTasksBuffer(): Promise<void>;
 }

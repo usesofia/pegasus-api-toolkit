@@ -10,9 +10,19 @@ export declare class GcpTasksServiceAdapter extends Base implements TasksService
     protected readonly logger: LoggerService;
     protected readonly cls: ClsService;
     private readonly cloudTasksClient;
+    private tasksBuffer;
+    private tasksBufferFlushInterval;
+    private flushing;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cloudTasksClient: CloudTasksClient);
     appendTask({ task, correlationId, }: {
         task: TaskEntity;
         correlationId?: string;
     }): Promise<void>;
+    unsafeAppendTask({ task, }: {
+        task: TaskEntity;
+    }): void;
+    flushTasksBuffer({ max }: {
+        max?: number;
+    }): Promise<void>;
+    stopAutoFlushTasksBuffer(): Promise<void>;
 }

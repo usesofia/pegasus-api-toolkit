@@ -21,7 +21,9 @@ const logger_module_1 = require("../logger/logger.module");
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("mongoose");
 const nestjs_cls_1 = require("nestjs-cls");
+const uuid_1 = require("uuid");
 exports.TASKS_COLLECTION_NAME = '_Tasks';
+const MAX_TASKS_BUFFER_SIZE = 4096;
 const TaskSchema = new mongoose_1.Schema({
     correlationId: { type: String, required: true },
     queue: { type: String, required: true },
@@ -38,7 +40,10 @@ let MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = class MongodbTas
         this.logger = logger;
         this.cls = cls;
         this.connection = connection;
+        this.tasksBuffer = [];
         this.taskModel = this.connection.model('Task', TaskSchema);
+        this.flushing = false;
+        this.tasksBufferFlushInterval = setInterval(() => void this.flushTasksBuffer({ max: 512 }), 400);
     }
     async appendTask({ task, correlationId, }) {
         const finalCorrelationId = correlationId ?? this.cls.getId();
@@ -48,6 +53,59 @@ let MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = class MongodbTas
             microservice: task.microservice,
             payload: task.payload,
         });
+    }
+    unsafeAppendTask({ task, }) {
+        if (this.tasksBuffer.length >= MAX_TASKS_BUFFER_SIZE) {
+            throw new Error(`Tasks buffer is full. It has ${this.tasksBuffer.length.toString()} items.`);
+        }
+        this.tasksBuffer.push({
+            correlationId: this.cls.getId(),
+            id: (0, uuid_1.v4)(),
+            task,
+        });
+    }
+    async flushTasksBuffer({ max }) {
+        if (this.tasksBuffer.length === 0) {
+            return;
+        }
+        if (this.flushing) {
+            return;
+        }
+        this.flushing = true;
+        const calculatedMax = max ?? this.tasksBuffer.length;
+        const itemsToBeProcessed = this.tasksBuffer.slice(0, calculatedMax);
+        const successItemIdsProcessed = [];
+        await Promise.all(itemsToBeProcessed.map(async (item) => {
+            try {
+                await this.appendTask({
+                    task: item.task,
+                    correlationId: item.correlationId,
+                });
+                successItemIdsProcessed.push(item.id);
+            }
+            catch (error) {
+                this.logWarn({
+                    correlationId: item.correlationId,
+                    functionName: 'flushTasksBuffer',
+                    suffix: 'itemFailedToBeProcessed',
+                    data: {
+                        error,
+                        item,
+                    },
+                });
+            }
+        }));
+        this.tasksBuffer = this.tasksBuffer.filter((item) => !successItemIdsProcessed.includes(item.id));
+        this.flushing = false;
+    }
+    async stopAutoFlushTasksBuffer() {
+        clearInterval(this.tasksBufferFlushInterval);
+        let attempts = 0;
+        while (this.flushing && attempts < 100) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            attempts++;
+        }
+        await this.flushTasksBuffer({});
     }
 };
 exports.MongodbTasksServiceAdapter = MongodbTasksServiceAdapter;

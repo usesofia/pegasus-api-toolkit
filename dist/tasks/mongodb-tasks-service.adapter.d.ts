@@ -12,9 +12,19 @@ export declare class MongodbTasksServiceAdapter extends Base implements TasksSer
     protected readonly cls: ClsService;
     private readonly connection;
     private readonly taskModel;
+    private tasksBuffer;
+    private tasksBufferFlushInterval;
+    private flushing;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, connection: Connection);
     appendTask({ task, correlationId, }: {
         task: TaskEntity;
         correlationId?: string;
     }): Promise<void>;
+    unsafeAppendTask({ task, }: {
+        task: TaskEntity;
+    }): void;
+    flushTasksBuffer({ max }: {
+        max?: number;
+    }): Promise<void>;
+    stopAutoFlushTasksBuffer(): Promise<void>;
 }
