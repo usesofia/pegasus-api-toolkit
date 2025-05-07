@@ -6,6 +6,7 @@ import { AuthUserEntity } from '../auth/entities/auth-user.entity';
 import { Base } from '../base';
 import { BaseSessionPort } from '../database/base-session.port';
 import { BaseSessionStarterPort } from '../database/base-session-starter.port';
+import { Duration } from 'luxon';
 export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc extends Document, TEntity, TCreateRequest extends {
     data: Partial<TDoc>;
 }, TFindOneRequest extends {
@@ -97,4 +98,9 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
         path: string;
         limit: number;
     }): PipelineStage;
+    findAllWithOutdatedMarkdownEmbedding({ limit, deltaDurationToConsiderAsOutdated, previousSession, }: {
+        limit: number;
+        deltaDurationToConsiderAsOutdated: Duration;
+        previousSession?: BaseSessionPort;
+    }): Promise<TEntity[]>;
 }

@@ -250,6 +250,35 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             },
         };
     }
+    async findAllWithOutdatedMarkdownEmbedding({ limit, deltaDurationToConsiderAsOutdated, previousSession, }) {
+        const session = previousSession
+            ? previousSession.getSession()
+            : null;
+        const currentDate = new Date();
+        const thresholdDate = new Date(currentDate.getTime() - deltaDurationToConsiderAsOutdated.toMillis());
+        const outdateds = await this.model.find({
+            $or: [
+                {
+                    markdownEmbeddingUpdatedAt: null,
+                    updatedAt: { $lt: thresholdDate }
+                },
+                {
+                    markdownEmbeddingUpdatedAt: { $ne: null },
+                    updatedAt: { $gt: '$markdownEmbeddingUpdatedAt' },
+                    $expr: {
+                        $gt: [
+                            { $subtract: ['$updatedAt', '$markdownEmbeddingUpdatedAt'] },
+                            deltaDurationToConsiderAsOutdated.toMillis()
+                        ]
+                    }
+                }
+            ],
+            deletedAt: null
+        })
+            .limit(limit)
+            .session(session);
+        return outdateds.map(this.toEntity.bind(this));
+    }
 }
 exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;
 __decorate([
@@ -336,4 +365,10 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Object)
 ], BaseMultitenantMongoDbRepositoryAdapter.prototype, "getSemanticSearchPipeline", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], BaseMultitenantMongoDbRepositoryAdapter.prototype, "findAllWithOutdatedMarkdownEmbedding", null);
 //# sourceMappingURL=base-multitenant-mongodb-repository.adapter.js.map

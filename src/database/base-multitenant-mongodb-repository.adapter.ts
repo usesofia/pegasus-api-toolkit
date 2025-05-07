@@ -11,6 +11,7 @@ import { BaseMongoDbSessionAdapter } from '@app/database/base-mongodb-session.ad
 import { BaseSessionStarterPort } from '@app/database/base-session-starter.port';
 import { ObjectId } from 'mongodb';
 import { escapeRegex } from '@app/utils/regex.utils';
+import { Duration } from 'luxon';
 
 export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     TDoc extends Document,
@@ -443,5 +444,49 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         },
       },
     };
+  }
+
+  @Log()
+  async findAllWithOutdatedMarkdownEmbedding({
+    limit,
+    deltaDurationToConsiderAsOutdated,
+    previousSession,
+  }: {
+    limit: number;
+    deltaDurationToConsiderAsOutdated: Duration;
+    previousSession?: BaseSessionPort;
+  }): Promise<TEntity[]> {
+    const session = previousSession
+      ? (previousSession.getSession() as ClientSession)
+      : null;
+
+    const currentDate = new Date();
+    const thresholdDate = new Date(currentDate.getTime() - deltaDurationToConsiderAsOutdated.toMillis());
+
+    const outdateds = await this.model.find({
+      $or: [
+        // Condition 1: markdownEmbeddingUpdatedAt is null and updatedAt is older than threshold
+        {
+          markdownEmbeddingUpdatedAt: null,
+          updatedAt: { $lt: thresholdDate }
+        },
+        // Condition 2: markdownEmbeddingUpdatedAt is older than updatedAt with minimum delta duration
+        {
+          markdownEmbeddingUpdatedAt: { $ne: null },
+          updatedAt: { $gt: '$markdownEmbeddingUpdatedAt' },
+          $expr: {
+            $gt: [
+              { $subtract: ['$updatedAt', '$markdownEmbeddingUpdatedAt'] },
+              deltaDurationToConsiderAsOutdated.toMillis()
+            ]
+          }
+        }
+      ],
+      deletedAt: null
+    })
+    .limit(limit)
+    .session(session);
+
+    return outdateds.map(this.toEntity.bind(this));
   }
 }
