@@ -93,6 +93,7 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
                         error,
                         item,
                     },
+                    correlationId: item.correlationId,
                 });
             }
         }));

@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TasksModule = void 0;
 const base_config_entity_1 = require("../config/base-config.entity");
-const primary_mongodb_database_module_1 = require("../database/primary-mongodb-database.module");
 const gcp_tasks_service_adapter_1 = require("./gcp-tasks-service.adapter");
 const mongodb_tasks_service_adapter_1 = require("./mongodb-tasks-service.adapter");
 const tasks_service_port_1 = require("./tasks-service.port");
@@ -32,7 +31,6 @@ exports.TasksModule = TasksModule;
 exports.TasksModule = TasksModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
-        imports: [primary_mongodb_database_module_1.PrimaryMongoDbDatabaseModule],
         providers: [
             {
                 provide: tasks_service_port_1.TASKS_SERVICE_PORT,

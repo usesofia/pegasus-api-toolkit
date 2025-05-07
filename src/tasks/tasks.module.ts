@@ -1,5 +1,4 @@
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
-import { PrimaryMongoDbDatabaseModule } from '@app/database/primary-mongodb-database.module';
 import { GcpTasksServiceAdapter } from '@app/tasks/gcp-tasks-service.adapter';
 import { MongodbTasksServiceAdapter } from '@app/tasks/mongodb-tasks-service.adapter';
 import { TASKS_SERVICE_PORT } from '@app/tasks/tasks-service.port';
@@ -9,7 +8,6 @@ import { Global, Module, OnApplicationShutdown } from '@nestjs/common';
 
 @Global()
 @Module({
-  imports: [PrimaryMongoDbDatabaseModule],
   providers: [
     {
       provide: TASKS_SERVICE_PORT,

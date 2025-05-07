@@ -125,6 +125,7 @@ export class MongoDbPubSubServiceAdapter
               error,
               item,
             },
+            correlationId: item.correlationId,
           });
         }
       }),
