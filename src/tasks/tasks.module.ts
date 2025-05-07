@@ -11,11 +11,16 @@ import { Global, Module, OnApplicationShutdown } from '@nestjs/common';
   providers: [
     {
       provide: TASKS_SERVICE_PORT,
-      useClass:
-        getEnvironment() === Environment.LOCAL ||
-        getEnvironment() === Environment.INTEGRATION_TEST
-          ? MongodbTasksServiceAdapter
-          : GcpTasksServiceAdapter,
+      useFactory: (
+        mongodbTasksServiceAdapter: MongodbTasksServiceAdapter,
+        gcpTasksServiceAdapter: GcpTasksServiceAdapter,
+      ) => {
+        return getEnvironment() === Environment.LOCAL ||
+          getEnvironment() === Environment.INTEGRATION_TEST
+          ? mongodbTasksServiceAdapter
+          : gcpTasksServiceAdapter;
+      },
+      inject: [MongodbTasksServiceAdapter, GcpTasksServiceAdapter],
     },
     MongodbTasksServiceAdapter,
     GcpTasksServiceAdapter,

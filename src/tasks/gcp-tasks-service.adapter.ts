@@ -147,13 +147,17 @@ export class GcpTasksServiceAdapter extends Base implements TasksServicePort {
 
   @Log()
   async stopAutoFlushTasksBuffer(): Promise<void> {
-    clearInterval(this.tasksBufferFlushInterval);
-    // Wait until is flushing is false for 10 seconds at max
-    let attempts = 0;
-    while (this.flushing && attempts < 100) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      attempts++;
+    try {
+      clearInterval(this.tasksBufferFlushInterval);
+      // Wait until is flushing is false for 10 seconds at max
+      let attempts = 0;
+      while (this.flushing && attempts < 100) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        attempts++;
+      }
+      await this.flushTasksBuffer({});
+    } catch {
+      // Just ignore the error
     }
-    await this.flushTasksBuffer({});
   }
 }

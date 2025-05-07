@@ -100,13 +100,17 @@ let MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = class MongodbTas
         this.flushing = false;
     }
     async stopAutoFlushTasksBuffer() {
-        clearInterval(this.tasksBufferFlushInterval);
-        let attempts = 0;
-        while (this.flushing && attempts < 100) {
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            attempts++;
+        try {
+            clearInterval(this.tasksBufferFlushInterval);
+            let attempts = 0;
+            while (this.flushing && attempts < 100) {
+                await new Promise((resolve) => setTimeout(resolve, 100));
+                attempts++;
+            }
+            await this.flushTasksBuffer({});
         }
-        await this.flushTasksBuffer({});
+        catch {
+        }
     }
 };
 exports.MongodbTasksServiceAdapter = MongodbTasksServiceAdapter;

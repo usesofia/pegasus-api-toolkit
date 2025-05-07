@@ -149,14 +149,18 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
 
   @Log()
   async stopAutoFlushPublishBuffer(): Promise<void> {
-    clearInterval(this.publishBufferFlushInterval);
-    // Wait until is flushing is false for 10 seconds at max
-    let attempts = 0;
-    while (this.flushing && attempts < 100) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      attempts++;
+    try {
+      clearInterval(this.publishBufferFlushInterval);
+      // Wait until is flushing is false for 10 seconds at max
+      let attempts = 0;
+      while (this.flushing && attempts < 100) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        attempts++;
+      }
+      await this.flushPublishBuffer({});
+    } catch {
+      // Just ignore the error
     }
-    await this.flushPublishBuffer({});
   }
 
   @Log()

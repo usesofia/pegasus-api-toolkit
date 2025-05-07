@@ -102,13 +102,17 @@ let MongoDbPubSubServiceAdapter = MongoDbPubSubServiceAdapter_1 = class MongoDbP
         this.flushing = false;
     }
     async stopAutoFlushPublishBuffer() {
-        clearInterval(this.publishBufferFlushInterval);
-        let attempts = 0;
-        while (this.flushing && attempts < 100) {
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            attempts++;
+        try {
+            clearInterval(this.publishBufferFlushInterval);
+            let attempts = 0;
+            while (this.flushing && attempts < 100) {
+                await new Promise((resolve) => setTimeout(resolve, 100));
+                attempts++;
+            }
+            await this.flushPublishBuffer({});
         }
-        await this.flushPublishBuffer({});
+        catch {
+        }
     }
     async publishWebsocketMessage({ message, correlationId, }) {
         await this.publish({
