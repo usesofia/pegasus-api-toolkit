@@ -446,7 +446,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     };
   }
 
-  @Log()
   async findAllWithOutdatedMarkdownEmbedding({
     limit,
     deltaDurationToConsiderAsOutdated,
@@ -473,11 +472,15 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         // Condition 2: markdownEmbeddingUpdatedAt is older than updatedAt with minimum delta duration
         {
           markdownEmbeddingUpdatedAt: { $ne: null },
-          updatedAt: { $gt: '$markdownEmbeddingUpdatedAt' },
           $expr: {
-            $gt: [
-              { $subtract: ['$updatedAt', '$markdownEmbeddingUpdatedAt'] },
-              deltaDurationToConsiderAsOutdated.toMillis()
+            $and: [
+              { $gt: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
+              { 
+                $gt: [
+                  { $subtract: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
+                  deltaDurationToConsiderAsOutdated.toMillis()
+                ]
+              }
             ]
           }
         }
@@ -488,5 +491,5 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     .session(session);
 
     return outdateds.map(this.toEntity.bind(this));
-  }
+  } 
 }
