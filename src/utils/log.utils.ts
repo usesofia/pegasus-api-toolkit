@@ -75,6 +75,12 @@ export function Log(
       }
     };
 
+    // Preserve the original function name
+    Object.defineProperty(descriptor.value, 'name', {
+      value: originalMethod.name,
+      configurable: true
+    });
+
     return descriptor;
   };
 }

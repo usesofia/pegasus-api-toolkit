@@ -56,6 +56,10 @@ function Log(level = 'debug') {
                 throw error;
             }
         };
+        Object.defineProperty(descriptor.value, 'name', {
+            value: originalMethod.name,
+            configurable: true
+        });
         return descriptor;
     };
 }
