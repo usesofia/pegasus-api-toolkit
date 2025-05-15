@@ -95,4 +95,40 @@ declare const FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEn
 export declare class FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEntity extends FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEntity_base {
     static build(input: z.infer<typeof FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataSchema>): FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEntity;
 }
+export declare const FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_FINISHED_EVENT_NAME = "financial-records-bulk-create-extraction-for-web-app-finished";
+declare const FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataSchema: z.ZodObject<{
+    jobRequestId: z.ZodString;
+    nProcessedFinancialRecords: z.ZodNumber;
+    nFinancialRecords: z.ZodNumber;
+    csvFileSignedUrl: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    jobRequestId: string;
+    nFinancialRecords: number;
+    nProcessedFinancialRecords: number;
+    csvFileSignedUrl: string;
+}, {
+    jobRequestId: string;
+    nFinancialRecords: number;
+    nProcessedFinancialRecords: number;
+    csvFileSignedUrl: string;
+}>;
+declare const FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity_base: import("nestjs-zod").ZodDto<{
+    jobRequestId: string;
+    nFinancialRecords: number;
+    nProcessedFinancialRecords: number;
+    csvFileSignedUrl: string;
+}, z.ZodObjectDef<{
+    jobRequestId: z.ZodString;
+    nProcessedFinancialRecords: z.ZodNumber;
+    nFinancialRecords: z.ZodNumber;
+    csvFileSignedUrl: z.ZodString;
+}, "strip", z.ZodTypeAny>, {
+    jobRequestId: string;
+    nFinancialRecords: number;
+    nProcessedFinancialRecords: number;
+    csvFileSignedUrl: string;
+}>;
+export declare class FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity extends FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity_base {
+    static build(input: z.infer<typeof FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataSchema>): FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity;
+}
 export {};

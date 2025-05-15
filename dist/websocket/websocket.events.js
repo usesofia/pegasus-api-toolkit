@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_PROCESSING_EVENT_NAME = exports.FinancialRecordsBulkCreateExtractionForWebAppStartProcessingEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_START_PROCESSING_EVENT_NAME = exports.FinancialRecordsBulkCreateExtractionForWebAppFailedEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_FAILED_EVENT_NAME = exports.FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_INVALID_FILE_INTENT_EVENT_NAME = void 0;
+exports.FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_FINISHED_EVENT_NAME = exports.FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_PROCESSING_EVENT_NAME = exports.FinancialRecordsBulkCreateExtractionForWebAppStartProcessingEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_START_PROCESSING_EVENT_NAME = exports.FinancialRecordsBulkCreateExtractionForWebAppFailedEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_FAILED_EVENT_NAME = exports.FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataEntity = exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_INVALID_FILE_INTENT_EVENT_NAME = void 0;
 const entity_utils_1 = require("../utils/entity.utils");
 const nestjs_zod_1 = require("nestjs-zod");
 const zod_1 = require("zod");
@@ -48,4 +48,17 @@ class FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEntity ext
     }
 }
 exports.FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEntity = FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEntity;
+exports.FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_FINISHED_EVENT_NAME = 'financial-records-bulk-create-extraction-for-web-app-finished';
+const FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataSchema = zod_1.z.object({
+    jobRequestId: zod_1.z.string(),
+    nProcessedFinancialRecords: zod_1.z.number(),
+    nFinancialRecords: zod_1.z.number(),
+    csvFileSignedUrl: zod_1.z.string(),
+});
+class FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity extends (0, nestjs_zod_1.createZodDto)(FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataSchema) {
+    static build(input) {
+        return (0, entity_utils_1.safeInstantiateEntity)(FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity, input);
+    }
+}
+exports.FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity = FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity;
 //# sourceMappingURL=websocket.events.js.map

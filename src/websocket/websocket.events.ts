@@ -59,3 +59,19 @@ export class FinancialRecordsBulkCreateExtractionForWebAppProcessingEventDataEnt
   }
 }
 // ----------------------------------------------------------------------------------------------------------
+export const FINANCIAL_RECORDS_BULK_CREATE_EXTRACTION_FOR_WEB_APP_FINISHED_EVENT_NAME =
+  'financial-records-bulk-create-extraction-for-web-app-finished';
+
+const FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataSchema = z.object({
+  jobRequestId: z.string(),
+  nProcessedFinancialRecords: z.number(),
+  nFinancialRecords: z.number(),
+  csvFileSignedUrl: z.string(),
+});
+
+export class FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity extends createZodDto(FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataSchema) {
+  static build(input: z.infer<typeof FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataSchema>) {
+    return safeInstantiateEntity(FinancialRecordsBulkCreateExtractionForWebAppFinishedEventDataEntity, input);
+  }
+}
+// ----------------------------------------------------------------------------------------------------------
