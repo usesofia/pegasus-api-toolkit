@@ -107,3 +107,6 @@ export * from '@app/base';
 
 // App Exceptions
 export * from '@app/app-exceptions.filter';
+
+// WebSocket
+export * from '@app/websocket/websocket.events';
