@@ -76,3 +76,4 @@ export * from './utils/regex.utils';
 export * from './utils/openai.utils';
 export * from './base';
 export * from './app-exceptions.filter';
+export * from './websocket/websocket.events';

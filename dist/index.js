@@ -92,4 +92,5 @@ __exportStar(require("./utils/regex.utils"), exports);
 __exportStar(require("./utils/openai.utils"), exports);
 __exportStar(require("./base"), exports);
 __exportStar(require("./app-exceptions.filter"), exports);
+__exportStar(require("./websocket/websocket.events"), exports);
 //# sourceMappingURL=index.js.map
