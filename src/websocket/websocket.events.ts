@@ -1,3 +1,4 @@
+import { safeInstantiateEntity } from "@app/utils/entity.utils";
 import { createZodDto } from "nestjs-zod";
 import { z } from "zod";
 
@@ -9,5 +10,9 @@ const FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataSch
   jobRequestId: z.string(),
 });
 
-export class FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataEntity extends createZodDto(FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataSchema) {}
+export class FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataEntity extends createZodDto(FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataSchema) {
+  static build(input: z.infer<typeof FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataSchema>) {
+    return safeInstantiateEntity(FinancialRecordsBulkCreateExtractionForWebAppInvalidFileIntentEventDataEntity, input);
+  }
+}
 // ----------------------------------------------------------------------------------------------------------
