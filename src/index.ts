@@ -110,3 +110,38 @@ export * from '@app/app-exceptions.filter';
 
 // WebSocket
 export * from '@app/websocket/websocket.events';
+
+// Files
+export * from '@app/files/files.module';
+export * from '@app/files/files.constants';
+
+// Files Adapters
+export * from '@app/files/adapters/files-service.adapter';
+export * from '@app/files/adapters/gcs-object-storage-service.adapter';
+export * from '@app/files/adapters/mongodb-files-repository.adapter';
+
+// Files Controllers
+export * from '@app/files/controllers/files.controller';
+export * from '@app/files/controllers/files-upload.controller';
+
+// Files DTOs
+export * from '@app/files/dtos/remove-file-request-body.dto';
+export * from '@app/files/dtos/create-file-upload-request-body.dto';
+export * from '@app/files/dtos/confirm-file-upload-request-body.dto';
+
+// Files Entities
+export * from '@app/files/entities/confirm-file-upload-request.entity';
+export * from '@app/files/entities/create-file-request.entity';
+export * from '@app/files/entities/create-file-upload-request.entity';
+export * from '@app/files/entities/file.entity';
+export * from '@app/files/entities/find-by-id-file-request.entity';
+export * from '@app/files/entities/partial-update-file-request.entity';
+export * from '@app/files/entities/remove-file-request.entity';
+
+// Files Models
+export * from '@app/files/models/mongodb-file.model';
+
+// Files Ports
+export * from '@app/files/ports/object-storage-service.port';
+export * from '@app/files/ports/files-service.port';
+export * from '@app/files/ports/files-repository.port';

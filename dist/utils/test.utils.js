@@ -23,6 +23,7 @@ const setup_utils_1 = require("./setup.utils");
 const tasks_module_1 = require("../tasks/tasks.module");
 const base_config_entity_1 = require("../config/base-config.entity");
 const sentry_module_1 = require("../sentry/sentry.module");
+const files_module_1 = require("../files/files.module");
 events_1.EventEmitter.defaultMaxListeners = 128;
 const buildClsModule = () => {
     return nestjs_cls_1.ClsModule.forRoot({
@@ -58,6 +59,7 @@ class InstanceFixture {
                 clerk_module_1.ClerkModule,
                 auth_module_1.AuthModule,
                 sentry_module_1.SentryModule,
+                files_module_1.FilesModule,
                 ...modules,
             ],
         });

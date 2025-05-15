@@ -27,6 +27,7 @@ import { fastifyOptions, setupApp } from '@app/utils/setup.utils';
 import { TasksModule } from '@app/tasks/tasks.module';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { SentryModule } from '@app/sentry/sentry.module';
+import { FilesModule } from '@app/files/files.module';
 
 EventEmitter.defaultMaxListeners = 128;
 
@@ -87,6 +88,7 @@ export class InstanceFixture {
         ClerkModule,
         AuthModule,
         SentryModule,
+        FilesModule,
         ...modules,
       ],
     });
