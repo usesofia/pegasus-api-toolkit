@@ -2,7 +2,7 @@ import type { CreateFileRequestEntity } from '@app/files/entities/create-file-re
 import { FileEntity } from '@app/files/entities/file.entity';
 import type { FindByIdFileRequestEntity } from '@app/files/entities/find-by-id-file-request.entity';
 import type { PartialUpdateFileRequestEntity } from '@app/files/entities/partial-update-file-request.entity';
-import { MODEL } from '@app/files/files.constants';
+import { FILE_MODEL } from '@app/files/files.constants';
 import { MongoDbFileModel } from '@app/files/models/mongodb-file.model';
 import { FilesRepositoryPort } from '@app/files/ports/files-repository.port';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
@@ -27,7 +27,7 @@ export class MongoDbFilesRepositoryAdapter
     @Inject(BASE_CONFIG) protected readonly baseConfig: BaseConfigEntity,
     @Inject(LOGGER_SERVICE_PORT) protected readonly logger: LoggerService,
     protected readonly cls: ClsService,
-    @Inject(MODEL) fileModel: Model<MongoDbFileModel>,
+    @Inject(FILE_MODEL) fileModel: Model<MongoDbFileModel>,
   ) {
     super(MongoDbFilesRepositoryAdapter.name, baseConfig, logger, cls, fileModel);
   }

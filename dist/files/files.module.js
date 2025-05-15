@@ -39,7 +39,7 @@ let FilesModule = class FilesModule {
         }
     }
     async createIndexes() {
-        const model = this.connection.model(files_constants_1.COLLECTION_NAME);
+        const model = this.connection.model(files_constants_1.FILES_COLLECTION_NAME);
         await model.createIndexes();
     }
 };
@@ -50,9 +50,9 @@ exports.FilesModule = FilesModule = __decorate([
         controllers: [files_upload_controller_1.FilesUploadController, files_controller_1.FilesController],
         providers: [
             {
-                provide: files_constants_1.MODEL,
+                provide: files_constants_1.FILE_MODEL,
                 useFactory: (connection) => {
-                    return connection.model(files_constants_1.COLLECTION_NAME, mongodb_file_model_1.MongoDbFileModelSchema);
+                    return connection.model(files_constants_1.FILES_COLLECTION_NAME, mongodb_file_model_1.MongoDbFileModelSchema);
                 },
                 inject: [primary_mongodb_database_module_1.PRIMARY_MONGOOSE_CONNECTION],
             },

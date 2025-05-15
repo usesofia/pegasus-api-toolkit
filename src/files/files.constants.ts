@@ -1,2 +1,2 @@
-export const MODEL = Symbol('FilesModel');
-export const COLLECTION_NAME = 'Files';
+export const FILE_MODEL = Symbol('FileModel');
+export const FILES_COLLECTION_NAME = 'Files';

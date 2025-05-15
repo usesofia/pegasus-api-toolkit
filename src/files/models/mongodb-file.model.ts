@@ -1,10 +1,10 @@
 /* istanbul ignore file */
 import { FileStatus, FileType } from '@app/files/entities/file.entity';
-import { COLLECTION_NAME } from '@app/files/files.constants';
+import { FILES_COLLECTION_NAME } from '@app/files/files.constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema({ collection: COLLECTION_NAME, timestamps: true })
+@Schema({ collection: FILES_COLLECTION_NAME, timestamps: true })
 export class MongoDbFileModel extends Document {
   @Prop({ type: String, required: true })
   ownerOrganization!: string;

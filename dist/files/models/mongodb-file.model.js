@@ -58,7 +58,7 @@ __decorate([
     __metadata("design:type", Object)
 ], MongoDbFileModel.prototype, "deletedAt", void 0);
 exports.MongoDbFileModel = MongoDbFileModel = __decorate([
-    (0, mongoose_1.Schema)({ collection: files_constants_1.COLLECTION_NAME, timestamps: true })
+    (0, mongoose_1.Schema)({ collection: files_constants_1.FILES_COLLECTION_NAME, timestamps: true })
 ], MongoDbFileModel);
 exports.MongoDbFileModelSchema = mongoose_1.SchemaFactory.createForClass(MongoDbFileModel);
 exports.MongoDbFileModelSchema.index({ ownerOrganization: 1 });

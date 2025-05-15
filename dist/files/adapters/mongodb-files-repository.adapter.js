@@ -38,7 +38,7 @@ exports.MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter = MongoDbF
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
     __param(1, (0, common_1.Inject)(logger_module_1.LOGGER_SERVICE_PORT)),
-    __param(3, (0, common_1.Inject)(files_constants_1.MODEL)),
+    __param(3, (0, common_1.Inject)(files_constants_1.FILE_MODEL)),
     __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService,
         mongoose_1.Model])
 ], MongoDbFilesRepositoryAdapter);

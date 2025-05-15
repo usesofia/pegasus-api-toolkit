@@ -1,2 +1,2 @@
-export declare const MODEL: unique symbol;
-export declare const COLLECTION_NAME = "Files";
+export declare const FILE_MODEL: unique symbol;
+export declare const FILES_COLLECTION_NAME = "Files";

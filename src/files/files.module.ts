@@ -5,7 +5,7 @@ import { GcsObjectStorageServiceAdapter } from '@app/files/adapters/gcs-object-s
 import { MongoDbFilesRepositoryAdapter } from '@app/files/adapters/mongodb-files-repository.adapter';
 import { FilesUploadController } from '@app/files/controllers/files-upload.controller';
 import { FilesController } from '@app/files/controllers/files.controller';
-import { COLLECTION_NAME, MODEL } from '@app/files/files.constants';
+import { FILES_COLLECTION_NAME, FILE_MODEL } from '@app/files/files.constants';
 import { MongoDbFileModelSchema } from '@app/files/models/mongodb-file.model';
 import { FILES_REPOSITORY_PORT } from '@app/files/ports/files-repository.port';
 import { FILES_SERVICE_PORT } from '@app/files/ports/files-service.port';
@@ -19,9 +19,9 @@ import { Connection } from 'mongoose';
   controllers: [FilesUploadController, FilesController],
   providers: [
     {
-      provide: MODEL,
+      provide: FILE_MODEL,
       useFactory: (connection: Connection) => {
-        return connection.model(COLLECTION_NAME, MongoDbFileModelSchema);
+        return connection.model(FILES_COLLECTION_NAME, MongoDbFileModelSchema);
       },
       inject: [PRIMARY_MONGOOSE_CONNECTION],
     },
@@ -57,7 +57,7 @@ export class FilesModule implements OnModuleInit {
 
   /* istanbul ignore next */
   async createIndexes() {
-    const model = this.connection.model(COLLECTION_NAME);
+    const model = this.connection.model(FILES_COLLECTION_NAME);
     await model.createIndexes();
   }
 }
