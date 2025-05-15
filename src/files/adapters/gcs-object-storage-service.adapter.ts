@@ -10,6 +10,7 @@ import { ClsService } from 'nestjs-cls';
 import type { Writable } from 'stream';
 import { v4 } from 'uuid';
 import { z } from 'zod';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorageServicePort {
@@ -54,7 +55,7 @@ export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorag
       .getSignedUrl({
         version: 'v4',
         action: 'write',
-        expires: Date.now() + expiresInMinutes * 60 * 1000,
+        expires: DateTime.now().plus({ minutes: expiresInMinutes }).toJSDate(),
         contentType: mimeType,
       });
 
@@ -74,7 +75,7 @@ export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorag
       .getSignedUrl({
         version: 'v4',
         action: 'read',
-        expires: Date.now() + expiresInMinutes * 60 * 1000,
+        expires: DateTime.now().plus({ minutes: expiresInMinutes }).toJSDate(),
       });
 
     return url;

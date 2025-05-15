@@ -22,6 +22,7 @@ const logger_module_1 = require("../../logger/logger.module");
 const nestjs_cls_1 = require("nestjs-cls");
 const uuid_1 = require("uuid");
 const zod_1 = require("zod");
+const luxon_1 = require("luxon");
 let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class GcsObjectStorageServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls) {
         super(GcsObjectStorageServiceAdapter_1.name, baseConfig, logger, cls);
@@ -49,7 +50,7 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
             .getSignedUrl({
             version: 'v4',
             action: 'write',
-            expires: Date.now() + expiresInMinutes * 60 * 1000,
+            expires: luxon_1.DateTime.now().plus({ minutes: expiresInMinutes }).toJSDate(),
             contentType: mimeType,
         });
         return url;
@@ -61,7 +62,7 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
             .getSignedUrl({
             version: 'v4',
             action: 'read',
-            expires: Date.now() + expiresInMinutes * 60 * 1000,
+            expires: luxon_1.DateTime.now().plus({ minutes: expiresInMinutes }).toJSDate(),
         });
         return url;
     }
