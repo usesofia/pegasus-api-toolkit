@@ -83,6 +83,7 @@ export * from '@app/tasks/tasks.module';
 export * from '@app/tasks/tasks-service.port';
 export * from '@app/tasks/gcp-tasks-service.adapter';
 export * from '@app/tasks/mongodb-tasks-service.adapter';
+export * from '@app/tasks/job-request-payload.entity';
 
 // Utils
 export * from '@app/utils/auth.utils';

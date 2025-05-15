@@ -74,6 +74,7 @@ __exportStar(require("./tasks/tasks.module"), exports);
 __exportStar(require("./tasks/tasks-service.port"), exports);
 __exportStar(require("./tasks/gcp-tasks-service.adapter"), exports);
 __exportStar(require("./tasks/mongodb-tasks-service.adapter"), exports);
+__exportStar(require("./tasks/job-request-payload.entity"), exports);
 __exportStar(require("./utils/auth.utils"), exports);
 __exportStar(require("./utils/channel.utils"), exports);
 __exportStar(require("./utils/clerk.utils"), exports);

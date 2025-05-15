@@ -58,6 +58,7 @@ export * from './tasks/tasks.module';
 export * from './tasks/tasks-service.port';
 export * from './tasks/gcp-tasks-service.adapter';
 export * from './tasks/mongodb-tasks-service.adapter';
+export * from './tasks/job-request-payload.entity';
 export * from './utils/auth.utils';
 export * from './utils/channel.utils';
 export * from './utils/clerk.utils';
