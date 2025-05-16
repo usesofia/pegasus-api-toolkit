@@ -109,7 +109,8 @@ export * from '@app/base';
 export * from '@app/app-exceptions.filter';
 
 // WebSocket
-export * from '@app/websocket/websocket.events';
+export * from '@app/websocket/financial-records.websocket-events';
+export * from '@app/websocket/contacts.websocket-events';
 
 // Files
 export * from '@app/files/files.module';
