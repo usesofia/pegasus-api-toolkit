@@ -1,11 +1,11 @@
+import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
+import { Base } from '../../base';
 import { BaseConfigEntity } from '../../config/base-config.entity';
 import type { FileType } from '../../files/entities/file.entity';
 import { type ObjectStorageServicePort } from '../../files/ports/object-storage-service.port';
 import { LoggerService } from '@nestjs/common';
-import { Base } from '../../base';
-import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
 import { ClsService } from 'nestjs-cls';
-import type { Writable } from 'stream';
+import type { Readable, Writable } from 'stream';
 export declare class GcsObjectStorageServiceAdapter extends Base implements ObjectStorageServicePort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
@@ -13,9 +13,12 @@ export declare class GcsObjectStorageServiceAdapter extends Base implements Obje
     private storage;
     private bucketName;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService);
-    createStream({ objectName }: {
+    createWritableStream({ objectName }: {
         objectName: string;
     }): Writable;
+    createReadableStream({ objectName }: {
+        objectName: string;
+    }): Readable;
     createSignedUploadUrl({ objectName, mimeType, expiresInMinutes, }: {
         requester: AuthUserEntity;
         objectName: string;

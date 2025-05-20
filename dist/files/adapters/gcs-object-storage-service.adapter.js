@@ -14,15 +14,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var GcsObjectStorageServiceAdapter_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GcsObjectStorageServiceAdapter = void 0;
+const base_1 = require("../../base");
 const base_config_entity_1 = require("../../config/base-config.entity");
+const logger_module_1 = require("../../logger/logger.module");
 const storage_1 = require("@google-cloud/storage");
 const common_1 = require("@nestjs/common");
-const base_1 = require("../../base");
-const logger_module_1 = require("../../logger/logger.module");
+const luxon_1 = require("luxon");
 const nestjs_cls_1 = require("nestjs-cls");
 const uuid_1 = require("uuid");
 const zod_1 = require("zod");
-const luxon_1 = require("luxon");
 let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class GcsObjectStorageServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls) {
         super(GcsObjectStorageServiceAdapter_1.name, baseConfig, logger, cls);
@@ -40,8 +40,11 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
             },
         });
     }
-    createStream({ objectName }) {
+    createWritableStream({ objectName }) {
         return this.storage.bucket(this.bucketName).file(objectName).createWriteStream();
+    }
+    createReadableStream({ objectName }) {
+        return this.storage.bucket(this.bucketName).file(objectName).createReadStream();
     }
     async createSignedUploadUrl({ objectName, mimeType, expiresInMinutes = 15, }) {
         const [url] = await this.storage

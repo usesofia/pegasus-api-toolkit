@@ -1,11 +1,14 @@
 import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
 import type { FileType } from '../../files/entities/file.entity';
-import type { Writable } from 'stream';
+import type { Readable, Writable } from 'stream';
 export declare const OBJECT_STORAGE_SERVICE_PORT: unique symbol;
 export interface ObjectStorageServicePort {
-    createStream({ objectName }: {
+    createWritableStream({ objectName }: {
         objectName: string;
     }): Writable;
+    createReadableStream({ objectName }: {
+        objectName: string;
+    }): Readable;
     createSignedUploadUrl({ objectName, mimeType, expiresInMinutes, }: {
         objectName: string;
         mimeType: string;

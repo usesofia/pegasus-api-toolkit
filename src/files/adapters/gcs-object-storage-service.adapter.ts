@@ -1,16 +1,16 @@
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { Base } from '@app/base';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import type { FileType } from '@app/files/entities/file.entity';
 import { type ObjectStorageServicePort } from '@app/files/ports/object-storage-service.port';
+import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { Storage } from '@google-cloud/storage';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
-import { Base } from '@app/base';
-import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
-import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { DateTime } from 'luxon';
 import { ClsService } from 'nestjs-cls';
-import type { Writable } from 'stream';
+import type { Readable, Writable } from 'stream';
 import { v4 } from 'uuid';
 import { z } from 'zod';
-import { DateTime } from 'luxon';
 
 @Injectable()
 export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorageServicePort {
@@ -35,8 +35,12 @@ export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorag
     });
   }
 
-  createStream({ objectName }: { objectName: string }): Writable {
+  createWritableStream({ objectName }: { objectName: string }): Writable {
     return this.storage.bucket(this.bucketName).file(objectName).createWriteStream();
+  }
+
+  createReadableStream({ objectName }: { objectName: string }): Readable {
+    return this.storage.bucket(this.bucketName).file(objectName).createReadStream();
   }
 
   async createSignedUploadUrl({
