@@ -22,7 +22,7 @@ let SecondaryMongoDbDatabaseModule = class SecondaryMongoDbDatabaseModule {
         this.connection = connection;
     }
     async onApplicationShutdown() {
-        await this.connection.disconnect();
+        await this.connection.close();
     }
 };
 exports.SecondaryMongoDbDatabaseModule = SecondaryMongoDbDatabaseModule;
@@ -46,6 +46,6 @@ exports.SecondaryMongoDbDatabaseModule = SecondaryMongoDbDatabaseModule = __deco
         exports: [exports.SECONDARY_MONGOOSE_CONNECTION],
     }),
     __param(0, (0, common_1.Inject)(exports.SECONDARY_MONGOOSE_CONNECTION)),
-    __metadata("design:paramtypes", [mongoose_1.default.Mongoose])
+    __metadata("design:paramtypes", [mongoose_1.default.Connection])
 ], SecondaryMongoDbDatabaseModule);
 //# sourceMappingURL=secondary-mongodb-database.module.js.map

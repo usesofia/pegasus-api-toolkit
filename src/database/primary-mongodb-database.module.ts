@@ -29,10 +29,10 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
 export class PrimaryMongoDbDatabaseModule implements OnApplicationShutdown {
   constructor(
     @Inject(PRIMARY_MONGOOSE_CONNECTION)
-    private readonly connection: mongoose.Mongoose,
+    private readonly connection: mongoose.Connection,
   ) {}
 
   async onApplicationShutdown() {
-    await this.connection.disconnect();
+    await this.connection.close();
   }
 }

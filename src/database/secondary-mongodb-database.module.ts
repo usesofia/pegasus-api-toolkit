@@ -29,10 +29,10 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
 export class SecondaryMongoDbDatabaseModule implements OnApplicationShutdown {
   constructor(
     @Inject(SECONDARY_MONGOOSE_CONNECTION)
-    private readonly connection: mongoose.Mongoose,
+    private readonly connection: mongoose.Connection,
   ) {}
 
   async onApplicationShutdown() {
-    await this.connection.disconnect();
+    await this.connection.close();
   }
 }

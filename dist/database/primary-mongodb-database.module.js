@@ -22,7 +22,7 @@ let PrimaryMongoDbDatabaseModule = class PrimaryMongoDbDatabaseModule {
         this.connection = connection;
     }
     async onApplicationShutdown() {
-        await this.connection.disconnect();
+        await this.connection.close();
     }
 };
 exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule;
@@ -46,6 +46,6 @@ exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule = __decorate
         exports: [exports.PRIMARY_MONGOOSE_CONNECTION],
     }),
     __param(0, (0, common_1.Inject)(exports.PRIMARY_MONGOOSE_CONNECTION)),
-    __metadata("design:paramtypes", [mongoose_1.default.Mongoose])
+    __metadata("design:paramtypes", [mongoose_1.default.Connection])
 ], PrimaryMongoDbDatabaseModule);
 //# sourceMappingURL=primary-mongodb-database.module.js.map
