@@ -11,7 +11,7 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
       provide: PRIMARY_MONGOOSE_CONNECTION,
       useFactory: async (
         baseConfig: BaseConfigEntity,
-      ): Promise<mongoose.Mongoose> => {
+      ): Promise<mongoose.Connection> => {
         const mongoDatabases = baseConfig.databases.filter(
           (db) => db.type === 'mongodb',
         );
@@ -19,7 +19,7 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
           throw new Error('No MongoDB database found.');
         }
         const primaryMongoDatabase = mongoDatabases[0];
-        return await mongoose.connect(primaryMongoDatabase.uri);
+        return await mongoose.createConnection(primaryMongoDatabase.uri).asPromise();
       },
       inject: [BASE_CONFIG],
     },

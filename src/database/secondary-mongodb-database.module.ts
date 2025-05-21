@@ -11,7 +11,7 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
       provide: SECONDARY_MONGOOSE_CONNECTION,
       useFactory: async (
         baseConfig: BaseConfigEntity,
-      ): Promise<mongoose.Mongoose> => {
+      ): Promise<mongoose.Connection> => {
         const mongoDatabases = baseConfig.databases.filter(
           (db) => db.type === 'mongodb',
         );
@@ -19,7 +19,7 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
           throw new Error('No secondary MongoDB database found.');
         }
         const secondaryMongoDatabase = mongoDatabases[1];
-        return await mongoose.connect(secondaryMongoDatabase.uri);
+        return await mongoose.createConnection(secondaryMongoDatabase.uri).asPromise();
       },
       inject: [BASE_CONFIG],
     },
