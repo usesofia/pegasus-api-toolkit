@@ -38,4 +38,4 @@ echo "Tagged and pushed!"
 echo "Creating release..."
 gh release create v$CURRENT_VERSION --generate-notes
 
-echo "Release v$CURRENT_VERSION created!"
+echo "Release v$CURRENT_VERSION created!" 
