@@ -53,20 +53,28 @@ export class InstanceFixture {
   app: INestApplication;
   request: ReturnType<typeof supertest>;
   mongoClient: MongoClient;
+  primaryMongoClient?: MongoClient;
+  secondaryMongoClient?: MongoClient;
   baseConfig: BaseConfigEntity;
 
   constructor({
     app,
     request,
     mongoClient,
+    primaryMongoClient,
+    secondaryMongoClient,
   }: {
     app: INestApplication;
     request: ReturnType<typeof supertest>;
     mongoClient: MongoClient;
+    primaryMongoClient?: MongoClient;
+    secondaryMongoClient?: MongoClient;
   }) {
     this.app = app;
     this.request = request;
     this.mongoClient = mongoClient;
+    this.primaryMongoClient = primaryMongoClient;
+    this.secondaryMongoClient = secondaryMongoClient;
     this.baseConfig = app.get<BaseConfigEntity>(BASE_CONFIG);
   }
 
@@ -125,6 +133,9 @@ export class InstanceFixture {
       throw new Error('MONGODB_URI or PRIMARY_MONGODB_URI is not set');
     }
 
+    const primaryMongoDbUri = process.env.PRIMARY_MONGODB_URI ?? process.env.MONGODB_URI;
+    const secondaryMongoDbUri = process.env.SECONDARY_MONGODB_URI;
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const port = await portfinder.getPortPromise();
@@ -135,7 +146,21 @@ export class InstanceFixture {
           retryReads: true,
           retryWrites: true,
         });
-        return new InstanceFixture({ app, request, mongoClient });
+        let primaryMongoClient: MongoClient | undefined;
+        if (primaryMongoDbUri) {
+          primaryMongoClient = new MongoClient(primaryMongoDbUri, {
+            retryReads: true,
+            retryWrites: true,
+          });
+        }
+        let secondaryMongoClient: MongoClient | undefined;
+        if (secondaryMongoDbUri) {
+          secondaryMongoClient = new MongoClient(secondaryMongoDbUri, {
+            retryReads: true,
+            retryWrites: true,
+          });
+        }
+        return new InstanceFixture({ app, request, mongoClient, primaryMongoClient, secondaryMongoClient });
       } catch (error) {
         lastError = error as Error;
         if (attempt === maxRetries) {

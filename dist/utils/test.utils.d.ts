@@ -8,11 +8,15 @@ export declare class InstanceFixture {
     app: INestApplication;
     request: ReturnType<typeof supertest>;
     mongoClient: MongoClient;
+    primaryMongoClient?: MongoClient;
+    secondaryMongoClient?: MongoClient;
     baseConfig: BaseConfigEntity;
-    constructor({ app, request, mongoClient, }: {
+    constructor({ app, request, mongoClient, primaryMongoClient, secondaryMongoClient, }: {
         app: INestApplication;
         request: ReturnType<typeof supertest>;
         mongoClient: MongoClient;
+        primaryMongoClient?: MongoClient;
+        secondaryMongoClient?: MongoClient;
     });
     static createTestingModule({ modules, log, }: {
         modules: (Type | DynamicModule)[];

@@ -41,10 +41,12 @@ const buildClsModule = () => {
 };
 exports.buildClsModule = buildClsModule;
 class InstanceFixture {
-    constructor({ app, request, mongoClient, }) {
+    constructor({ app, request, mongoClient, primaryMongoClient, secondaryMongoClient, }) {
         this.app = app;
         this.request = request;
         this.mongoClient = mongoClient;
+        this.primaryMongoClient = primaryMongoClient;
+        this.secondaryMongoClient = secondaryMongoClient;
         this.baseConfig = app.get(base_config_entity_1.BASE_CONFIG);
     }
     static createTestingModule({ modules, log = false, }) {
@@ -81,6 +83,8 @@ class InstanceFixture {
         if (!mongoDbUri) {
             throw new Error('MONGODB_URI or PRIMARY_MONGODB_URI is not set');
         }
+        const primaryMongoDbUri = process.env.PRIMARY_MONGODB_URI ?? process.env.MONGODB_URI;
+        const secondaryMongoDbUri = process.env.SECONDARY_MONGODB_URI;
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
                 const port = await portfinder.getPortPromise();
@@ -91,7 +95,21 @@ class InstanceFixture {
                     retryReads: true,
                     retryWrites: true,
                 });
-                return new InstanceFixture({ app, request, mongoClient });
+                let primaryMongoClient;
+                if (primaryMongoDbUri) {
+                    primaryMongoClient = new mongodb_1.MongoClient(primaryMongoDbUri, {
+                        retryReads: true,
+                        retryWrites: true,
+                    });
+                }
+                let secondaryMongoClient;
+                if (secondaryMongoDbUri) {
+                    secondaryMongoClient = new mongodb_1.MongoClient(secondaryMongoDbUri, {
+                        retryReads: true,
+                        retryWrites: true,
+                    });
+                }
+                return new InstanceFixture({ app, request, mongoClient, primaryMongoClient, secondaryMongoClient });
             }
             catch (error) {
                 lastError = error;
