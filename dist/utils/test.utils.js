@@ -24,6 +24,7 @@ const tasks_module_1 = require("../tasks/tasks.module");
 const base_config_entity_1 = require("../config/base-config.entity");
 const sentry_module_1 = require("../sentry/sentry.module");
 const files_module_1 = require("../files/files.module");
+const secondary_mongodb_database_module_1 = require("../database/secondary-mongodb-database.module");
 events_1.EventEmitter.defaultMaxListeners = 128;
 const buildClsModule = () => {
     return nestjs_cls_1.ClsModule.forRoot({
@@ -55,6 +56,7 @@ class InstanceFixture {
                 logger_module_1.LoggerModule,
                 (0, exports.buildClsModule)(),
                 primary_mongodb_database_module_1.PrimaryMongoDbDatabaseModule,
+                secondary_mongodb_database_module_1.SecondaryMongoDbDatabaseModule,
                 pub_sub_module_1.PubSubModule,
                 tasks_module_1.TasksModule,
                 cache_module_1.CacheModule,
