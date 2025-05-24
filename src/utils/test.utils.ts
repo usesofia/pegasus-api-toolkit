@@ -28,7 +28,6 @@ import { TasksModule } from '@app/tasks/tasks.module';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { SentryModule } from '@app/sentry/sentry.module';
 import { FilesModule } from '@app/files/files.module';
-import { SecondaryMongoDbDatabaseModule } from '@app/database/secondary-mongodb-database.module';
 
 EventEmitter.defaultMaxListeners = 128;
 
@@ -91,7 +90,6 @@ export class InstanceFixture {
         LoggerModule,
         buildClsModule(),
         PrimaryMongoDbDatabaseModule,
-        SecondaryMongoDbDatabaseModule,
         PubSubModule,
         TasksModule,
         CacheModule,
