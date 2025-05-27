@@ -1,6 +1,6 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { ZodDto } from 'nestjs-zod';
-import SuperJSON from 'superjson';
+import { SuperJSON } from 'superjson';
 
 function createInstance<T extends ZodDto>(c: new () => T): T {
   return new c();

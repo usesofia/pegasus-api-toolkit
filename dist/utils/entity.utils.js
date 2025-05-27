@@ -10,7 +10,7 @@ function createInstance(c) {
 function safeInstantiateEntity(entityClass, input) {
     try {
         const entityInstance = createInstance(entityClass);
-        const safeInput = superjson_1.default.deserialize(superjson_1.default.serialize(input));
+        const safeInput = superjson_1.SuperJSON.deserialize(superjson_1.SuperJSON.serialize(input));
         const validProps = entityClass.create(safeInput);
         Object.assign(entityInstance, validProps);
         Object.freeze(entityInstance);
