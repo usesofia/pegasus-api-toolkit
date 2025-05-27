@@ -23,6 +23,9 @@ exports.isoDateStringWithoutTime = zod_1.z.preprocess((val) => {
     if (val instanceof Date && isValidUtcDateOnStartOfDay(val)) {
         return val.toISOString().split('T')[0];
     }
+    if (typeof val === 'string' && isValidUtcDateStringOnStartOfDay(val)) {
+        return val.split('T')[0];
+    }
     return val;
 }, zod_1.z.string()).refine((val) => {
     const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -54,8 +57,15 @@ function convertIsoDateStringWithoutTimeToJsDate(dateString) {
 }
 function isValidUtcDateOnStartOfDay(val) {
     const parsedDate = luxon_1.DateTime.fromJSDate(val, { zone: 'utc' });
+    return isValidDateTimeOnStartOfDayUtc(parsedDate);
+}
+function isValidUtcDateStringOnStartOfDay(val) {
+    const parsedDate = luxon_1.DateTime.fromFormat(val, 'yyyy-MM-dd', { zone: 'utc' });
+    return isValidDateTimeOnStartOfDayUtc(parsedDate);
+}
+function isValidDateTimeOnStartOfDayUtc(parsedDate) {
     const isUtc = parsedDate.offset === 0;
-    const isStartOfDay = parsedDate.startOf('day').toISO() === val.toISOString();
+    const isStartOfDay = parsedDate.startOf('day').toISO() === parsedDate.toISO();
     const isValid = parsedDate.isValid;
     return isUtc && isStartOfDay && isValid;
 }
