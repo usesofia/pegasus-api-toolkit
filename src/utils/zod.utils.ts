@@ -43,7 +43,14 @@ export const jsDateOnUtcStartOfDay = z.preprocess((val) => {
     if (isoDateStringWithoutTime.safeParse(val).success) {
       return DateTime.fromFormat(val, 'yyyy-MM-dd', { zone: 'utc' }).toJSDate();
     }
-    throw new Error('Esperava-se uma string no formato yyyy-mm-dd, recebido: ' + val);
+
+    const date = DateTime.fromISO(val, { zone: 'utc' });
+    const isValid = isValidUtcDateOnStartOfDay(date.toJSDate());
+    if (isValid) {
+      return date.toJSDate();
+    }
+
+    throw new Error('Esperava-se uma string no formato yyyy-mm-dd ou yyyy-mm-ddT00:00:00.000Z, recebido: ' + val);
   }
 
   return val;
