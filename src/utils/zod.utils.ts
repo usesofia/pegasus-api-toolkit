@@ -17,37 +17,38 @@ export const coercedBigInt = z.preprocess((val) => {
 }, z.coerce.bigint());
 
 export const isoDateStringWithoutTime = z.preprocess((val) => {
-  if (val instanceof Date && isValidUtcDateOnStartOfDay(val)) {
+  if (val instanceof Date && isValidJsDateOnUtcStartOfDay(val)) {
     return val.toISOString().split('T')[0];
   }
-  if (typeof val === 'string' && isValidUtcDateStringOnStartOfDay(val)) {
-    return val.split('T')[0];
+
+  if (typeof val === 'string') {
+    if (isValidIso8601DatetimeString(val)) {
+      return val.split('T')[0];
+    }
+    if (isValidIso8601DateString(val)) {
+      return val;
+    }
   }
 
   return val;
-}, z.string()).refine((val) => {
-  const isoDateRegex = /^\d{4}-\d{2}-\d{2}$/;
-  if (!isoDateRegex.test(val)) {
-    return false;
-  }
-
-  // Usa Luxon para validar se é uma data válida
-  const parsedDate = DateTime.fromISO(val, { zone: 'utc' });
-  return parsedDate.isValid;
-}, {
-  message: 'A string deve estar no formato yyyy-mm-dd e representar uma data válida',
+}, z.string(), {
+  message: `A data deve ser uma:\
+  1. String no formato yyyy-mm-dd\
+  2. String no formato yyyy-mm-ddT00:00:00.000Z\
+  3. JS Date no início do dia UTC\
+  `
+}).refine((val) => isValidIso8601DatetimeString(val), {
+  message: 'A string deve estar no formato yyyy-mm-dd e representar uma data válida'
 });
 
 export const jsDateOnUtcStartOfDay = z.preprocess((val) => {
   if (typeof val === 'string') {
-    if (isoDateStringWithoutTime.safeParse(val).success) {
-      return DateTime.fromFormat(val, 'yyyy-MM-dd', { zone: 'utc' }).toJSDate();
+    if (isValidIso8601DatetimeString(val)) {
+      return DateTime.fromISO(val, { zone: 'utc' }).toJSDate();
     }
 
-    const date = DateTime.fromISO(val, { zone: 'utc' });
-    const isValid = isValidUtcDateOnStartOfDay(date.toJSDate());
-    if (isValid) {
-      return date.toJSDate();
+    if (isValidIso8601DateString(val)) {
+      return DateTime.fromFormat(val, 'yyyy-MM-dd', { zone: 'utc' }).toJSDate();
     }
 
     throw new Error('Esperava-se uma string no formato yyyy-mm-dd ou yyyy-mm-ddT00:00:00.000Z, recebido: ' + val);
@@ -57,7 +58,7 @@ export const jsDateOnUtcStartOfDay = z.preprocess((val) => {
 }, z.date(), {
   message: 'A data deve ser uma string no formato yyyy-mm-dd ou um JS Date'
 })
-  .refine((val) => isValidUtcDateOnStartOfDay(val), {
+  .refine((val) => isValidJsDateOnUtcStartOfDay(val), {
     message: 'A data deve estar no formato yyyy-mm-ddT00:00:00.000Z e representar uma data válida UTC',
   });
 
@@ -66,17 +67,24 @@ export function convertIsoDateStringWithoutTimeToJsDate(dateString: string): Dat
   return parsedDate.toJSDate();
 }
 
-function isValidUtcDateOnStartOfDay(val: Date): boolean {
+function isValidJsDateOnUtcStartOfDay(val: Date): boolean {
   const parsedDate = DateTime.fromJSDate(val, { zone: 'utc' });
-  return isValidDateTimeOnStartOfDayUtc(parsedDate);
+  return isDateTimeOnUTCStartOfDay(parsedDate);
 }
 
-function isValidUtcDateStringOnStartOfDay(val: string): boolean {
+
+function isValidIso8601DatetimeString(val: string): boolean {
+  const parsedDate = DateTime.fromISO(val, { zone: 'utc' });
+  return isDateTimeOnUTCStartOfDay(parsedDate);
+}
+
+function isValidIso8601DateString(val: string): boolean {
   const parsedDate = DateTime.fromFormat(val, 'yyyy-MM-dd', { zone: 'utc' });
-  return isValidDateTimeOnStartOfDayUtc(parsedDate);
+  return parsedDate.isValid;
 }
 
-function isValidDateTimeOnStartOfDayUtc(parsedDate: DateTime): boolean {
+
+function isDateTimeOnUTCStartOfDay(parsedDate: DateTime): boolean {
   const isUtc = parsedDate.offset === 0;
   const isStartOfDay = parsedDate.startOf('day').toISO() === parsedDate.toISO();
   const isValid = parsedDate.isValid;
