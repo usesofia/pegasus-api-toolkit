@@ -1,6 +1,9 @@
+import {
+  getJsonParseReviver,
+  getJsonStringifyReplacer,
+} from '@app/utils/json.utils';
 import { InternalServerErrorException } from '@nestjs/common';
 import { ZodDto } from 'nestjs-zod';
-import { SuperJSON } from 'superjson';
 
 function createInstance<T extends ZodDto>(c: new () => T): T {
   return new c();
@@ -13,7 +16,10 @@ export function safeInstantiateEntity<T extends ZodDto>(
 ): InstanceType<T> {
   try {
     const entityInstance = createInstance(entityClass);
-    const safeInput = SuperJSON.deserialize(SuperJSON.serialize(input));
+    const safeInput = JSON.parse(
+      JSON.stringify(input, getJsonStringifyReplacer()),
+      getJsonParseReviver(),
+    );
     const validProps = entityClass.create(safeInput);
     Object.assign(entityInstance, validProps);
     Object.freeze(entityInstance);

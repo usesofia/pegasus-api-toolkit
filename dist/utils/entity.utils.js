@@ -2,15 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.safeInstantiateEntity = safeInstantiateEntity;
 exports.unsafeInstantiateEntity = unsafeInstantiateEntity;
+const json_utils_1 = require("./json.utils");
 const common_1 = require("@nestjs/common");
-const superjson_1 = require("superjson");
 function createInstance(c) {
     return new c();
 }
 function safeInstantiateEntity(entityClass, input) {
     try {
         const entityInstance = createInstance(entityClass);
-        const safeInput = superjson_1.SuperJSON.deserialize(superjson_1.SuperJSON.serialize(input));
+        const safeInput = JSON.parse(JSON.stringify(input, (0, json_utils_1.getJsonStringifyReplacer)()), (0, json_utils_1.getJsonParseReviver)());
         const validProps = entityClass.create(safeInput);
         Object.assign(entityInstance, validProps);
         Object.freeze(entityInstance);
