@@ -49,10 +49,9 @@ exports.jsDateOnUtcStartOfDay = zod_1.z.preprocess((val) => {
         if (isValidIso8601DateString(val)) {
             return luxon_1.DateTime.fromFormat(val, 'yyyy-MM-dd', { zone: 'utc' }).toJSDate();
         }
-        throw new Error('Esperava-se uma string no formato yyyy-mm-dd ou yyyy-mm-ddT00:00:00.000Z, recebido: ' + val);
     }
     return val;
-}, zod_1.z.date(), {
+}, zod_1.z.coerce.date(), {
     message: 'A data deve ser uma string no formato yyyy-mm-dd ou um JS Date'
 })
     .refine((val) => isValidJsDateOnUtcStartOfDay(val), {
