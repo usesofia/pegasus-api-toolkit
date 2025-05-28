@@ -37,6 +37,7 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
@@ -50,7 +51,7 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
         signedUrl?: string | undefined;
     };
     id: string;
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, {
     data: {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
@@ -63,7 +64,7 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
         signedUrl?: string | undefined;
     };
     id: string;
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;
 declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
@@ -77,7 +78,7 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         signedUrl?: string | undefined;
     };
     id: string;
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, z.ZodObjectDef<{
     id: z.ZodString;
     data: z.ZodObject<Omit<{
@@ -116,6 +117,7 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
@@ -129,7 +131,7 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         signedUrl?: string | undefined;
     };
     id: string;
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;
 export declare class PartialUpdateFileRequestEntity extends PartialUpdateFileRequestEntity_base {
     static build(input: z.input<typeof PartialUpdateFileRequestEntitySchema>): PartialUpdateFileRequestEntity;

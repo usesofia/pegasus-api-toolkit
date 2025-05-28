@@ -60,6 +60,7 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
@@ -70,7 +71,7 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
         fileType: import("../../files/entities/file.entity").FileType;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, {
     data: {
         size: number;
@@ -80,7 +81,7 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;
 declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
@@ -91,7 +92,7 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         fileType: import("../../files/entities/file.entity").FileType;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, z.ZodObjectDef<{
     data: z.ZodObject<Omit<{
         id: z.ZodString;
@@ -125,6 +126,7 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
@@ -135,7 +137,7 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;
 export declare class CreateFileUploadRequestEntity extends CreateFileUploadRequestEntity_base {
     static build(input: z.input<typeof CreateFileUploadRequestEntitySchema>): CreateFileUploadRequestEntity;

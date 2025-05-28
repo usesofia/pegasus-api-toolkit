@@ -52,6 +52,7 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
@@ -60,7 +61,7 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
         deletedAt: Date | null;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
@@ -68,7 +69,7 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;
 declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
@@ -77,7 +78,7 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         deletedAt: Date | null;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, z.ZodObjectDef<{
     data: z.ZodObject<Omit<{
         id: z.ZodString;
@@ -107,6 +108,7 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
@@ -115,7 +117,7 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;
 export declare class ConfirmFileUploadRequestEntity extends ConfirmFileUploadRequestEntity_base {
     static build(input: z.input<typeof ConfirmFileUploadRequestEntitySchema>): ConfirmFileUploadRequestEntity;

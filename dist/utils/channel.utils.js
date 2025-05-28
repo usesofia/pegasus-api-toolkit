@@ -6,6 +6,7 @@ exports.CHANNEL_TYPES = {
     WEB_APP: 'WEB_APP',
     WHATSAPP: 'WHATSAPP',
     SYSTEM: 'SYSTEM',
+    EMAIL: 'EMAIL',
 };
 exports.channel = zod_1.z
     .nativeEnum(exports.CHANNEL_TYPES)

@@ -4,6 +4,7 @@ export const CHANNEL_TYPES = {
   WEB_APP: 'WEB_APP',
   WHATSAPP: 'WHATSAPP',
   SYSTEM: 'SYSTEM',
+  EMAIL: 'EMAIL',
 } as const;
 
 export type ChannelType = keyof typeof CHANNEL_TYPES;

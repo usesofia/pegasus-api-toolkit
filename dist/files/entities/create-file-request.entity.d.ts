@@ -37,6 +37,7 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
@@ -49,7 +50,7 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         objectName: string;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
 }, {
     data: {
@@ -62,7 +63,7 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
 }>;
 declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
@@ -76,7 +77,7 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         objectName: string;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
 }, z.ZodObjectDef<{
     data: z.ZodObject<Omit<{
@@ -116,6 +117,7 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
@@ -128,7 +130,7 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
     };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
 }>;
 export declare class CreateFileRequestEntity extends CreateFileRequestEntity_base {

@@ -4,7 +4,7 @@ declare const ConfirmFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<
     status: FileStatus.COMPLETED | FileStatus.FAILED;
     id: string;
     deletedAt: Date | null;
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     signedUrl?: string | undefined;
 }, z.ZodObjectDef<z.objectUtil.extendShape<Omit<{
     id: z.ZodString;
@@ -25,11 +25,12 @@ declare const ConfirmFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
+        readonly EMAIL: "EMAIL";
     }>;
 }>, "strip", z.ZodTypeAny>, {
     status: FileStatus.COMPLETED | FileStatus.FAILED;
     id: string;
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM";
+    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     deletedAt?: Date | null | undefined;
     signedUrl?: string | undefined;
 }>;
