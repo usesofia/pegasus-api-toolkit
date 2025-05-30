@@ -154,12 +154,6 @@ __decorate([
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], MongoDbPubSubServiceAdapter.prototype, "flushPublishBuffer", null);
-__decorate([
-    (0, log_utils_1.Log)(),
-    __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MongoDbPubSubServiceAdapter.prototype, "stopAutoFlushPublishBuffer", null);

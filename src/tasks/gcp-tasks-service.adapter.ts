@@ -99,7 +99,6 @@ export class GcpTasksServiceAdapter extends Base implements TasksServicePort {
     });
   }
 
-  @Log()
   async flushTasksBuffer({ max }: { max?: number }): Promise<void> {
     if (this.tasksBuffer.length === 0) {
       return;

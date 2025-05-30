@@ -100,7 +100,6 @@ export class GcpPubSubServiceAdapter extends Base implements PubSubServicePort {
     });
   }
 
-  @Log()
   async flushPublishBuffer({ max }: { max?: number }): Promise<void> {
     if (this.publishBuffer.length === 0) {
       return;
