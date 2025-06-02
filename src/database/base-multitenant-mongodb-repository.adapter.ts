@@ -432,7 +432,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         index: indexName,
         path,
         queryVector,
-        numCandidates: 100,
+        numCandidates: Math.min(30* limit, 10000), // Limit to 10000 candidates for performance
         limit,
         filter: {
           $and: [
