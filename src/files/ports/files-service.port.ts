@@ -28,7 +28,7 @@ export interface FilesServicePort {
   }: {
     requester: AuthUserEntity;
     request: ConfirmFileUploadRequestEntity;
-  }): Promise<void>;
+  }): Promise<FileEntity>;
 
   removeOrThrow({ requester, request }: { requester: AuthUserEntity; request: RemoveFileRequestEntity }): Promise<void>;
 

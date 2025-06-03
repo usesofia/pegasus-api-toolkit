@@ -2,7 +2,7 @@ import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import type { ConfirmFileUploadRequestEntity } from '@app/files/entities/confirm-file-upload-request.entity';
 import { CreateFileRequestEntity } from '@app/files/entities/create-file-request.entity';
 import type { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-upload-request.entity';
-import { FileStatus, type FileEntity } from '@app/files/entities/file.entity';
+import { FileEntity, FileStatus } from '@app/files/entities/file.entity';
 import { FindByIdFileRequestEntity } from '@app/files/entities/find-by-id-file-request.entity';
 import { PartialUpdateFileRequestEntity } from '@app/files/entities/partial-update-file-request.entity';
 import type { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
@@ -18,6 +18,7 @@ import { ClsService } from 'nestjs-cls';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { Base } from '@app/base';
 import { Log } from '@app/utils/log.utils';
+import { Duration } from 'luxon';
 
 @Injectable()
 export class FilesServiceAdapter extends Base implements FilesServicePort {
@@ -70,16 +71,16 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
   }: {
     requester: AuthUserEntity;
     request: ConfirmFileUploadRequestEntity;
-  }): Promise<void> {
+  }): Promise<FileEntity> {
     const session = await this.filesRepository.startSession();
-    await session.withTransaction(async () => {
+    const file =  await session.withTransaction(async () => {
       await this.filesRepository.findByIdOrThrow({
         requester,
         request: FindByIdFileRequestEntity.build({ id: request.data.id, status: FileStatus.PENDING }),
         previousSession: session,
       });
 
-      await this.filesRepository.partialUpdateOrThrow({
+      const file = await this.filesRepository.partialUpdateOrThrow({
         requester,
         request: PartialUpdateFileRequestEntity.build({
           id: request.data.id,
@@ -88,6 +89,15 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
         }),
         previousSession: session,
       });
+
+      return file
+    });
+
+    const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
+
+    return FileEntity.build({
+      ...file,
+      signedUrl: signedUrls[0],
     });
   }
 

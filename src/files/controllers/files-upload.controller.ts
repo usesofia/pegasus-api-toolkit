@@ -7,13 +7,14 @@ import { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-u
 import { FILES_SERVICE_PORT, type FilesServicePort } from '@app/files/ports/files-service.port';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { Body, Controller, Inject, LoggerService, Post } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ClsService } from 'nestjs-cls';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { OrganizationTypes } from '@app/auth/decorators/organization-types.decorator';
 import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 import { AuthUser } from '@app/auth/decorators/auth-user.decorator';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { FileEntity } from '@app/files/entities/file.entity';
 
 @ApiTags('FilesUpload')
 @ApiResponse({
@@ -69,11 +70,14 @@ export class FilesUploadController extends Base {
   @ApiBody({
     type: ConfirmFileUploadRequestBodyDto,
   })
+  @ApiCreatedResponse({
+    type: FileEntity,
+  })
   @Post('/external/files/upload/confirm')
   @OrganizationTypes(OrganizationType.LEAF)
-  async confirm(@AuthUser() requester: AuthUserEntity, @Body() body: ConfirmFileUploadRequestBodyDto): Promise<void> {
+  async confirm(@AuthUser() requester: AuthUserEntity, @Body() body: ConfirmFileUploadRequestBodyDto): Promise<FileEntity> {
     const { channel, ...data } = body;
-    await this.filesService.confirmUploadRequest({
+    return await this.filesService.confirmUploadRequest({
       requester,
       request: ConfirmFileUploadRequestEntity.build({ data, channel }),
     });

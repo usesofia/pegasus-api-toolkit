@@ -30,6 +30,7 @@ const organization_types_decorator_1 = require("../../auth/decorators/organizati
 const organization_type_enum_1 = require("../../auth/constants/organization-type.enum");
 const auth_user_decorator_1 = require("../../auth/decorators/auth-user.decorator");
 const auth_user_entity_1 = require("../../auth/entities/auth-user.entity");
+const file_entity_1 = require("../entities/file.entity");
 let FilesUploadController = FilesUploadController_1 = class FilesUploadController extends base_1.Base {
     constructor(baseConfig, logger, cls, filesService) {
         super(FilesUploadController_1.name, baseConfig, logger, cls);
@@ -48,7 +49,7 @@ let FilesUploadController = FilesUploadController_1 = class FilesUploadControlle
     }
     async confirm(requester, body) {
         const { channel, ...data } = body;
-        await this.filesService.confirmUploadRequest({
+        return await this.filesService.confirmUploadRequest({
             requester,
             request: confirm_file_upload_request_entity_1.ConfirmFileUploadRequestEntity.build({ data, channel }),
         });
@@ -88,6 +89,9 @@ __decorate([
     }),
     (0, swagger_1.ApiBody)({
         type: confirm_file_upload_request_body_dto_1.ConfirmFileUploadRequestBodyDto,
+    }),
+    (0, swagger_1.ApiCreatedResponse)({
+        type: file_entity_1.FileEntity,
     }),
     (0, common_1.Post)('/external/files/upload/confirm'),
     (0, organization_types_decorator_1.OrganizationTypes)(organization_type_enum_1.OrganizationType.LEAF),

@@ -1,7 +1,7 @@
 import { BaseConfigEntity } from '../../config/base-config.entity';
 import type { ConfirmFileUploadRequestEntity } from '../../files/entities/confirm-file-upload-request.entity';
 import type { CreateFileUploadRequestEntity } from '../../files/entities/create-file-upload-request.entity';
-import { type FileEntity } from '../../files/entities/file.entity';
+import { FileEntity } from '../../files/entities/file.entity';
 import type { RemoveFileRequestEntity } from '../../files/entities/remove-file-request.entity';
 import { type FilesRepositoryPort } from '../../files/ports/files-repository.port';
 import { type BuildableEntity, type FilesServicePort, type PopulatesFile } from '../../files/ports/files-service.port';
@@ -27,7 +27,7 @@ export declare class FilesServiceAdapter extends Base implements FilesServicePor
     confirmUploadRequest({ requester, request, }: {
         requester: AuthUserEntity;
         request: ConfirmFileUploadRequestEntity;
-    }): Promise<void>;
+    }): Promise<FileEntity>;
     removeOrThrow({ requester, request, }: {
         requester: AuthUserEntity;
         request: RemoveFileRequestEntity;

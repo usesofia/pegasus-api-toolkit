@@ -27,6 +27,7 @@ const nestjs_cls_1 = require("nestjs-cls");
 const logger_module_1 = require("../../logger/logger.module");
 const base_1 = require("../../base");
 const log_utils_1 = require("../../utils/log.utils");
+const luxon_1 = require("luxon");
 let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, filesRepository, objectStorageService) {
         super(FilesServiceAdapter_1.name, baseConfig, logger, cls);
@@ -57,13 +58,13 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
     }
     async confirmUploadRequest({ requester, request, }) {
         const session = await this.filesRepository.startSession();
-        await session.withTransaction(async () => {
+        const file = await session.withTransaction(async () => {
             await this.filesRepository.findByIdOrThrow({
                 requester,
                 request: find_by_id_file_request_entity_1.FindByIdFileRequestEntity.build({ id: request.data.id, status: file_entity_1.FileStatus.PENDING }),
                 previousSession: session,
             });
-            await this.filesRepository.partialUpdateOrThrow({
+            const file = await this.filesRepository.partialUpdateOrThrow({
                 requester,
                 request: partial_update_file_request_entity_1.PartialUpdateFileRequestEntity.build({
                     id: request.data.id,
@@ -72,6 +73,12 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
                 }),
                 previousSession: session,
             });
+            return file;
+        });
+        const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
+        return file_entity_1.FileEntity.build({
+            ...file,
+            signedUrl: signedUrls[0],
         });
     }
     async removeOrThrow({ requester, request, }) {

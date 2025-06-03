@@ -6,6 +6,7 @@ import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '../../config/base-config.entity';
 import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
+import { FileEntity } from '../../files/entities/file.entity';
 export declare class FilesUploadController extends Base {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
@@ -16,5 +17,5 @@ export declare class FilesUploadController extends Base {
         fileId: string;
         uploadUrl: string;
     }>;
-    confirm(requester: AuthUserEntity, body: ConfirmFileUploadRequestBodyDto): Promise<void>;
+    confirm(requester: AuthUserEntity, body: ConfirmFileUploadRequestBodyDto): Promise<FileEntity>;
 }
