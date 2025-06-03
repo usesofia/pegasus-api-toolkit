@@ -11,6 +11,7 @@ var FileType;
     FileType["EXPORT"] = "EXPORT";
     FileType["INSTALLMENT_FINANCIAL_RECORD"] = "INSTALLMENT_FINANCIAL_RECORD";
     FileType["RECURRING_FINANCIAL_RECORD"] = "RECURRING_FINANCIAL_RECORD";
+    FileType["OFX"] = "OFX";
     FileType["SEVEN_DAYS_TEMP_FILE"] = "SEVEN_DAYS_TEMP_FILE";
 })(FileType || (exports.FileType = FileType = {}));
 var FileStatus;
