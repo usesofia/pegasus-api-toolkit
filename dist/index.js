@@ -92,8 +92,6 @@ __exportStar(require("./utils/regex.utils"), exports);
 __exportStar(require("./utils/openai.utils"), exports);
 __exportStar(require("./base"), exports);
 __exportStar(require("./app-exceptions.filter"), exports);
-__exportStar(require("./websocket/financial-records.websocket-events"), exports);
-__exportStar(require("./websocket/contacts.websocket-events"), exports);
 __exportStar(require("./files/files.module"), exports);
 __exportStar(require("./files/files.constants"), exports);
 __exportStar(require("./files/adapters/files-service.adapter"), exports);
