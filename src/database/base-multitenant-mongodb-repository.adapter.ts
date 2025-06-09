@@ -1,4 +1,4 @@
-import { Model, Document, ClientSession, PipelineStage } from 'mongoose';
+import { Model, Document, ClientSession, PipelineStage, PopulateOptions } from 'mongoose';
 import { NotFoundException, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '@app/config/base-config.entity';
@@ -58,7 +58,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   }
 
   @Log()
-  protected buildPopulatePaths(populate: string, session?: ClientSession) {
+  protected buildPopulatePaths(populate: string, session?: ClientSession): PopulateOptions[] {
     return populate.split(',').map((field) => ({
       path: field.trim(),
       options: session ? { session } : undefined,

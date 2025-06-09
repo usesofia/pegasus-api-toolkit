@@ -175,7 +175,7 @@ __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Array)
 ], BaseDefaultMongoDbRepositoryAdapter.prototype, "buildPopulatePaths", null);
 __decorate([
     (0, log_utils_1.Log)(),
