@@ -1,7 +1,7 @@
-import { Base } from '../base';
-import { BaseConfigEntity } from '../config/base-config.entity';
-import { TaskEntity } from '../tasks/task.entity';
-import { TasksServicePort } from '../tasks/tasks-service.port';
+import { Base } from '@app/base';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { TaskEntity } from '@app/tasks/task.entity';
+import { TasksServicePort } from '@app/tasks/tasks-service.port';
 import { CloudTasksClient } from '@google-cloud/tasks';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';

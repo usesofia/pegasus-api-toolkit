@@ -1,4 +1,4 @@
-import { FileStatus } from '../../files/entities/file.entity';
+import { FileStatus } from '@app/files/entities/file.entity';
 import { z } from 'zod';
 declare const ConfirmFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<{
     status: FileStatus.COMPLETED | FileStatus.FAILED;

@@ -1,8 +1,8 @@
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { z } from 'zod';
-import { Base } from '../base';
-import { BaseConfigEntity } from '../config/base-config.entity';
+import { Base } from '@app/base';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 declare const HealthResponseDto_base: import("nestjs-zod").ZodDto<{
     status: string;
 }, z.ZodObjectDef<{
