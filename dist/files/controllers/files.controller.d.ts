@@ -1,10 +1,10 @@
-import { RemoveFileRequestBodyDto } from '../../files/dtos/remove-file-request-body.dto';
-import { type FilesServicePort } from '../../files/ports/files-service.port';
+import { RemoveFileRequestBodyDto } from '@app/files/dtos/remove-file-request-body.dto';
+import { type FilesServicePort } from '@app/files/ports/files-service.port';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
-import { Base } from '../../base';
-import { BaseConfigEntity } from '../../config/base-config.entity';
-import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
+import { Base } from '@app/base';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 export declare class FilesController extends Base {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;

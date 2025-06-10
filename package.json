@@ -1,6 +1,6 @@
 {
   "name": "@usesofia/pegasus-api-toolkit",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "description": "Um conjunto de ferramentas para desenvolvimento de APIs para o Pegasus.",
   "author": "Sofia",
   "private": false,
@@ -68,6 +68,7 @@
     "rxjs": "^7.8.2",
     "supertest": "^7.1.1",
     "typescript-eslint": "^8.33.1",
+    "typia": "^9.3.1",
     "uuid": "^11.1.0",
     "zod": "^3.25.56"
   },

@@ -1,8 +1,8 @@
-import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
-import { Base } from '../../base';
-import { BaseConfigEntity } from '../../config/base-config.entity';
-import type { FileType } from '../../files/entities/file.entity';
-import { type ObjectStorageServicePort } from '../../files/ports/object-storage-service.port';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { Base } from '@app/base';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import type { FileType } from '@app/files/entities/file.entity';
+import { type ObjectStorageServicePort } from '@app/files/ports/object-storage-service.port';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import type { Readable, Writable } from 'stream';
