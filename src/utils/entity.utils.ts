@@ -1,7 +1,3 @@
-import {
-  getJsonParseReviver,
-  getJsonStringifyReplacer,
-} from '@app/utils/json.utils';
 import { InternalServerErrorException } from '@nestjs/common';
 import { ZodDto } from 'nestjs-zod';
 
@@ -16,13 +12,8 @@ export function safeInstantiateEntity<T extends ZodDto>(
 ): InstanceType<T> {
   try {
     const entityInstance = createInstance(entityClass);
-    const safeInput = JSON.parse(
-      JSON.stringify(input, getJsonStringifyReplacer()),
-      getJsonParseReviver(),
-    );
-    const validProps = entityClass.create(safeInput);
+    const validProps = entityClass.create(input);
     Object.assign(entityInstance, validProps);
-    Object.freeze(entityInstance);
     return entityInstance;
   } catch (error) {
     throw new InternalServerErrorException(error);
@@ -33,11 +24,10 @@ export function unsafeInstantiateEntity<T extends ZodDto>(
   entityClass: T,
   input: any,
 ): InstanceType<T> {
-  const entityInstance = createInstance(entityClass);
   try {
+    const entityInstance = createInstance(entityClass);
     const validProps = entityClass.create(input);
     Object.assign(entityInstance, validProps);
-    Object.freeze(entityInstance);
     return entityInstance;
   } catch (error) {
     throw new InternalServerErrorException(error);
