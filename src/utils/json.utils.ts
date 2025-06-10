@@ -20,3 +20,9 @@ export function getJsonStringifyReplacer() {
     return value;
   };
 }
+
+export function getJsonParseReviver() {
+  return (_key: string, value: unknown) => {
+    return value;
+  };
+}

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getJsonStringifyReplacer = getJsonStringifyReplacer;
+exports.getJsonParseReviver = getJsonParseReviver;
 function getJsonStringifyReplacer() {
     const seen = new WeakSet();
     return (_key, value) => {
@@ -20,6 +21,11 @@ function getJsonStringifyReplacer() {
             }
             seen.add(value);
         }
+        return value;
+    };
+}
+function getJsonParseReviver() {
+    return (_key, value) => {
         return value;
     };
 }
