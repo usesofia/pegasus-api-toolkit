@@ -13,6 +13,7 @@ export function safeInstantiateEntity<T extends ZodDto>(
 ): InstanceType<T> {
   try {
     const entityInstance = createInstance(entityClass);
+    const seen = new WeakSet();
     const safeInput = deepcopy(input, {
       customizer: (obj) => {
         if (obj instanceof Error) {
@@ -25,6 +26,13 @@ export function safeInstantiateEntity<T extends ZodDto>(
         if (typeof obj === 'bigint') {
           return obj.toString();
         }
+        if (typeof obj === 'object' && obj !== null) {
+          if (seen.has(obj)) {
+            return;
+          }
+          seen.add(obj);
+        }
+        return obj;
       },
     });
     const validProps = entityClass.create(safeInput);

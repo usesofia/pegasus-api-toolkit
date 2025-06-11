@@ -10,6 +10,7 @@ function createInstance(c) {
 function safeInstantiateEntity(entityClass, input) {
     try {
         const entityInstance = createInstance(entityClass);
+        const seen = new WeakSet();
         const safeInput = (0, deepcopy_1.default)(input, {
             customizer: (obj) => {
                 if (obj instanceof Error) {
@@ -22,6 +23,13 @@ function safeInstantiateEntity(entityClass, input) {
                 if (typeof obj === 'bigint') {
                     return obj.toString();
                 }
+                if (typeof obj === 'object' && obj !== null) {
+                    if (seen.has(obj)) {
+                        return;
+                    }
+                    seen.add(obj);
+                }
+                return obj;
             },
         });
         const validProps = entityClass.create(safeInput);
