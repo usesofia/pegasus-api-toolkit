@@ -2,15 +2,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.safeInstantiateEntity = safeInstantiateEntity;
 exports.unsafeInstantiateEntity = unsafeInstantiateEntity;
-const json_utils_1 = require("./json.utils");
 const common_1 = require("@nestjs/common");
+const deepcopy_1 = require("deepcopy");
 function createInstance(c) {
     return new c();
 }
 function safeInstantiateEntity(entityClass, input) {
     try {
         const entityInstance = createInstance(entityClass);
-        const safeInput = JSON.parse(JSON.stringify(input, (0, json_utils_1.getJsonStringifyReplacer)()), (0, json_utils_1.getJsonParseReviver)());
+        const safeInput = (0, deepcopy_1.default)(input, {
+            customizer: (obj) => {
+                if (obj instanceof Error) {
+                    return {
+                        name: obj.name,
+                        message: obj.message,
+                        stack: obj.stack,
+                    };
+                }
+                if (typeof obj === 'bigint') {
+                    return obj.toString();
+                }
+            },
+        });
         const validProps = entityClass.create(safeInput);
         Object.assign(entityInstance, validProps);
         Object.freeze(entityInstance);

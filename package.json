@@ -1,6 +1,6 @@
 {
   "name": "@usesofia/pegasus-api-toolkit",
-  "version": "3.7.0",
+  "version": "3.8.0",
   "description": "Um conjunto de ferramentas para desenvolvimento de APIs para o Pegasus.",
   "author": "Sofia",
   "private": false,
@@ -46,6 +46,7 @@
     "axios": "^1.9.0",
     "axios-retry": "^4.5.0",
     "cpf-cnpj-validator": "^1.0.3",
+    "deepcopy": "^2.1.0",
     "deepmerge-ts": "^7.1.5",
     "dotenv": "^16.5.0",
     "eslint-config-prettier": "^10.1.5",
