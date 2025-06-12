@@ -102,7 +102,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FilesUploadController.prototype, "confirm", null);
 exports.FilesUploadController = FilesUploadController = FilesUploadController_1 = __decorate([
-    (0, swagger_1.ApiTags)('FilesUpload'),
+    (0, swagger_1.ApiTags)('Files Upload'),
     (0, swagger_1.ApiResponse)({
         type: app_exceptions_filter_1.ExceptionResponseEntity,
     }),

@@ -16,7 +16,7 @@ import { AuthUser } from '@app/auth/decorators/auth-user.decorator';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { FileEntity } from '@app/files/entities/file.entity';
 
-@ApiTags('FilesUpload')
+@ApiTags('Files Upload')
 @ApiResponse({
   type: ExceptionResponseEntity,
 })

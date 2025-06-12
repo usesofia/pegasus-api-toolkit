@@ -125,6 +125,19 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
             });
         }
     }
+    async getUserWithoutOrganization(userId) {
+        const { clerkUser } = await this.getCachedClerkUserAndOrganization({
+            userId,
+        });
+        return auth_user_entity_1.AuthUserEntity.build({
+            id: clerkUser.id,
+            primaryEmail: clerkUser.emailAddresses[0].emailAddress,
+            primaryPhoneNumber: clerkUser.phoneNumbers[0].phoneNumber,
+            firstName: clerkUser.firstName ?? '',
+            lastName: clerkUser.lastName ?? '',
+            organization: null,
+        });
+    }
     async getClerkUserAndOrganization({ userId, organizationId, }) {
         const [clerkUser, clerkOrganization] = await Promise.all([
             this.clerkClient.users.getUser(userId),
@@ -225,6 +238,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthServiceAdapter.prototype, "getUser", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthServiceAdapter.prototype, "getUserWithoutOrganization", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),

@@ -15,6 +15,7 @@ export interface AuthServicePort {
   }): Promise<AuthUserEntity>;
   getSystemUserForOrganization(organizationId: string): Promise<AuthUserEntity>;
   generateGcpServiceAccountToken(): Promise<string>;
+  getUserWithoutOrganization(userId: string): Promise<AuthUserEntity>;
 }
 
 export const AUTH_SERVICE_PORT = Symbol('AuthServicePort');
