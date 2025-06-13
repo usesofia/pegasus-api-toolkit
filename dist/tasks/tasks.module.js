@@ -45,9 +45,9 @@ exports.TasksModule = TasksModule = __decorate([
             mongodb_tasks_service_adapter_1.MongodbTasksServiceAdapter,
             gcp_tasks_service_adapter_1.GcpTasksServiceAdapter,
             {
-                provide: tasks_1.CloudTasksClient,
+                provide: tasks_1.v2beta2.CloudTasksClient,
                 useFactory: (baseConfig) => {
-                    return new tasks_1.CloudTasksClient({
+                    return new tasks_1.v2beta2.CloudTasksClient({
                         credentials: baseConfig.gcp.credentials,
                         projectId: baseConfig.gcp.credentials.project_id,
                     });
