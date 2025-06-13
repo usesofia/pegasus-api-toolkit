@@ -12,4 +12,7 @@ export interface TasksServicePort {
         max?: number;
     }): Promise<void>;
     stopAutoFlushTasksBuffer(): Promise<void>;
+    getQueueSize({ queueName }: {
+        queueName: string;
+    }): Promise<number>;
 }

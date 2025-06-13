@@ -163,4 +163,10 @@ export class MongodbTasksServiceAdapter
       // Just ignore the error
     }
   }
+
+  @Log()
+  async getQueueSize({ queueName }: { queueName: string }): Promise<number> {
+    const queueSize = await this.taskModel.countDocuments({ queue: queueName });
+    return queueSize;
+  }
 }

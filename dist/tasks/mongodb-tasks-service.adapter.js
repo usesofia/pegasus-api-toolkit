@@ -112,6 +112,10 @@ let MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = class MongodbTas
         catch {
         }
     }
+    async getQueueSize({ queueName }) {
+        const queueSize = await this.taskModel.countDocuments({ queue: queueName });
+        return queueSize;
+    }
 };
 exports.MongodbTasksServiceAdapter = MongodbTasksServiceAdapter;
 __decorate([
@@ -132,6 +136,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MongodbTasksServiceAdapter.prototype, "stopAutoFlushTasksBuffer", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MongodbTasksServiceAdapter.prototype, "getQueueSize", null);
 exports.MongodbTasksServiceAdapter = MongodbTasksServiceAdapter = MongodbTasksServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

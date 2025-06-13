@@ -2,7 +2,7 @@ import { Base } from '../base';
 import { BaseConfigEntity } from '../config/base-config.entity';
 import { TaskEntity } from '../tasks/task.entity';
 import { TasksServicePort } from '../tasks/tasks-service.port';
-import { CloudTasksClient } from '@google-cloud/tasks';
+import { v2beta2 } from '@google-cloud/tasks';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 export declare class GcpTasksServiceAdapter extends Base implements TasksServicePort {
@@ -13,7 +13,7 @@ export declare class GcpTasksServiceAdapter extends Base implements TasksService
     private tasksBuffer;
     private tasksBufferFlushInterval;
     private flushing;
-    constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cloudTasksClient: CloudTasksClient);
+    constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cloudTasksClient: v2beta2.CloudTasksClient);
     appendTask({ task, correlationId, }: {
         task: TaskEntity;
         correlationId?: string;
@@ -25,4 +25,7 @@ export declare class GcpTasksServiceAdapter extends Base implements TasksService
         max?: number;
     }): Promise<void>;
     stopAutoFlushTasksBuffer(): Promise<void>;
+    getQueueSize({ queueName, }: {
+        queueName: string;
+    }): Promise<number>;
 }

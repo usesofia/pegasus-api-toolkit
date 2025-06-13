@@ -117,6 +117,13 @@ let GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = class GcpTasksServiceAda
         catch {
         }
     }
+    async getQueueSize({ queueName, }) {
+        const queuePath = this.cloudTasksClient.queuePath(this.baseConfig.gcp.credentials.project_id, this.baseConfig.gcp.location, queueName);
+        const [queueData] = await this.cloudTasksClient.getQueue({
+            name: queuePath,
+        });
+        return Number(queueData.stats?.tasksCount ?? 0);
+    }
 };
 exports.GcpTasksServiceAdapter = GcpTasksServiceAdapter;
 __decorate([
@@ -137,11 +144,16 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], GcpTasksServiceAdapter.prototype, "stopAutoFlushTasksBuffer", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], GcpTasksServiceAdapter.prototype, "getQueueSize", null);
 exports.GcpTasksServiceAdapter = GcpTasksServiceAdapter = GcpTasksServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
     __param(1, (0, common_1.Inject)(logger_module_1.LOGGER_SERVICE_PORT)),
-    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService,
-        tasks_1.CloudTasksClient])
+    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, tasks_1.v2beta2.CloudTasksClient])
 ], GcpTasksServiceAdapter);
 //# sourceMappingURL=gcp-tasks-service.adapter.js.map

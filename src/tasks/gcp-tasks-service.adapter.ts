@@ -6,7 +6,7 @@ import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { TaskEntity } from '@app/tasks/task.entity';
 import { TasksServicePort } from '@app/tasks/tasks-service.port';
 import { Log } from '@app/utils/log.utils';
-import { CloudTasksClient } from '@google-cloud/tasks';
+import { v2beta2 } from '@google-cloud/tasks';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { v4 as uuidv4 } from 'uuid';
@@ -31,7 +31,7 @@ export class GcpTasksServiceAdapter extends Base implements TasksServicePort {
     @Inject(LOGGER_SERVICE_PORT)
     protected readonly logger: LoggerService,
     protected readonly cls: ClsService,
-    private readonly cloudTasksClient: CloudTasksClient,
+    private readonly cloudTasksClient: v2beta2.CloudTasksClient,
   ) {
     super(GcpTasksServiceAdapter.name, baseConfig, logger, cls);
     this.flushing = false;
@@ -158,5 +158,24 @@ export class GcpTasksServiceAdapter extends Base implements TasksServicePort {
     } catch {
       // Just ignore the error
     }
+  }
+
+  @Log()
+  async getQueueSize({
+    queueName,
+  }: {
+    queueName: string;
+  }): Promise<number> {
+    const queuePath = this.cloudTasksClient.queuePath(
+      this.baseConfig.gcp.credentials.project_id,
+      this.baseConfig.gcp.location,
+      queueName,
+    );
+
+    const [queueData] = await this.cloudTasksClient.getQueue({
+      name: queuePath,
+    });
+
+    return Number(queueData.stats?.tasksCount ?? 0);
   }
 }

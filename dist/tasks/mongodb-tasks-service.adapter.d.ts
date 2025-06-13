@@ -27,4 +27,7 @@ export declare class MongodbTasksServiceAdapter extends Base implements TasksSer
         max?: number;
     }): Promise<void>;
     stopAutoFlushTasksBuffer(): Promise<void>;
+    getQueueSize({ queueName }: {
+        queueName: string;
+    }): Promise<number>;
 }
