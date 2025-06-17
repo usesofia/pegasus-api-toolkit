@@ -117,6 +117,6 @@ export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorag
 
   extractObjectNameFromUrl({ url }: { url: string }): string {
     const urlObject = new URL(url);
-    return urlObject.pathname.split('/').slice(1).join('/');
+    return urlObject.pathname.split('/').slice(2).join('/');
   }
 }

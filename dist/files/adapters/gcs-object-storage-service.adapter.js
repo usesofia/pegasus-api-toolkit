@@ -81,7 +81,7 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
     }
     extractObjectNameFromUrl({ url }) {
         const urlObject = new URL(url);
-        return urlObject.pathname.split('/').slice(1).join('/');
+        return urlObject.pathname.split('/').slice(2).join('/');
     }
 };
 exports.GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter;
