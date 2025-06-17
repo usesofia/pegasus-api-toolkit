@@ -15,6 +15,7 @@ import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 import { AuthUser } from '@app/auth/decorators/auth-user.decorator';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { FileEntity } from '@app/files/entities/file.entity';
+import { Log } from '@app/utils/log.utils';
 
 @ApiTags('Files Upload')
 @ApiResponse({
@@ -50,6 +51,7 @@ export class FilesUploadController extends Base {
   })
   @Post('/external/files/upload')
   @OrganizationTypes(OrganizationType.LEAF)
+  @Log('controller')
   async create(
     @AuthUser() requester: AuthUserEntity,
     @Body() body: CreateFileUploadRequestBodyDto,
@@ -75,6 +77,7 @@ export class FilesUploadController extends Base {
   })
   @Post('/external/files/upload/confirm')
   @OrganizationTypes(OrganizationType.LEAF)
+  @Log('controller')
   async confirm(@AuthUser() requester: AuthUserEntity, @Body() body: ConfirmFileUploadRequestBodyDto): Promise<FileEntity> {
     const { channel, ...data } = body;
     return await this.filesService.confirmUploadRequest({

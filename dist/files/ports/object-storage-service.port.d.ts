@@ -30,4 +30,7 @@ export interface ObjectStorageServicePort {
         fileType: FileType;
         originalFileName: string;
     }): string;
+    extractObjectNameFromUrl({ url }: {
+        url: string;
+    }): string;
 }

@@ -12,7 +12,7 @@ import {
   OBJECT_STORAGE_SERVICE_PORT,
   type ObjectStorageServicePort,
 } from '@app/files/ports/object-storage-service.port';
-import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, LoggerService } from '@nestjs/common';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { ClsService } from 'nestjs-cls';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
@@ -150,5 +150,24 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
     buildableEntity: BuildableEntity<T>,
   ): Promise<T[]> {
     return Promise.all(entities.map((entity) => this.enrichEntityWithFileSignedUrls(entity, buildableEntity)));
+  }
+
+  @Log()
+  async getSignedUrlFromUrl({
+    requester,
+    url,
+  }: {
+    requester: AuthUserEntity;
+    url: string;
+  }): Promise<string> {
+    const objectName = this.objectStorageService.extractObjectNameFromUrl({ url });
+
+    if(!objectName.startsWith(requester.getOrganizationOrThrow().id)) {
+      throw new ForbiddenException('Você não tem permissão para acessar este arquivo.');
+    }
+
+    const signedUrl = await this.objectStorageService.createSignedDownloadUrl({ objectName, expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
+    
+    return signedUrl;
   }
 }

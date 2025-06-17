@@ -41,4 +41,7 @@ export declare class GcsObjectStorageServiceAdapter extends Base implements Obje
         fileType: FileType;
         originalFileName: string;
     }): string;
+    extractObjectNameFromUrl({ url }: {
+        url: string;
+    }): string;
 }

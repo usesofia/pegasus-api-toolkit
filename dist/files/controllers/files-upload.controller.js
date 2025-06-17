@@ -31,6 +31,7 @@ const organization_type_enum_1 = require("../../auth/constants/organization-type
 const auth_user_decorator_1 = require("../../auth/decorators/auth-user.decorator");
 const auth_user_entity_1 = require("../../auth/entities/auth-user.entity");
 const file_entity_1 = require("../entities/file.entity");
+const log_utils_1 = require("../../utils/log.utils");
 let FilesUploadController = FilesUploadController_1 = class FilesUploadController extends base_1.Base {
     constructor(baseConfig, logger, cls, filesService) {
         super(FilesUploadController_1.name, baseConfig, logger, cls);
@@ -75,6 +76,7 @@ __decorate([
     }),
     (0, common_1.Post)('/external/files/upload'),
     (0, organization_types_decorator_1.OrganizationTypes)(organization_type_enum_1.OrganizationType.LEAF),
+    (0, log_utils_1.Log)('controller'),
     __param(0, (0, auth_user_decorator_1.AuthUser)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -95,6 +97,7 @@ __decorate([
     }),
     (0, common_1.Post)('/external/files/upload/confirm'),
     (0, organization_types_decorator_1.OrganizationTypes)(organization_type_enum_1.OrganizationType.LEAF),
+    (0, log_utils_1.Log)('controller'),
     __param(0, (0, auth_user_decorator_1.AuthUser)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),

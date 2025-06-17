@@ -79,6 +79,10 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
     generateUniqueObjectName({ requester, fileType, originalFileName, }) {
         return `${requester.getOrganizationOrThrow().id}/${fileType}/${(0, uuid_1.v4)()}/${originalFileName}`;
     }
+    extractObjectNameFromUrl({ url }) {
+        const urlObject = new URL(url);
+        return urlObject.pathname.split('/').slice(1).join('/');
+    }
 };
 exports.GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter;
 exports.GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = __decorate([

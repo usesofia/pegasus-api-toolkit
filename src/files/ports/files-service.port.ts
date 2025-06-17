@@ -40,4 +40,12 @@ export interface FilesServicePort {
     entities: T[],
     buildableEntity: BuildableEntity<T>,
   ): Promise<T[]>;
+
+  getSignedUrlFromUrl({
+    requester,
+    url,
+  }: {
+    requester: AuthUserEntity;
+    url: string;
+  }): Promise<string>;
 }

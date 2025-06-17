@@ -110,6 +110,14 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
     async enrichEntitiesWithFileSignedUrls(entities, buildableEntity) {
         return Promise.all(entities.map((entity) => this.enrichEntityWithFileSignedUrls(entity, buildableEntity)));
     }
+    async getSignedUrlFromUrl({ requester, url, }) {
+        const objectName = this.objectStorageService.extractObjectNameFromUrl({ url });
+        if (!objectName.startsWith(requester.getOrganizationOrThrow().id)) {
+            throw new common_1.ForbiddenException('Você não tem permissão para acessar este arquivo.');
+        }
+        const signedUrl = await this.objectStorageService.createSignedDownloadUrl({ objectName, expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
+        return signedUrl;
+    }
 };
 exports.FilesServiceAdapter = FilesServiceAdapter;
 __decorate([
@@ -148,6 +156,12 @@ __decorate([
     __metadata("design:paramtypes", [Array, Object]),
     __metadata("design:returntype", Promise)
 ], FilesServiceAdapter.prototype, "enrichEntitiesWithFileSignedUrls", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FilesServiceAdapter.prototype, "getSignedUrlFromUrl", null);
 exports.FilesServiceAdapter = FilesServiceAdapter = FilesServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

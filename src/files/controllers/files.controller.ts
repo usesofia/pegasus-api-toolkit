@@ -1,8 +1,8 @@
 import { RemoveFileRequestBodyDto } from '@app/files/dtos/remove-file-request-body.dto';
 import { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
 import { FILES_SERVICE_PORT, type FilesServicePort } from '@app/files/ports/files-service.port';
-import { Body, Controller, Delete, Inject, LoggerService, Param } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, HttpRedirectResponse, HttpStatus, Inject, LoggerService, Param, Query } from '@nestjs/common';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ClsService } from 'nestjs-cls';
 import { Base } from '@app/base';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
@@ -12,6 +12,8 @@ import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { OrganizationTypes } from '@app/auth/decorators/organization-types.decorator';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { OrganizationType } from '@app/auth/constants/organization-type.enum';
+import { SignedUrlEntity } from '@app/files/entities/signed-url.entity';
+import { Log } from '@app/utils/log.utils';
 
 @ApiTags('Files')
 @ApiResponse({
@@ -38,6 +40,7 @@ export class FilesController extends Base {
   })
   @Delete('/external/files/:id')
   @OrganizationTypes(OrganizationType.LEAF)
+  @Log('controller')
   async delete(
     @AuthUser() requester: AuthUserEntity,
     @Param('id') id: string,
@@ -47,5 +50,51 @@ export class FilesController extends Base {
       requester,
       request: RemoveFileRequestEntity.build({ id, channel: body.channel }),
     });
+  }
+
+  @ApiOperation({
+    operationId: 'getSignedUrlFromUrl',
+    summary: 'Get a signed url from a url',
+  })
+  @ApiQuery({
+    name: 'url',
+    description: 'The url of the file to get the signed url from',
+    type: String,
+    required: true,
+  })
+  @ApiOkResponse({
+    type: SignedUrlEntity,
+  })
+  @Get('/external/files/signed-url')
+  @Log('controller')
+  @OrganizationTypes(OrganizationType.LEAF)
+  async getSignedUrlFromUrl(@AuthUser() requester: AuthUserEntity, @Query('url') url: string): Promise<SignedUrlEntity> {
+    const signedUrl = await this.filesService.getSignedUrlFromUrl({ requester, url });
+    return SignedUrlEntity.build({ url, signedUrl });
+  }
+
+  @ApiOperation({
+    operationId: 'redirectToSignedUrl',
+    summary: 'Redirect to a signed url',
+  })
+  @ApiQuery({
+    name: 'url',
+    description: 'The url of the file to redirect to',
+    type: String,
+    required: true,
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Redirect to the signed url',
+  })
+  @Get('/external/files/signed-url/redirect')
+  @Log('controller')
+  @OrganizationTypes(OrganizationType.LEAF)
+  async redirectToSignedUrl(@AuthUser() requester: AuthUserEntity, @Query('url') url: string): Promise<HttpRedirectResponse> {
+    const signedUrl = await this.filesService.getSignedUrlFromUrl({ requester, url });
+    return {
+      url: signedUrl,
+      statusCode: HttpStatus.FOUND,
+    };
   }
 }

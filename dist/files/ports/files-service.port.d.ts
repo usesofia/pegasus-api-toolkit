@@ -29,4 +29,8 @@ export interface FilesServicePort {
     getFilesSignedUrlsOrThrow(files: FileEntity[]): Promise<FileEntity[]>;
     enrichEntityWithFileSignedUrls<T extends PopulatesFile>(entity: T, buildableEntity: BuildableEntity<T>): Promise<T>;
     enrichEntitiesWithFileSignedUrls<T extends PopulatesFile>(entities: T[], buildableEntity: BuildableEntity<T>): Promise<T[]>;
+    getSignedUrlFromUrl({ requester, url, }: {
+        requester: AuthUserEntity;
+        url: string;
+    }): Promise<string>;
 }

@@ -28,6 +28,8 @@ const base_config_entity_1 = require("../../config/base-config.entity");
 const organization_types_decorator_1 = require("../../auth/decorators/organization-types.decorator");
 const auth_user_entity_1 = require("../../auth/entities/auth-user.entity");
 const organization_type_enum_1 = require("../../auth/constants/organization-type.enum");
+const signed_url_entity_1 = require("../entities/signed-url.entity");
+const log_utils_1 = require("../../utils/log.utils");
 let FilesController = FilesController_1 = class FilesController extends base_1.Base {
     constructor(baseConfig, logger, cls, filesService) {
         super(FilesController_1.name, baseConfig, logger, cls);
@@ -42,6 +44,17 @@ let FilesController = FilesController_1 = class FilesController extends base_1.B
             request: remove_file_request_entity_1.RemoveFileRequestEntity.build({ id, channel: body.channel }),
         });
     }
+    async getSignedUrlFromUrl(requester, url) {
+        const signedUrl = await this.filesService.getSignedUrlFromUrl({ requester, url });
+        return signed_url_entity_1.SignedUrlEntity.build({ url, signedUrl });
+    }
+    async redirectToSignedUrl(requester, url) {
+        const signedUrl = await this.filesService.getSignedUrlFromUrl({ requester, url });
+        return {
+            url: signedUrl,
+            statusCode: common_1.HttpStatus.FOUND,
+        };
+    }
 };
 exports.FilesController = FilesController;
 __decorate([
@@ -54,6 +67,7 @@ __decorate([
     }),
     (0, common_1.Delete)('/external/files/:id'),
     (0, organization_types_decorator_1.OrganizationTypes)(organization_type_enum_1.OrganizationType.LEAF),
+    (0, log_utils_1.Log)('controller'),
     __param(0, (0, auth_user_decorator_1.AuthUser)()),
     __param(1, (0, common_1.Param)('id')),
     __param(2, (0, common_1.Body)()),
@@ -61,6 +75,53 @@ __decorate([
     __metadata("design:paramtypes", [auth_user_entity_1.AuthUserEntity, String, remove_file_request_body_dto_1.RemoveFileRequestBodyDto]),
     __metadata("design:returntype", Promise)
 ], FilesController.prototype, "delete", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({
+        operationId: 'getSignedUrlFromUrl',
+        summary: 'Get a signed url from a url',
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'url',
+        description: 'The url of the file to get the signed url from',
+        type: String,
+        required: true,
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        type: signed_url_entity_1.SignedUrlEntity,
+    }),
+    (0, common_1.Get)('/external/files/signed-url'),
+    (0, log_utils_1.Log)('controller'),
+    (0, organization_types_decorator_1.OrganizationTypes)(organization_type_enum_1.OrganizationType.LEAF),
+    __param(0, (0, auth_user_decorator_1.AuthUser)()),
+    __param(1, (0, common_1.Query)('url')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_user_entity_1.AuthUserEntity, String]),
+    __metadata("design:returntype", Promise)
+], FilesController.prototype, "getSignedUrlFromUrl", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({
+        operationId: 'redirectToSignedUrl',
+        summary: 'Redirect to a signed url',
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'url',
+        description: 'The url of the file to redirect to',
+        type: String,
+        required: true,
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 302,
+        description: 'Redirect to the signed url',
+    }),
+    (0, common_1.Get)('/external/files/signed-url/redirect'),
+    (0, log_utils_1.Log)('controller'),
+    (0, organization_types_decorator_1.OrganizationTypes)(organization_type_enum_1.OrganizationType.LEAF),
+    __param(0, (0, auth_user_decorator_1.AuthUser)()),
+    __param(1, (0, common_1.Query)('url')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_user_entity_1.AuthUserEntity, String]),
+    __metadata("design:returntype", Promise)
+], FilesController.prototype, "redirectToSignedUrl", null);
 exports.FilesController = FilesController = FilesController_1 = __decorate([
     (0, swagger_1.ApiTags)('Files'),
     (0, swagger_1.ApiResponse)({

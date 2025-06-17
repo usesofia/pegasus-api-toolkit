@@ -114,4 +114,9 @@ export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorag
   }): string {
     return `${requester.getOrganizationOrThrow().id}/${fileType}/${v4()}/${originalFileName}`;
   }
+
+  extractObjectNameFromUrl({ url }: { url: string }): string {
+    const urlObject = new URL(url);
+    return urlObject.pathname.split('/').slice(1).join('/');
+  }
 }
