@@ -39,4 +39,8 @@ export declare class FilesServiceAdapter extends Base implements FilesServicePor
         requester: AuthUserEntity;
         url: string;
     }): Promise<string>;
+    findByIdOrThrow({ requester, id, }: {
+        requester: AuthUserEntity;
+        id: string;
+    }): Promise<FileEntity>;
 }

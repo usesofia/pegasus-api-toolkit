@@ -2,7 +2,7 @@ import { RemoveFileRequestBodyDto } from '@app/files/dtos/remove-file-request-bo
 import { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
 import { FILES_SERVICE_PORT, type FilesServicePort } from '@app/files/ports/files-service.port';
 import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Query } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ClsService } from 'nestjs-cls';
 import { Base } from '@app/base';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
@@ -14,6 +14,7 @@ import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 import { SignedUrlEntity } from '@app/files/entities/signed-url.entity';
 import { Log } from '@app/utils/log.utils';
+import { FileEntity } from '@app/files/entities/file.entity';
 
 @ApiTags('Files')
 @ApiResponse({
@@ -50,6 +51,29 @@ export class FilesController extends Base {
       requester,
       request: RemoveFileRequestEntity.build({ id, channel: body.channel }),
     });
+  }
+
+  @ApiOperation({
+    operationId: 'findByIdFile',
+    summary: 'Finds a file by id',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The id of the file to get',
+    type: String,
+    required: true,
+  })
+  @ApiOkResponse({
+    type: FileEntity,
+  })
+  @Get('/external/files/:id')
+  @OrganizationTypes(OrganizationType.LEAF)
+  @Log('controller')
+  async findById(
+    @AuthUser() requester: AuthUserEntity,
+    @Param('id') id: string,
+  ): Promise<FileEntity> {
+    return await this.filesService.findByIdOrThrow({ requester, id });
   }
 
   @ApiOperation({

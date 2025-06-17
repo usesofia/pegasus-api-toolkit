@@ -12,7 +12,7 @@ import {
   OBJECT_STORAGE_SERVICE_PORT,
   type ObjectStorageServicePort,
 } from '@app/files/ports/object-storage-service.port';
-import { ForbiddenException, Inject, Injectable, LoggerService } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, LoggerService, NotFoundException } from '@nestjs/common';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { ClsService } from 'nestjs-cls';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
@@ -167,7 +167,29 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
     }
 
     const signedUrl = await this.objectStorageService.createSignedDownloadUrl({ objectName, expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
-    
+
     return signedUrl;
+  }
+
+  @Log()
+  async findByIdOrThrow({
+    requester,
+    id,
+  }: {
+    requester: AuthUserEntity;
+    id: string;
+  }): Promise<FileEntity> {
+    const file = await this.filesRepository.findByIdOrThrow({ requester, request: FindByIdFileRequestEntity.build({ id }) });
+
+    if(file.status === FileStatus.DELETED || file.status === FileStatus.PENDING) {
+      throw new NotFoundException('Arquivo não encontrado.');
+    }
+
+    const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
+
+    return FileEntity.build({
+      ...file,
+      signedUrl: signedUrls[0],
+    });
   }
 }

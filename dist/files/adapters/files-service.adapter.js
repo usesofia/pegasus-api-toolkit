@@ -118,6 +118,17 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
         const signedUrl = await this.objectStorageService.createSignedDownloadUrl({ objectName, expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
         return signedUrl;
     }
+    async findByIdOrThrow({ requester, id, }) {
+        const file = await this.filesRepository.findByIdOrThrow({ requester, request: find_by_id_file_request_entity_1.FindByIdFileRequestEntity.build({ id }) });
+        if (file.status === file_entity_1.FileStatus.DELETED || file.status === file_entity_1.FileStatus.PENDING) {
+            throw new common_1.NotFoundException('Arquivo não encontrado.');
+        }
+        const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
+        return file_entity_1.FileEntity.build({
+            ...file,
+            signedUrl: signedUrls[0],
+        });
+    }
 };
 exports.FilesServiceAdapter = FilesServiceAdapter;
 __decorate([
@@ -162,6 +173,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FilesServiceAdapter.prototype, "getSignedUrlFromUrl", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FilesServiceAdapter.prototype, "findByIdOrThrow", null);
 exports.FilesServiceAdapter = FilesServiceAdapter = FilesServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

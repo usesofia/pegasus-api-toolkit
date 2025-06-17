@@ -6,6 +6,7 @@ import { Base } from '../../base';
 import { BaseConfigEntity } from '../../config/base-config.entity';
 import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
 import { SignedUrlEntity } from '../../files/entities/signed-url.entity';
+import { FileEntity } from '../../files/entities/file.entity';
 export declare class FilesController extends Base {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
@@ -13,5 +14,6 @@ export declare class FilesController extends Base {
     private readonly filesService;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, filesService: FilesServicePort);
     delete(requester: AuthUserEntity, id: string, body: RemoveFileRequestBodyDto): Promise<void>;
+    findById(requester: AuthUserEntity, id: string): Promise<FileEntity>;
     getSignedUrlFromUrl(requester: AuthUserEntity, url: string): Promise<SignedUrlEntity>;
 }
