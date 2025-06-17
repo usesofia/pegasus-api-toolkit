@@ -1,6 +1,6 @@
 import { RemoveFileRequestBodyDto } from '../../files/dtos/remove-file-request-body.dto';
 import { type FilesServicePort } from '../../files/ports/files-service.port';
-import { HttpRedirectResponse, LoggerService } from '@nestjs/common';
+import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { Base } from '../../base';
 import { BaseConfigEntity } from '../../config/base-config.entity';
@@ -14,5 +14,4 @@ export declare class FilesController extends Base {
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, filesService: FilesServicePort);
     delete(requester: AuthUserEntity, id: string, body: RemoveFileRequestBodyDto): Promise<void>;
     getSignedUrlFromUrl(requester: AuthUserEntity, url: string): Promise<SignedUrlEntity>;
-    redirectToSignedUrl(requester: AuthUserEntity, url: string): Promise<HttpRedirectResponse>;
 }

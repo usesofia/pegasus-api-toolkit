@@ -48,13 +48,6 @@ let FilesController = FilesController_1 = class FilesController extends base_1.B
         const signedUrl = await this.filesService.getSignedUrlFromUrl({ requester, url });
         return signed_url_entity_1.SignedUrlEntity.build({ url, signedUrl });
     }
-    async redirectToSignedUrl(requester, url) {
-        const signedUrl = await this.filesService.getSignedUrlFromUrl({ requester, url });
-        return {
-            url: signedUrl,
-            statusCode: common_1.HttpStatus.FOUND,
-        };
-    }
 };
 exports.FilesController = FilesController;
 __decorate([
@@ -98,30 +91,6 @@ __decorate([
     __metadata("design:paramtypes", [auth_user_entity_1.AuthUserEntity, String]),
     __metadata("design:returntype", Promise)
 ], FilesController.prototype, "getSignedUrlFromUrl", null);
-__decorate([
-    (0, swagger_1.ApiOperation)({
-        operationId: 'redirectToSignedUrl',
-        summary: 'Redirect to a signed url',
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'url',
-        description: 'The url of the file to redirect to',
-        type: String,
-        required: true,
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 302,
-        description: 'Redirect to the signed url',
-    }),
-    (0, common_1.Get)('/external/files/signed-url/redirect'),
-    (0, log_utils_1.Log)('controller'),
-    (0, organization_types_decorator_1.OrganizationTypes)(organization_type_enum_1.OrganizationType.LEAF),
-    __param(0, (0, auth_user_decorator_1.AuthUser)()),
-    __param(1, (0, common_1.Query)('url')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_user_entity_1.AuthUserEntity, String]),
-    __metadata("design:returntype", Promise)
-], FilesController.prototype, "redirectToSignedUrl", null);
 exports.FilesController = FilesController = FilesController_1 = __decorate([
     (0, swagger_1.ApiTags)('Files'),
     (0, swagger_1.ApiResponse)({
