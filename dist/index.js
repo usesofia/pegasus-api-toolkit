@@ -113,4 +113,7 @@ __exportStar(require("./files/models/mongodb-file.model"), exports);
 __exportStar(require("./files/ports/object-storage-service.port"), exports);
 __exportStar(require("./files/ports/files-service.port"), exports);
 __exportStar(require("./files/ports/files-repository.port"), exports);
+__exportStar(require("./email/email.module"), exports);
+__exportStar(require("./email/email-service.port"), exports);
+__exportStar(require("./email/adapters/sendgrid-email-service.adapter"), exports);
 //# sourceMappingURL=index.js.map

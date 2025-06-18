@@ -98,6 +98,11 @@ export const BaseConfigSchema = z.object({
   tasks: z.object({
     secret: z.string(),
   }),
+  email: z.object({
+    sendgrid: z.object({
+      apiKey: z.string(),
+    }),
+  }),
 });
 
 export class BaseConfigEntity extends createZodDto(BaseConfigSchema) {

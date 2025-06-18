@@ -97,3 +97,6 @@ export * from './files/models/mongodb-file.model';
 export * from './files/ports/object-storage-service.port';
 export * from './files/ports/files-service.port';
 export * from './files/ports/files-repository.port';
+export * from './email/email.module';
+export * from './email/email-service.port';
+export * from './email/adapters/sendgrid-email-service.adapter';

@@ -142,3 +142,8 @@ export * from '@app/files/models/mongodb-file.model';
 export * from '@app/files/ports/object-storage-service.port';
 export * from '@app/files/ports/files-service.port';
 export * from '@app/files/ports/files-repository.port';
+
+// Email
+export * from '@app/email/email.module';
+export * from '@app/email/email-service.port';
+export * from '@app/email/adapters/sendgrid-email-service.adapter';

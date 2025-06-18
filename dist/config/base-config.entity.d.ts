@@ -252,6 +252,23 @@ export declare const BaseConfigSchema: z.ZodObject<{
     }, {
         secret: string;
     }>;
+    email: z.ZodObject<{
+        sendgrid: z.ZodObject<{
+            apiKey: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            apiKey: string;
+        }, {
+            apiKey: string;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        sendgrid: {
+            apiKey: string;
+        };
+    }, {
+        sendgrid: {
+            apiKey: string;
+        };
+    }>;
 }, "strip", z.ZodTypeAny, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -325,6 +342,11 @@ export declare const BaseConfigSchema: z.ZodObject<{
     }[];
     tasks: {
         secret: string;
+    };
+    email: {
+        sendgrid: {
+            apiKey: string;
+        };
     };
 }, {
     env: Environment;
@@ -400,6 +422,11 @@ export declare const BaseConfigSchema: z.ZodObject<{
     tasks: {
         secret: string;
     };
+    email: {
+        sendgrid: {
+            apiKey: string;
+        };
+    };
 }>;
 declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     env: Environment;
@@ -474,6 +501,11 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     }[];
     tasks: {
         secret: string;
+    };
+    email: {
+        sendgrid: {
+            apiKey: string;
+        };
     };
 }, z.ZodObjectDef<{
     env: z.ZodNativeEnum<typeof Environment>;
@@ -727,6 +759,23 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     }, {
         secret: string;
     }>;
+    email: z.ZodObject<{
+        sendgrid: z.ZodObject<{
+            apiKey: z.ZodString;
+        }, "strip", z.ZodTypeAny, {
+            apiKey: string;
+        }, {
+            apiKey: string;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        sendgrid: {
+            apiKey: string;
+        };
+    }, {
+        sendgrid: {
+            apiKey: string;
+        };
+    }>;
 }, "strip", z.ZodTypeAny>, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -800,6 +849,11 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     }[];
     tasks: {
         secret: string;
+    };
+    email: {
+        sendgrid: {
+            apiKey: string;
+        };
     };
 }>;
 export declare class BaseConfigEntity extends BaseConfigEntity_base {
