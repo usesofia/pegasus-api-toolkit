@@ -11,6 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var FilesServiceAdapter_1;
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -28,6 +31,7 @@ const logger_module_1 = require("../../logger/logger.module");
 const base_1 = require("../../base");
 const log_utils_1 = require("../../utils/log.utils");
 const luxon_1 = require("luxon");
+const axios_1 = __importDefault(require("axios"));
 let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, filesRepository, objectStorageService) {
         super(FilesServiceAdapter_1.name, baseConfig, logger, cls);
@@ -111,6 +115,10 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
         return Promise.all(entities.map((entity) => this.enrichEntityWithFileSignedUrls(entity, buildableEntity)));
     }
     async getSignedUrlFromUrl({ requester, url, }) {
+        const response = await axios_1.default.head(url);
+        if (response.status === 200) {
+            return url;
+        }
         const objectName = this.objectStorageService.extractObjectNameFromUrl({ url });
         if (!objectName.startsWith(requester.getOrganizationOrThrow().id)) {
             throw new common_1.ForbiddenException('Você não tem permissão para acessar este arquivo.');

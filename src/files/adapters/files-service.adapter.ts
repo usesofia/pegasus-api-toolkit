@@ -19,6 +19,7 @@ import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { Base } from '@app/base';
 import { Log } from '@app/utils/log.utils';
 import { Duration } from 'luxon';
+import axios from 'axios';
 
 @Injectable()
 export class FilesServiceAdapter extends Base implements FilesServicePort {
@@ -160,6 +161,13 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
     requester: AuthUserEntity;
     url: string;
   }): Promise<string> {
+    // Checking if the url is public with axios
+    const response = await axios.head(url);
+    
+    if(response.status === 200) {
+      return url;
+    }
+
     const objectName = this.objectStorageService.extractObjectNameFromUrl({ url });
 
     if(!objectName.startsWith(requester.getOrganizationOrThrow().id)) {
