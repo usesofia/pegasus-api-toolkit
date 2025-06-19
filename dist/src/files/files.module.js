@@ -18,8 +18,6 @@ const primary_mongodb_database_module_1 = require("../database/primary-mongodb-d
 const files_service_adapter_1 = require("./adapters/files-service.adapter");
 const gcs_object_storage_service_adapter_1 = require("./adapters/gcs-object-storage-service.adapter");
 const mongodb_files_repository_adapter_1 = require("./adapters/mongodb-files-repository.adapter");
-const files_upload_controller_1 = require("./controllers/files-upload.controller");
-const files_controller_1 = require("./controllers/files.controller");
 const files_constants_1 = require("./files.constants");
 const mongodb_file_model_1 = require("./models/mongodb-file.model");
 const files_repository_port_1 = require("./ports/files-repository.port");
@@ -47,7 +45,7 @@ exports.FilesModule = FilesModule;
 exports.FilesModule = FilesModule = __decorate([
     (0, common_1.Module)({
         imports: [],
-        controllers: [files_upload_controller_1.FilesUploadController, files_controller_1.FilesController],
+        controllers: [],
         providers: [
             {
                 provide: files_constants_1.FILE_MODEL,

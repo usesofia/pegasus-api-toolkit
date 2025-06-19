@@ -3,8 +3,6 @@ import { PRIMARY_MONGOOSE_CONNECTION } from '@app/database/primary-mongodb-datab
 import { FilesServiceAdapter } from '@app/files/adapters/files-service.adapter';
 import { GcsObjectStorageServiceAdapter } from '@app/files/adapters/gcs-object-storage-service.adapter';
 import { MongoDbFilesRepositoryAdapter } from '@app/files/adapters/mongodb-files-repository.adapter';
-import { FilesUploadController } from '@app/files/controllers/files-upload.controller';
-import { FilesController } from '@app/files/controllers/files.controller';
 import { FILES_COLLECTION_NAME, FILE_MODEL } from '@app/files/files.constants';
 import { MongoDbFileModelSchema } from '@app/files/models/mongodb-file.model';
 import { FILES_REPOSITORY_PORT } from '@app/files/ports/files-repository.port';
@@ -16,7 +14,7 @@ import { Connection } from 'mongoose';
 
 @Module({
   imports: [],
-  controllers: [FilesUploadController, FilesController],
+  controllers: [],
   providers: [
     {
       provide: FILE_MODEL,
