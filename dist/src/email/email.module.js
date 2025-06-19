@@ -5,12 +5,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmailModule = void 0;
 const common_1 = require("@nestjs/common");
 const email_service_port_1 = require("./email-service.port");
 const sendgrid_email_service_adapter_1 = require("./adapters/sendgrid-email-service.adapter");
-const mail_1 = require("@sendgrid/mail");
+const mail_1 = __importDefault(require("@sendgrid/mail"));
 const base_config_entity_1 = require("../config/base-config.entity");
 const email_constants_1 = require("./email.constants");
 let EmailModule = class EmailModule {

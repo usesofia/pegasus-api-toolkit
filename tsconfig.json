@@ -19,9 +19,15 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
     "paths": {
-      "@app/*": ["src/*"],
-      "@test/*": ["test/*"]
+      "@app/*": ["./src/*"],
+      "@/*": ["./*"],
+      "@test/*": ["./test/*"]
     }
   }
 }

@@ -1,5 +1,5 @@
-import { AuthUserEntity } from '../auth/entities/auth-user.entity';
-import { ClerkClientMockSubset } from '../utils/clerk.utils';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { ClerkClientMockSubset } from '@app/utils/clerk.utils';
 export declare const buildAuthServiceMock: ({ clerkClientMock, }: {
     clerkClientMock: ClerkClientMockSubset;
 }) => {

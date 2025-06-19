@@ -11,6 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CacheModule = void 0;
 const common_1 = require("@nestjs/common");
@@ -20,7 +23,7 @@ const base_config_entity_1 = require("../config/base-config.entity");
 const memory_cache_service_adapter_1 = require("./adapters/memory-cache-service.adapter");
 const mongodb_cache_service_adapter_1 = require("./adapters/mongodb-cache-service.adapter");
 const primary_mongodb_database_module_1 = require("../database/primary-mongodb-database.module");
-const ioredis_1 = require("ioredis");
+const ioredis_1 = __importDefault(require("ioredis"));
 const cache_controller_1 = require("./cache.controller");
 const REDIS = Symbol('Redis');
 let CacheModule = class CacheModule {

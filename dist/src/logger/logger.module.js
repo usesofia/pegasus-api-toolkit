@@ -11,11 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoggerModule = exports.LOGGER_SERVICE_PORT = void 0;
 const common_1 = require("@nestjs/common");
 const pino_logger_1 = require("./pino-logger");
-const morgan_1 = require("morgan");
+const morgan_1 = __importDefault(require("morgan"));
 const correlation_constants_1 = require("../correlation/correlation.constants");
 const base_config_entity_1 = require("../config/base-config.entity");
 exports.LOGGER_SERVICE_PORT = Symbol('LoggerServicePort');

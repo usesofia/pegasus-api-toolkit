@@ -1,7 +1,7 @@
 import { LoggerService, MiddlewareConsumer, NestModule, OnApplicationShutdown } from '@nestjs/common';
-import { PinoLoggerAdapter } from '../logger/pino-logger';
-import { correlationIdKey } from '../correlation/correlation.constants';
-import { BaseConfigEntity } from '../config/base-config.entity';
+import { PinoLoggerAdapter } from '@app/logger/pino-logger';
+import { correlationIdKey } from '@app/correlation/correlation.constants';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 declare module 'express' {
     interface Request {
         [correlationIdKey]: string;

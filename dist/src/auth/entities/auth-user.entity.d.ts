@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { OrganizationRole } from '../../auth/constants/organization-role.enum';
-import { OrganizationType } from '../../auth/constants/organization-type.enum';
+import { OrganizationRole } from '@app/auth/constants/organization-role.enum';
+import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 export declare const OrganizationSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;

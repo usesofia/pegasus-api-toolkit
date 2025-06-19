@@ -11,15 +11,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PinoLoggerAdapter = void 0;
 const base_config_entity_1 = require("../config/base-config.entity");
-const better_stack_transport_1 = require("./better-stack-transport");
+const better_stack_transport_1 = __importDefault(require("./better-stack-transport"));
 const environment_utils_1 = require("../utils/environment.utils");
 const json_utils_1 = require("../utils/json.utils");
 const common_1 = require("@nestjs/common");
 const nested_mask_attributes_1 = require("nested-mask-attributes");
-const pino_1 = require("pino");
+const pino_1 = __importDefault(require("pino"));
 const sensitiveFields = [
     'password',
     'passwordHash',
