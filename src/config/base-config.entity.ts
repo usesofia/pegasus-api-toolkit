@@ -102,7 +102,7 @@ export const BaseConfigSchema = z.object({
     sendgrid: z.object({
       apiKey: z.string(),
     }),
-  }),
+  }).optional(),
 });
 
 export class BaseConfigEntity extends createZodDto(BaseConfigSchema) {

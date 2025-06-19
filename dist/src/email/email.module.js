@@ -25,6 +25,9 @@ exports.EmailModule = EmailModule = __decorate([
             {
                 provide: email_constants_1.SENDGRID_CLIENT,
                 useFactory: (baseConfig) => {
+                    if (!baseConfig.email) {
+                        throw new Error('Email configuration is not set.');
+                    }
                     mail_1.default.setApiKey(baseConfig.email.sendgrid.apiKey);
                     return mail_1.default;
                 },

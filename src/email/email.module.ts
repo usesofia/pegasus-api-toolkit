@@ -10,6 +10,9 @@ import { SENDGRID_CLIENT } from '@app/email/email.constants';
     {
       provide: SENDGRID_CLIENT,
       useFactory: (baseConfig: BaseConfigEntity) => {
+        if (!baseConfig.email) {
+          throw new Error('Email configuration is not set.');
+        }
         sgMail.setApiKey(baseConfig.email.sendgrid.apiKey);
         return sgMail;
       },
