@@ -6,8 +6,8 @@ import { ConfirmFileUploadRequestEntity } from '@app/files/entities/confirm-file
 import { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-upload-request.entity';
 import { FILES_SERVICE_PORT, type FilesServicePort } from '@app/files/ports/files-service.port';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
-import { Body, Controller, Inject, LoggerService, Post } from '@nestjs/common';
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Inject, LoggerService, Param, Post, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ClsService } from 'nestjs-cls';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { OrganizationTypes } from '@app/auth/decorators/organization-types.decorator';
@@ -16,6 +16,9 @@ import { AuthUser } from '@app/auth/decorators/auth-user.decorator';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { FileEntity } from '@app/files/entities/file.entity';
 import { Log } from '@app/utils/log.utils';
+import { AUTH_SERVICE_PORT, AuthServicePort } from '@app/auth/ports/auth-service.port';
+import { IgnoreAuthGuard } from '@app/auth/decorators/ignore-auth-guard.decorator';
+import { GcpServiceAccountGuard } from '@app/auth/guards/gcp-service-account.guard';
 
 @ApiTags('Files Upload')
 @ApiResponse({
@@ -29,6 +32,8 @@ export class FilesUploadController extends Base {
     protected readonly cls: ClsService,
     @Inject(FILES_SERVICE_PORT)
     private readonly filesService: FilesServicePort,
+    @Inject(AUTH_SERVICE_PORT)
+    private readonly authService: AuthServicePort,
   ) {
     super(FilesUploadController.name, baseConfig, logger, cls);
   }
@@ -66,6 +71,46 @@ export class FilesUploadController extends Base {
   }
 
   @ApiOperation({
+    operationId: 'systemCreateFileUpload',
+    summary: 'Cria uma nova solicitação de upload de arquivo',
+  })
+  @ApiParam({
+    name: 'organizationId',
+    description: 'The id of the organization to confirm the file upload',
+    type: String,
+    required: true,
+  })
+  @ApiBody({
+    type: CreateFileUploadRequestBodyDto,
+  })
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        fileId: { type: 'string' },
+        uploadUrl: { type: 'string' },
+      },
+    },
+  })
+  @IgnoreAuthGuard()
+  @UseGuards(GcpServiceAccountGuard)
+  @Post('/internal/organizations/:organizationId/files/upload')
+  @Log('controller')
+  async systemCreate(
+    @Body() body: CreateFileUploadRequestBodyDto,
+    @Param('organizationId') organizationId: string,
+  ): Promise<{ fileId: string; uploadUrl: string }> {
+    const { channel, ...data } = body;
+    const requester = await this.authService.getSystemUserForOrganization(organizationId);
+    const { file, uploadUrl } = await this.filesService.createUploadRequest({
+      requester,
+      request: CreateFileUploadRequestEntity.build({ data, channel }),
+    });
+
+    return { fileId: file.id, uploadUrl };
+  }
+
+  @ApiOperation({
     operationId: 'confirmFileUpload',
     summary: 'Confirms a file upload',
   })
@@ -80,6 +125,38 @@ export class FilesUploadController extends Base {
   @Log('controller')
   async confirm(@AuthUser() requester: AuthUserEntity, @Body() body: ConfirmFileUploadRequestBodyDto): Promise<FileEntity> {
     const { channel, ...data } = body;
+    return await this.filesService.confirmUploadRequest({
+      requester,
+      request: ConfirmFileUploadRequestEntity.build({ data, channel }),
+    });
+  }
+
+  @ApiOperation({
+    operationId: 'systemConfirmFileUpload',
+    summary: 'Confirms a file upload',
+  })
+  @ApiParam({
+    name: 'organizationId',
+    description: 'The id of the organization to confirm the file upload',
+    type: String,
+    required: true,
+  })
+  @ApiBody({
+    type: ConfirmFileUploadRequestBodyDto,
+  })
+  @ApiCreatedResponse({
+    type: FileEntity,
+  })
+  @IgnoreAuthGuard()
+  @UseGuards(GcpServiceAccountGuard)
+  @Post('/internal/organizations/:organizationId/files/upload/confirm')
+  @Log('controller')
+  async systemConfirm(
+    @Body() body: ConfirmFileUploadRequestBodyDto,
+    @Param('organizationId') organizationId: string,
+  ): Promise<FileEntity> {
+    const { channel, ...data } = body;
+    const requester = await this.authService.getSystemUserForOrganization(organizationId);
     return await this.filesService.confirmUploadRequest({
       requester,
       request: ConfirmFileUploadRequestEntity.build({ data, channel }),
