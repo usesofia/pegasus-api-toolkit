@@ -2,7 +2,7 @@ import { INestApplication, Logger, DynamicModule, Type } from '@nestjs/common';
 import { config } from 'dotenv';
 // Load .env.integration-test file
 config({ path: '.env.integration-test' });
-import * as supertest from 'supertest';
+import supertest from 'supertest';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { ClsModule } from 'nestjs-cls';
 import { v4 } from 'uuid';
@@ -10,7 +10,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import * as portfinder from 'portfinder';
+import portfinder from 'portfinder';
 import { MongoClient } from 'mongodb';
 import { EventEmitter } from 'events';
 import { LoggerModule } from '@app/logger/logger.module';

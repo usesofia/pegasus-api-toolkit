@@ -6,28 +6,28 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
         size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
+        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
         objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
+        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
         signedUrl: z.ZodOptional<z.ZodString>;
     }, "id" | "ownerOrganization" | "updatedAt" | "createdAt">, "strip", z.ZodTypeAny, {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         signedUrl?: string | undefined;
     }, {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
@@ -41,12 +41,12 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         signedUrl?: string | undefined;
     };
@@ -54,11 +54,11 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
     populate?: string | undefined;
 }, {
     data: {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
@@ -68,12 +68,12 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
 }>;
 declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         signedUrl?: string | undefined;
     };
@@ -86,28 +86,28 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
         size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
+        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
         objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
+        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
         signedUrl: z.ZodOptional<z.ZodString>;
     }, "id" | "ownerOrganization" | "updatedAt" | "createdAt">, "strip", z.ZodTypeAny, {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         signedUrl?: string | undefined;
     }, {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
@@ -121,11 +121,11 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
         signedUrl?: string | undefined;
