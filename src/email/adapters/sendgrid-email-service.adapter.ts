@@ -4,13 +4,13 @@ import { BaseConfigEntity, BASE_CONFIG } from '@app/config/base-config.entity';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { ClsService } from 'nestjs-cls';
 import { Base } from '@app/base';
-import * as sgMail from '@sendgrid/mail';
+import sgMail from '@sendgrid/mail';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as handlebars from 'handlebars';
 import { Log } from '@app/utils/log.utils';
 import z from 'zod';
-import { SENDGRID_CLIENT } from '@app/email/email.module';
+import { SENDGRID_CLIENT } from '@app/email/email.constants';
 
 @Injectable()
 export class SendgridEmailServiceAdapter extends Base implements EmailServicePort {
@@ -50,6 +50,6 @@ export class SendgridEmailServiceAdapter extends Base implements EmailServicePor
       html,
     };
 
-    await sgMail.send(msg);
+    await this.sgMail.send(msg);
   }
 }

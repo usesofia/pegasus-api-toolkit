@@ -8,7 +8,7 @@ import {
   OnApplicationShutdown,
 } from '@nestjs/common';
 import { PinoLoggerAdapter } from '@app/logger/pino-logger';
-import * as morgan from 'morgan';
+import morgan from 'morgan';
 import {
   correlationIdKey,
   correlationIdTokenKey,

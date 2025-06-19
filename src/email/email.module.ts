@@ -1,17 +1,12 @@
 import { Module } from '@nestjs/common';
 import { EMAIL_SERVICE_PORT } from '@app/email/email-service.port';
 import { SendgridEmailServiceAdapter } from '@app/email/adapters/sendgrid-email-service.adapter';
-import * as sgMail from '@sendgrid/mail';
+import sgMail from '@sendgrid/mail';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
-
-export const SENDGRID_CLIENT = Symbol('SendgridClient');
+import { SENDGRID_CLIENT } from '@app/email/email.constants';
 
 @Module({
   providers: [
-    {
-      provide: EMAIL_SERVICE_PORT,
-      useClass: SendgridEmailServiceAdapter,
-    },
     {
       provide: SENDGRID_CLIENT,
       useFactory: (baseConfig: BaseConfigEntity) => {
@@ -19,6 +14,10 @@ export const SENDGRID_CLIENT = Symbol('SendgridClient');
         return sgMail;
       },
       inject: [BASE_CONFIG],
+    },
+    {
+      provide: EMAIL_SERVICE_PORT,
+      useClass: SendgridEmailServiceAdapter,
     },
   ],
   exports: [EMAIL_SERVICE_PORT],

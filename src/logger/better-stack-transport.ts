@@ -1,4 +1,4 @@
-import * as build from 'pino-abstract-transport';
+import build from 'pino-abstract-transport';
 import axios from 'axios';
 import axiosRetry, { exponentialDelay } from 'axios-retry';
 import { DateTime } from 'luxon';
