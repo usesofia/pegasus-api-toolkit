@@ -23,7 +23,7 @@ export const EmailSchema = z.discriminatedUnion("template", [
       switch (data.template) {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         case EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED:
-          return `[Lançamentos financeiros] Processamento de arquivo finalizado!`;
+          return `Processamento de arquivo para criação de lançamentos financeiros em lote finalizado!`;
       }
     },
   };

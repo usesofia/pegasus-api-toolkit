@@ -16,6 +16,8 @@ const sendgrid_email_service_adapter_1 = require("./adapters/sendgrid-email-serv
 const mail_1 = __importDefault(require("@sendgrid/mail"));
 const base_config_entity_1 = require("../config/base-config.entity");
 const email_constants_1 = require("./email.constants");
+const environment_utils_1 = require("../utils/environment.utils");
+const mock_email_service_adapter_1 = require("./adapters/mock-email-service.adapter");
 let EmailModule = class EmailModule {
 };
 exports.EmailModule = EmailModule;
@@ -35,7 +37,7 @@ exports.EmailModule = EmailModule = __decorate([
             },
             {
                 provide: email_service_port_1.EMAIL_SERVICE_PORT,
-                useClass: sendgrid_email_service_adapter_1.SendgridEmailServiceAdapter,
+                useClass: (0, environment_utils_1.isIntegrationTestEnvironment)() && process.env.USE_SENDGRID !== 'true' ? mock_email_service_adapter_1.MockEmailServiceAdapter : sendgrid_email_service_adapter_1.SendgridEmailServiceAdapter,
             },
         ],
         exports: [email_service_port_1.EMAIL_SERVICE_PORT],

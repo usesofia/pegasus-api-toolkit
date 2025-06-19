@@ -4,6 +4,8 @@ import { SendgridEmailServiceAdapter } from '@app/email/adapters/sendgrid-email-
 import sgMail from '@sendgrid/mail';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { SENDGRID_CLIENT } from '@app/email/email.constants';
+import { isIntegrationTestEnvironment } from '@app/utils/environment.utils';
+import { MockEmailServiceAdapter } from '@app/email/adapters/mock-email-service.adapter';
 
 @Module({
   providers: [
@@ -20,7 +22,7 @@ import { SENDGRID_CLIENT } from '@app/email/email.constants';
     },
     {
       provide: EMAIL_SERVICE_PORT,
-      useClass: SendgridEmailServiceAdapter,
+      useClass: isIntegrationTestEnvironment() && process.env.USE_SENDGRID !== 'true' ? MockEmailServiceAdapter : SendgridEmailServiceAdapter,
     },
   ],
   exports: [EMAIL_SERVICE_PORT],

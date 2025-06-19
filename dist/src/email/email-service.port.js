@@ -26,7 +26,7 @@ exports.EmailSchema = zod_1.default.discriminatedUnion("template", [
         getSubject: () => {
             switch (data.template) {
                 case EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED:
-                    return `[Lançamentos financeiros] Processamento de arquivo finalizado!`;
+                    return `Processamento de arquivo para criação de lançamentos financeiros em lote finalizado!`;
             }
         },
     };

@@ -38,7 +38,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
     };
     template: EmailTemplate;
 }>]>, {
-    getSubject: () => "[Lançamentos financeiros] Processamento de arquivo finalizado!";
+    getSubject: () => "Processamento de arquivo para criação de lançamentos financeiros em lote finalizado!";
     data: {
         name: string;
         fileName: string;
