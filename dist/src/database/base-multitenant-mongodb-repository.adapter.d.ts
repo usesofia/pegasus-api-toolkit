@@ -7,13 +7,14 @@ import { Base } from '../base';
 import { BaseSessionPort } from '../database/base-session.port';
 import { BaseSessionStarterPort } from '../database/base-session-starter.port';
 import { Duration } from 'luxon';
+import { DeepPartial } from '../utils/deep-partial.type';
 export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc extends Document, TEntity, TCreateRequest extends {
-    data: Partial<TDoc>;
+    data: DeepPartial<TDoc>;
 }, TFindOneRequest extends {
     id: string;
 }, TPartialUpdateRequest extends {
     id: string;
-    data: Partial<TDoc>;
+    data: DeepPartial<TDoc>;
 }> extends Base implements BaseSessionStarterPort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;

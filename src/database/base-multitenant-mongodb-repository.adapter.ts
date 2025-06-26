@@ -12,13 +12,14 @@ import { BaseSessionStarterPort } from '@app/database/base-session-starter.port'
 import { ObjectId } from 'mongodb';
 import { escapeRegex } from '@app/utils/regex.utils';
 import { Duration } from 'luxon';
+import { DeepPartial } from '@app/utils/deep-partial.type';
 
 export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     TDoc extends Document,
     TEntity,
-    TCreateRequest extends { data: Partial<TDoc> },
+    TCreateRequest extends { data: DeepPartial<TDoc> },
     TFindOneRequest extends { id: string },
-    TPartialUpdateRequest extends { id: string; data: Partial<TDoc> },
+    TPartialUpdateRequest extends { id: string; data: DeepPartial<TDoc> },
   >
   extends Base
   implements BaseSessionStarterPort
