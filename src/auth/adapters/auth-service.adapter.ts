@@ -354,7 +354,7 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
       this.getOrganizationEntity({
         organizationId: organizationMembership.organization.id,
         organizationRole: organizationMembership.role as OrganizationRole,
-        ignoreCache: false,
+        ignoreCache: true,
       })),
     );
   }

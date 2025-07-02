@@ -226,7 +226,7 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
         return Promise.all(organizationMemberships.data.map((organizationMembership) => this.getOrganizationEntity({
             organizationId: organizationMembership.organization.id,
             organizationRole: organizationMembership.role,
-            ignoreCache: false,
+            ignoreCache: true,
         })));
     }
 };
