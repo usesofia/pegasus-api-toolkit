@@ -342,4 +342,19 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
 
     return AuthUserEntity.buildSystemUserForOrganization(organizationEntity);
   }
+
+  @Log()
+  async getUserOrganizations(userId: string): Promise<OrganizationEntity[]> {
+    const organizationMemberships = await this.clerkClient.users.getOrganizationMembershipList({
+      userId,
+    });
+
+    return Promise.all(organizationMemberships.data.map((organizationMembership) =>
+      this.getOrganizationEntity({
+        organizationId: organizationMembership.organization.id,
+        organizationRole: organizationMembership.role as OrganizationRole,
+        ignoreCache: false,
+      })),
+    );
+  }
 }

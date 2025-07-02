@@ -1,4 +1,4 @@
-import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { AuthUserEntity, OrganizationEntity } from '@app/auth/entities/auth-user.entity';
 
 export interface AuthServicePort {
   verifyToken(token: string): Promise<AuthUserEntity>;
@@ -16,6 +16,7 @@ export interface AuthServicePort {
   getSystemUserForOrganization(organizationId: string): Promise<AuthUserEntity>;
   generateGcpServiceAccountToken(): Promise<string>;
   getUserWithoutOrganization(userId: string): Promise<AuthUserEntity>;
+  getUserOrganizations(userId: string): Promise<OrganizationEntity[]>;
 }
 
 export const AUTH_SERVICE_PORT = Symbol('AuthServicePort');

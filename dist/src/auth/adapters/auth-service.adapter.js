@@ -218,6 +218,16 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
         });
         return auth_user_entity_1.AuthUserEntity.buildSystemUserForOrganization(organizationEntity);
     }
+    async getUserOrganizations(userId) {
+        const organizationMemberships = await this.clerkClient.users.getOrganizationMembershipList({
+            userId,
+        });
+        return Promise.all(organizationMemberships.data.map((organizationMembership) => this.getOrganizationEntity({
+            organizationId: organizationMembership.organization.id,
+            organizationRole: organizationMembership.role,
+            ignoreCache: false,
+        })));
+    }
 };
 exports.AuthServiceAdapter = AuthServiceAdapter;
 __decorate([
@@ -274,6 +284,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AuthServiceAdapter.prototype, "getSystemUserForOrganization", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthServiceAdapter.prototype, "getUserOrganizations", null);
 exports.AuthServiceAdapter = AuthServiceAdapter = AuthServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
