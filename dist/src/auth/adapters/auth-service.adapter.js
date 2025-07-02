@@ -125,9 +125,10 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
             });
         }
     }
-    async getUserWithoutOrganization(userId) {
+    async getUserWithoutOrganization(userId, ignoreCache) {
         const { clerkUser } = await this.getCachedClerkUserAndOrganization({
             userId,
+            ignoreCache,
         });
         return auth_user_entity_1.AuthUserEntity.build({
             id: clerkUser.id,
@@ -251,7 +252,7 @@ __decorate([
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Boolean]),
     __metadata("design:returntype", Promise)
 ], AuthServiceAdapter.prototype, "getUserWithoutOrganization", null);
 __decorate([

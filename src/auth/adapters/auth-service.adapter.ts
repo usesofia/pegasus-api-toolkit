@@ -168,9 +168,10 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
   }
 
   @Log()
-  async getUserWithoutOrganization(userId: string): Promise<AuthUserEntity> {
+  async getUserWithoutOrganization(userId: string, ignoreCache?: boolean): Promise<AuthUserEntity> {
     const { clerkUser } = await this.getCachedClerkUserAndOrganization({
       userId,
+      ignoreCache,
     });
 
     return AuthUserEntity.build({

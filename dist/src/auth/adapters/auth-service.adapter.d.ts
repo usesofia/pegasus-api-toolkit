@@ -30,7 +30,7 @@ export declare class AuthServiceAdapter extends Base implements AuthServicePort 
         organizationRole?: string;
         ignoreCache?: boolean;
     }): Promise<AuthUserEntity>;
-    getUserWithoutOrganization(userId: string): Promise<AuthUserEntity>;
+    getUserWithoutOrganization(userId: string, ignoreCache?: boolean): Promise<AuthUserEntity>;
     private getClerkUserAndOrganization;
     private getClerkOrganization;
     private getCachedClerkUserAndOrganization;
