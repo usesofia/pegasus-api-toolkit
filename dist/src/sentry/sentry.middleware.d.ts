@@ -1,7 +1,7 @@
 import { LoggerService, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { Base } from '@app/base';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { Base } from '../base';
+import { BaseConfigEntity } from '../config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
 export declare class SentryMiddleware extends Base implements NestMiddleware {
     protected readonly baseConfig: BaseConfigEntity;

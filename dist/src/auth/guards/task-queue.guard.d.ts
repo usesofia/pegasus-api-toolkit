@@ -1,5 +1,5 @@
-import { Base } from '@app/base';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { Base } from '../../base';
+import { BaseConfigEntity } from '../../config/base-config.entity';
 import { CanActivate, ExecutionContext, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 export declare const tasksQueueSecretHeaderKey = "x-tasks-queue-secret";

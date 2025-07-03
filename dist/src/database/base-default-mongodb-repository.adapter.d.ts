@@ -1,11 +1,11 @@
 import { Model, Document, ClientSession, PopulateOptions } from 'mongoose';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
-import { Base } from '@app/base';
-import { BaseSessionPort } from '@app/database/base-session.port';
-import { BaseSessionStarterPort } from '@app/database/base-session-starter.port';
-import { DeepPartial } from '@app/utils/deep-partial.type';
+import { BaseConfigEntity } from '../config/base-config.entity';
+import { Base } from '../base';
+import { BaseSessionPort } from '../database/base-session.port';
+import { BaseSessionStarterPort } from '../database/base-session-starter.port';
+import { DeepPartial } from '../utils/deep-partial.type';
 export declare abstract class BaseDefaultMongoDbRepositoryAdapter<TDoc extends Document, TEntity, TCreateRequest extends {
     data: DeepPartial<TDoc>;
 }, TFindOneRequest extends {
