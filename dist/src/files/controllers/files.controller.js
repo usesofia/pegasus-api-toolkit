@@ -31,13 +31,17 @@ const organization_type_enum_1 = require("../../auth/constants/organization-type
 const signed_url_entity_1 = require("../entities/signed-url.entity");
 const log_utils_1 = require("../../utils/log.utils");
 const file_entity_1 = require("../entities/file.entity");
+const auth_service_port_1 = require("../../auth/ports/auth-service.port");
+const ignore_auth_guard_decorator_1 = require("../../auth/decorators/ignore-auth-guard.decorator");
+const gcp_service_account_guard_1 = require("../../auth/guards/gcp-service-account.guard");
 let FilesController = FilesController_1 = class FilesController extends base_1.Base {
-    constructor(baseConfig, logger, cls, filesService) {
+    constructor(baseConfig, logger, cls, filesService, authService) {
         super(FilesController_1.name, baseConfig, logger, cls);
         this.baseConfig = baseConfig;
         this.logger = logger;
         this.cls = cls;
         this.filesService = filesService;
+        this.authService = authService;
     }
     async delete(requester, id, body) {
         await this.filesService.removeOrThrow({
@@ -47,6 +51,10 @@ let FilesController = FilesController_1 = class FilesController extends base_1.B
     }
     async findById(requester, id) {
         return await this.filesService.findByIdOrThrow({ requester, id });
+    }
+    async systemFindById(fileId, organizationId) {
+        const requester = await this.authService.getSystemUserForOrganization(organizationId);
+        return await this.filesService.findByIdOrThrow({ requester, id: fileId });
     }
     async getSignedUrlFromUrl(requester, url) {
         const signedUrl = await this.filesService.getSignedUrlFromUrl({ requester, url });
@@ -97,6 +105,30 @@ __decorate([
 ], FilesController.prototype, "findById", null);
 __decorate([
     (0, swagger_1.ApiOperation)({
+        operationId: 'systemFindByIdFile',
+        summary: 'Finds a file by id',
+    }),
+    (0, swagger_1.ApiParam)({
+        name: 'id',
+        description: 'The id of the file to get',
+        type: String,
+        required: true,
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        type: file_entity_1.FileEntity,
+    }),
+    (0, ignore_auth_guard_decorator_1.IgnoreAuthGuard)(),
+    (0, common_1.UseGuards)(gcp_service_account_guard_1.GcpServiceAccountGuard),
+    (0, common_1.Get)('/internal/organizations/:organizationId/files/:fileId'),
+    (0, log_utils_1.Log)('controller'),
+    __param(0, (0, common_1.Param)('fileId')),
+    __param(1, (0, common_1.Param)('organizationId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], FilesController.prototype, "systemFindById", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({
         operationId: 'getSignedUrlFromUrl',
         summary: 'Get a signed url from a url',
     }),
@@ -127,6 +159,7 @@ exports.FilesController = FilesController = FilesController_1 = __decorate([
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
     __param(1, (0, common_1.Inject)(logger_module_1.LOGGER_SERVICE_PORT)),
     __param(3, (0, common_1.Inject)(files_service_port_1.FILES_SERVICE_PORT)),
-    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object])
+    __param(4, (0, common_1.Inject)(auth_service_port_1.AUTH_SERVICE_PORT)),
+    __metadata("design:paramtypes", [base_config_entity_1.BaseConfigEntity, Object, nestjs_cls_1.ClsService, Object, Object])
 ], FilesController);
 //# sourceMappingURL=files.controller.js.map

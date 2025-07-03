@@ -1,7 +1,7 @@
 import { RemoveFileRequestBodyDto } from '@app/files/dtos/remove-file-request-body.dto';
 import { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
 import { FILES_SERVICE_PORT, type FilesServicePort } from '@app/files/ports/files-service.port';
-import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, LoggerService, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ClsService } from 'nestjs-cls';
 import { Base } from '@app/base';
@@ -15,6 +15,9 @@ import { OrganizationType } from '@app/auth/constants/organization-type.enum';
 import { SignedUrlEntity } from '@app/files/entities/signed-url.entity';
 import { Log } from '@app/utils/log.utils';
 import { FileEntity } from '@app/files/entities/file.entity';
+import { AUTH_SERVICE_PORT, AuthServicePort } from '@app/auth/ports/auth-service.port';
+import { IgnoreAuthGuard } from '@app/auth/decorators/ignore-auth-guard.decorator';
+import { GcpServiceAccountGuard } from '@app/auth/guards/gcp-service-account.guard';
 
 @ApiTags('Files')
 @ApiResponse({
@@ -28,6 +31,8 @@ export class FilesController extends Base {
     protected readonly cls: ClsService,
     @Inject(FILES_SERVICE_PORT)
     private readonly filesService: FilesServicePort,
+    @Inject(AUTH_SERVICE_PORT)
+    private readonly authService: AuthServicePort,
   ) {
     super(FilesController.name, baseConfig, logger, cls);
   }
@@ -74,6 +79,31 @@ export class FilesController extends Base {
     @Param('id') id: string,
   ): Promise<FileEntity> {
     return await this.filesService.findByIdOrThrow({ requester, id });
+  }
+
+  @ApiOperation({
+    operationId: 'systemFindByIdFile',
+    summary: 'Finds a file by id',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'The id of the file to get',
+    type: String,
+    required: true,
+  })
+  @ApiOkResponse({
+    type: FileEntity,
+  })
+  @IgnoreAuthGuard()
+  @UseGuards(GcpServiceAccountGuard)
+  @Get('/internal/organizations/:organizationId/files/:fileId')
+  @Log('controller')
+  async systemFindById(
+    @Param('fileId') fileId: string,
+    @Param('organizationId') organizationId: string,
+  ): Promise<FileEntity> {
+    const requester = await this.authService.getSystemUserForOrganization(organizationId);
+    return await this.filesService.findByIdOrThrow({ requester, id: fileId });
   }
 
   @ApiOperation({
