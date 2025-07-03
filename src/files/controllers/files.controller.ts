@@ -86,8 +86,14 @@ export class FilesController extends Base {
     summary: 'Finds a file by id',
   })
   @ApiParam({
-    name: 'id',
+    name: 'fileId',
     description: 'The id of the file to get',
+    type: String,
+    required: true,
+  })
+  @ApiParam({
+    name: 'organizationId',
+    description: 'The id of the organization to get the file from',
     type: String,
     required: true,
   })
