@@ -13,6 +13,8 @@ export const ConfirmFileUploadRequestDataEntitySchema = FileEntitySchema.omit({
   originalFileName: true,
   size: true,
   objectName: true,
+  url: true,
+  signedUrl: true,
 });
 
 const ConfirmFileUploadRequestEntitySchema = z.object({

@@ -14,17 +14,13 @@ export declare const ConfirmFileUploadRequestDataEntitySchema: z.ZodObject<Omit<
 } & {
     url: z.ZodString;
     signedUrl: z.ZodString;
-}, "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt">, "strip", z.ZodTypeAny, {
+}, "url" | "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
     status: import("../../files/entities/file.entity").FileStatus;
-    url: string;
     id: string;
     deletedAt: Date | null;
-    signedUrl: string;
 }, {
     status: import("../../files/entities/file.entity").FileStatus;
-    url: string;
     id: string;
-    signedUrl: string;
     deletedAt?: Date | null | undefined;
 }>;
 declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
@@ -43,17 +39,13 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
     } & {
         url: z.ZodString;
         signedUrl: z.ZodString;
-    }, "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt">, "strip", z.ZodTypeAny, {
+    }, "url" | "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         id: string;
         deletedAt: Date | null;
-        signedUrl: string;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         id: string;
-        signedUrl: string;
         deletedAt?: Date | null | undefined;
     }>;
     channel: z.ZodNativeEnum<{
@@ -65,18 +57,14 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         id: string;
         deletedAt: Date | null;
-        signedUrl: string;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         id: string;
-        signedUrl: string;
         deletedAt?: Date | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
@@ -84,10 +72,8 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
 declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         id: string;
         deletedAt: Date | null;
-        signedUrl: string;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, z.ZodObjectDef<{
@@ -106,17 +92,13 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     } & {
         url: z.ZodString;
         signedUrl: z.ZodString;
-    }, "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt">, "strip", z.ZodTypeAny, {
+    }, "url" | "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         id: string;
         deletedAt: Date | null;
-        signedUrl: string;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         id: string;
-        signedUrl: string;
         deletedAt?: Date | null | undefined;
     }>;
     channel: z.ZodNativeEnum<{
@@ -128,9 +110,7 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
 }, "strip", z.ZodTypeAny>, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         id: string;
-        signedUrl: string;
         deletedAt?: Date | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";

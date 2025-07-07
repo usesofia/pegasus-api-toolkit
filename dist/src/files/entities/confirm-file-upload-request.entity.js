@@ -15,6 +15,8 @@ exports.ConfirmFileUploadRequestDataEntitySchema = file_entity_1.FileEntitySchem
     originalFileName: true,
     size: true,
     objectName: true,
+    url: true,
+    signedUrl: true,
 });
 const ConfirmFileUploadRequestEntitySchema = zod_1.z.object({
     data: exports.ConfirmFileUploadRequestDataEntitySchema,
