@@ -33,7 +33,7 @@ let MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter_1 = class Mong
         return requester.organization?.id ?? 'system';
     }
     toEntity(doc) {
-        return file_entity_1.FileEntity.build({ ...doc.toObject(), id: doc.id.toString() });
+        return file_entity_1.BaseFileEntity.build({ ...doc.toObject(), id: doc.id.toString() });
     }
 };
 exports.MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter;

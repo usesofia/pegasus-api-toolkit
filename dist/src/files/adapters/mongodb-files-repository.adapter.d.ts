@@ -1,5 +1,5 @@
 import type { CreateFileRequestEntity } from '../../files/entities/create-file-request.entity';
-import { BaseFileEntity, FileEntity } from '../../files/entities/file.entity';
+import { BaseFileEntity } from '../../files/entities/file.entity';
 import type { FindByIdFileRequestEntity } from '../../files/entities/find-by-id-file-request.entity';
 import type { PartialUpdateFileRequestEntity } from '../../files/entities/partial-update-file-request.entity';
 import { MongoDbFileModel } from '../../files/models/mongodb-file.model';
@@ -18,5 +18,5 @@ export declare class MongoDbFilesRepositoryAdapter extends BaseMultitenantMongoD
     protected getOwnerOrganization({ requester, }: {
         requester: AuthUserEntity;
     }): string;
-    toEntity(doc: MongoDbFileModel): FileEntity;
+    toEntity(doc: MongoDbFileModel): BaseFileEntity;
 }

@@ -37,9 +37,9 @@ export class MongoDbFilesRepositoryAdapter
     return requester.organization?.id ?? 'system';
   }
 
-  public toEntity(doc: MongoDbFileModel): FileEntity {
+  public toEntity(doc: MongoDbFileModel): BaseFileEntity {
     /* eslint-disable */
-    return FileEntity.build({ ...doc.toObject(), id: doc.id.toString() });
+    return BaseFileEntity.build({ ...doc.toObject(), id: doc.id.toString() });
     /* eslint-enable */
   }
 }
