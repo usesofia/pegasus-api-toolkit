@@ -9,6 +9,8 @@ const CreateFileRequestDataEntitySchema = FileEntitySchema.omit({
   ownerOrganization: true,
   createdAt: true,
   updatedAt: true,
+  url: true,
+  signedUrl: true,
 });
 
 const CreateFileRequestEntitySchema = z.object({

@@ -11,6 +11,8 @@ export const CreateFileUploadRequestDataEntitySchema = FileEntitySchema.omit({
   updatedAt: true,
   status: true,
   objectName: true,
+  url: true,
+  signedUrl: true,
 });
 
 const CreateFileUploadRequestEntitySchema = z.object({

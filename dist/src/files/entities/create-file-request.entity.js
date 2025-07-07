@@ -11,6 +11,8 @@ const CreateFileRequestDataEntitySchema = file_entity_1.FileEntitySchema.omit({
     ownerOrganization: true,
     createdAt: true,
     updatedAt: true,
+    url: true,
+    signedUrl: true,
 });
 const CreateFileRequestEntitySchema = zod_1.z.object({
     data: CreateFileRequestDataEntitySchema,

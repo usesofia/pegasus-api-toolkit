@@ -1,10 +1,8 @@
 declare const CreateFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<{
-    url: string;
     size: number;
     originalFileName: string;
     mimeType: string;
     fileType: import("../..").FileType;
-    signedUrl: string;
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, import("zod").ZodObjectDef<Omit<Omit<{
     id: import("zod").ZodString;
@@ -21,7 +19,7 @@ declare const CreateFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<{
 } & {
     url: import("zod").ZodString;
     signedUrl: import("zod").ZodString;
-}, "status" | "id" | "ownerOrganization" | "updatedAt" | "objectName" | "createdAt"> & {
+}, "status" | "url" | "id" | "ownerOrganization" | "updatedAt" | "objectName" | "createdAt" | "signedUrl"> & {
     channel: import("zod").ZodNativeEnum<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
@@ -29,12 +27,10 @@ declare const CreateFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<{
         readonly EMAIL: "EMAIL";
     }>;
 }, "deletedAt">, "strip", import("zod").ZodTypeAny>, {
-    url: string;
     size: number;
     originalFileName: string;
     mimeType: string;
     fileType: import("../..").FileType;
-    signedUrl: string;
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;
 export declare class CreateFileUploadRequestBodyDto extends CreateFileUploadRequestBodyDto_base {

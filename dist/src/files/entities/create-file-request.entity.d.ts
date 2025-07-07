@@ -15,25 +15,21 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
     } & {
         url: z.ZodString;
         signedUrl: z.ZodString;
-    }, "id" | "ownerOrganization" | "updatedAt" | "createdAt">, "strip", z.ZodTypeAny, {
+    }, "url" | "id" | "ownerOrganization" | "updatedAt" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
-        signedUrl: string;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         size: number;
         originalFileName: string;
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
-        signedUrl: string;
         deletedAt?: Date | null | undefined;
     }>;
     populate: z.ZodOptional<z.ZodString>;
@@ -46,27 +42,23 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
-        signedUrl: string;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
 }, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         size: number;
         originalFileName: string;
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
-        signedUrl: string;
         deletedAt?: Date | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
@@ -75,14 +67,12 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
 declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
-        signedUrl: string;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
@@ -102,25 +92,21 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     } & {
         url: z.ZodString;
         signedUrl: z.ZodString;
-    }, "id" | "ownerOrganization" | "updatedAt" | "createdAt">, "strip", z.ZodTypeAny, {
+    }, "url" | "id" | "ownerOrganization" | "updatedAt" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
-        signedUrl: string;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         size: number;
         originalFileName: string;
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
-        signedUrl: string;
         deletedAt?: Date | null | undefined;
     }>;
     populate: z.ZodOptional<z.ZodString>;
@@ -133,13 +119,11 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
 }, "strip", z.ZodTypeAny>, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        url: string;
         size: number;
         originalFileName: string;
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
-        signedUrl: string;
         deletedAt?: Date | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";

@@ -13,6 +13,8 @@ exports.CreateFileUploadRequestDataEntitySchema = file_entity_1.FileEntitySchema
     updatedAt: true,
     status: true,
     objectName: true,
+    url: true,
+    signedUrl: true,
 });
 const CreateFileUploadRequestEntitySchema = zod_1.z.object({
     data: exports.CreateFileUploadRequestDataEntitySchema,
