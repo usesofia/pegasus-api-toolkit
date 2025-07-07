@@ -38,4 +38,5 @@ export declare class AuthServiceAdapter extends Base implements AuthServicePort 
     generateGcpServiceAccountToken(): Promise<string>;
     getSystemUserForOrganization(organizationId: string): Promise<AuthUserEntity>;
     getUserOrganizations(userId: string): Promise<OrganizationEntity[]>;
+    getUserByPhoneNumber(phoneNumber: string): Promise<AuthUserEntity | null>;
 }

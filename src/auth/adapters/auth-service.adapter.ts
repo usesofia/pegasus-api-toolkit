@@ -358,4 +358,17 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
       })),
     );
   }
+
+  @Log()
+  async getUserByPhoneNumber(phoneNumber: string): Promise<AuthUserEntity | null> {
+    const usersPage = await this.clerkClient.users.getUserList({
+      phoneNumber: [phoneNumber],
+    });
+
+    if(usersPage.data.length !== 1) {
+      return null;
+    }
+
+    return this.getUser({ userId: usersPage.data[0].id, ignoreCache: true });
+  }
 }

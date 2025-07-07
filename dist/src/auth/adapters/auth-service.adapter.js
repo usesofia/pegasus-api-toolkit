@@ -229,6 +229,15 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
             ignoreCache: true,
         })));
     }
+    async getUserByPhoneNumber(phoneNumber) {
+        const usersPage = await this.clerkClient.users.getUserList({
+            phoneNumber: [phoneNumber],
+        });
+        if (usersPage.data.length !== 1) {
+            return null;
+        }
+        return this.getUser({ userId: usersPage.data[0].id, ignoreCache: true });
+    }
 };
 exports.AuthServiceAdapter = AuthServiceAdapter;
 __decorate([
@@ -291,6 +300,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AuthServiceAdapter.prototype, "getUserOrganizations", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AuthServiceAdapter.prototype, "getUserByPhoneNumber", null);
 exports.AuthServiceAdapter = AuthServiceAdapter = AuthServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
