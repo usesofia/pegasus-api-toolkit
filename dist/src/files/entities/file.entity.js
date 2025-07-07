@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FileEntity = exports.FileEntitySchema = exports.FileStatus = exports.FileType = void 0;
+exports.FileEntity = exports.BaseFileEntity = exports.FileEntitySchema = exports.BaseFileEntitySchema = exports.FileStatus = exports.FileType = void 0;
 const entity_utils_1 = require("../../utils/entity.utils");
 const nestjs_zod_1 = require("nestjs-zod");
 const zod_1 = require("zod");
@@ -21,6 +21,7 @@ var FileType;
     FileType["CONTACTS_BULK_CREATE_EXTRACTION_INPUT"] = "CONTACTS_BULK_CREATE_EXTRACTION_INPUT";
     FileType["CONTACTS_BULK_CREATE_EXTRACTION_OUTPUT"] = "CONTACTS_BULK_CREATE_EXTRACTION_OUTPUT";
     FileType["SEVEN_DAYS_TEMP_FILE"] = "SEVEN_DAYS_TEMP_FILE";
+    FileType["WHATSAPP_MESSAGE_FILE"] = "WHATSAPP_MESSAGE_FILE";
 })(FileType || (exports.FileType = FileType = {}));
 var FileStatus;
 (function (FileStatus) {
@@ -29,7 +30,7 @@ var FileStatus;
     FileStatus["FAILED"] = "FAILED";
     FileStatus["DELETED"] = "DELETED";
 })(FileStatus || (exports.FileStatus = FileStatus = {}));
-exports.FileEntitySchema = zod_1.z.object({
+exports.BaseFileEntitySchema = zod_1.z.object({
     id: zod_1.z.string().describe('Identificador do arquivo.'),
     ownerOrganization: zod_1.z.string().describe('Identificador da organização dona do arquivo.'),
     originalFileName: zod_1.z.string().describe('Nome original do arquivo.'),
@@ -41,8 +42,17 @@ exports.FileEntitySchema = zod_1.z.object({
     createdAt: zod_1.z.coerce.date().describe('Data de criação do arquivo.'),
     updatedAt: zod_1.z.coerce.date().describe('Data de atualização do arquivo.'),
     deletedAt: zod_1.z.coerce.date().describe('Data de exclusão do arquivo.').nullable().default(null),
-    signedUrl: zod_1.z.string().describe('URL assinada do arquivo.').optional(),
 });
+exports.FileEntitySchema = exports.BaseFileEntitySchema.extend({
+    url: zod_1.z.string().describe('URL do arquivo.'),
+    signedUrl: zod_1.z.string().describe('URL assinada do arquivo.'),
+});
+class BaseFileEntity extends (0, nestjs_zod_1.createZodDto)(exports.BaseFileEntitySchema) {
+    static build(input) {
+        return (0, entity_utils_1.safeInstantiateEntity)(BaseFileEntity, input);
+    }
+}
+exports.BaseFileEntity = BaseFileEntity;
 class FileEntity extends (0, nestjs_zod_1.createZodDto)(exports.FileEntitySchema) {
     static build(input) {
         return (0, entity_utils_1.safeInstantiateEntity)(FileEntity, input);

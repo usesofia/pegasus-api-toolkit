@@ -32,6 +32,7 @@ const base_1 = require("../../base");
 const log_utils_1 = require("../../utils/log.utils");
 const luxon_1 = require("luxon");
 const axios_1 = __importDefault(require("axios"));
+const url_1 = require("url");
 let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, filesRepository, objectStorageService) {
         super(FilesServiceAdapter_1.name, baseConfig, logger, cls);
@@ -58,7 +59,7 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
             objectName,
             mimeType: request.data.mimeType,
         });
-        return { file, uploadUrl };
+        return { file: await this.enhanceBaseFile(file), uploadUrl };
     }
     async confirmUploadRequest({ requester, request, }) {
         const session = await this.filesRepository.startSession();
@@ -80,10 +81,7 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
             return file;
         });
         const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
-        return file_entity_1.FileEntity.build({
-            ...file,
-            signedUrl: signedUrls[0],
-        });
+        return this.enhanceBaseFile(file);
     }
     async removeOrThrow({ requester, request, }) {
         const session = await this.filesRepository.startSession();
@@ -126,16 +124,25 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
         const signedUrl = await this.objectStorageService.createSignedDownloadUrl({ objectName, expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
         return signedUrl;
     }
+    async enhanceBaseFile(file) {
+        const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
+        const signedUrl = signedUrls[0];
+        const url = url_1.URL.parse(signedUrl)?.pathname;
+        if (!url) {
+            throw new Error('URL não encontrada.');
+        }
+        return file_entity_1.FileEntity.build({
+            ...file,
+            signedUrl,
+            url: url,
+        });
+    }
     async findByIdOrThrow({ requester, id, }) {
         const file = await this.filesRepository.findByIdOrThrow({ requester, request: find_by_id_file_request_entity_1.FindByIdFileRequestEntity.build({ id }) });
         if (file.status === file_entity_1.FileStatus.DELETED || file.status === file_entity_1.FileStatus.PENDING) {
             throw new common_1.NotFoundException('Arquivo não encontrado.');
         }
-        const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
-        return file_entity_1.FileEntity.build({
-            ...file,
-            signedUrl: signedUrls[0],
-        });
+        return this.enhanceBaseFile(file);
     }
 };
 exports.FilesServiceAdapter = FilesServiceAdapter;
@@ -181,6 +188,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FilesServiceAdapter.prototype, "getSignedUrlFromUrl", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [file_entity_1.BaseFileEntity]),
+    __metadata("design:returntype", Promise)
+], FilesServiceAdapter.prototype, "enhanceBaseFile", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),

@@ -1,7 +1,7 @@
 import { BaseConfigEntity } from '../../config/base-config.entity';
 import type { ConfirmFileUploadRequestEntity } from '../../files/entities/confirm-file-upload-request.entity';
 import type { CreateFileUploadRequestEntity } from '../../files/entities/create-file-upload-request.entity';
-import { FileEntity } from '../../files/entities/file.entity';
+import { BaseFileEntity, FileEntity } from '../../files/entities/file.entity';
 import type { RemoveFileRequestEntity } from '../../files/entities/remove-file-request.entity';
 import { type FilesRepositoryPort } from '../../files/ports/files-repository.port';
 import { type BuildableEntity, type FilesServicePort, type PopulatesFile } from '../../files/ports/files-service.port';
@@ -39,6 +39,7 @@ export declare class FilesServiceAdapter extends Base implements FilesServicePor
         requester: AuthUserEntity;
         url: string;
     }): Promise<string>;
+    enhanceBaseFile(file: BaseFileEntity): Promise<FileEntity>;
     findByIdOrThrow({ requester, id, }: {
         requester: AuthUserEntity;
         id: string;

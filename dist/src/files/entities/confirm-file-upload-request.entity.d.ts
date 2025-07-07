@@ -11,17 +11,21 @@ export declare const ConfirmFileUploadRequestDataEntitySchema: z.ZodObject<Omit<
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-    signedUrl: z.ZodOptional<z.ZodString>;
+} & {
+    url: z.ZodString;
+    signedUrl: z.ZodString;
 }, "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt">, "strip", z.ZodTypeAny, {
     status: import("../../files/entities/file.entity").FileStatus;
+    url: string;
     id: string;
     deletedAt: Date | null;
-    signedUrl?: string | undefined;
+    signedUrl: string;
 }, {
     status: import("../../files/entities/file.entity").FileStatus;
+    url: string;
     id: string;
+    signedUrl: string;
     deletedAt?: Date | null | undefined;
-    signedUrl?: string | undefined;
 }>;
 declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
     data: z.ZodObject<Omit<{
@@ -36,17 +40,21 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-        signedUrl: z.ZodOptional<z.ZodString>;
+    } & {
+        url: z.ZodString;
+        signedUrl: z.ZodString;
     }, "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt">, "strip", z.ZodTypeAny, {
         status: import("../../files/entities/file.entity").FileStatus;
+        url: string;
         id: string;
         deletedAt: Date | null;
-        signedUrl?: string | undefined;
+        signedUrl: string;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
+        url: string;
         id: string;
+        signedUrl: string;
         deletedAt?: Date | null | undefined;
-        signedUrl?: string | undefined;
     }>;
     channel: z.ZodNativeEnum<{
         readonly WEB_APP: "WEB_APP";
@@ -57,26 +65,29 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
+        url: string;
         id: string;
         deletedAt: Date | null;
-        signedUrl?: string | undefined;
+        signedUrl: string;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
+        url: string;
         id: string;
+        signedUrl: string;
         deletedAt?: Date | null | undefined;
-        signedUrl?: string | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;
 declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
+        url: string;
         id: string;
         deletedAt: Date | null;
-        signedUrl?: string | undefined;
+        signedUrl: string;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, z.ZodObjectDef<{
@@ -92,17 +103,21 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-        signedUrl: z.ZodOptional<z.ZodString>;
+    } & {
+        url: z.ZodString;
+        signedUrl: z.ZodString;
     }, "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt">, "strip", z.ZodTypeAny, {
         status: import("../../files/entities/file.entity").FileStatus;
+        url: string;
         id: string;
         deletedAt: Date | null;
-        signedUrl?: string | undefined;
+        signedUrl: string;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
+        url: string;
         id: string;
+        signedUrl: string;
         deletedAt?: Date | null | undefined;
-        signedUrl?: string | undefined;
     }>;
     channel: z.ZodNativeEnum<{
         readonly WEB_APP: "WEB_APP";
@@ -113,9 +128,10 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
 }, "strip", z.ZodTypeAny>, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
+        url: string;
         id: string;
+        signedUrl: string;
         deletedAt?: Date | null | undefined;
-        signedUrl?: string | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }>;

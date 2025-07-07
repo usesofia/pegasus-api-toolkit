@@ -1,5 +1,5 @@
 import type { CreateFileRequestEntity } from '@app/files/entities/create-file-request.entity';
-import { FileEntity } from '@app/files/entities/file.entity';
+import { BaseFileEntity, FileEntity } from '@app/files/entities/file.entity';
 import type { FindByIdFileRequestEntity } from '@app/files/entities/find-by-id-file-request.entity';
 import type { PartialUpdateFileRequestEntity } from '@app/files/entities/partial-update-file-request.entity';
 import { FILE_MODEL } from '@app/files/files.constants';
@@ -11,12 +11,13 @@ import { Model } from 'mongoose';
 import { ClsService } from 'nestjs-cls';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 
 @Injectable()
 export class MongoDbFilesRepositoryAdapter
   extends BaseMultitenantMongoDbRepositoryAdapter<
     MongoDbFileModel,
-    FileEntity,
+    BaseFileEntity,
     CreateFileRequestEntity,
     FindByIdFileRequestEntity,
     PartialUpdateFileRequestEntity
@@ -30,6 +31,10 @@ export class MongoDbFilesRepositoryAdapter
     @Inject(FILE_MODEL) fileModel: Model<MongoDbFileModel>,
   ) {
     super(MongoDbFilesRepositoryAdapter.name, baseConfig, logger, cls, fileModel);
+  }
+
+  protected override getOwnerOrganization({ requester, }: { requester: AuthUserEntity; }): string {
+    return requester.organization?.id ?? 'system';
   }
 
   public toEntity(doc: MongoDbFileModel): FileEntity {

@@ -18,6 +18,7 @@ export enum FileType {
   CONTACTS_BULK_CREATE_EXTRACTION_INPUT = 'CONTACTS_BULK_CREATE_EXTRACTION_INPUT',
   CONTACTS_BULK_CREATE_EXTRACTION_OUTPUT = 'CONTACTS_BULK_CREATE_EXTRACTION_OUTPUT',
   SEVEN_DAYS_TEMP_FILE = 'SEVEN_DAYS_TEMP_FILE',
+  WHATSAPP_MESSAGE_FILE = 'WHATSAPP_MESSAGE_FILE',
 }
 
 export enum FileStatus {
@@ -27,7 +28,7 @@ export enum FileStatus {
   DELETED = 'DELETED',
 }
 
-export const FileEntitySchema = z.object({
+export const BaseFileEntitySchema = z.object({
   id: z.string().describe('Identificador do arquivo.'),
   ownerOrganization: z.string().describe('Identificador da organização dona do arquivo.'),
   originalFileName: z.string().describe('Nome original do arquivo.'),
@@ -39,8 +40,18 @@ export const FileEntitySchema = z.object({
   createdAt: z.coerce.date().describe('Data de criação do arquivo.'),
   updatedAt: z.coerce.date().describe('Data de atualização do arquivo.'),
   deletedAt: z.coerce.date().describe('Data de exclusão do arquivo.').nullable().default(null),
-  signedUrl: z.string().describe('URL assinada do arquivo.').optional(),
 });
+
+export const FileEntitySchema = BaseFileEntitySchema.extend({
+  url: z.string().describe('URL do arquivo.'),
+  signedUrl: z.string().describe('URL assinada do arquivo.'),
+});
+
+export class BaseFileEntity extends createZodDto(BaseFileEntitySchema) {
+  static build(input: z.input<typeof BaseFileEntitySchema>): BaseFileEntity {
+    return safeInstantiateEntity(BaseFileEntity, input);
+  }
+}
 
 export class FileEntity extends createZodDto(FileEntitySchema) {
   static build(input: z.input<typeof FileEntitySchema>): FileEntity {

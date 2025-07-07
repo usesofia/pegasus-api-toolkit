@@ -77,7 +77,12 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
         return await Promise.all(objectNames.map((objectName) => this.createSignedDownloadUrl({ objectName, expiresInMinutes })));
     }
     generateUniqueObjectName({ requester, fileType, originalFileName, }) {
-        return `${requester.getOrganizationOrThrow().id}/${fileType}/${(0, uuid_1.v4)()}/${originalFileName}`;
+        if (requester.organization) {
+            return `${requester.getOrganizationOrThrow().id}/${fileType}/${(0, uuid_1.v4)()}/${originalFileName}`;
+        }
+        else {
+            return `${requester.id}/${fileType}/${(0, uuid_1.v4)()}/${originalFileName}`;
+        }
     }
     extractObjectNameFromUrl({ url }) {
         const urlObject = new URL(url);

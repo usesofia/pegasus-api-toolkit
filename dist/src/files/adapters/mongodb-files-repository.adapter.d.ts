@@ -1,5 +1,5 @@
 import type { CreateFileRequestEntity } from '../../files/entities/create-file-request.entity';
-import { FileEntity } from '../../files/entities/file.entity';
+import { BaseFileEntity, FileEntity } from '../../files/entities/file.entity';
 import type { FindByIdFileRequestEntity } from '../../files/entities/find-by-id-file-request.entity';
 import type { PartialUpdateFileRequestEntity } from '../../files/entities/partial-update-file-request.entity';
 import { MongoDbFileModel } from '../../files/models/mongodb-file.model';
@@ -9,10 +9,14 @@ import { BaseMultitenantMongoDbRepositoryAdapter } from '../../database/base-mul
 import { Model } from 'mongoose';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '../../config/base-config.entity';
-export declare class MongoDbFilesRepositoryAdapter extends BaseMultitenantMongoDbRepositoryAdapter<MongoDbFileModel, FileEntity, CreateFileRequestEntity, FindByIdFileRequestEntity, PartialUpdateFileRequestEntity> implements FilesRepositoryPort {
+import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
+export declare class MongoDbFilesRepositoryAdapter extends BaseMultitenantMongoDbRepositoryAdapter<MongoDbFileModel, BaseFileEntity, CreateFileRequestEntity, FindByIdFileRequestEntity, PartialUpdateFileRequestEntity> implements FilesRepositoryPort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
     protected readonly cls: ClsService;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, fileModel: Model<MongoDbFileModel>);
+    protected getOwnerOrganization({ requester, }: {
+        requester: AuthUserEntity;
+    }): string;
     toEntity(doc: MongoDbFileModel): FileEntity;
 }

@@ -2,7 +2,7 @@ import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import type { ConfirmFileUploadRequestEntity } from '@app/files/entities/confirm-file-upload-request.entity';
 import { CreateFileRequestEntity } from '@app/files/entities/create-file-request.entity';
 import type { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-upload-request.entity';
-import { FileEntity, FileStatus } from '@app/files/entities/file.entity';
+import { BaseFileEntity, FileEntity, FileStatus } from '@app/files/entities/file.entity';
 import { FindByIdFileRequestEntity } from '@app/files/entities/find-by-id-file-request.entity';
 import { PartialUpdateFileRequestEntity } from '@app/files/entities/partial-update-file-request.entity';
 import type { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
@@ -20,6 +20,7 @@ import { Base } from '@app/base';
 import { Log } from '@app/utils/log.utils';
 import { Duration } from 'luxon';
 import axios from 'axios';
+import { URL } from 'url';
 
 @Injectable()
 export class FilesServiceAdapter extends Base implements FilesServicePort {
@@ -62,7 +63,7 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
       mimeType: request.data.mimeType,
     });
 
-    return { file, uploadUrl };
+    return { file: await this.enhanceBaseFile(file), uploadUrl };
   }
 
   @Log()
@@ -96,10 +97,7 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
 
     const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
 
-    return FileEntity.build({
-      ...file,
-      signedUrl: signedUrls[0],
-    });
+    return this.enhanceBaseFile(file);
   }
 
   @Log()
@@ -180,6 +178,23 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
   }
 
   @Log()
+  async enhanceBaseFile(file: BaseFileEntity): Promise<FileEntity> {
+    const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
+    const signedUrl = signedUrls[0];
+    const url = URL.parse(signedUrl)?.pathname;
+
+    if(!url) {
+      throw new Error('URL não encontrada.');
+    }
+
+    return FileEntity.build({
+      ...file,
+      signedUrl,
+      url: url,
+    });
+  }
+
+  @Log()
   async findByIdOrThrow({
     requester,
     id,
@@ -193,11 +208,6 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
       throw new NotFoundException('Arquivo não encontrado.');
     }
 
-    const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
-
-    return FileEntity.build({
-      ...file,
-      signedUrl: signedUrls[0],
-    });
+    return this.enhanceBaseFile(file);
   }
 }
