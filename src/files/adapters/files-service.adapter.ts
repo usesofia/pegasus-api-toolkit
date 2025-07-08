@@ -95,8 +95,6 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
       return file
     });
 
-    const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
-
     return this.enhanceBaseFile(file);
   }
 
@@ -127,7 +125,7 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
     const objectNames = files.map((file) => file.objectName);
     const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames });
 
-    return files.map((file, index) => ({ ...file, signedUrl: signedUrls[index] }));
+    return files.map((file, index) => (FileEntity.build({ ...file, signedUrl: signedUrls[index] })));
   }
 
   @Log()

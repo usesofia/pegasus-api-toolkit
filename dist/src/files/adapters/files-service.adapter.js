@@ -80,7 +80,6 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
             });
             return file;
         });
-        const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
         return this.enhanceBaseFile(file);
     }
     async removeOrThrow({ requester, request, }) {
@@ -100,7 +99,7 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
     async getFilesSignedUrlsOrThrow(files) {
         const objectNames = files.map((file) => file.objectName);
         const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames });
-        return files.map((file, index) => ({ ...file, signedUrl: signedUrls[index] }));
+        return files.map((file, index) => (file_entity_1.FileEntity.build({ ...file, signedUrl: signedUrls[index] })));
     }
     async enrichEntityWithFileSignedUrls(entity, buildableEntity) {
         if (!entity.populatedFiles) {

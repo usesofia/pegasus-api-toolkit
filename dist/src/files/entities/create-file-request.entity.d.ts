@@ -6,9 +6,9 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
         size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
+        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
         objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
+        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
         caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -17,20 +17,20 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         url: z.ZodString;
         signedUrl: z.ZodString;
     }, "url" | "id" | "ownerOrganization" | "updatedAt" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         caption?: string | null | undefined;
     }, {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -44,12 +44,12 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         caption?: string | null | undefined;
     };
@@ -57,11 +57,11 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
     populate?: string | undefined;
 }, {
     data: {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -71,12 +71,12 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
 }>;
 declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         caption?: string | null | undefined;
     };
@@ -89,9 +89,9 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
         size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
+        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
         objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
+        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
         caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -100,20 +100,20 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         url: z.ZodString;
         signedUrl: z.ZodString;
     }, "url" | "id" | "ownerOrganization" | "updatedAt" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         caption?: string | null | undefined;
     }, {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -127,11 +127,11 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
-        status: import("@app/files/entities/file.entity").FileStatus;
+        status: import("../../files/entities/file.entity").FileStatus;
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("@app/files/entities/file.entity").FileType;
+        fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;

@@ -1,4 +1,4 @@
-import { FileStatus, FileType } from '@app/files/entities/file.entity';
+import { FileStatus, FileType } from '../../files/entities/file.entity';
 import { Document } from 'mongoose';
 export declare class MongoDbFileModel extends Document {
     ownerOrganization: string;
