@@ -46,6 +46,10 @@ __decorate([
     __metadata("design:type", String)
 ], MongoDbFileModel.prototype, "status", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: String, required: false, default: null }),
+    __metadata("design:type", Object)
+], MongoDbFileModel.prototype, "caption", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: Date, required: false }),
     __metadata("design:type", Date)
 ], MongoDbFileModel.prototype, "createdAt", void 0);

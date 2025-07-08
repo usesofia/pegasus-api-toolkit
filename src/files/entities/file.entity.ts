@@ -37,6 +37,7 @@ export const BaseFileEntitySchema = z.object({
   fileType: z.nativeEnum(FileType).describe('Tipo do arquivo.'),
   objectName: z.string().describe('Nome do objeto no storage.'),
   status: z.nativeEnum(FileStatus).describe('Status do arquivo.'),
+  caption: z.string().nullish().describe('Legenda do arquivo.'),
   createdAt: z.coerce.date().describe('Data de criação do arquivo.'),
   updatedAt: z.coerce.date().describe('Data de atualização do arquivo.'),
   deletedAt: z.coerce.date().describe('Data de exclusão do arquivo.').nullable().default(null),

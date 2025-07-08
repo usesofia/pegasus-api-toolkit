@@ -39,6 +39,7 @@ exports.BaseFileEntitySchema = zod_1.z.object({
     fileType: zod_1.z.nativeEnum(FileType).describe('Tipo do arquivo.'),
     objectName: zod_1.z.string().describe('Nome do objeto no storage.'),
     status: zod_1.z.nativeEnum(FileStatus).describe('Status do arquivo.'),
+    caption: zod_1.z.string().nullish().describe('Legenda do arquivo.'),
     createdAt: zod_1.z.coerce.date().describe('Data de criação do arquivo.'),
     updatedAt: zod_1.z.coerce.date().describe('Data de atualização do arquivo.'),
     deletedAt: zod_1.z.coerce.date().describe('Data de exclusão do arquivo.').nullable().default(null),

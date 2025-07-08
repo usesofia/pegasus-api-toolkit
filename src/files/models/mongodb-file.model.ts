@@ -27,6 +27,9 @@ export class MongoDbFileModel extends Document {
   @Prop({ type: String, enum: Object.values(FileStatus), required: true })
   status!: FileStatus;
 
+  @Prop({ type: String, required: false, default: null })
+  caption!: string | null;
+
   @Prop({ type: Date, required: false })
   createdAt!: Date;
 

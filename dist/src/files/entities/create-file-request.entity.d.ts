@@ -9,6 +9,7 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
         objectName: z.ZodString;
         status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+        caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
@@ -23,6 +24,7 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
+        caption?: string | null | undefined;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
         size: number;
@@ -31,6 +33,7 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
+        caption?: string | null | undefined;
     }>;
     populate: z.ZodOptional<z.ZodString>;
     channel: z.ZodNativeEnum<{
@@ -48,6 +51,7 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
+        caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
@@ -60,6 +64,7 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
+        caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
@@ -73,6 +78,7 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
+        caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;
@@ -86,6 +92,7 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
         objectName: z.ZodString;
         status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+        caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
@@ -100,6 +107,7 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         mimeType: string;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
+        caption?: string | null | undefined;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
         size: number;
@@ -108,6 +116,7 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
+        caption?: string | null | undefined;
     }>;
     populate: z.ZodOptional<z.ZodString>;
     channel: z.ZodNativeEnum<{
@@ -125,6 +134,7 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
+        caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     populate?: string | undefined;

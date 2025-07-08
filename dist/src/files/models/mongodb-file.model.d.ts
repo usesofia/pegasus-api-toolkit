@@ -8,6 +8,7 @@ export declare class MongoDbFileModel extends Document {
     fileType: FileType;
     objectName: string;
     status: FileStatus;
+    caption: string | null;
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;

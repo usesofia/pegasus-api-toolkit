@@ -5,9 +5,11 @@ declare const ConfirmFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<
     id: string;
     deletedAt: Date | null;
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
+    caption?: string | null | undefined;
 }, z.ZodObjectDef<{
     id: z.ZodString;
     deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
+    caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 } & {
     status: z.ZodEnum<[FileStatus.FAILED, FileStatus.COMPLETED]>;
     channel: z.ZodNativeEnum<{
@@ -21,6 +23,7 @@ declare const ConfirmFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<
     id: string;
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     deletedAt?: Date | null | undefined;
+    caption?: string | null | undefined;
 }>;
 export declare class ConfirmFileUploadRequestBodyDto extends ConfirmFileUploadRequestBodyDto_base {
 }

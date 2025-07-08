@@ -32,6 +32,7 @@ export declare const BaseFileEntitySchema: z.ZodObject<{
     fileType: z.ZodNativeEnum<typeof FileType>;
     objectName: z.ZodString;
     status: z.ZodNativeEnum<typeof FileStatus>;
+    caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
@@ -47,6 +48,7 @@ export declare const BaseFileEntitySchema: z.ZodObject<{
     fileType: FileType;
     objectName: string;
     createdAt: Date;
+    caption?: string | null | undefined;
 }, {
     status: FileStatus;
     id: string;
@@ -59,6 +61,7 @@ export declare const BaseFileEntitySchema: z.ZodObject<{
     objectName: string;
     createdAt: Date;
     deletedAt?: Date | null | undefined;
+    caption?: string | null | undefined;
 }>;
 export declare const FileEntitySchema: z.ZodObject<{
     id: z.ZodString;
@@ -69,6 +72,7 @@ export declare const FileEntitySchema: z.ZodObject<{
     fileType: z.ZodNativeEnum<typeof FileType>;
     objectName: z.ZodString;
     status: z.ZodNativeEnum<typeof FileStatus>;
+    caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
@@ -89,6 +93,7 @@ export declare const FileEntitySchema: z.ZodObject<{
     objectName: string;
     createdAt: Date;
     signedUrl: string;
+    caption?: string | null | undefined;
 }, {
     status: FileStatus;
     url: string;
@@ -103,6 +108,7 @@ export declare const FileEntitySchema: z.ZodObject<{
     createdAt: Date;
     signedUrl: string;
     deletedAt?: Date | null | undefined;
+    caption?: string | null | undefined;
 }>;
 declare const BaseFileEntity_base: import("nestjs-zod").ZodDto<{
     status: FileStatus;
@@ -116,6 +122,7 @@ declare const BaseFileEntity_base: import("nestjs-zod").ZodDto<{
     fileType: FileType;
     objectName: string;
     createdAt: Date;
+    caption?: string | null | undefined;
 }, z.ZodObjectDef<{
     id: z.ZodString;
     ownerOrganization: z.ZodString;
@@ -125,6 +132,7 @@ declare const BaseFileEntity_base: import("nestjs-zod").ZodDto<{
     fileType: z.ZodNativeEnum<typeof FileType>;
     objectName: z.ZodString;
     status: z.ZodNativeEnum<typeof FileStatus>;
+    caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
@@ -140,6 +148,7 @@ declare const BaseFileEntity_base: import("nestjs-zod").ZodDto<{
     objectName: string;
     createdAt: Date;
     deletedAt?: Date | null | undefined;
+    caption?: string | null | undefined;
 }>;
 export declare class BaseFileEntity extends BaseFileEntity_base {
     static build(input: z.input<typeof BaseFileEntitySchema>): BaseFileEntity;
@@ -158,6 +167,7 @@ declare const FileEntity_base: import("nestjs-zod").ZodDto<{
     objectName: string;
     createdAt: Date;
     signedUrl: string;
+    caption?: string | null | undefined;
 }, z.ZodObjectDef<{
     id: z.ZodString;
     ownerOrganization: z.ZodString;
@@ -167,6 +177,7 @@ declare const FileEntity_base: import("nestjs-zod").ZodDto<{
     fileType: z.ZodNativeEnum<typeof FileType>;
     objectName: z.ZodString;
     status: z.ZodNativeEnum<typeof FileStatus>;
+    caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
@@ -187,6 +198,7 @@ declare const FileEntity_base: import("nestjs-zod").ZodDto<{
     createdAt: Date;
     signedUrl: string;
     deletedAt?: Date | null | undefined;
+    caption?: string | null | undefined;
 }>;
 export declare class FileEntity extends FileEntity_base {
     static build(input: z.input<typeof FileEntitySchema>): FileEntity;
