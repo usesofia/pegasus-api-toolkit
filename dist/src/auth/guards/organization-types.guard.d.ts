@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, LoggerService } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '../../auth/guards/auth.guard';
-import { BaseConfigEntity } from '../../config/base-config.entity';
+import { AuthGuard } from '@app/auth/guards/auth.guard';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
-import { AuthServicePort } from '../../auth/ports/auth-service.port';
+import { AuthServicePort } from '@app/auth/ports/auth-service.port';
 export declare class OrganizationTypesGuard extends AuthGuard implements CanActivate {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;

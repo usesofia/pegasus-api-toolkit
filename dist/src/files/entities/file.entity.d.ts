@@ -202,5 +202,9 @@ declare const FileEntity_base: import("nestjs-zod").ZodDto<{
 }>;
 export declare class FileEntity extends FileEntity_base {
     static build(input: z.input<typeof FileEntitySchema>): FileEntity;
+    isImage(): boolean;
+    isAudio(): boolean;
+    isDocument(): boolean;
+    isVideo(): boolean;
 }
 export {};

@@ -58,6 +58,18 @@ class FileEntity extends (0, nestjs_zod_1.createZodDto)(exports.FileEntitySchema
     static build(input) {
         return (0, entity_utils_1.safeInstantiateEntity)(FileEntity, input);
     }
+    isImage() {
+        return this.mimeType.startsWith('image/');
+    }
+    isAudio() {
+        return this.mimeType.startsWith('audio/');
+    }
+    isDocument() {
+        return this.mimeType.startsWith('application/') || this.mimeType.startsWith('text/');
+    }
+    isVideo() {
+        return this.mimeType.startsWith('video/');
+    }
 }
 exports.FileEntity = FileEntity;
 //# sourceMappingURL=file.entity.js.map

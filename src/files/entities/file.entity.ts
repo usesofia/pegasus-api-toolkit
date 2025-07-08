@@ -58,4 +58,20 @@ export class FileEntity extends createZodDto(FileEntitySchema) {
   static build(input: z.input<typeof FileEntitySchema>): FileEntity {
     return safeInstantiateEntity(FileEntity, input);
   }
+
+  isImage(): boolean {
+    return this.mimeType.startsWith('image/');
+  }
+
+  isAudio(): boolean {
+    return this.mimeType.startsWith('audio/');
+  }
+
+  isDocument(): boolean {
+    return this.mimeType.startsWith('application/') || this.mimeType.startsWith('text/');
+  }
+
+  isVideo(): boolean {
+    return this.mimeType.startsWith('video/');
+  }
 }

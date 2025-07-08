@@ -1,5 +1,5 @@
 import { LoggerService, LogLevel } from '@nestjs/common';
-import { BaseConfigEntity } from './config/base-config.entity';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
 export declare class Base {
     private readonly className;
