@@ -19,7 +19,9 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
           throw new Error('No secondary MongoDB database found.');
         }
         const secondaryMongoDatabase = mongoDatabases[1];
-        return await mongoose.createConnection(secondaryMongoDatabase.uri).asPromise();
+        return await mongoose.createConnection(secondaryMongoDatabase.uri, {
+          replicaSet: 'rs0',
+        }).asPromise();
       },
       inject: [BASE_CONFIG],
     },

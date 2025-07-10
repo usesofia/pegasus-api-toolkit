@@ -41,7 +41,9 @@ exports.SecondaryMongoDbDatabaseModule = SecondaryMongoDbDatabaseModule = __deco
                         throw new Error('No secondary MongoDB database found.');
                     }
                     const secondaryMongoDatabase = mongoDatabases[1];
-                    return await mongoose_1.default.createConnection(secondaryMongoDatabase.uri).asPromise();
+                    return await mongoose_1.default.createConnection(secondaryMongoDatabase.uri, {
+                        replicaSet: 'rs0',
+                    }).asPromise();
                 },
                 inject: [base_config_entity_1.BASE_CONFIG],
             },

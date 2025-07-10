@@ -41,7 +41,9 @@ exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule = __decorate
                         throw new Error('No MongoDB database found.');
                     }
                     const primaryMongoDatabase = mongoDatabases[0];
-                    return await mongoose_1.default.createConnection(primaryMongoDatabase.uri).asPromise();
+                    return await mongoose_1.default.createConnection(primaryMongoDatabase.uri, {
+                        replicaSet: 'rs0',
+                    }).asPromise();
                 },
                 inject: [base_config_entity_1.BASE_CONFIG],
             },
