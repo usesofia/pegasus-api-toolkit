@@ -89,11 +89,19 @@ exports.BaseConfigSchema = zod_1.z.object({
     tasks: zod_1.z.object({
         secret: zod_1.z.string(),
     }),
-    email: zod_1.z.object({
+    email: zod_1.z
+        .object({
         sendgrid: zod_1.z.object({
             apiKey: zod_1.z.string(),
         }),
-    }).optional(),
+    })
+        .optional(),
+    shortio: zod_1.z
+        .object({
+        apiKey: zod_1.z.string(),
+        domain: zod_1.z.string(),
+    })
+        .optional(),
 });
 class BaseConfigEntity extends (0, nestjs_zod_1.createZodDto)(exports.BaseConfigSchema) {
     static build(input) {

@@ -269,6 +269,16 @@ export declare const BaseConfigSchema: z.ZodObject<{
             apiKey: string;
         };
     }>>;
+    shortio: z.ZodOptional<z.ZodObject<{
+        apiKey: z.ZodString;
+        domain: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        domain: string;
+        apiKey: string;
+    }, {
+        domain: string;
+        apiKey: string;
+    }>>;
 }, "strip", z.ZodTypeAny, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -347,6 +357,10 @@ export declare const BaseConfigSchema: z.ZodObject<{
         sendgrid: {
             apiKey: string;
         };
+    } | undefined;
+    shortio?: {
+        domain: string;
+        apiKey: string;
     } | undefined;
 }, {
     env: Environment;
@@ -427,6 +441,10 @@ export declare const BaseConfigSchema: z.ZodObject<{
             apiKey: string;
         };
     } | undefined;
+    shortio?: {
+        domain: string;
+        apiKey: string;
+    } | undefined;
 }>;
 declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     env: Environment;
@@ -506,6 +524,10 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         sendgrid: {
             apiKey: string;
         };
+    } | undefined;
+    shortio?: {
+        domain: string;
+        apiKey: string;
     } | undefined;
 }, z.ZodObjectDef<{
     env: z.ZodNativeEnum<typeof Environment>;
@@ -776,6 +798,16 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             apiKey: string;
         };
     }>>;
+    shortio: z.ZodOptional<z.ZodObject<{
+        apiKey: z.ZodString;
+        domain: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        domain: string;
+        apiKey: string;
+    }, {
+        domain: string;
+        apiKey: string;
+    }>>;
 }, "strip", z.ZodTypeAny>, {
     env: Environment;
     nodeEnv: "development" | "production";
@@ -854,6 +886,10 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
         sendgrid: {
             apiKey: string;
         };
+    } | undefined;
+    shortio?: {
+        domain: string;
+        apiKey: string;
     } | undefined;
 }>;
 export declare class BaseConfigEntity extends BaseConfigEntity_base {

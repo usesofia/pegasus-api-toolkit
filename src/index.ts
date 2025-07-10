@@ -51,6 +51,12 @@ export * from '@app/database/secondary-mongodb-database.module';
 export * from '@app/health/health.module';
 export * from '@app/health/health.controller';
 
+// Link Shortner
+export * from '@app/link-shortner/link-shortner-service.port';
+export * from '@app/link-shortner/link-shortner.module';
+export * from '@app/link-shortner/shortio-link-shortner-service.adapter';
+export * from '@app/link-shortner/mock-link-shortner-service.adapter';
+
 // Logger
 export * from '@app/logger/logger.module';
 export * from '@app/logger/pino-logger';
