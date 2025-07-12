@@ -22,6 +22,7 @@ var FileType;
     FileType["CONTACTS_BULK_CREATE_EXTRACTION_OUTPUT"] = "CONTACTS_BULK_CREATE_EXTRACTION_OUTPUT";
     FileType["SEVEN_DAYS_TEMP_FILE"] = "SEVEN_DAYS_TEMP_FILE";
     FileType["WHATSAPP_MESSAGE_FILE"] = "WHATSAPP_MESSAGE_FILE";
+    FileType["EMAIL_FORWARDING_INTEGRATION"] = "EMAIL_FORWARDING_INTEGRATION";
 })(FileType || (exports.FileType = FileType = {}));
 var FileStatus;
 (function (FileStatus) {
