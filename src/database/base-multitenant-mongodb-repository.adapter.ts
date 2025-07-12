@@ -37,7 +37,13 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   /**
    * Convert a Mongoose document to its corresponding entity.
    */
-  protected abstract toEntity(doc: TDoc): TEntity;
+  protected abstract toEntity({
+    doc,
+    requester,
+  }: {
+    doc: TDoc;
+    requester?: AuthUserEntity;
+  }): Promise<TEntity>;
 
   @Log()
   protected getOwnerOrganization({
@@ -92,7 +98,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       await created.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
     }
 
-    return this.toEntity(created);
+    return this.toEntity({ doc: created, requester });
   }
 
   /**
@@ -130,7 +136,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       await doc.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
     }
 
-    return this.toEntity(doc);
+    return this.toEntity({ doc, requester });
   }
 
   /**
@@ -198,7 +204,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       await existing.populate(this.buildPopulatePaths(request.populate, session));
     }
 
-    return this.toEntity(existing);
+    return this.toEntity({ doc: existing, requester });
   }
 
   @Log()
@@ -495,6 +501,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     .limit(limit)
     .session(session);
 
-    return outdateds.map(this.toEntity.bind(this));
+    return await Promise.all(outdateds.map(async (doc) => this.toEntity({ doc })));
   } 
 }

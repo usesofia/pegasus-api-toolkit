@@ -5,9 +5,9 @@ export declare const ConfirmFileUploadRequestDataEntitySchema: z.ZodObject<Omit<
     originalFileName: z.ZodString;
     mimeType: z.ZodString;
     size: z.ZodNumber;
-    fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
+    fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
     objectName: z.ZodString;
-    status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+    status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
     caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
@@ -16,12 +16,12 @@ export declare const ConfirmFileUploadRequestDataEntitySchema: z.ZodObject<Omit<
     url: z.ZodString;
     signedUrl: z.ZodString;
 }, "url" | "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-    status: import("../../files/entities/file.entity").FileStatus;
+    status: import("@app/files/entities/file.entity").FileStatus;
     id: string;
     deletedAt: Date | null;
     caption?: string | null | undefined;
 }, {
-    status: import("../../files/entities/file.entity").FileStatus;
+    status: import("@app/files/entities/file.entity").FileStatus;
     id: string;
     deletedAt?: Date | null | undefined;
     caption?: string | null | undefined;
@@ -33,9 +33,9 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
         size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
+        fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
         objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+        status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
         caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -44,12 +44,12 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
         url: z.ZodString;
         signedUrl: z.ZodString;
     }, "url" | "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-        status: import("../../files/entities/file.entity").FileStatus;
+        status: import("@app/files/entities/file.entity").FileStatus;
         id: string;
         deletedAt: Date | null;
         caption?: string | null | undefined;
     }, {
-        status: import("../../files/entities/file.entity").FileStatus;
+        status: import("@app/files/entities/file.entity").FileStatus;
         id: string;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -62,7 +62,7 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
-        status: import("../../files/entities/file.entity").FileStatus;
+        status: import("@app/files/entities/file.entity").FileStatus;
         id: string;
         deletedAt: Date | null;
         caption?: string | null | undefined;
@@ -70,7 +70,7 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, {
     data: {
-        status: import("../../files/entities/file.entity").FileStatus;
+        status: import("@app/files/entities/file.entity").FileStatus;
         id: string;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -79,7 +79,7 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
 }>;
 declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
-        status: import("../../files/entities/file.entity").FileStatus;
+        status: import("@app/files/entities/file.entity").FileStatus;
         id: string;
         deletedAt: Date | null;
         caption?: string | null | undefined;
@@ -92,9 +92,9 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
         size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
+        fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
         objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+        status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
         caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -103,12 +103,12 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         url: z.ZodString;
         signedUrl: z.ZodString;
     }, "url" | "size" | "ownerOrganization" | "updatedAt" | "originalFileName" | "mimeType" | "fileType" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-        status: import("../../files/entities/file.entity").FileStatus;
+        status: import("@app/files/entities/file.entity").FileStatus;
         id: string;
         deletedAt: Date | null;
         caption?: string | null | undefined;
     }, {
-        status: import("../../files/entities/file.entity").FileStatus;
+        status: import("@app/files/entities/file.entity").FileStatus;
         id: string;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -121,7 +121,7 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
-        status: import("../../files/entities/file.entity").FileStatus;
+        status: import("@app/files/entities/file.entity").FileStatus;
         id: string;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;

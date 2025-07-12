@@ -48,7 +48,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         if (request.populate) {
             await created.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
         }
-        return this.toEntity(created);
+        return this.toEntity({ doc: created, requester });
     }
     async findByIdOrThrow({ requester, request, previousSession, }) {
         const session = previousSession
@@ -65,7 +65,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         if (request.populate) {
             await doc.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
         }
-        return this.toEntity(doc);
+        return this.toEntity({ doc, requester });
     }
     async findById({ requester, request, previousSession, }) {
         try {
@@ -95,7 +95,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         if (request.populate) {
             await existing.populate(this.buildPopulatePaths(request.populate, session));
         }
-        return this.toEntity(existing);
+        return this.toEntity({ doc: existing, requester });
     }
     async _partialUpdate({ requester, request, session, }) {
         if (session.inTransaction()) {
@@ -284,7 +284,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         })
             .limit(limit)
             .session(session);
-        return outdateds.map(this.toEntity.bind(this));
+        return await Promise.all(outdateds.map(async (doc) => this.toEntity({ doc })));
     }
 }
 exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;

@@ -1,9 +1,9 @@
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { z } from 'zod';
-import { Base } from '../base';
-import { BaseConfigEntity } from '../config/base-config.entity';
-import { CacheServicePort } from '../cache/ports/cache-service.port';
+import { Base } from '@app/base';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { CacheServicePort } from '@app/cache/ports/cache-service.port';
 declare const CacheSetDto_base: import("nestjs-zod").ZodDto<{
     value: string;
 }, z.ZodObjectDef<{
