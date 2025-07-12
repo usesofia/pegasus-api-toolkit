@@ -1,6 +1,6 @@
 {
   "name": "@usesofia/pegasus-api-toolkit",
-  "version": "3.31.0",
+  "version": "3.31.1",
   "description": "Um conjunto de ferramentas para desenvolvimento de APIs para o Pegasus.",
   "author": "Sofia",
   "private": false,

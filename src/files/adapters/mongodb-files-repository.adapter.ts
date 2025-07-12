@@ -1,5 +1,5 @@
 import type { CreateFileRequestEntity } from '@app/files/entities/create-file-request.entity';
-import { BaseFileEntity, FileEntity } from '@app/files/entities/file.entity';
+import { BaseFileEntity } from '@app/files/entities/file.entity';
 import type { FindByIdFileRequestEntity } from '@app/files/entities/find-by-id-file-request.entity';
 import type { PartialUpdateFileRequestEntity } from '@app/files/entities/partial-update-file-request.entity';
 import { FILE_MODEL } from '@app/files/files.constants';
@@ -37,9 +37,13 @@ export class MongoDbFilesRepositoryAdapter
     return requester.organization?.id ?? 'system';
   }
 
-  public toEntity(doc: MongoDbFileModel): BaseFileEntity {
+  public toEntity({
+    doc,
+  }: {
+    doc: MongoDbFileModel;
+  }): Promise<BaseFileEntity> {
     /* eslint-disable */
-    return BaseFileEntity.build({ ...doc.toObject(), id: doc.id.toString() });
+    return Promise.resolve(BaseFileEntity.build({ ...doc.toObject(), id: doc.id.toString() }));
     /* eslint-enable */
   }
 }

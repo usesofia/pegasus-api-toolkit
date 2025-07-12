@@ -32,8 +32,8 @@ let MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter_1 = class Mong
     getOwnerOrganization({ requester, }) {
         return requester.organization?.id ?? 'system';
     }
-    toEntity(doc) {
-        return file_entity_1.BaseFileEntity.build({ ...doc.toObject(), id: doc.id.toString() });
+    toEntity({ doc, }) {
+        return Promise.resolve(file_entity_1.BaseFileEntity.build({ ...doc.toObject(), id: doc.id.toString() }));
     }
 };
 exports.MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter;
