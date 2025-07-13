@@ -40,6 +40,7 @@ export declare class FilesServiceAdapter extends Base implements FilesServicePor
         url: string;
     }): Promise<string>;
     enhanceBaseFile(file: BaseFileEntity): Promise<FileEntity>;
+    private removeQueryParamsFromUrl;
     findByIdOrThrow({ requester, id, }: {
         requester: AuthUserEntity;
         id: string;

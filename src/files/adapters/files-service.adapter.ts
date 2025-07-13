@@ -20,7 +20,6 @@ import { Base } from '@app/base';
 import { Log } from '@app/utils/log.utils';
 import { Duration } from 'luxon';
 import axios from 'axios';
-import { URL } from 'url';
 
 @Injectable()
 export class FilesServiceAdapter extends Base implements FilesServicePort {
@@ -179,7 +178,7 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
   async enhanceBaseFile(file: BaseFileEntity): Promise<FileEntity> {
     const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
     const signedUrl = signedUrls[0];
-    const url = URL.parse(signedUrl)?.pathname;
+    const url = this.removeQueryParamsFromUrl(signedUrl);
 
     if(!url) {
       throw new Error('URL não encontrada.');
@@ -190,6 +189,11 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
       signedUrl,
       url: url,
     });
+  }
+
+  @Log()
+  private removeQueryParamsFromUrl(url: string): string {
+    return url.split('?')[0];
   }
 
   @Log()
