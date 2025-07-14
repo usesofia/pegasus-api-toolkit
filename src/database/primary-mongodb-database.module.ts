@@ -19,7 +19,10 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
           throw new Error('No MongoDB database found.');
         }
         const primaryMongoDatabase = mongoDatabases[0];
-        return await mongoose.createConnection(primaryMongoDatabase.uri).asPromise();
+        return await mongoose.createConnection(primaryMongoDatabase.uri, {
+          maxPoolSize: 150,
+          serverSelectionTimeoutMS: 60000,
+        }).asPromise();
       },
       inject: [BASE_CONFIG],
     },
