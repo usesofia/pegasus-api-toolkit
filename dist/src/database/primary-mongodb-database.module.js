@@ -44,6 +44,7 @@ exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule = __decorate
                     return await mongoose_1.default.createConnection(primaryMongoDatabase.uri, {
                         maxPoolSize: 150,
                         serverSelectionTimeoutMS: 60000,
+                        socketTimeoutMS: 60000,
                     }).asPromise();
                 },
                 inject: [base_config_entity_1.BASE_CONFIG],
