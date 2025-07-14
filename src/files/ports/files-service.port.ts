@@ -1,6 +1,6 @@
 import { ConfirmFileUploadRequestEntity } from '@app/files/entities/confirm-file-upload-request.entity';
 import { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-upload-request.entity';
-import { FileEntity } from '@app/files/entities/file.entity';
+import { BaseFileEntity, FileEntity } from '@app/files/entities/file.entity';
 import { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 
@@ -58,4 +58,6 @@ export interface FilesServicePort {
   }): Promise<FileEntity>;
 
   systemFindByIdOrThrow({ id }: { id: string }): Promise<FileEntity>;
+
+  enhanceBaseFile(file: BaseFileEntity): Promise<FileEntity>;
 }

@@ -1,6 +1,6 @@
 import { ConfirmFileUploadRequestEntity } from '../../files/entities/confirm-file-upload-request.entity';
 import { CreateFileUploadRequestEntity } from '../../files/entities/create-file-upload-request.entity';
-import { FileEntity } from '../../files/entities/file.entity';
+import { BaseFileEntity, FileEntity } from '../../files/entities/file.entity';
 import { RemoveFileRequestEntity } from '../../files/entities/remove-file-request.entity';
 import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
 export declare const FILES_SERVICE_PORT: unique symbol;
@@ -40,4 +40,5 @@ export interface FilesServicePort {
     systemFindByIdOrThrow({ id }: {
         id: string;
     }): Promise<FileEntity>;
+    enhanceBaseFile(file: BaseFileEntity): Promise<FileEntity>;
 }
