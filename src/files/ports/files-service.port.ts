@@ -3,12 +3,13 @@ import { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-u
 import { BaseFileEntity, FileEntity } from '@app/files/entities/file.entity';
 import { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import z from 'zod';
 
 export const FILES_SERVICE_PORT = Symbol('FilesServicePort');
 
 export interface PopulatesFile {
   files?: string[];
-  populatedFiles?: FileEntity[];
+  populatedFiles?: z.infer<typeof FileEntity.schema>;
 }
 export interface BuildableEntity<T> {
   build: (entity: T) => T;
