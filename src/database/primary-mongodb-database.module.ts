@@ -21,9 +21,10 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
         const primaryMongoDatabase = mongoDatabases[0];
         return await mongoose.createConnection(primaryMongoDatabase.uri, {
           maxPoolSize: 150,
-          serverSelectionTimeoutMS: 60000,
-          socketTimeoutMS: 60000,
-          connectTimeoutMS: 60000,
+          maxIdleTimeMS: 80000,
+          serverSelectionTimeoutMS: 80000,
+          socketTimeoutMS: 0,
+          connectTimeoutMS: 0
         }).asPromise();
       },
       inject: [BASE_CONFIG],
