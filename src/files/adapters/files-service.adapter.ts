@@ -212,4 +212,10 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
 
     return this.enhanceBaseFile(file);
   }
+
+  @Log()
+  async systemFindByIdOrThrow({ id }: { id: string }): Promise<FileEntity> {
+    const file = await this.filesRepository.systemFindByIdOrThrow({ id });
+    return this.enhanceBaseFile(file);
+  }
 }

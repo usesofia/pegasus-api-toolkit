@@ -2,7 +2,7 @@ import { BaseSessionPort } from '@app/database/base-session.port';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { BaseSessionStarterPort } from '@app/database/base-session-starter.port';
 import type { CreateFileRequestEntity } from '@app/files/entities/create-file-request.entity';
-import type { BaseFileEntity, FileEntity } from '@app/files/entities/file.entity';
+import type { BaseFileEntity } from '@app/files/entities/file.entity';
 import type { FindByIdFileRequestEntity } from '@app/files/entities/find-by-id-file-request.entity';
 import type { PartialUpdateFileRequestEntity } from '@app/files/entities/partial-update-file-request.entity';
 
@@ -36,4 +36,6 @@ export interface FilesRepositoryPort extends BaseSessionStarterPort {
     request: PartialUpdateFileRequestEntity;
     previousSession?: BaseSessionPort;
   }): Promise<BaseFileEntity>;
+
+  systemFindByIdOrThrow({ id, previousSession }: { id: string, previousSession?: BaseSessionPort }): Promise<BaseFileEntity>;
 }

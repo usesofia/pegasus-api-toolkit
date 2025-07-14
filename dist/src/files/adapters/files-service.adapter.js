@@ -145,6 +145,10 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
         }
         return this.enhanceBaseFile(file);
     }
+    async systemFindByIdOrThrow({ id }) {
+        const file = await this.filesRepository.systemFindByIdOrThrow({ id });
+        return this.enhanceBaseFile(file);
+    }
 };
 exports.FilesServiceAdapter = FilesServiceAdapter;
 __decorate([
@@ -207,6 +211,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FilesServiceAdapter.prototype, "findByIdOrThrow", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FilesServiceAdapter.prototype, "systemFindByIdOrThrow", null);
 exports.FilesServiceAdapter = FilesServiceAdapter = FilesServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

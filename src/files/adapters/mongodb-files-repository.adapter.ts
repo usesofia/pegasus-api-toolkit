@@ -5,13 +5,15 @@ import type { PartialUpdateFileRequestEntity } from '@app/files/entities/partial
 import { FILE_MODEL } from '@app/files/files.constants';
 import { MongoDbFileModel } from '@app/files/models/mongodb-file.model';
 import { FilesRepositoryPort } from '@app/files/ports/files-repository.port';
-import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import { Inject, Injectable, LoggerService, NotFoundException } from '@nestjs/common';
 import { BaseMultitenantMongoDbRepositoryAdapter } from '@app/database/base-multitenant-mongodb-repository.adapter';
-import { Model } from 'mongoose';
+import { ClientSession, Model } from 'mongoose';
 import { ClsService } from 'nestjs-cls';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { BaseSessionPort } from '@app/database/base-session.port';
+import { Log } from '@app/utils/log.utils';
 
 @Injectable()
 export class MongoDbFilesRepositoryAdapter
@@ -45,5 +47,20 @@ export class MongoDbFilesRepositoryAdapter
     /* eslint-disable */
     return Promise.resolve(BaseFileEntity.build({ ...doc.toObject(), id: doc.id.toString() }));
     /* eslint-enable */
+  }
+
+  @Log()
+  async systemFindByIdOrThrow({ id, previousSession }: { id: string, previousSession?: BaseSessionPort }): Promise<BaseFileEntity> {
+    const session = previousSession
+      ? (previousSession.getSession() as ClientSession)
+      : null;
+    
+    const file = await this.model.findById(id).session(session);
+
+    if (!file) {
+      throw new NotFoundException('Arquivo não encontrado.');
+    }
+    
+    return this.toEntity({ doc: file });
   }
 }

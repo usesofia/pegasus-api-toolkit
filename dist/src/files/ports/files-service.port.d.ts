@@ -37,4 +37,7 @@ export interface FilesServicePort {
         requester: AuthUserEntity;
         id: string;
     }): Promise<FileEntity>;
+    systemFindByIdOrThrow({ id }: {
+        id: string;
+    }): Promise<FileEntity>;
 }

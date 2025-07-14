@@ -22,4 +22,8 @@ export interface FilesRepositoryPort extends BaseSessionStarterPort {
         request: PartialUpdateFileRequestEntity;
         previousSession?: BaseSessionPort;
     }): Promise<BaseFileEntity>;
+    systemFindByIdOrThrow({ id, previousSession }: {
+        id: string;
+        previousSession?: BaseSessionPort;
+    }): Promise<BaseFileEntity>;
 }

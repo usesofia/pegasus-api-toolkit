@@ -22,6 +22,7 @@ const mongoose_1 = require("mongoose");
 const nestjs_cls_1 = require("nestjs-cls");
 const base_config_entity_1 = require("../../config/base-config.entity");
 const logger_module_1 = require("../../logger/logger.module");
+const log_utils_1 = require("../../utils/log.utils");
 let MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter_1 = class MongoDbFilesRepositoryAdapter extends base_multitenant_mongodb_repository_adapter_1.BaseMultitenantMongoDbRepositoryAdapter {
     constructor(baseConfig, logger, cls, fileModel) {
         super(MongoDbFilesRepositoryAdapter_1.name, baseConfig, logger, cls, fileModel);
@@ -35,8 +36,24 @@ let MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter_1 = class Mong
     toEntity({ doc, }) {
         return Promise.resolve(file_entity_1.BaseFileEntity.build({ ...doc.toObject(), id: doc.id.toString() }));
     }
+    async systemFindByIdOrThrow({ id, previousSession }) {
+        const session = previousSession
+            ? previousSession.getSession()
+            : null;
+        const file = await this.model.findById(id).session(session);
+        if (!file) {
+            throw new common_1.NotFoundException('Arquivo não encontrado.');
+        }
+        return this.toEntity({ doc: file });
+    }
 };
 exports.MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter;
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MongoDbFilesRepositoryAdapter.prototype, "systemFindByIdOrThrow", null);
 exports.MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter = MongoDbFilesRepositoryAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),

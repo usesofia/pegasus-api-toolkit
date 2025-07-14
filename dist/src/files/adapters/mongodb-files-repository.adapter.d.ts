@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '../../config/base-config.entity';
 import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
+import { BaseSessionPort } from '../../database/base-session.port';
 export declare class MongoDbFilesRepositoryAdapter extends BaseMultitenantMongoDbRepositoryAdapter<MongoDbFileModel, BaseFileEntity, CreateFileRequestEntity, FindByIdFileRequestEntity, PartialUpdateFileRequestEntity> implements FilesRepositoryPort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;
@@ -20,5 +21,9 @@ export declare class MongoDbFilesRepositoryAdapter extends BaseMultitenantMongoD
     }): string;
     toEntity({ doc, }: {
         doc: MongoDbFileModel;
+    }): Promise<BaseFileEntity>;
+    systemFindByIdOrThrow({ id, previousSession }: {
+        id: string;
+        previousSession?: BaseSessionPort;
     }): Promise<BaseFileEntity>;
 }
