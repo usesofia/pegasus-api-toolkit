@@ -101,10 +101,10 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
         return files.map((file, index) => (file_entity_1.FileEntity.build({ ...file, signedUrl: signedUrls[index] })));
     }
     async enrichEntityWithFileSignedUrls(entity, buildableEntity) {
-        if (!entity.populatedFiles) {
+        if (!entity.files || entity.files.length === 0) {
             return entity;
         }
-        const populatedFiles = await this.getFilesSignedUrlsOrThrow(entity.populatedFiles);
+        const populatedFiles = await Promise.all(entity.files.map((fileId) => this.systemFindByIdOrThrow({ id: fileId })));
         return buildableEntity.build({ ...entity, populatedFiles });
     }
     async enrichEntitiesWithFileSignedUrls(entities, buildableEntity) {

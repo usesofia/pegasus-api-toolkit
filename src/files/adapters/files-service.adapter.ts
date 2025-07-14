@@ -132,11 +132,12 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
     entity: T,
     buildableEntity: BuildableEntity<T>,
   ): Promise<T> {
-    if (!entity.populatedFiles) {
+    if (!entity.files || entity.files.length === 0) {
       return entity;
     }
 
-    const populatedFiles = await this.getFilesSignedUrlsOrThrow(entity.populatedFiles);
+    const populatedFiles = await Promise.all(entity.files.map((fileId) => this.systemFindByIdOrThrow({ id: fileId })));
+
     return buildableEntity.build({ ...entity, populatedFiles });
   }
 

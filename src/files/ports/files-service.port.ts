@@ -7,6 +7,7 @@ import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 export const FILES_SERVICE_PORT = Symbol('FilesServicePort');
 
 export interface PopulatesFile {
+  files?: string[];
   populatedFiles?: FileEntity[];
 }
 export interface BuildableEntity<T> {

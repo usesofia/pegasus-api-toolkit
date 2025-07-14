@@ -5,6 +5,7 @@ import { RemoveFileRequestEntity } from '../../files/entities/remove-file-reques
 import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
 export declare const FILES_SERVICE_PORT: unique symbol;
 export interface PopulatesFile {
+    files?: string[];
     populatedFiles?: FileEntity[];
 }
 export interface BuildableEntity<T> {
