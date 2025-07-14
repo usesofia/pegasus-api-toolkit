@@ -1,6 +1,6 @@
 import { ConfirmFileUploadRequestEntity } from '@app/files/entities/confirm-file-upload-request.entity';
 import { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-upload-request.entity';
-import { BaseFileEntity, FileEntity } from '@app/files/entities/file.entity';
+import { BaseFileEntity, FileEntity, FileEntitySchema } from '@app/files/entities/file.entity';
 import { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import z from 'zod';
@@ -9,7 +9,7 @@ export const FILES_SERVICE_PORT = Symbol('FilesServicePort');
 
 export interface PopulatesFile {
   files?: string[];
-  populatedFiles?: z.infer<typeof FileEntity.schema>;
+  populatedFiles?: z.infer<typeof FileEntitySchema>[];
 }
 export interface BuildableEntity<T> {
   build: (entity: T) => T;
