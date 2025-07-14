@@ -45,6 +45,7 @@ exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule = __decorate
                         maxPoolSize: 150,
                         serverSelectionTimeoutMS: 60000,
                         socketTimeoutMS: 60000,
+                        connectTimeoutMS: 60000,
                     }).asPromise();
                 },
                 inject: [base_config_entity_1.BASE_CONFIG],

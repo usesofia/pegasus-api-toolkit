@@ -23,6 +23,7 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
           maxPoolSize: 150,
           serverSelectionTimeoutMS: 60000,
           socketTimeoutMS: 60000,
+          connectTimeoutMS: 60000,
         }).asPromise();
       },
       inject: [BASE_CONFIG],

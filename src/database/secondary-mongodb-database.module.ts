@@ -23,6 +23,7 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
           maxPoolSize: 150,
           serverSelectionTimeoutMS: 60000,
           socketTimeoutMS: 60000,
+          connectTimeoutMS: 60000,
         }).asPromise();
       },
       inject: [BASE_CONFIG],
