@@ -13,4 +13,5 @@ export declare class BaseMongoDbSessionAdapter extends Base implements BaseSessi
     endSession(): Promise<void>;
     withTransaction<T>(fn: () => Promise<T>, options?: TransactionOptions): Promise<T>;
     getSession(): ClientSession;
+    inTransaction(): boolean;
 }

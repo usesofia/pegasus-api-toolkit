@@ -11,4 +11,5 @@ export interface BaseSessionPort {
     options?: TransactionOptions,
   ): Promise<T>;
   getSession(): unknown;
+  inTransaction(): boolean;
 }

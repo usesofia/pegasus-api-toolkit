@@ -56,6 +56,9 @@ class BaseMongoDbSessionAdapter extends base_1.Base {
     getSession() {
         return this.session;
     }
+    inTransaction() {
+        return this.session.inTransaction();
+    }
 }
 exports.BaseMongoDbSessionAdapter = BaseMongoDbSessionAdapter;
 //# sourceMappingURL=base-mongodb-session.adapter.js.map

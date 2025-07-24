@@ -85,4 +85,8 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
   getSession(): ClientSession {
     return this.session;
   }
+
+  inTransaction(): boolean {
+    return this.session.inTransaction();
+  }
 }
