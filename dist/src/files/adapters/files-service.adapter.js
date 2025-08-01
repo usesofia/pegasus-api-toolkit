@@ -111,9 +111,13 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
         return Promise.all(entities.map((entity) => this.enrichEntityWithFileSignedUrls(entity, buildableEntity)));
     }
     async getSignedUrlFromUrl({ requester, url, }) {
-        const response = await axios_1.default.head(url);
-        if (response.status === 200) {
-            return url;
+        try {
+            const response = await axios_1.default.head(url);
+            if (response.status === 200) {
+                return url;
+            }
+        }
+        catch {
         }
         const objectName = this.objectStorageService.extractObjectNameFromUrl({ url });
         if (!objectName.startsWith(requester.getOrganizationOrThrow().id)) {

@@ -158,10 +158,14 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
     url: string;
   }): Promise<string> {
     // Checking if the url is public with axios
-    const response = await axios.head(url);
+    try {
+      const response = await axios.head(url);
     
-    if(response.status === 200) {
-      return url;
+      if(response.status === 200) {
+        return url;
+      }
+    } catch {
+      // If the url is not public, we need to check if it's a valid object name
     }
 
     const objectName = this.objectStorageService.extractObjectNameFromUrl({ url });
