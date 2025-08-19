@@ -180,6 +180,30 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
   }
 
   @Log()
+  async systemGetSignedUrlFromUrl({
+    url,
+  }: {
+    url: string;
+  }): Promise<string> {
+    // Checking if the url is public with axios
+    try {
+      const response = await axios.head(url);
+    
+      if(response.status === 200) {
+        return url;
+      }
+    } catch {
+      // If the url is not public, we need to check if it's a valid object name
+    }
+
+    const objectName = this.objectStorageService.extractObjectNameFromUrl({ url });
+
+    const signedUrl = await this.objectStorageService.createSignedDownloadUrl({ objectName, expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
+
+    return signedUrl;
+  }
+
+  @Log()
   async enhanceBaseFile(file: BaseFileEntity): Promise<FileEntity> {
     const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: Duration.fromObject({ days: 1 }).as('minutes') });
     const signedUrl = signedUrls[0];

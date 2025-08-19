@@ -39,6 +39,9 @@ export declare class FilesServiceAdapter extends Base implements FilesServicePor
         requester: AuthUserEntity;
         url: string;
     }): Promise<string>;
+    systemGetSignedUrlFromUrl({ url, }: {
+        url: string;
+    }): Promise<string>;
     enhanceBaseFile(file: BaseFileEntity): Promise<FileEntity>;
     private removeQueryParamsFromUrl;
     findByIdOrThrow({ requester, id, }: {

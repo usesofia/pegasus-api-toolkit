@@ -126,6 +126,19 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
         const signedUrl = await this.objectStorageService.createSignedDownloadUrl({ objectName, expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
         return signedUrl;
     }
+    async systemGetSignedUrlFromUrl({ url, }) {
+        try {
+            const response = await axios_1.default.head(url);
+            if (response.status === 200) {
+                return url;
+            }
+        }
+        catch {
+        }
+        const objectName = this.objectStorageService.extractObjectNameFromUrl({ url });
+        const signedUrl = await this.objectStorageService.createSignedDownloadUrl({ objectName, expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
+        return signedUrl;
+    }
     async enhanceBaseFile(file) {
         const signedUrls = await this.objectStorageService.createManySignedDownloadUrls({ objectNames: [file.objectName], expiresInMinutes: luxon_1.Duration.fromObject({ days: 1 }).as('minutes') });
         const signedUrl = signedUrls[0];
@@ -197,6 +210,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], FilesServiceAdapter.prototype, "getSignedUrlFromUrl", null);
+__decorate([
+    (0, log_utils_1.Log)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FilesServiceAdapter.prototype, "systemGetSignedUrlFromUrl", null);
 __decorate([
     (0, log_utils_1.Log)(),
     __metadata("design:type", Function),

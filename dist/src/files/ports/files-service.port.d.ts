@@ -35,6 +35,9 @@ export interface FilesServicePort {
         requester: AuthUserEntity;
         url: string;
     }): Promise<string>;
+    systemGetSignedUrlFromUrl({ url, }: {
+        url: string;
+    }): Promise<string>;
     findByIdOrThrow({ requester, id, }: {
         requester: AuthUserEntity;
         id: string;

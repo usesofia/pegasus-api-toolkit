@@ -51,6 +51,12 @@ export interface FilesServicePort {
     url: string;
   }): Promise<string>;
 
+  systemGetSignedUrlFromUrl({
+    url,
+  }: {
+    url: string;
+  }): Promise<string>;
+
   findByIdOrThrow({
     requester,
     id,
