@@ -86,7 +86,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   async findByIdOrThrow({
     request,
     previousSession,
-    maxTimeMS = 30000,
+    maxTimeMS = 4000,
   }: {
     request: TFindOneRequest & { populate?: string };
     previousSession?: BaseSessionPort;

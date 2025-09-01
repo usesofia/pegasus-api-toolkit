@@ -109,7 +109,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     requester,
     request,
     previousSession,
-    maxTimeMS = 30000,
+    maxTimeMS = 4000,
   }: {
     requester: AuthUserEntity;
     request: TFindOneRequest & { populate?: string };
