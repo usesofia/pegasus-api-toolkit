@@ -26,9 +26,9 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
           maxIdleTimeMS: 60000,
 
           // Timeouts (não deixar nada "infinito")
-          serverSelectionTimeoutMS: 5000,
-          connectTimeoutMS: 10000,
-          socketTimeoutMS: 30000,
+          serverSelectionTimeoutMS: 30000,
+          connectTimeoutMS: 30000,
+          socketTimeoutMS: 60000,
 
           // Boas práticas p/ prod
           family: 4,         // força IPv4 no driver (pass-through)

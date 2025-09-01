@@ -109,10 +109,12 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     requester,
     request,
     previousSession,
+    maxTimeMS = 30000,
   }: {
     requester: AuthUserEntity;
     request: TFindOneRequest & { populate?: string };
     previousSession?: BaseSessionPort;
+    maxTimeMS?: number;
   }): Promise<TEntity> {
     const session = previousSession
       ? (previousSession.getSession() as ClientSession)
@@ -124,7 +126,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
         ownerOrganization: this.getOwnerOrganization({ requester }),
         deletedAt: null,
       },
-    ).session(session);
+    ).session(session).maxTimeMS(maxTimeMS);
 
     if (!doc) {
       throw new NotFoundException(
