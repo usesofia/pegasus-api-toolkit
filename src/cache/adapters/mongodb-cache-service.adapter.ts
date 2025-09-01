@@ -71,7 +71,7 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
     const record = await this.cacheModel.findOne({
       key: finalKey,
       expiresAt: { $gt: now },
-    });
+    }).maxTimeMS(2000);
 
     if (!record) {
       return null;
