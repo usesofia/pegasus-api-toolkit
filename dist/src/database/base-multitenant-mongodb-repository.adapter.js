@@ -50,7 +50,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         }
         return this.toEntity({ doc: created, requester });
     }
-    async findByIdOrThrow({ requester, request, previousSession, maxTimeMS = 4000, }) {
+    async findByIdOrThrow({ requester, request, previousSession, maxTimeMS = 2000, }) {
         const session = previousSession
             ? previousSession.getSession()
             : null;

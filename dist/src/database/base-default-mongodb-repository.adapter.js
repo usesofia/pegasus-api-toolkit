@@ -44,7 +44,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         }
         return this.toEntity(created);
     }
-    async findByIdOrThrow({ request, previousSession, maxTimeMS = 4000, }) {
+    async findByIdOrThrow({ request, previousSession, maxTimeMS = 2000, }) {
         const session = previousSession
             ? previousSession.getSession()
             : null;
