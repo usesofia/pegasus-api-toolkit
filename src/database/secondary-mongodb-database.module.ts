@@ -20,12 +20,18 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
         }
         const secondaryMongoDatabase = mongoDatabases[1];
         return await mongoose.createConnection(secondaryMongoDatabase.uri, {
-          maxPoolSize: 150,
-          maxIdleTimeMS: 80000,
-          serverSelectionTimeoutMS: 80000,
-          socketTimeoutMS: 0,
-          connectTimeoutMS: 0
+          // Pool
+          maxPoolSize: 50,
+          minPoolSize: 5,
+          maxIdleTimeMS: 60000,
 
+          // Timeouts (não deixar nada "infinito")
+          serverSelectionTimeoutMS: 5000,
+          connectTimeoutMS: 10000,
+          socketTimeoutMS: 30000,
+
+          // Boas práticas p/ prod
+          family: 4,         // força IPv4 no driver (pass-through)
         }).asPromise();
       },
       inject: [BASE_CONFIG],

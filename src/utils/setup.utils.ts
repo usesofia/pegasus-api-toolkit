@@ -10,6 +10,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import mongoose from 'mongoose';
 import { ClsService } from 'nestjs-cls';
 import { patchNestJsSwagger, ZodValidationPipe } from 'nestjs-zod';
+import dns from 'dns';
+
+dns.setDefaultResultOrder('ipv4first');
 
 mongoose.Schema.Types.String.checkRequired((v: unknown) => v !== null && v !== undefined);
 
