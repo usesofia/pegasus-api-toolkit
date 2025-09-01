@@ -28,11 +28,12 @@ export declare abstract class BaseDefaultMongoDbRepositoryAdapter<TDoc extends D
         };
         previousSession?: BaseSessionPort;
     }): Promise<TEntity>;
-    findByIdOrThrow({ request, previousSession, }: {
+    findByIdOrThrow({ request, previousSession, maxTimeMS, }: {
         request: TFindOneRequest & {
             populate?: string;
         };
         previousSession?: BaseSessionPort;
+        maxTimeMS?: number;
     }): Promise<TEntity>;
     findById({ request, previousSession, }: {
         request: TFindOneRequest & {

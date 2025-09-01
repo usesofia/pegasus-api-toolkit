@@ -42,11 +42,13 @@ exports.SecondaryMongoDbDatabaseModule = SecondaryMongoDbDatabaseModule = __deco
                     }
                     const secondaryMongoDatabase = mongoDatabases[1];
                     return await mongoose_1.default.createConnection(secondaryMongoDatabase.uri, {
-                        maxPoolSize: 150,
-                        maxIdleTimeMS: 80000,
-                        serverSelectionTimeoutMS: 80000,
-                        socketTimeoutMS: 0,
-                        connectTimeoutMS: 0
+                        maxPoolSize: 50,
+                        minPoolSize: 5,
+                        maxIdleTimeMS: 60000,
+                        serverSelectionTimeoutMS: 30000,
+                        connectTimeoutMS: 30000,
+                        socketTimeoutMS: 60000,
+                        family: 4,
                     }).asPromise();
                 },
                 inject: [base_config_entity_1.BASE_CONFIG],

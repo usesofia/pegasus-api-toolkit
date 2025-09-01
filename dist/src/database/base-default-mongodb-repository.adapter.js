@@ -44,14 +44,14 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         }
         return this.toEntity(created);
     }
-    async findByIdOrThrow({ request, previousSession, }) {
+    async findByIdOrThrow({ request, previousSession, maxTimeMS = 30000, }) {
         const session = previousSession
             ? previousSession.getSession()
             : null;
         const doc = await this.model.findOne({
             _id: request.id,
             deletedAt: null,
-        }).session(session);
+        }).session(session).maxTimeMS(maxTimeMS);
         if (!doc) {
             throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }

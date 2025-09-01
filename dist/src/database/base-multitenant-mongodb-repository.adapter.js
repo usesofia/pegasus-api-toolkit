@@ -50,7 +50,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         }
         return this.toEntity({ doc: created, requester });
     }
-    async findByIdOrThrow({ requester, request, previousSession, }) {
+    async findByIdOrThrow({ requester, request, previousSession, maxTimeMS = 30000, }) {
         const session = previousSession
             ? previousSession.getSession()
             : null;
@@ -58,7 +58,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             _id: request.id,
             ownerOrganization: this.getOwnerOrganization({ requester }),
             deletedAt: null,
-        }).session(session);
+        }).session(session).maxTimeMS(maxTimeMS);
         if (!doc) {
             throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }

@@ -15,6 +15,8 @@ const swagger_1 = require("@nestjs/swagger");
 const mongoose_1 = __importDefault(require("mongoose"));
 const nestjs_cls_1 = require("nestjs-cls");
 const nestjs_zod_1 = require("nestjs-zod");
+const dns_1 = __importDefault(require("dns"));
+dns_1.default.setDefaultResultOrder('ipv4first');
 mongoose_1.default.Schema.Types.String.checkRequired((v) => v !== null && v !== undefined);
 function setupApp({ app, version, }) {
     app

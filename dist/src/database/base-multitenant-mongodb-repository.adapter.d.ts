@@ -37,12 +37,13 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
         };
         previousSession?: BaseSessionPort;
     }): Promise<TEntity>;
-    findByIdOrThrow({ requester, request, previousSession, }: {
+    findByIdOrThrow({ requester, request, previousSession, maxTimeMS, }: {
         requester: AuthUserEntity;
         request: TFindOneRequest & {
             populate?: string;
         };
         previousSession?: BaseSessionPort;
+        maxTimeMS?: number;
     }): Promise<TEntity>;
     findById({ requester, request, previousSession, }: {
         requester: AuthUserEntity;
