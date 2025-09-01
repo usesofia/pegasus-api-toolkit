@@ -68,7 +68,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   protected buildPopulatePaths(populate: string, session?: ClientSession): PopulateOptions[] {
     return populate.split(',').map((field) => ({
       path: field.trim(),
-      options: session ? { session } : undefined,
+      options: session ? { session, maxTimeMS: 2000 } : undefined,
     }));
   }
 

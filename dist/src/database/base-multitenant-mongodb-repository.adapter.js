@@ -34,7 +34,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
     buildPopulatePaths(populate, session) {
         return populate.split(',').map((field) => ({
             path: field.trim(),
-            options: session ? { session } : undefined,
+            options: session ? { session, maxTimeMS: 2000 } : undefined,
         }));
     }
     async create({ requester, request, previousSession, }) {
