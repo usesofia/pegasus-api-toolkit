@@ -25,6 +25,26 @@ __decorate([
     __metadata("design:type", String)
 ], MongoDbOrganizationModel.prototype, "organizationName", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: Date, required: true }),
+    __metadata("design:type", Date)
+], MongoDbOrganizationModel.prototype, "organizationCreatedAt", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, enum: Object.values(sync_organizations_constants_1.OrganizationSubscriptionStatus), required: true }),
+    __metadata("design:type", String)
+], MongoDbOrganizationModel.prototype, "organizationSubscriptionStatus", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, enum: Object.values(sync_organizations_constants_1.OrganizationSubtype), required: true }),
+    __metadata("design:type", String)
+], MongoDbOrganizationModel.prototype, "organizationSubtype", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, required: false, default: null }),
+    __metadata("design:type", Object)
+], MongoDbOrganizationModel.prototype, "bpoOfficeOrganizationId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, required: false, default: null }),
+    __metadata("design:type", Object)
+], MongoDbOrganizationModel.prototype, "bpoOfficeName", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: Date, required: false }),
     __metadata("design:type", Date)
 ], MongoDbOrganizationModel.prototype, "createdAt", void 0);

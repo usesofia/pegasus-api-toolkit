@@ -4,9 +4,11 @@ import { BASE_CONFIG, BaseConfigEntity } from "@app/config/base-config.entity";
 import { LOGGER_SERVICE_PORT } from "@app/logger/logger.module";
 import { ORGANIZATIONS_REPOSITORY_PORT, OrganizationsRepositoryPort } from "@app/sync-organizations/ports/organizations-repository.port";
 import { SyncOrganizationsServicePort } from "@app/sync-organizations/ports/sync-organizations-service.port";
+import { OrganizationSubscriptionStatus, OrganizationSubtype } from "@app/sync-organizations/sync-organizations.constants";
 import { Organization } from "@clerk/backend";
 import { Inject, LoggerService } from "@nestjs/common";
 import { ClerkClient } from "@usesofia/clerk-backend";
+import { DateTime } from "luxon";
 import { ClsService } from "nestjs-cls";
 
 export class ClerkSyncOrganizationsServiceAdapter extends Base implements SyncOrganizationsServicePort {
@@ -51,6 +53,11 @@ export class ClerkSyncOrganizationsServiceAdapter extends Base implements SyncOr
         await this.organizationsRepository.createOrUpdate({
           organizationId: organization.id,
           organizationName: organization.name,
+          organizationCreatedAt: DateTime.fromMillis(organization.createdAt).toJSDate(),
+          organizationSubscriptionStatus: (organization.publicMetadata?.subscriptionStatus ?? OrganizationSubscriptionStatus.TRIAL) as OrganizationSubscriptionStatus,
+          organizationSubtype: (organization.publicMetadata?.subtype ?? OrganizationSubtype.DEFAULT_BUSINESS) as OrganizationSubtype,
+          bpoOfficeOrganizationId: (organization.publicMetadata?.bpoOfficeOrganizationId ?? null) as string | null,
+          bpoOfficeName: (organization.publicMetadata?.bpoOfficeName ?? null) as string | null,
         });
       } catch (error) {
         this.logWarn({

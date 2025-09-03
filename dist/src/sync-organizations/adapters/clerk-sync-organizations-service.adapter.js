@@ -19,8 +19,10 @@ const clerk_constants_1 = require("../../clerk/clerk.constants");
 const base_config_entity_1 = require("../../config/base-config.entity");
 const logger_module_1 = require("../../logger/logger.module");
 const organizations_repository_port_1 = require("../ports/organizations-repository.port");
+const sync_organizations_constants_1 = require("../sync-organizations.constants");
 const common_1 = require("@nestjs/common");
 const clerk_backend_1 = require("@usesofia/clerk-backend");
+const luxon_1 = require("luxon");
 const nestjs_cls_1 = require("nestjs-cls");
 let ClerkSyncOrganizationsServiceAdapter = ClerkSyncOrganizationsServiceAdapter_1 = class ClerkSyncOrganizationsServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, organizationsRepository, clerkClient) {
@@ -57,6 +59,11 @@ let ClerkSyncOrganizationsServiceAdapter = ClerkSyncOrganizationsServiceAdapter_
                 await this.organizationsRepository.createOrUpdate({
                     organizationId: organization.id,
                     organizationName: organization.name,
+                    organizationCreatedAt: luxon_1.DateTime.fromMillis(organization.createdAt).toJSDate(),
+                    organizationSubscriptionStatus: (organization.publicMetadata?.subscriptionStatus ?? sync_organizations_constants_1.OrganizationSubscriptionStatus.TRIAL),
+                    organizationSubtype: (organization.publicMetadata?.subtype ?? sync_organizations_constants_1.OrganizationSubtype.DEFAULT_BUSINESS),
+                    bpoOfficeOrganizationId: (organization.publicMetadata?.bpoOfficeOrganizationId ?? null),
+                    bpoOfficeName: (organization.publicMetadata?.bpoOfficeName ?? null),
                 });
             }
             catch (error) {
