@@ -29,8 +29,15 @@ let MongoDbOrganizationsRepositoryAdapter = MongoDbOrganizationsRepositoryAdapte
         this.cls = cls;
         this.model = model;
     }
-    async createOrUpdate({ organizationId, organizationName }) {
-        await this.model.updateOne({ organizationId }, { organizationName }, { upsert: true });
+    async createOrUpdate({ organizationId, organizationName, organizationCreatedAt, organizationSubscriptionStatus, organizationSubtype, bpoOfficeOrganizationId, bpoOfficeName, }) {
+        await this.model.updateOne({ organizationId }, {
+            organizationName,
+            organizationCreatedAt,
+            organizationSubscriptionStatus,
+            organizationSubtype,
+            bpoOfficeOrganizationId,
+            bpoOfficeName,
+        }, { upsert: true });
     }
 };
 exports.MongoDbOrganizationsRepositoryAdapter = MongoDbOrganizationsRepositoryAdapter;
