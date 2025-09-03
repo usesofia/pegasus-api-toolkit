@@ -45,7 +45,7 @@ __decorate([
     }),
     (0, ignore_auth_guard_decorator_1.IgnoreAuthGuard)(),
     (0, common_1.UseGuards)(gcp_service_account_guard_1.GcpServiceAccountGuard),
-    (0, common_1.Post)('/external/sync-organizations'),
+    (0, common_1.Post)('/internal/sync-organizations'),
     (0, log_utils_1.Log)('controller'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

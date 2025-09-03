@@ -42,7 +42,7 @@ export class SyncOrganizationsController extends Base {
   })
   @IgnoreAuthGuard()
   @UseGuards(GcpServiceAccountGuard)
-  @Post('/external/sync-organizations')
+  @Post('/internal/sync-organizations')
   @Log('controller')
   async syncOrganizations(
   ): Promise<void> {
