@@ -4,6 +4,7 @@ import { PRIMARY_MONGOOSE_CONNECTION } from '@app/database/primary-mongodb-datab
 import { ClerkSyncOrganizationsServiceAdapter } from '@app/sync-organizations/adapters/clerk-sync-organizations-service.adapter';
 import { MongoDbOrganizationsRepositoryAdapter } from '@app/sync-organizations/adapters/mongodb-organizations-repository.adapter';
 import { MongoDbOrganizationModelSchema } from '@app/sync-organizations/mongodb-organization-model';
+import { ORGANIZATIONS_REPOSITORY_PORT } from '@app/sync-organizations/ports/organizations-repository.port';
 import { SYNC_ORGANIZATIONS_SERVICE_PORT } from '@app/sync-organizations/ports/sync-organizations-service.port';
 import { ORGANIZATION_COLLECTION_NAME, ORGANIZATION_MODEL } from '@app/sync-organizations/sync-organizations.constants';
 import { SyncOrganizationsController } from '@app/sync-organizations/sync-organizations.controller';
@@ -18,7 +19,10 @@ import { Connection } from 'mongoose';
   ],
   controllers: [SyncOrganizationsController],
   providers: [
-    MongoDbOrganizationsRepositoryAdapter,
+    {
+      provide: ORGANIZATIONS_REPOSITORY_PORT,
+      useClass: MongoDbOrganizationsRepositoryAdapter,
+    },
     {
       provide: ORGANIZATION_MODEL,
       useFactory: (connection: Connection) => {

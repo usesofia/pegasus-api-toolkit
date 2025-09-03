@@ -19,6 +19,7 @@ const primary_mongodb_database_module_1 = require("../database/primary-mongodb-d
 const clerk_sync_organizations_service_adapter_1 = require("./adapters/clerk-sync-organizations-service.adapter");
 const mongodb_organizations_repository_adapter_1 = require("./adapters/mongodb-organizations-repository.adapter");
 const mongodb_organization_model_1 = require("./mongodb-organization-model");
+const organizations_repository_port_1 = require("./ports/organizations-repository.port");
 const sync_organizations_service_port_1 = require("./ports/sync-organizations-service.port");
 const sync_organizations_constants_1 = require("./sync-organizations.constants");
 const sync_organizations_controller_1 = require("./sync-organizations.controller");
@@ -48,7 +49,10 @@ exports.SyncOrganizationsModule = SyncOrganizationsModule = __decorate([
         ],
         controllers: [sync_organizations_controller_1.SyncOrganizationsController],
         providers: [
-            mongodb_organizations_repository_adapter_1.MongoDbOrganizationsRepositoryAdapter,
+            {
+                provide: organizations_repository_port_1.ORGANIZATIONS_REPOSITORY_PORT,
+                useClass: mongodb_organizations_repository_adapter_1.MongoDbOrganizationsRepositoryAdapter,
+            },
             {
                 provide: sync_organizations_constants_1.ORGANIZATION_MODEL,
                 useFactory: (connection) => {
