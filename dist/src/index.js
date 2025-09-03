@@ -120,4 +120,12 @@ __exportStar(require("./files/ports/files-repository.port"), exports);
 __exportStar(require("./email/email.module"), exports);
 __exportStar(require("./email/email-service.port"), exports);
 __exportStar(require("./email/adapters/sendgrid-email-service.adapter"), exports);
+__exportStar(require("./sync-organizations/sync-organizations.module"), exports);
+__exportStar(require("./sync-organizations/sync-organizations.controller"), exports);
+__exportStar(require("./sync-organizations/ports/sync-organizations-service.port"), exports);
+__exportStar(require("./sync-organizations/ports/organizations-repository.port"), exports);
+__exportStar(require("./sync-organizations/adapters/clerk-sync-organizations-service.adapter"), exports);
+__exportStar(require("./sync-organizations/adapters/mongodb-organizations-repository.adapter"), exports);
+__exportStar(require("./sync-organizations/mongodb-organization-model"), exports);
+__exportStar(require("./sync-organizations/sync-organizations.constants"), exports);
 //# sourceMappingURL=index.js.map
