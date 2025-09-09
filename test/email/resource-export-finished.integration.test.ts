@@ -51,6 +51,7 @@ describe('Email.send.resource-export-finished', () => {
     const email: z.input<typeof EmailSchema> = {
       template: EmailTemplate.RESOURCE_EXPORT_FINISHED,
       data: {
+        organizationName: 'Embraer',
         resourceName: 'Lançamentos Financeiros',
         downloadUrl: 'https://example.com/download/export-123.csv',
         filters: ['Período: Janeiro 2024', 'Status: Ativo', 'Categoria: Receitas'],
@@ -75,6 +76,7 @@ describe('Email.send.resource-export-finished', () => {
     const email: z.input<typeof EmailSchema> = {
       template: EmailTemplate.RESOURCE_EXPORT_FINISHED,
       data: {
+        organizationName: 'Embraer',
         resourceName: 'Relatório de Vendas',
         downloadUrl: 'https://example.com/download/export-456.xlsx',
         filters: ['Região: Sudeste', 'Produto: Eletrônicos'],
@@ -99,6 +101,7 @@ describe('Email.send.resource-export-finished', () => {
     const email: z.input<typeof EmailSchema> = {
       template: EmailTemplate.RESOURCE_EXPORT_FINISHED,
       data: {
+        organizationName: 'Embraer',
         resourceName: 'Todos os Clientes',
         downloadUrl: 'https://example.com/download/export-789.csv',
         filters: [],

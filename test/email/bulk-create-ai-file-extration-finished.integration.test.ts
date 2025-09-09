@@ -51,6 +51,7 @@ describe('Email.send.bulk-create-ai-file-extration-finished', () => {
     const email: z.input<typeof EmailSchema> = {
       template: EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED,
       data: {
+        organizationName: 'Embraer',
         name: 'Marco',
         fileName: 'financials.csv',
         nFinancialRecords: 42,
