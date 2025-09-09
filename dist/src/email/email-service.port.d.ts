@@ -7,17 +7,20 @@ export declare enum EmailTemplate {
 export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template", [z.ZodObject<{
     template: z.ZodLiteral<EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED>;
     data: z.ZodObject<{
+        organizationName: z.ZodString;
         name: z.ZodString;
         fileName: z.ZodString;
         nFinancialRecords: z.ZodNumber;
         continueUrl: z.ZodString;
     }, "strip", z.ZodTypeAny, {
         name: string;
+        organizationName: string;
         fileName: string;
         nFinancialRecords: number;
         continueUrl: string;
     }, {
         name: string;
+        organizationName: string;
         fileName: string;
         nFinancialRecords: number;
         continueUrl: string;
@@ -25,6 +28,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
 }, "strip", z.ZodTypeAny, {
     data: {
         name: string;
+        organizationName: string;
         fileName: string;
         nFinancialRecords: number;
         continueUrl: string;
@@ -33,6 +37,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
 }, {
     data: {
         name: string;
+        organizationName: string;
         fileName: string;
         nFinancialRecords: number;
         continueUrl: string;
@@ -41,17 +46,20 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
 }>, z.ZodObject<{
     template: z.ZodLiteral<EmailTemplate.RESOURCE_EXPORT_FINISHED>;
     data: z.ZodObject<{
+        organizationName: z.ZodString;
         resourceName: z.ZodString;
         downloadUrl: z.ZodString;
         filters: z.ZodArray<z.ZodString, "many">;
         fileType: z.ZodEnum<["csv", "excel"]>;
     }, "strip", z.ZodTypeAny, {
         fileType: "csv" | "excel";
+        organizationName: string;
         resourceName: string;
         downloadUrl: string;
         filters: string[];
     }, {
         fileType: "csv" | "excel";
+        organizationName: string;
         resourceName: string;
         downloadUrl: string;
         filters: string[];
@@ -59,6 +67,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
 }, "strip", z.ZodTypeAny, {
     data: {
         fileType: "csv" | "excel";
+        organizationName: string;
         resourceName: string;
         downloadUrl: string;
         filters: string[];
@@ -67,6 +76,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
 }, {
     data: {
         fileType: "csv" | "excel";
+        organizationName: string;
         resourceName: string;
         downloadUrl: string;
         filters: string[];
@@ -76,6 +86,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
     getSubject: () => string;
     data: {
         name: string;
+        organizationName: string;
         fileName: string;
         nFinancialRecords: number;
         continueUrl: string;
@@ -85,6 +96,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
     getSubject: () => string;
     data: {
         fileType: "csv" | "excel";
+        organizationName: string;
         resourceName: string;
         downloadUrl: string;
         filters: string[];
@@ -93,6 +105,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
 }, {
     data: {
         name: string;
+        organizationName: string;
         fileName: string;
         nFinancialRecords: number;
         continueUrl: string;
@@ -101,6 +114,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
 } | {
     data: {
         fileType: "csv" | "excel";
+        organizationName: string;
         resourceName: string;
         downloadUrl: string;
         filters: string[];

@@ -15,6 +15,7 @@ exports.EmailSchema = zod_1.default.discriminatedUnion("template", [
     zod_1.default.object({
         template: zod_1.default.literal(EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED),
         data: zod_1.default.object({
+            organizationName: zod_1.default.string(),
             name: zod_1.default.string(),
             fileName: zod_1.default.string(),
             nFinancialRecords: zod_1.default.number(),
@@ -24,6 +25,7 @@ exports.EmailSchema = zod_1.default.discriminatedUnion("template", [
     zod_1.default.object({
         template: zod_1.default.literal(EmailTemplate.RESOURCE_EXPORT_FINISHED),
         data: zod_1.default.object({
+            organizationName: zod_1.default.string(),
             resourceName: zod_1.default.string(),
             downloadUrl: zod_1.default.string(),
             filters: zod_1.default.array(zod_1.default.string()),
@@ -36,9 +38,9 @@ exports.EmailSchema = zod_1.default.discriminatedUnion("template", [
         getSubject: () => {
             switch (data.template) {
                 case EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED:
-                    return `Processamento de arquivo para criação de lançamentos financeiros em lote finalizado!`;
+                    return `[${data.data.organizationName}] Processamento de arquivo para criação de lançamentos financeiros em lote finalizado!`;
                 case EmailTemplate.RESOURCE_EXPORT_FINISHED:
-                    return `Exportação de "${data.data.resourceName}" finalizada!`;
+                    return `[${data.data.organizationName}] Exportação de "${data.data.resourceName}" finalizada!`;
             }
         },
     };
