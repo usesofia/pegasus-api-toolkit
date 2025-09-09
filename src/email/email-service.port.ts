@@ -32,9 +32,11 @@ export const EmailSchema = z.discriminatedUnion("template", [
 export interface EmailServicePort {
   send({
     email,
+    from,
     to,
   }: {
     email: z.output<typeof EmailSchema>,
+    from?: 'notificacoes@usesofia.com' | 'sofia@usesofia.com' | 'noreply@usesofia.com',
     to: string,
   }): Promise<void>;
 }

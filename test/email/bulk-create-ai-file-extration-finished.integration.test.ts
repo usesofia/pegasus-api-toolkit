@@ -61,6 +61,7 @@ describe('Email.send.bulk-create-ai-file-extration-finished', () => {
     // Act
     await emailService.send({
       to,
+      from: 'notificacoes@usesofia.com',
       email: EmailSchema.parse(email),
     });
 

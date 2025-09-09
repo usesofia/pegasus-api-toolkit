@@ -29,9 +29,11 @@ export class SendgridEmailServiceAdapter extends Base implements EmailServicePor
   async send({
     email,
     to,
+    from = 'notificacoes@usesofia.com',
   }: {
     email: z.output<typeof EmailSchema>,
     to: string;
+    from?: 'notificacoes@usesofia.com' | 'sofia@usesofia.com' | 'noreply@usesofia.com';
   }): Promise<void> {
     const templatePath = path.join(
       __dirname,
@@ -43,9 +45,13 @@ export class SendgridEmailServiceAdapter extends Base implements EmailServicePor
     const compiledTemplate = handlebars.compile(templateSource);
     const html = compiledTemplate(email.data);
 
-    const msg = {
+
+    const msg: sgMail.MailDataRequired = {
       to,
-      from: 'sofia@usesofia.com',
+      from: {
+        name: 'Sofia',
+        email: from,
+      },
       subject: email.getSubject(),
       html,
     };
