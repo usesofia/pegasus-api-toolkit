@@ -61,6 +61,7 @@ const path = __importStar(require("path"));
 const handlebars = __importStar(require("handlebars"));
 const log_utils_1 = require("../../utils/log.utils");
 const email_constants_1 = require("../email.constants");
+handlebars.registerHelper('eq', (a, b) => a === b);
 let SendgridEmailServiceAdapter = SendgridEmailServiceAdapter_1 = class SendgridEmailServiceAdapter extends base_1.Base {
     constructor(baseConfig, logger, cls, sgMail) {
         super(SendgridEmailServiceAdapter_1.name, baseConfig, logger, cls);

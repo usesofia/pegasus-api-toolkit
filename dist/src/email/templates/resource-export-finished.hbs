@@ -147,7 +147,7 @@
                                                             A exportação do recurso <strong>{{ resourceName }}</strong> foi concluída com sucesso!
                                                         </p>
                                                         <p align="left" style="padding: 0px; margin: 16px 0px 0px; font-family: Helvetica, Arial, sans-serif; color: #000000; font-size: 14px; line-height: 21px;">
-                                                            O arquivo foi gerado no formato <strong>{{#if fileType}}{{#if fileType}}CSV{{else}}Excel{{/if}}{{else}}CSV{{/if}}</strong> e está pronto para download.
+                                                            O arquivo foi gerado no formato <strong>{{#if (eq fileType "csv")}}CSV{{else}}Excel{{/if}}</strong> e está pronto para download.
                                                         </p>
                                                         {{#if filters}}
                                                         <p align="left" style="padding: 0px; margin: 16px 0px 0px; font-family: Helvetica, Arial, sans-serif; color: #000000; font-size: 14px; line-height: 21px;">

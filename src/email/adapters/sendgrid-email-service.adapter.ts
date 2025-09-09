@@ -12,6 +12,8 @@ import { Log } from '@app/utils/log.utils';
 import z from 'zod';
 import { SENDGRID_CLIENT } from '@app/email/email.constants';
 
+handlebars.registerHelper('eq', (a, b) => a === b);
+
 @Injectable()
 export class SendgridEmailServiceAdapter extends Base implements EmailServicePort {
   constructor(
