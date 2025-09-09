@@ -45,7 +45,6 @@ export class SendgridEmailServiceAdapter extends Base implements EmailServicePor
     const compiledTemplate = handlebars.compile(templateSource);
     const html = compiledTemplate(email.data);
 
-
     const msg: sgMail.MailDataRequired = {
       to,
       from: {

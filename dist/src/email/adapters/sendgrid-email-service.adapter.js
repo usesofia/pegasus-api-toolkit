@@ -69,14 +69,17 @@ let SendgridEmailServiceAdapter = SendgridEmailServiceAdapter_1 = class Sendgrid
         this.cls = cls;
         this.sgMail = sgMail;
     }
-    async send({ email, to, }) {
+    async send({ email, to, from = 'notificacoes@usesofia.com', }) {
         const templatePath = path.join(__dirname, '..', 'templates', `${email.template}.hbs`);
         const templateSource = await fs.readFile(templatePath, 'utf-8');
         const compiledTemplate = handlebars.compile(templateSource);
         const html = compiledTemplate(email.data);
         const msg = {
             to,
-            from: 'sofia@usesofia.com',
+            from: {
+                name: 'Sofia',
+                email: from,
+            },
             subject: email.getSubject(),
             html,
         };

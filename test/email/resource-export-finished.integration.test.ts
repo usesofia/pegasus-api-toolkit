@@ -1,0 +1,119 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import { EmailModule } from '../../src/email/email.module';
+import { EmailServicePort, EMAIL_SERVICE_PORT, EmailTemplate, EmailSchema } from '../../src/email/email-service.port';
+import { buildClerkClientMock } from '../../src/utils/clerk.utils';
+import z from 'zod';
+import { BASE_CONFIG } from '@app/config/base-config.entity';
+import { BaseConfigModule } from '@app/config/base-config.module';
+import { LoggerModule } from '@app/logger/logger.module';
+import { buildClsModule } from '@app/utils/test.utils';
+
+describe('Email.send.resource-export-finished', () => {
+  let app: INestApplication;
+  let emailService: EmailServicePort;
+  const clerkMock = buildClerkClientMock();
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [EmailModule, BaseConfigModule, LoggerModule, buildClsModule()],
+    })
+      .overrideProvider(BASE_CONFIG)
+      .useValue({
+        env: 'integration-test',
+        logger: {
+          level: 'log',
+          consoleLog: false,
+          betterStackSourceToken: process.env.BETTER_STACK_SOURCE_TOKEN,
+          betterStackEndpoint: 'https://s1353310.us-east-9.betterstackdata.com',
+        },
+        email: {
+          sendgrid: {
+            apiKey: process.env.SENDGRID_API_KEY,
+          },
+        },
+      })
+      .compile();
+
+    app = moduleFixture.createNestApplication();
+    await app.init();
+
+    emailService = app.get<EmailServicePort>(EMAIL_SERVICE_PORT);
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('should send a resource export finished email with CSV file type', async () => {
+    // Arrange
+    const to = 'marco@usesofia.com';
+    const email: z.input<typeof EmailSchema> = {
+      template: EmailTemplate.RESOURCE_EXPORT_FINISHED,
+      data: {
+        resourceName: 'Lançamentos Financeiros',
+        downloadUrl: 'https://example.com/download/export-123.csv',
+        filters: ['Período: Janeiro 2024', 'Status: Ativo', 'Categoria: Receitas'],
+        fileType: 'csv',
+      },
+    };
+
+    // Act
+    await emailService.send({
+      to,
+      from: 'notificacoes@usesofia.com',
+      email: EmailSchema.parse(email),
+    });
+
+    // Assert
+    // Check the email...
+  });
+
+  it('should send a resource export finished email with Excel file type', async () => {
+    // Arrange
+    const to = 'marco@usesofia.com';
+    const email: z.input<typeof EmailSchema> = {
+      template: EmailTemplate.RESOURCE_EXPORT_FINISHED,
+      data: {
+        resourceName: 'Relatório de Vendas',
+        downloadUrl: 'https://example.com/download/export-456.xlsx',
+        filters: ['Região: Sudeste', 'Produto: Eletrônicos'],
+        fileType: 'excel',
+      },
+    };
+
+    // Act
+    await emailService.send({
+      to,
+      from: 'notificacoes@usesofia.com',
+      email: EmailSchema.parse(email),
+    });
+
+    // Assert
+    // Check the email...
+  });
+
+  it('should send a resource export finished email without filters', async () => {
+    // Arrange
+    const to = 'marco@usesofia.com';
+    const email: z.input<typeof EmailSchema> = {
+      template: EmailTemplate.RESOURCE_EXPORT_FINISHED,
+      data: {
+        resourceName: 'Todos os Clientes',
+        downloadUrl: 'https://example.com/download/export-789.csv',
+        filters: [],
+        fileType: 'csv',
+      },
+    };
+
+    // Act
+    await emailService.send({
+      to,
+      from: 'notificacoes@usesofia.com',
+      email: EmailSchema.parse(email),
+    });
+
+    // Assert
+    // Check the email...
+  });
+});

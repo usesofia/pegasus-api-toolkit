@@ -11,8 +11,9 @@ export declare class SendgridEmailServiceAdapter extends Base implements EmailSe
     protected readonly cls: ClsService;
     protected readonly sgMail: sgMail.MailService;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, sgMail: sgMail.MailService);
-    send({ email, to, }: {
+    send({ email, to, from, }: {
         email: z.output<typeof EmailSchema>;
         to: string;
+        from?: 'notificacoes@usesofia.com' | 'sofia@usesofia.com' | 'noreply@usesofia.com';
     }): Promise<void>;
 }

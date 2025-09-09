@@ -9,6 +9,7 @@ exports.EMAIL_SERVICE_PORT = Symbol('EmailServicePort');
 var EmailTemplate;
 (function (EmailTemplate) {
     EmailTemplate["BULK_CREATE_AI_FILE_EXTRACTION_FINISHED"] = "bulk-create-ai-file-extraction-finished";
+    EmailTemplate["RESOURCE_EXPORT_FINISHED"] = "resource-export-finished";
 })(EmailTemplate || (exports.EmailTemplate = EmailTemplate = {}));
 exports.EmailSchema = zod_1.default.discriminatedUnion("template", [
     zod_1.default.object({
@@ -19,6 +20,15 @@ exports.EmailSchema = zod_1.default.discriminatedUnion("template", [
             nFinancialRecords: zod_1.default.number(),
             continueUrl: zod_1.default.string(),
         }),
+    }),
+    zod_1.default.object({
+        template: zod_1.default.literal(EmailTemplate.RESOURCE_EXPORT_FINISHED),
+        data: zod_1.default.object({
+            resourceName: zod_1.default.string(),
+            downloadUrl: zod_1.default.string(),
+            filters: zod_1.default.array(zod_1.default.string()),
+            fileType: zod_1.default.enum(['csv', 'excel']),
+        }),
     })
 ]).transform((data) => {
     return {
@@ -27,6 +37,8 @@ exports.EmailSchema = zod_1.default.discriminatedUnion("template", [
             switch (data.template) {
                 case EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED:
                     return `Processamento de arquivo para criação de lançamentos financeiros em lote finalizado!`;
+                case EmailTemplate.RESOURCE_EXPORT_FINISHED:
+                    return `Exportação de "${data.data.resourceName}" finalizada!`;
             }
         },
     };

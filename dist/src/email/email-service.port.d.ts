@@ -1,10 +1,11 @@
 import z from "zod";
 export declare const EMAIL_SERVICE_PORT: unique symbol;
 export declare enum EmailTemplate {
-    BULK_CREATE_AI_FILE_EXTRACTION_FINISHED = "bulk-create-ai-file-extraction-finished"
+    BULK_CREATE_AI_FILE_EXTRACTION_FINISHED = "bulk-create-ai-file-extraction-finished",
+    RESOURCE_EXPORT_FINISHED = "resource-export-finished"
 }
 export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template", [z.ZodObject<{
-    template: z.ZodLiteral<EmailTemplate>;
+    template: z.ZodLiteral<EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED>;
     data: z.ZodObject<{
         name: z.ZodString;
         fileName: z.ZodString;
@@ -28,7 +29,7 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
         nFinancialRecords: number;
         continueUrl: string;
     };
-    template: EmailTemplate;
+    template: EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED;
 }, {
     data: {
         name: string;
@@ -36,16 +37,59 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
         nFinancialRecords: number;
         continueUrl: string;
     };
-    template: EmailTemplate;
+    template: EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED;
+}>, z.ZodObject<{
+    template: z.ZodLiteral<EmailTemplate.RESOURCE_EXPORT_FINISHED>;
+    data: z.ZodObject<{
+        resourceName: z.ZodString;
+        downloadUrl: z.ZodString;
+        filters: z.ZodArray<z.ZodString, "many">;
+        fileType: z.ZodEnum<["csv", "excel"]>;
+    }, "strip", z.ZodTypeAny, {
+        fileType: "csv" | "excel";
+        resourceName: string;
+        downloadUrl: string;
+        filters: string[];
+    }, {
+        fileType: "csv" | "excel";
+        resourceName: string;
+        downloadUrl: string;
+        filters: string[];
+    }>;
+}, "strip", z.ZodTypeAny, {
+    data: {
+        fileType: "csv" | "excel";
+        resourceName: string;
+        downloadUrl: string;
+        filters: string[];
+    };
+    template: EmailTemplate.RESOURCE_EXPORT_FINISHED;
+}, {
+    data: {
+        fileType: "csv" | "excel";
+        resourceName: string;
+        downloadUrl: string;
+        filters: string[];
+    };
+    template: EmailTemplate.RESOURCE_EXPORT_FINISHED;
 }>]>, {
-    getSubject: () => "Processamento de arquivo para criação de lançamentos financeiros em lote finalizado!";
+    getSubject: () => string;
     data: {
         name: string;
         fileName: string;
         nFinancialRecords: number;
         continueUrl: string;
     };
-    template: EmailTemplate;
+    template: EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED;
+} | {
+    getSubject: () => string;
+    data: {
+        fileType: "csv" | "excel";
+        resourceName: string;
+        downloadUrl: string;
+        filters: string[];
+    };
+    template: EmailTemplate.RESOURCE_EXPORT_FINISHED;
 }, {
     data: {
         name: string;
@@ -53,11 +97,20 @@ export declare const EmailSchema: z.ZodEffects<z.ZodDiscriminatedUnion<"template
         nFinancialRecords: number;
         continueUrl: string;
     };
-    template: EmailTemplate;
+    template: EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED;
+} | {
+    data: {
+        fileType: "csv" | "excel";
+        resourceName: string;
+        downloadUrl: string;
+        filters: string[];
+    };
+    template: EmailTemplate.RESOURCE_EXPORT_FINISHED;
 }>;
 export interface EmailServicePort {
-    send({ email, to, }: {
+    send({ email, from, to, }: {
         email: z.output<typeof EmailSchema>;
+        from?: 'notificacoes@usesofia.com' | 'sofia@usesofia.com' | 'noreply@usesofia.com';
         to: string;
     }): Promise<void>;
 }

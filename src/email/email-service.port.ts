@@ -4,6 +4,7 @@ export const EMAIL_SERVICE_PORT = Symbol('EmailServicePort');
 
 export enum EmailTemplate {
   BULK_CREATE_AI_FILE_EXTRACTION_FINISHED = 'bulk-create-ai-file-extraction-finished',
+  RESOURCE_EXPORT_FINISHED = 'resource-export-finished',
 }
 
 export const EmailSchema = z.discriminatedUnion("template", [
@@ -15,15 +16,25 @@ export const EmailSchema = z.discriminatedUnion("template", [
       nFinancialRecords: z.number(),
       continueUrl: z.string(),
     }),
+  }),
+  z.object({
+    template: z.literal(EmailTemplate.RESOURCE_EXPORT_FINISHED),
+    data: z.object({
+      resourceName: z.string(),
+      downloadUrl: z.string(),
+      filters: z.array(z.string()),
+      fileType: z.enum(['csv', 'excel']),
+    }),
   })
 ]).transform((data) => {
   return {
     ...data,
     getSubject: () => {
       switch (data.template) {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         case EmailTemplate.BULK_CREATE_AI_FILE_EXTRACTION_FINISHED:
           return `Processamento de arquivo para criação de lançamentos financeiros em lote finalizado!`;
+        case EmailTemplate.RESOURCE_EXPORT_FINISHED:
+          return `Exportação de "${data.data.resourceName}" finalizada!`;
       }
     },
   };

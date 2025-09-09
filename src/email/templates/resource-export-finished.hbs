@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Processamento de arquivo finalizado</title>
+        <title>Exportação finalizada</title>
         <style type="text/css">
             #outlook a {
                 padding: 0
@@ -118,7 +118,7 @@
     </head>
 
     <body style="font-family: Helvetica, Arial, sans-serif; margin: 0px; padding: 0px; background-color: #ffffff;">
-        <span style="color: transparent; display: none; height: 0px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; visibility: hidden; width: 0px;">Processamento de arquivo finalizado</span>
+        <span style="color: transparent; display: none; height: 0px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; visibility: hidden; width: 0px;">Exportação finalizada</span>
         <table cellpadding="0" cellspacing="0" border="0" width="100%" class="body" style="width: 100%;">
             <tbody>
                 <tr>
@@ -142,26 +142,39 @@
                                             <tbody>
                                                 <tr>
                                                     <td align="left" valign="top" bgcolor="#ffffff" style="vertical-align: top; line-height: 1; padding: 32px 32px 48px; background-color: #ffffff; border-radius: 0px;">
-                                                        <h1 class="h1" align="left" style="padding: 0px; margin: 0px; font-style: normal; font-family: Helvetica, Arial, sans-serif; font-size: 32px; line-height: 39px; color: #000000; font-weight: bold;">Processamento de arquivo finalizado!</h1>
+                                                        <h1 class="h1" align="left" style="padding: 0px; margin: 0px; font-style: normal; font-family: Helvetica, Arial, sans-serif; font-size: 32px; line-height: 39px; color: #000000; font-weight: bold;">Exportação finalizada!</h1>
                                                         <p align="left" style="padding: 0px; margin: 16px 0px 0px; font-family: Helvetica, Arial, sans-serif; color: #000000; font-size: 14px; line-height: 21px;">
-                                                            Olá {{ name }}, finalizei a extração dos dados de lançamentos financeiros do arquivo {{ fileName }}.
+                                                            Sua exportação do recurso <strong>{{ resourceName }}</strong> foi concluída com sucesso!
                                                         </p>
                                                         <p align="left" style="padding: 0px; margin: 16px 0px 0px; font-family: Helvetica, Arial, sans-serif; color: #000000; font-size: 14px; line-height: 21px;">
-                                                            Foram encontrados e categorizados {{ nFinancialRecords }} lançamentos financeiros no arquivo.
+                                                            O arquivo foi gerado no formato <strong>{{#if fileType}}{{#if fileType}}CSV{{else}}Excel{{/if}}{{else}}CSV{{/if}}</strong> e está pronto para download.
                                                         </p>
+                                                        {{#if filters}}
+                                                        <p align="left" style="padding: 0px; margin: 16px 0px 0px; font-family: Helvetica, Arial, sans-serif; color: #000000; font-size: 14px; line-height: 21px;">
+                                                            <strong>Filtros aplicados:</strong>
+                                                        </p>
+                                                        <ul style="padding: 0px; margin: 8px 0px 0px 16px; font-family: Helvetica, Arial, sans-serif; color: #000000; font-size: 14px; line-height: 21px;">
+                                                            {{#each filters}}
+                                                            <li style="margin-bottom: 4px;">{{ this }}</li>
+                                                            {{/each}}
+                                                        </ul>
+                                                        {{/if}}
                                                         <table cellpadding="0" cellspacing="0" border="0" width="auto" style="width: auto; font-size: 14px; font-weight: normal; background-color: #0A0A0A; color: #ffffff; border-radius: 8px; border-collapse: separate; margin: 32px 0px 0px;" class="">
                                                             <tbody>
                                                                 <tr>
                                                                     <td align="center" valign="top" bgcolor="#0A0A0A" style="vertical-align: top; line-height: 1; text-align: center; font-family: Helvetica, Arial, sans-serif; border-radius: 8px;">
-                                                                        <a class="cl-branded-button" target="_blank" href="{{ continueUrl }}" style="display: inline-block; box-sizing: border-box; cursor: pointer; text-decoration: none; margin: 0px; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; background-color: #0A0A0A; color: #ffffff; border-radius: 8px; border: 1px solid #0A0A0A; padding: 15px 24px;">
-                                                                            <b>Continuar processo</b>
+                                                                        <a class="cl-branded-button" target="_blank" href="{{ downloadUrl }}" style="display: inline-block; box-sizing: border-box; cursor: pointer; text-decoration: none; margin: 0px; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; background-color: #0A0A0A; color: #ffffff; border-radius: 8px; border: 1px solid #0A0A0A; padding: 15px 24px;">
+                                                                            <b>Baixar arquivo</b>
                                                                         </a>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
                                                         <p style="padding: 0px; margin: 16px 0px 0px; font-family: Helvetica, Arial, sans-serif; color: #000000; font-size: 14px; line-height: 21px;">
-                                                            Se o botão acima não funcionar, <a href="{{ continueUrl }}" style="text-decoration: underline; color: #0A0A0A; font-size: 14px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 1.5;" class="cl-branded-link" target="_blank">clique aqui</a>.
+                                                            Se o botão acima não funcionar, <a href="{{ downloadUrl }}" style="text-decoration: underline; color: #0A0A0A; font-size: 14px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; line-height: 1.5;" class="cl-branded-link" target="_blank">clique aqui</a>.
+                                                        </p>
+                                                        <p style="padding: 0px; margin: 16px 0px 0px; font-family: Helvetica, Arial, sans-serif; color: #666666; font-size: 12px; line-height: 18px;">
+                                                            <strong>Importante:</strong> O link de download expirará em 24 horas. Certifique-se de baixar o arquivo antes desse prazo.
                                                         </p>
                                                         <p style="padding: 0px; margin: 32px 0px 0px; font-family: Helvetica, Arial, sans-serif; color: #000000; font-size: 14px; line-height: 21px;">
                                                             Atenciosamente,<br>
