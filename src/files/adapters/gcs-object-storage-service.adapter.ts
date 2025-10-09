@@ -4,6 +4,7 @@ import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import type { FileType } from '@app/files/entities/file.entity';
 import { type ObjectStorageServicePort } from '@app/files/ports/object-storage-service.port';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
+import { Log } from '@app/utils/log.utils';
 import { Storage } from '@google-cloud/storage';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { DateTime } from 'luxon';
@@ -123,6 +124,7 @@ export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorag
     return url.split('?')[0];
   }
 
+  @Log("log")
   extractObjectNameFromUrl({ url }: { url: string }): string {
     const decodedUrl = decodeURIComponent(url);
     const urlWithoutQueryParams = this.removeQueryParamsFromUrl(decodedUrl);
