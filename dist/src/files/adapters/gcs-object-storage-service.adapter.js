@@ -17,7 +17,6 @@ exports.GcsObjectStorageServiceAdapter = void 0;
 const base_1 = require("../../base");
 const base_config_entity_1 = require("../../config/base-config.entity");
 const logger_module_1 = require("../../logger/logger.module");
-const log_utils_1 = require("../../utils/log.utils");
 const storage_1 = require("@google-cloud/storage");
 const common_1 = require("@nestjs/common");
 const luxon_1 = require("luxon");
@@ -89,19 +88,13 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
         return url.split('?')[0];
     }
     extractObjectNameFromUrl({ url }) {
-        const decodedUrl = decodeURIComponent(url);
-        const urlWithoutQueryParams = this.removeQueryParamsFromUrl(decodedUrl);
-        const urlObject = new URL(urlWithoutQueryParams);
-        return urlObject.pathname.split('/').slice(2).join('/');
+        const urlWithoutQueryParams = this.removeQueryParamsFromUrl(url);
+        const afterProtocol = urlWithoutQueryParams.substring(urlWithoutQueryParams.indexOf('://') + 3);
+        const pathname = afterProtocol.substring(afterProtocol.indexOf('/'));
+        return pathname.split('/').slice(2).join('/');
     }
 };
 exports.GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter;
-__decorate([
-    (0, log_utils_1.Log)("log"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", String)
-], GcsObjectStorageServiceAdapter.prototype, "extractObjectNameFromUrl", null);
 exports.GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(base_config_entity_1.BASE_CONFIG)),
