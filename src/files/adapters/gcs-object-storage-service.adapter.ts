@@ -124,7 +124,9 @@ export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorag
   }
 
   extractObjectNameFromUrl({ url }: { url: string }): string {
-    const urlObject = new URL(this.removeQueryParamsFromUrl(url));
+    const decodedUrl = decodeURIComponent(url);
+    const urlWithoutQueryParams = this.removeQueryParamsFromUrl(decodedUrl);
+    const urlObject = new URL(urlWithoutQueryParams);
     return urlObject.pathname.split('/').slice(2).join('/');
   }
 }

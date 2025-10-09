@@ -88,7 +88,9 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
         return url.split('?')[0];
     }
     extractObjectNameFromUrl({ url }) {
-        const urlObject = new URL(this.removeQueryParamsFromUrl(url));
+        const decodedUrl = decodeURIComponent(url);
+        const urlWithoutQueryParams = this.removeQueryParamsFromUrl(decodedUrl);
+        const urlObject = new URL(urlWithoutQueryParams);
         return urlObject.pathname.split('/').slice(2).join('/');
     }
 };
