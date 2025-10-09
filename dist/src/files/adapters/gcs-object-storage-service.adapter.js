@@ -84,8 +84,11 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
             return `${requester.id}/${fileType}/${(0, uuid_1.v4)()}/${originalFileName}`;
         }
     }
+    removeQueryParamsFromUrl(url) {
+        return url.split('?')[0];
+    }
     extractObjectNameFromUrl({ url }) {
-        const urlObject = new URL(url);
+        const urlObject = new URL(this.removeQueryParamsFromUrl(url));
         return urlObject.pathname.split('/').slice(2).join('/');
     }
 };
