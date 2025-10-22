@@ -28,6 +28,10 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
     getOwnerOrganization({ requester, }) {
         return requester.getOrganizationOrThrow().id;
     }
+    filterPopulate(populate) {
+        return populate;
+    }
+    ;
     async startSession() {
         return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession(), this.baseConfig, this.logger, this.cls);
     }
@@ -46,7 +50,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             ownerOrganization: this.getOwnerOrganization({ requester }),
         }, { session });
         if (request.populate) {
-            await created.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
+            await created.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session ?? undefined));
         }
         return this.toEntity({ doc: created, requester });
     }
@@ -63,7 +67,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }
         if (request.populate) {
-            await doc.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
+            await doc.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session ?? undefined));
         }
         return this.toEntity({ doc, requester });
     }
@@ -93,7 +97,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
         Object.assign(existing, merged);
         await existing.save({ session });
         if (request.populate) {
-            await existing.populate(this.buildPopulatePaths(request.populate, session));
+            await existing.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session));
         }
         return this.toEntity({ doc: existing, requester });
     }

@@ -54,6 +54,10 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     return requester.getOrganizationOrThrow().id;
   }
 
+  protected filterPopulate(populate: string): string {
+    return populate;
+  };
+
   @Log()
   async startSession(): Promise<BaseSessionPort> {
     return new BaseMongoDbSessionAdapter(
@@ -95,7 +99,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     }, { session });
 
     if (request.populate) {
-      await created.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
+      await created.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session ?? undefined));
     }
 
     return this.toEntity({ doc: created, requester });
@@ -135,7 +139,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     }
 
     if (request.populate) {
-      await doc.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
+      await doc.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session ?? undefined));
     }
 
     return this.toEntity({ doc, requester });
@@ -203,7 +207,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     await existing.save({ session });
 
     if (request.populate) {
-      await existing.populate(this.buildPopulatePaths(request.populate, session));
+      await existing.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session));
     }
 
     return this.toEntity({ doc: existing, requester });

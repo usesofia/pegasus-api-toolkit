@@ -23,6 +23,10 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         this.cls = cls;
         this.model = model;
     }
+    filterPopulate(populate) {
+        return populate;
+    }
+    ;
     async startSession() {
         return new base_mongodb_session_adapter_1.BaseMongoDbSessionAdapter(await this.model.db.startSession(), this.baseConfig, this.logger, this.cls);
     }
@@ -40,7 +44,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             ...request.data,
         }, { session });
         if (request.populate) {
-            await created.populate(this.buildPopulatePaths(request.populate, session));
+            await created.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session));
         }
         return this.toEntity(created);
     }
@@ -56,7 +60,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
             throw new common_1.NotFoundException(`Recurso do tipo ${this.model.modelName} com id ${request.id} não foi encontrado.`);
         }
         if (request.populate) {
-            await doc.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
+            await doc.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session ?? undefined));
         }
         return this.toEntity(doc);
     }
@@ -85,7 +89,7 @@ class BaseDefaultMongoDbRepositoryAdapter extends base_1.Base {
         Object.assign(existing, merged);
         await existing.save({ session });
         if (request.populate) {
-            await existing.populate(this.buildPopulatePaths(request.populate, session));
+            await existing.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session));
         }
         return this.toEntity(existing);
     }

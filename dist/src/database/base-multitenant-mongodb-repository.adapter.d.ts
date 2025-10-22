@@ -28,6 +28,7 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
     protected getOwnerOrganization({ requester, }: {
         requester: AuthUserEntity;
     }): string;
+    protected filterPopulate(populate: string): string;
     startSession(): Promise<BaseSessionPort>;
     protected buildPopulatePaths(populate: string, session?: ClientSession): PopulateOptions[];
     create({ requester, request, previousSession, }: {

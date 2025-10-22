@@ -35,6 +35,10 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
    */
   protected abstract toEntity(doc: TDoc): TEntity;
 
+  protected filterPopulate(populate: string): string {
+    return populate;
+  };
+
   @Log()
   async startSession(): Promise<BaseSessionPort> {
     return new BaseMongoDbSessionAdapter(
@@ -44,6 +48,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
       this.cls,
     );
   }
+
 
   @Log()
   protected buildPopulatePaths(populate: string, session?: ClientSession | null): PopulateOptions[] {
@@ -73,7 +78,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     }, { session });
 
     if (request.populate) {
-      await created.populate(this.buildPopulatePaths(request.populate, session));
+      await created.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session));
     }
 
     return this.toEntity(created);
@@ -110,7 +115,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     }
 
     if (request.populate) {
-      await doc.populate(this.buildPopulatePaths(request.populate, session ?? undefined));
+      await doc.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session ?? undefined));
     }
 
     return this.toEntity(doc);
@@ -173,7 +178,7 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     await existing.save({ session });
 
     if (request.populate) {
-      await existing.populate(this.buildPopulatePaths(request.populate, session));
+      await existing.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session));
     }
 
     return this.toEntity(existing);
