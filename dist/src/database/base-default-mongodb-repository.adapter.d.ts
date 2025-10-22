@@ -20,7 +20,7 @@ export declare abstract class BaseDefaultMongoDbRepositoryAdapter<TDoc extends D
     protected readonly model: Model<TDoc>;
     constructor(className: string, baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, model: Model<TDoc>);
     protected abstract toEntity(doc: TDoc): TEntity;
-    protected filterPopulate(populate: string): string;
+    protected filterPopulate(populate: string | undefined): string | undefined;
     startSession(): Promise<BaseSessionPort>;
     protected buildPopulatePaths(populate: string, session?: ClientSession | null): PopulateOptions[];
     create({ request, previousSession, }: {

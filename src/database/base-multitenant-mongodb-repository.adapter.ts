@@ -54,7 +54,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     return requester.getOrganizationOrThrow().id;
   }
 
-  protected filterPopulate(populate: string): string {
+  protected filterPopulate(populate: string | undefined): string | undefined {
     return populate;
   };
 
@@ -98,8 +98,9 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       ownerOrganization: this.getOwnerOrganization({ requester }),
     }, { session });
 
-    if (request.populate) {
-      await created.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session ?? undefined));
+    const filteredPopulate = this.filterPopulate(request.populate);
+    if (filteredPopulate) {
+      await created.populate(this.buildPopulatePaths(filteredPopulate, session ?? undefined));
     }
 
     return this.toEntity({ doc: created, requester });
@@ -138,8 +139,9 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
       );
     }
 
-    if (request.populate) {
-      await doc.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session ?? undefined));
+    const filteredPopulate = this.filterPopulate(request.populate);
+    if (filteredPopulate) {
+      await doc.populate(this.buildPopulatePaths(filteredPopulate, session ?? undefined));
     }
 
     return this.toEntity({ doc, requester });
@@ -206,8 +208,9 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
 
     await existing.save({ session });
 
-    if (request.populate) {
-      await existing.populate(this.buildPopulatePaths(this.filterPopulate(request.populate), session));
+    const filteredPopulate = this.filterPopulate(request.populate);
+    if (filteredPopulate) {
+      await existing.populate(this.buildPopulatePaths(filteredPopulate, session));
     }
 
     return this.toEntity({ doc: existing, requester });
