@@ -222,6 +222,7 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
     async getUserOrganizations(userId) {
         const organizationMemberships = await this.clerkClient.users.getOrganizationMembershipList({
             userId,
+            limit: 200,
         });
         return Promise.all(organizationMemberships.data.map((organizationMembership) => this.getOrganizationEntity({
             organizationId: organizationMembership.organization.id,
