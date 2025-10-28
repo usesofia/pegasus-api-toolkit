@@ -244,7 +244,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
                 index: indexName,
                 path,
                 queryVector,
-                numCandidates: Math.min(30 * limit, 10000),
+                numCandidates: Math.min(10 * limit, 10000),
                 limit,
                 filter: {
                     $and: [
