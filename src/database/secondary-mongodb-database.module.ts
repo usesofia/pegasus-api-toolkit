@@ -1,6 +1,6 @@
+import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { Global, Inject, Module, OnApplicationShutdown } from '@nestjs/common';
 import mongoose from 'mongoose';
-import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 
 export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection');
 
@@ -29,6 +29,9 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
           serverSelectionTimeoutMS: 30000,
           connectTimeoutMS: 30000,
           socketTimeoutMS: 60000,
+
+          // Prefer reading from replica set secondaries when possible
+          readPreference: 'secondaryPreferred',
 
           // Boas práticas p/ prod
           family: 4,         // força IPv4 no driver (pass-through)

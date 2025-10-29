@@ -16,9 +16,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SecondaryMongoDbDatabaseModule = exports.SECONDARY_MONGOOSE_CONNECTION = void 0;
+const base_config_entity_1 = require("../config/base-config.entity");
 const common_1 = require("@nestjs/common");
 const mongoose_1 = __importDefault(require("mongoose"));
-const base_config_entity_1 = require("../config/base-config.entity");
 exports.SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection');
 let SecondaryMongoDbDatabaseModule = class SecondaryMongoDbDatabaseModule {
     constructor(connection) {
@@ -48,6 +48,7 @@ exports.SecondaryMongoDbDatabaseModule = SecondaryMongoDbDatabaseModule = __deco
                         serverSelectionTimeoutMS: 30000,
                         connectTimeoutMS: 30000,
                         socketTimeoutMS: 60000,
+                        readPreference: 'secondaryPreferred',
                         family: 4,
                     }).asPromise();
                 },
