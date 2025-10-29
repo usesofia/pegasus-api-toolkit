@@ -85,7 +85,7 @@ export class FilesServiceAdapter extends Base implements FilesServicePort {
         requester,
         request: PartialUpdateFileRequestEntity.build({
           id: request.data.id,
-          data: { status: request.data.status },
+          data: { status: request.data.status, size: request.data.size },
           channel: request.channel,
         }),
         previousSession: session,

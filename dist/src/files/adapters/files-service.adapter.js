@@ -72,7 +72,7 @@ let FilesServiceAdapter = FilesServiceAdapter_1 = class FilesServiceAdapter exte
                 requester,
                 request: partial_update_file_request_entity_1.PartialUpdateFileRequestEntity.build({
                     id: request.data.id,
-                    data: { status: request.data.status },
+                    data: { status: request.data.status, size: request.data.size },
                     channel: request.channel,
                 }),
                 previousSession: session,

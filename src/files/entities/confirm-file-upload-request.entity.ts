@@ -11,10 +11,11 @@ export const ConfirmFileUploadRequestDataEntitySchema = FileEntitySchema.omit({
   fileType: true,
   mimeType: true,
   originalFileName: true,
-  size: true,
   objectName: true,
   url: true,
   signedUrl: true,
+}).extend({
+  size: z.number().describe('Tamanho do arquivo em bytes.').optional(),
 });
 
 const ConfirmFileUploadRequestEntitySchema = z.object({
