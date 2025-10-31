@@ -7,8 +7,8 @@ import { safeInstantiateEntity } from '@app/utils/entity.utils';
 export const OrganizationSchema = z.object({
   id: z.string(),
   name: z.string(),
-  type: z.nativeEnum(OrganizationType),
-  role: z.nativeEnum(OrganizationRole),
+  type: z.enum(OrganizationType),
+  role: z.enum(OrganizationRole),
   parent: z
     .object({
       id: z.string(),
@@ -36,7 +36,7 @@ export class OrganizationEntity extends createZodDto(OrganizationSchema) {
 
 export const AuthUserEntitySchema = z.object({
   id: z.string(),
-  primaryEmail: z.string().email(),
+  primaryEmail: z.email(),
   primaryPhoneNumber: z.string(),
   firstName: z.string(),
   lastName: z.string(),

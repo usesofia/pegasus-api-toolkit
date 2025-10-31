@@ -9,7 +9,7 @@ import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import mongoose from 'mongoose';
 import { ClsService } from 'nestjs-cls';
-import { patchNestJsSwagger, ZodValidationPipe } from 'nestjs-zod';
+import { cleanupOpenApiDoc, ZodValidationPipe } from 'nestjs-zod';
 import dns from 'dns';
 
 dns.setDefaultResultOrder('ipv4first');
@@ -47,7 +47,6 @@ export function setupApp({
   );
   app.enableCors();
   app.enableShutdownHooks();
-  patchNestJsSwagger();
 
   const baseConfig = app.get<BaseConfigEntity>(BASE_CONFIG);
 
@@ -58,7 +57,7 @@ export function setupApp({
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerDocument);
-  SwaggerModule.setup('/external/docs', app, document);
+  SwaggerModule.setup('/external/docs', app, cleanupOpenApiDoc(document));
 }
 
 export const appOptions: NestApplicationOptions = {

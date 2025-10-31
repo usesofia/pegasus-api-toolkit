@@ -41,6 +41,7 @@ const fs = __importStar(require("fs"));
 const mongodb_memory_server_1 = require("mongodb-memory-server");
 const setup_utils_1 = require("./setup.utils");
 const base_config_entity_1 = require("../config/base-config.entity");
+const nestjs_zod_1 = require("nestjs-zod");
 async function generateSwaggerJson({ AppModule, version, }) {
     const replset = await mongodb_memory_server_1.MongoMemoryReplSet.create({ replSet: { count: 1 } });
     process.env.MONGODB_URI = replset.getUri();
@@ -55,7 +56,8 @@ async function generateSwaggerJson({ AppModule, version, }) {
         .setVersion(version)
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, swaggerDocument);
-    fs.writeFileSync(`swagger.json`, JSON.stringify(document, null, 2));
+    const cleaned = (0, nestjs_zod_1.cleanupOpenApiDoc)(document);
+    fs.writeFileSync(`swagger.json`, JSON.stringify(cleaned, null, 2));
     await app.close();
     await replset.stop();
     process.exit(0);

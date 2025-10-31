@@ -30,7 +30,6 @@ function setupApp({ app, version, }) {
     }));
     app.enableCors();
     app.enableShutdownHooks();
-    (0, nestjs_zod_1.patchNestJsSwagger)();
     const baseConfig = app.get(base_config_entity_1.BASE_CONFIG);
     const swaggerDocument = new swagger_1.DocumentBuilder()
         .setTitle(baseConfig.swagger.title)
@@ -38,7 +37,7 @@ function setupApp({ app, version, }) {
         .setVersion(version)
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, swaggerDocument);
-    swagger_1.SwaggerModule.setup('/external/docs', app, document);
+    swagger_1.SwaggerModule.setup('/external/docs', app, (0, nestjs_zod_1.cleanupOpenApiDoc)(document));
 }
 exports.appOptions = {
     rawBody: true,

@@ -71,7 +71,7 @@ let GcsObjectStorageServiceAdapter = GcsObjectStorageServiceAdapter_1 = class Gc
     }
     async getObjectSize({ objectName }) {
         const [metadata] = await this.storage.bucket(this.bucketName).file(objectName).getMetadata();
-        return zod_1.z.number({ coerce: true }).parse(metadata.size);
+        return zod_1.z.coerce.number().parse(metadata.size);
     }
     async createManySignedDownloadUrls({ objectNames, expiresInMinutes, }) {
         return await Promise.all(objectNames.map((objectName) => this.createSignedDownloadUrl({ objectName, expiresInMinutes })));

@@ -3,46 +3,24 @@ import { HttpAdapterHost } from '@nestjs/core';
 import { ZodValidationException } from 'nestjs-zod';
 import { z } from 'zod';
 import { ClsService } from 'nestjs-cls';
-declare const FieldErrorEntity_base: import("nestjs-zod").ZodDto<{
-    fieldPath: string;
-    messages: string[];
-}, z.ZodObjectDef<{
+declare const FieldErrorEntity_base: import("nestjs-zod").ZodDto<z.ZodObject<{
     fieldPath: z.ZodString;
-    messages: z.ZodArray<z.ZodString, "many">;
-}, "strip", z.ZodTypeAny>, {
-    fieldPath: string;
-    messages: string[];
-}>;
+    messages: z.ZodArray<z.ZodString>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 export declare class FieldErrorEntity extends FieldErrorEntity_base {
 }
-declare const ExceptionResponseEntity_base: import("nestjs-zod").ZodDto<{
-    message: string;
-    statusCode: number;
-    errors: {
-        fieldPath: string;
-        messages: string[];
-    }[];
-}, z.ZodObjectDef<{
+declare const ExceptionResponseEntity_base: import("nestjs-zod").ZodDto<z.ZodObject<{
     statusCode: z.ZodNumber;
     message: z.ZodString;
     errors: z.ZodArray<z.ZodObject<{
         fieldPath: z.ZodString;
-        messages: z.ZodArray<z.ZodString, "many">;
-    }, "strip", z.ZodTypeAny, {
-        fieldPath: string;
-        messages: string[];
-    }, {
-        fieldPath: string;
-        messages: string[];
-    }>, "many">;
-}, "strip", z.ZodTypeAny>, {
-    message: string;
-    statusCode: number;
-    errors: {
-        fieldPath: string;
-        messages: string[];
-    }[];
-}>;
+        messages: z.ZodArray<z.ZodString>;
+    }, z.core.$strip>>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 export declare class ExceptionResponseEntity extends ExceptionResponseEntity_base {
 }
 export declare class AppExceptionsFilter implements ExceptionFilter {

@@ -15,7 +15,7 @@ const PubSubMessageBodyDtoSchema = z.object({
 export class PubSubMessageBodyDto extends createZodDto(
   PubSubMessageBodyDtoSchema,
 ) {
-  extractPayload<T extends ZodDto>(entityClass: T): InstanceType<T> {
+  extractPayload<T extends ZodDto<any>>(entityClass: T): InstanceType<T> {
     const decodedData = Buffer.from(this.message.data, 'base64').toString();
     const parsedData = JSON.parse(decodedData);
     return safeInstantiateEntity(entityClass, parsedData);

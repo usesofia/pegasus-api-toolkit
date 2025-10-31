@@ -9,6 +9,7 @@ import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import { appOptions, setupApp } from '@app/utils/setup.utils';
 import { DynamicModule, Type } from '@nestjs/common';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
+import { cleanupOpenApiDoc } from 'nestjs-zod';
 
 export async function generateSwaggerJson({
   AppModule,
@@ -43,7 +44,9 @@ export async function generateSwaggerJson({
     swaggerDocument,
   );
 
-  fs.writeFileSync(`swagger.json`, JSON.stringify(document, null, 2));
+  const cleaned = cleanupOpenApiDoc(document);
+
+  fs.writeFileSync(`swagger.json`, JSON.stringify(cleaned, null, 2));
   await app.close();
   await replset.stop();
   process.exit(0);

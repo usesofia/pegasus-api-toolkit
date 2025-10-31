@@ -49,12 +49,12 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
     const { statusCode, message, errors } = this.prepareResponse(exception);
     if (
-      statusCode === +HttpStatus.INTERNAL_SERVER_ERROR ||
-      statusCode === +HttpStatus.NOT_IMPLEMENTED ||
-      statusCode === +HttpStatus.BAD_GATEWAY ||
-      statusCode === +HttpStatus.SERVICE_UNAVAILABLE ||
-      statusCode === +HttpStatus.GATEWAY_TIMEOUT ||
-      statusCode === +HttpStatus.HTTP_VERSION_NOT_SUPPORTED
+      statusCode === HttpStatus.INTERNAL_SERVER_ERROR.valueOf() ||
+      statusCode === HttpStatus.NOT_IMPLEMENTED.valueOf() ||
+      statusCode === HttpStatus.BAD_GATEWAY.valueOf() ||
+      statusCode === HttpStatus.SERVICE_UNAVAILABLE.valueOf() ||
+      statusCode === HttpStatus.GATEWAY_TIMEOUT.valueOf() ||
+      statusCode === HttpStatus.HTTP_VERSION_NOT_SUPPORTED.valueOf()
     ) {
       if (exception instanceof Error) {
         Sentry.captureException(exception);
@@ -120,25 +120,23 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
   getErrors(exception: ZodValidationException): FieldErrorEntity[] {
     try {
-      const errors = exception.getZodError().errors;
-      const messagesByFieldPath: Record<string, string[]> = {};
-      for (const error of errors) {
-        const fieldPath = error.path.join('.');
-        if (fieldPath in messagesByFieldPath) {
-          messagesByFieldPath[fieldPath].push(error.message);
-        } else {
-          messagesByFieldPath[fieldPath] = [error.message];
-        }
-      }
-      return Object.entries(messagesByFieldPath).map(
-        ([fieldPath, messages]) => ({
-          fieldPath,
-          messages,
-        }),
-      );
-    } catch {
-      return [];
-    }
+			const errors = (exception.getResponse() as { errors: { path: string[]; message: string }[] }).errors;
+			const messagesByFieldPath: Record<string, string[]> = {};
+			for (const error of errors) {
+				const fieldPath = error.path.join(".");
+				if (fieldPath in messagesByFieldPath) {
+					messagesByFieldPath[fieldPath].push(error.message);
+				} else {
+					messagesByFieldPath[fieldPath] = [error.message];
+				}
+			}
+			return Object.entries(messagesByFieldPath).map(([fieldPath, messages]) => ({
+				fieldPath,
+				messages,
+			}));
+		} catch {
+			return [];
+		}
   }
 
   isArrayOfStrings(value: unknown): value is string[] {

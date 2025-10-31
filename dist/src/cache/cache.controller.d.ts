@@ -4,22 +4,18 @@ import { z } from 'zod';
 import { Base } from '../base';
 import { BaseConfigEntity } from '../config/base-config.entity';
 import { CacheServicePort } from '../cache/ports/cache-service.port';
-declare const CacheSetDto_base: import("nestjs-zod").ZodDto<{
-    value: string;
-}, z.ZodObjectDef<{
+declare const CacheSetDto_base: import("nestjs-zod").ZodDto<z.ZodObject<{
     value: z.ZodString;
-}, "strip", z.ZodTypeAny>, {
-    value: string;
-}>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 declare class CacheSetDto extends CacheSetDto_base {
 }
-declare const CacheGetResponseDto_base: import("nestjs-zod").ZodDto<{
-    value: string | null;
-}, z.ZodObjectDef<{
+declare const CacheGetResponseDto_base: import("nestjs-zod").ZodDto<z.ZodObject<{
     value: z.ZodNullable<z.ZodString>;
-}, "strip", z.ZodTypeAny>, {
-    value: string | null;
-}>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 declare class CacheGetResponseDto extends CacheGetResponseDto_base {
 }
 export declare class CacheController extends Base {

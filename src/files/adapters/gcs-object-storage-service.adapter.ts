@@ -4,7 +4,6 @@ import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import type { FileType } from '@app/files/entities/file.entity';
 import { type ObjectStorageServicePort } from '@app/files/ports/object-storage-service.port';
 import { LOGGER_SERVICE_PORT } from '@app/logger/logger.module';
-import { Log } from '@app/utils/log.utils';
 import { Storage } from '@google-cloud/storage';
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { DateTime } from 'luxon';
@@ -88,7 +87,7 @@ export class GcsObjectStorageServiceAdapter extends Base implements ObjectStorag
 
   async getObjectSize({ objectName }: { objectName: string }): Promise<number> {
     const [metadata] = await this.storage.bucket(this.bucketName).file(objectName).getMetadata();
-    return z.number({ coerce: true }).parse(metadata.size);
+    return z.coerce.number().parse(metadata.size);
   }
 
   async createManySignedDownloadUrls({

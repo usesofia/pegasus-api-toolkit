@@ -4,7 +4,7 @@ import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 export const BaseConfigSchema = z.object({
-  env: z.nativeEnum(Environment),
+  env: z.enum(Environment),
   nodeEnv: z.enum(['development', 'production']),
   databases: z.array(
     z.object({

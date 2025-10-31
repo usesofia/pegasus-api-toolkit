@@ -4,12 +4,13 @@ import {
 } from '@app/utils/json.utils';
 import { ZodDto } from 'nestjs-zod';
 
-function createInstance<T extends ZodDto>(c: new () => T): T {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function createInstance<T extends ZodDto<any>>(c: new () => T): T {
   return new c();
 }
 
 /* eslint-disable */
-export function safeInstantiateEntity<T extends ZodDto>(
+export function safeInstantiateEntity<T extends ZodDto<any>>(
   entityClass: T,
   input: any,
 ): InstanceType<T> {
@@ -24,7 +25,7 @@ export function safeInstantiateEntity<T extends ZodDto>(
   return entityInstance;
 }
 
-export function unsafeInstantiateEntity<T extends ZodDto>(
+export function unsafeInstantiateEntity<T extends ZodDto<any>>(
   entityClass: T,
   input: any,
 ): InstanceType<T> {

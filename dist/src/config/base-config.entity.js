@@ -6,7 +6,7 @@ const environment_utils_1 = require("../utils/environment.utils");
 const nestjs_zod_1 = require("nestjs-zod");
 const zod_1 = require("zod");
 exports.BaseConfigSchema = zod_1.z.object({
-    env: zod_1.z.nativeEnum(environment_utils_1.Environment),
+    env: zod_1.z.enum(environment_utils_1.Environment),
     nodeEnv: zod_1.z.enum(['development', 'production']),
     databases: zod_1.z.array(zod_1.z.object({
         type: zod_1.z.enum(['mongodb', 'postgres']),

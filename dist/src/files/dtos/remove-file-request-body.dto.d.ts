@@ -1,16 +1,14 @@
 import { z } from 'zod';
-declare const RemoveFileRequestBodyDto_base: import("nestjs-zod").ZodDto<{
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
-}, z.ZodObjectDef<{
-    channel: z.ZodNativeEnum<{
+declare const RemoveFileRequestBodyDto_base: import("nestjs-zod").ZodDto<z.ZodObject<{
+    channel: z.ZodEnum<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
         readonly EMAIL: "EMAIL";
     }>;
-}, "strip", z.ZodTypeAny>, {
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
-}>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 export declare class RemoveFileRequestBodyDto extends RemoveFileRequestBodyDto_base {
 }
 export {};

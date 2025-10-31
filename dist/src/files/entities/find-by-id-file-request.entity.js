@@ -8,7 +8,7 @@ const zod_1 = require("zod");
 const FindByIdFileRequestEntitySchema = zod_1.z.object({
     id: zod_1.z.string(),
     populate: zod_1.z.string().optional(),
-    status: zod_1.z.nativeEnum(file_entity_1.FileStatus).optional(),
+    status: zod_1.z.enum(file_entity_1.FileStatus).optional(),
 });
 class FindByIdFileRequestEntity extends (0, nestjs_zod_1.createZodDto)(FindByIdFileRequestEntitySchema) {
     static build(input) {

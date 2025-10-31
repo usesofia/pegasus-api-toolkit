@@ -88,8 +88,8 @@ This is the port for the authentication service. It defines the contract for aut
     object({
       id: z.string(),
       name: z.string(),
-      type: z.nativeEnum(OrganizationType),
-      role: z.nativeEnum(OrganizationRole),
+      type: z.enum(OrganizationType),
+      role: z.enum(OrganizationRole),
       parent: z.object({ ... }).nullish(),
       children: z.array(z.object({ id: z.string(), name: z.string() })).nullish(),
     })
@@ -278,9 +278,9 @@ Defines the contract for the object storage service.
       originalFileName: z.string(),
       mimeType: z.string(),
       size: z.number(),
-      fileType: z.nativeEnum(FileType),
+      fileType: z.enum(FileType),
       objectName: z.string(),
-      status: z.nativeEnum(FileStatus),
+      status: z.enum(FileStatus),
       url: z.string(),
       signedUrl: z.string(),
       // ... timestamps
@@ -292,8 +292,8 @@ Defines the contract for the object storage service.
       originalFileName: z.string(),
       mimeType: z.string(),
       size: z.number(),
-      fileType: z.nativeEnum(FileType),
-      channel: z.nativeEnum(CHANNEL_TYPES),
+      fileType: z.enum(FileType),
+      channel: z.enum(CHANNEL_TYPES),
       caption: z.string().nullish(),
     })
     ```
@@ -302,7 +302,7 @@ Defines the contract for the object storage service.
     object({
       id: z.string(),
       status: z.enum([FileStatus.FAILED, FileStatus.COMPLETED]),
-      channel: z.nativeEnum(CHANNEL_TYPES),
+      channel: z.enum(CHANNEL_TYPES),
     })
     ```
 

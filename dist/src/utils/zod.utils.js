@@ -32,13 +32,13 @@ exports.isoDateStringWithoutTime = zod_1.z.preprocess((val) => {
         }
     }
     return val;
-}, zod_1.z.string(), {
-    message: `A data deve ser uma:\
+}, zod_1.z.string({
+    error: `A data deve ser uma:\
   1. String no formato yyyy-mm-dd\
   2. String no formato yyyy-mm-ddT00:00:00.000Z\
   3. JS Date no início do dia UTC\
   `
-}).refine((val) => isValidIso8601DatetimeString(val), {
+})).refine((val) => isValidIso8601DatetimeString(val), {
     message: 'A string deve estar no formato yyyy-mm-dd e representar uma data válida'
 });
 exports.jsDateOnUtcStartOfDay = zod_1.z.preprocess((val) => {
@@ -51,9 +51,9 @@ exports.jsDateOnUtcStartOfDay = zod_1.z.preprocess((val) => {
         }
     }
     return val;
-}, zod_1.z.coerce.date(), {
+}, zod_1.z.coerce.date({
     message: 'A data deve ser uma string no formato yyyy-mm-dd ou um JS Date'
-})
+}))
     .refine((val) => isValidJsDateOnUtcStartOfDay(val), {
     message: 'A data deve estar no formato yyyy-mm-ddT00:00:00.000Z e representar uma data válida UTC',
 });

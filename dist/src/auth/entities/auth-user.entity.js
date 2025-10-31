@@ -9,8 +9,8 @@ const entity_utils_1 = require("../../utils/entity.utils");
 exports.OrganizationSchema = zod_1.z.object({
     id: zod_1.z.string(),
     name: zod_1.z.string(),
-    type: zod_1.z.nativeEnum(organization_type_enum_1.OrganizationType),
-    role: zod_1.z.nativeEnum(organization_role_enum_1.OrganizationRole),
+    type: zod_1.z.enum(organization_type_enum_1.OrganizationType),
+    role: zod_1.z.enum(organization_role_enum_1.OrganizationRole),
     parent: zod_1.z
         .object({
         id: zod_1.z.string(),
@@ -35,7 +35,7 @@ class OrganizationEntity extends (0, nestjs_zod_1.createZodDto)(exports.Organiza
 exports.OrganizationEntity = OrganizationEntity;
 exports.AuthUserEntitySchema = zod_1.z.object({
     id: zod_1.z.string(),
-    primaryEmail: zod_1.z.string().email(),
+    primaryEmail: zod_1.z.email(),
     primaryPhoneNumber: zod_1.z.string(),
     firstName: zod_1.z.string(),
     lastName: zod_1.z.string(),

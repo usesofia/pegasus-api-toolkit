@@ -6,7 +6,7 @@ import { z } from 'zod';
 const FindByIdFileRequestEntitySchema = z.object({
   id: z.string(),
   populate: z.string().optional(),
-  status: z.nativeEnum(FileStatus).optional(),
+  status: z.enum(FileStatus).optional(),
 });
 
 export class FindByIdFileRequestEntity extends createZodDto(FindByIdFileRequestEntitySchema) {

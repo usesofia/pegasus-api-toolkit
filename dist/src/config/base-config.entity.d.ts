@@ -1,59 +1,36 @@
 import { Environment } from '../utils/environment.utils';
 import { z } from 'zod';
 export declare const BaseConfigSchema: z.ZodObject<{
-    env: z.ZodNativeEnum<typeof Environment>;
-    nodeEnv: z.ZodEnum<["development", "production"]>;
+    env: z.ZodEnum<typeof Environment>;
+    nodeEnv: z.ZodEnum<{
+        development: "development";
+        production: "production";
+    }>;
     databases: z.ZodArray<z.ZodObject<{
-        type: z.ZodEnum<["mongodb", "postgres"]>;
+        type: z.ZodEnum<{
+            mongodb: "mongodb";
+            postgres: "postgres";
+        }>;
         uri: z.ZodString;
         transactionTimeoutInMiliseconds: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
         nTransactionRetries: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
         maxDelayBetweenTransactionAttempts: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "mongodb" | "postgres";
-        uri: string;
-        transactionTimeoutInMiliseconds: number;
-        nTransactionRetries: number;
-        maxDelayBetweenTransactionAttempts: number;
-    }, {
-        type: "mongodb" | "postgres";
-        uri: string;
-        transactionTimeoutInMiliseconds?: number | undefined;
-        nTransactionRetries?: number | undefined;
-        maxDelayBetweenTransactionAttempts?: number | undefined;
-    }>, "many">;
-    auth: z.ZodEffects<z.ZodObject<{
+    }, z.core.$strip>>;
+    auth: z.ZodObject<{
         applyAuthGuardToAllRoutes: z.ZodBoolean;
         applyGcpServiceAccountGuardToAllRoutes: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    }, {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    }>, {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    }, {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    }>;
+    }, z.core.$strip>;
     logger: z.ZodObject<{
-        level: z.ZodEnum<["log", "error", "warn", "debug"]>;
+        level: z.ZodEnum<{
+            error: "error";
+            log: "log";
+            warn: "warn";
+            debug: "debug";
+        }>;
         consoleLog: z.ZodBoolean;
         betterStackSourceToken: z.ZodString;
         betterStackEndpoint: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        level: "log" | "error" | "warn" | "debug";
-        consoleLog: boolean;
-        betterStackSourceToken: string;
-        betterStackEndpoint?: string | undefined;
-    }, {
-        level: "log" | "error" | "warn" | "debug";
-        consoleLog: boolean;
-        betterStackSourceToken: string;
-        betterStackEndpoint?: string | undefined;
-    }>;
+    }, z.core.$strip>;
     gcp: z.ZodObject<{
         location: z.ZodString;
         credentials: z.ZodObject<{
@@ -68,62 +45,8 @@ export declare const BaseConfigSchema: z.ZodObject<{
             auth_provider_x509_cert_url: z.ZodString;
             client_x509_cert_url: z.ZodString;
             universe_domain: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        }, {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        location: string;
-        credentials: {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        };
-    }, {
-        location: string;
-        credentials: {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        };
-    }>;
+        }, z.core.$strip>;
+    }, z.core.$strip>;
     objectStorage: z.ZodObject<{
         organizationFilesBucket: z.ZodObject<{
             name: z.ZodString;
@@ -132,457 +55,81 @@ export declare const BaseConfigSchema: z.ZodObject<{
             privateKey: z.ZodString;
             audience: z.ZodString;
             subjectTokenType: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        }, {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        organizationFilesBucket: {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        };
-    }, {
-        organizationFilesBucket: {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        };
-    }>;
+        }, z.core.$strip>;
+    }, z.core.$strip>;
     clerk: z.ZodObject<{
         domain: z.ZodString;
         secretKey: z.ZodString;
         jwtKey: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        domain: string;
-        secretKey: string;
-        jwtKey: string;
-    }, {
-        domain: string;
-        secretKey: string;
-        jwtKey: string;
-    }>;
+    }, z.core.$strip>;
     cache: z.ZodObject<{
-        type: z.ZodEnum<["redis", "memory", "mongodb"]>;
+        type: z.ZodEnum<{
+            mongodb: "mongodb";
+            redis: "redis";
+            memory: "memory";
+        }>;
         ttlInSeconds: z.ZodNumber;
         redis: z.ZodOptional<z.ZodObject<{
             url: z.ZodString;
             keyPrefix: z.ZodString;
             ssl: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-        }, "strip", z.ZodTypeAny, {
-            url: string;
-            keyPrefix: string;
-            ssl: boolean;
-        }, {
-            url: string;
-            keyPrefix: string;
-            ssl?: boolean | undefined;
-        }>>;
+        }, z.core.$strip>>;
         mongodb: z.ZodOptional<z.ZodObject<{
             keyPrefix: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            keyPrefix: string;
-        }, {
-            keyPrefix: string;
-        }>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "mongodb" | "redis" | "memory";
-        ttlInSeconds: number;
-        mongodb?: {
-            keyPrefix: string;
-        } | undefined;
-        redis?: {
-            url: string;
-            keyPrefix: string;
-            ssl: boolean;
-        } | undefined;
-    }, {
-        type: "mongodb" | "redis" | "memory";
-        ttlInSeconds: number;
-        mongodb?: {
-            keyPrefix: string;
-        } | undefined;
-        redis?: {
-            url: string;
-            keyPrefix: string;
-            ssl?: boolean | undefined;
-        } | undefined;
-    }>;
+        }, z.core.$strip>>;
+    }, z.core.$strip>;
     swagger: z.ZodObject<{
         title: z.ZodString;
         description: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        title: string;
-        description: string;
-    }, {
-        title: string;
-        description: string;
-    }>;
+    }, z.core.$strip>;
     microservices: z.ZodArray<z.ZodObject<{
         name: z.ZodString;
         internalBaseUrl: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
-        internalBaseUrl: string;
-    }, {
-        name: string;
-        internalBaseUrl: string;
-    }>, "many">;
+    }, z.core.$strip>>;
     tasks: z.ZodObject<{
         secret: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        secret: string;
-    }, {
-        secret: string;
-    }>;
+    }, z.core.$strip>;
     email: z.ZodOptional<z.ZodObject<{
         sendgrid: z.ZodObject<{
             apiKey: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            apiKey: string;
-        }, {
-            apiKey: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        sendgrid: {
-            apiKey: string;
-        };
-    }, {
-        sendgrid: {
-            apiKey: string;
-        };
-    }>>;
+        }, z.core.$strip>;
+    }, z.core.$strip>>;
     shortio: z.ZodOptional<z.ZodObject<{
         apiKey: z.ZodString;
         domain: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        domain: string;
-        apiKey: string;
-    }, {
-        domain: string;
-        apiKey: string;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    env: Environment;
-    nodeEnv: "development" | "production";
-    databases: {
-        type: "mongodb" | "postgres";
-        uri: string;
-        transactionTimeoutInMiliseconds: number;
-        nTransactionRetries: number;
-        maxDelayBetweenTransactionAttempts: number;
-    }[];
-    auth: {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    };
-    logger: {
-        level: "log" | "error" | "warn" | "debug";
-        consoleLog: boolean;
-        betterStackSourceToken: string;
-        betterStackEndpoint?: string | undefined;
-    };
-    gcp: {
-        location: string;
-        credentials: {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        };
-    };
-    objectStorage: {
-        organizationFilesBucket: {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        };
-    };
-    clerk: {
-        domain: string;
-        secretKey: string;
-        jwtKey: string;
-    };
-    cache: {
-        type: "mongodb" | "redis" | "memory";
-        ttlInSeconds: number;
-        mongodb?: {
-            keyPrefix: string;
-        } | undefined;
-        redis?: {
-            url: string;
-            keyPrefix: string;
-            ssl: boolean;
-        } | undefined;
-    };
-    swagger: {
-        title: string;
-        description: string;
-    };
-    microservices: {
-        name: string;
-        internalBaseUrl: string;
-    }[];
-    tasks: {
-        secret: string;
-    };
-    email?: {
-        sendgrid: {
-            apiKey: string;
-        };
-    } | undefined;
-    shortio?: {
-        domain: string;
-        apiKey: string;
-    } | undefined;
-}, {
-    env: Environment;
-    nodeEnv: "development" | "production";
-    databases: {
-        type: "mongodb" | "postgres";
-        uri: string;
-        transactionTimeoutInMiliseconds?: number | undefined;
-        nTransactionRetries?: number | undefined;
-        maxDelayBetweenTransactionAttempts?: number | undefined;
-    }[];
-    auth: {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    };
-    logger: {
-        level: "log" | "error" | "warn" | "debug";
-        consoleLog: boolean;
-        betterStackSourceToken: string;
-        betterStackEndpoint?: string | undefined;
-    };
-    gcp: {
-        location: string;
-        credentials: {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        };
-    };
-    objectStorage: {
-        organizationFilesBucket: {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        };
-    };
-    clerk: {
-        domain: string;
-        secretKey: string;
-        jwtKey: string;
-    };
-    cache: {
-        type: "mongodb" | "redis" | "memory";
-        ttlInSeconds: number;
-        mongodb?: {
-            keyPrefix: string;
-        } | undefined;
-        redis?: {
-            url: string;
-            keyPrefix: string;
-            ssl?: boolean | undefined;
-        } | undefined;
-    };
-    swagger: {
-        title: string;
-        description: string;
-    };
-    microservices: {
-        name: string;
-        internalBaseUrl: string;
-    }[];
-    tasks: {
-        secret: string;
-    };
-    email?: {
-        sendgrid: {
-            apiKey: string;
-        };
-    } | undefined;
-    shortio?: {
-        domain: string;
-        apiKey: string;
-    } | undefined;
-}>;
-declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
-    env: Environment;
-    nodeEnv: "development" | "production";
-    databases: {
-        type: "mongodb" | "postgres";
-        uri: string;
-        transactionTimeoutInMiliseconds: number;
-        nTransactionRetries: number;
-        maxDelayBetweenTransactionAttempts: number;
-    }[];
-    auth: {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    };
-    logger: {
-        level: "log" | "error" | "warn" | "debug";
-        consoleLog: boolean;
-        betterStackSourceToken: string;
-        betterStackEndpoint?: string | undefined;
-    };
-    gcp: {
-        location: string;
-        credentials: {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        };
-    };
-    objectStorage: {
-        organizationFilesBucket: {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        };
-    };
-    clerk: {
-        domain: string;
-        secretKey: string;
-        jwtKey: string;
-    };
-    cache: {
-        type: "mongodb" | "redis" | "memory";
-        ttlInSeconds: number;
-        mongodb?: {
-            keyPrefix: string;
-        } | undefined;
-        redis?: {
-            url: string;
-            keyPrefix: string;
-            ssl: boolean;
-        } | undefined;
-    };
-    swagger: {
-        title: string;
-        description: string;
-    };
-    microservices: {
-        name: string;
-        internalBaseUrl: string;
-    }[];
-    tasks: {
-        secret: string;
-    };
-    email?: {
-        sendgrid: {
-            apiKey: string;
-        };
-    } | undefined;
-    shortio?: {
-        domain: string;
-        apiKey: string;
-    } | undefined;
-}, z.ZodObjectDef<{
-    env: z.ZodNativeEnum<typeof Environment>;
-    nodeEnv: z.ZodEnum<["development", "production"]>;
+    }, z.core.$strip>>;
+}, z.core.$strip>;
+declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<z.ZodObject<{
+    env: z.ZodEnum<typeof Environment>;
+    nodeEnv: z.ZodEnum<{
+        development: "development";
+        production: "production";
+    }>;
     databases: z.ZodArray<z.ZodObject<{
-        type: z.ZodEnum<["mongodb", "postgres"]>;
+        type: z.ZodEnum<{
+            mongodb: "mongodb";
+            postgres: "postgres";
+        }>;
         uri: z.ZodString;
         transactionTimeoutInMiliseconds: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
         nTransactionRetries: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
         maxDelayBetweenTransactionAttempts: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "mongodb" | "postgres";
-        uri: string;
-        transactionTimeoutInMiliseconds: number;
-        nTransactionRetries: number;
-        maxDelayBetweenTransactionAttempts: number;
-    }, {
-        type: "mongodb" | "postgres";
-        uri: string;
-        transactionTimeoutInMiliseconds?: number | undefined;
-        nTransactionRetries?: number | undefined;
-        maxDelayBetweenTransactionAttempts?: number | undefined;
-    }>, "many">;
-    auth: z.ZodEffects<z.ZodObject<{
+    }, z.core.$strip>>;
+    auth: z.ZodObject<{
         applyAuthGuardToAllRoutes: z.ZodBoolean;
         applyGcpServiceAccountGuardToAllRoutes: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    }, {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    }>, {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    }, {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    }>;
+    }, z.core.$strip>;
     logger: z.ZodObject<{
-        level: z.ZodEnum<["log", "error", "warn", "debug"]>;
+        level: z.ZodEnum<{
+            error: "error";
+            log: "log";
+            warn: "warn";
+            debug: "debug";
+        }>;
         consoleLog: z.ZodBoolean;
         betterStackSourceToken: z.ZodString;
         betterStackEndpoint: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        level: "log" | "error" | "warn" | "debug";
-        consoleLog: boolean;
-        betterStackSourceToken: string;
-        betterStackEndpoint?: string | undefined;
-    }, {
-        level: "log" | "error" | "warn" | "debug";
-        consoleLog: boolean;
-        betterStackSourceToken: string;
-        betterStackEndpoint?: string | undefined;
-    }>;
+    }, z.core.$strip>;
     gcp: z.ZodObject<{
         location: z.ZodString;
         credentials: z.ZodObject<{
@@ -597,62 +144,8 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             auth_provider_x509_cert_url: z.ZodString;
             client_x509_cert_url: z.ZodString;
             universe_domain: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        }, {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        location: string;
-        credentials: {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        };
-    }, {
-        location: string;
-        credentials: {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        };
-    }>;
+        }, z.core.$strip>;
+    }, z.core.$strip>;
     objectStorage: z.ZodObject<{
         organizationFilesBucket: z.ZodObject<{
             name: z.ZodString;
@@ -661,237 +154,52 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             privateKey: z.ZodString;
             audience: z.ZodString;
             subjectTokenType: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        }, {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        organizationFilesBucket: {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        };
-    }, {
-        organizationFilesBucket: {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        };
-    }>;
+        }, z.core.$strip>;
+    }, z.core.$strip>;
     clerk: z.ZodObject<{
         domain: z.ZodString;
         secretKey: z.ZodString;
         jwtKey: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        domain: string;
-        secretKey: string;
-        jwtKey: string;
-    }, {
-        domain: string;
-        secretKey: string;
-        jwtKey: string;
-    }>;
+    }, z.core.$strip>;
     cache: z.ZodObject<{
-        type: z.ZodEnum<["redis", "memory", "mongodb"]>;
+        type: z.ZodEnum<{
+            mongodb: "mongodb";
+            redis: "redis";
+            memory: "memory";
+        }>;
         ttlInSeconds: z.ZodNumber;
         redis: z.ZodOptional<z.ZodObject<{
             url: z.ZodString;
             keyPrefix: z.ZodString;
             ssl: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
-        }, "strip", z.ZodTypeAny, {
-            url: string;
-            keyPrefix: string;
-            ssl: boolean;
-        }, {
-            url: string;
-            keyPrefix: string;
-            ssl?: boolean | undefined;
-        }>>;
+        }, z.core.$strip>>;
         mongodb: z.ZodOptional<z.ZodObject<{
             keyPrefix: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            keyPrefix: string;
-        }, {
-            keyPrefix: string;
-        }>>;
-    }, "strip", z.ZodTypeAny, {
-        type: "mongodb" | "redis" | "memory";
-        ttlInSeconds: number;
-        mongodb?: {
-            keyPrefix: string;
-        } | undefined;
-        redis?: {
-            url: string;
-            keyPrefix: string;
-            ssl: boolean;
-        } | undefined;
-    }, {
-        type: "mongodb" | "redis" | "memory";
-        ttlInSeconds: number;
-        mongodb?: {
-            keyPrefix: string;
-        } | undefined;
-        redis?: {
-            url: string;
-            keyPrefix: string;
-            ssl?: boolean | undefined;
-        } | undefined;
-    }>;
+        }, z.core.$strip>>;
+    }, z.core.$strip>;
     swagger: z.ZodObject<{
         title: z.ZodString;
         description: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        title: string;
-        description: string;
-    }, {
-        title: string;
-        description: string;
-    }>;
+    }, z.core.$strip>;
     microservices: z.ZodArray<z.ZodObject<{
         name: z.ZodString;
         internalBaseUrl: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
-        internalBaseUrl: string;
-    }, {
-        name: string;
-        internalBaseUrl: string;
-    }>, "many">;
+    }, z.core.$strip>>;
     tasks: z.ZodObject<{
         secret: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        secret: string;
-    }, {
-        secret: string;
-    }>;
+    }, z.core.$strip>;
     email: z.ZodOptional<z.ZodObject<{
         sendgrid: z.ZodObject<{
             apiKey: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            apiKey: string;
-        }, {
-            apiKey: string;
-        }>;
-    }, "strip", z.ZodTypeAny, {
-        sendgrid: {
-            apiKey: string;
-        };
-    }, {
-        sendgrid: {
-            apiKey: string;
-        };
-    }>>;
+        }, z.core.$strip>;
+    }, z.core.$strip>>;
     shortio: z.ZodOptional<z.ZodObject<{
         apiKey: z.ZodString;
         domain: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        domain: string;
-        apiKey: string;
-    }, {
-        domain: string;
-        apiKey: string;
-    }>>;
-}, "strip", z.ZodTypeAny>, {
-    env: Environment;
-    nodeEnv: "development" | "production";
-    databases: {
-        type: "mongodb" | "postgres";
-        uri: string;
-        transactionTimeoutInMiliseconds?: number | undefined;
-        nTransactionRetries?: number | undefined;
-        maxDelayBetweenTransactionAttempts?: number | undefined;
-    }[];
-    auth: {
-        applyAuthGuardToAllRoutes: boolean;
-        applyGcpServiceAccountGuardToAllRoutes: boolean;
-    };
-    logger: {
-        level: "log" | "error" | "warn" | "debug";
-        consoleLog: boolean;
-        betterStackSourceToken: string;
-        betterStackEndpoint?: string | undefined;
-    };
-    gcp: {
-        location: string;
-        credentials: {
-            type: string;
-            project_id: string;
-            private_key_id: string;
-            private_key: string;
-            client_email: string;
-            client_id: string;
-            auth_uri: string;
-            token_uri: string;
-            auth_provider_x509_cert_url: string;
-            client_x509_cert_url: string;
-            universe_domain: string;
-        };
-    };
-    objectStorage: {
-        organizationFilesBucket: {
-            name: string;
-            projectId: string;
-            clientEmail: string;
-            privateKey: string;
-            audience: string;
-            subjectTokenType: string;
-        };
-    };
-    clerk: {
-        domain: string;
-        secretKey: string;
-        jwtKey: string;
-    };
-    cache: {
-        type: "mongodb" | "redis" | "memory";
-        ttlInSeconds: number;
-        mongodb?: {
-            keyPrefix: string;
-        } | undefined;
-        redis?: {
-            url: string;
-            keyPrefix: string;
-            ssl?: boolean | undefined;
-        } | undefined;
-    };
-    swagger: {
-        title: string;
-        description: string;
-    };
-    microservices: {
-        name: string;
-        internalBaseUrl: string;
-    }[];
-    tasks: {
-        secret: string;
-    };
-    email?: {
-        sendgrid: {
-            apiKey: string;
-        };
-    } | undefined;
-    shortio?: {
-        domain: string;
-        apiKey: string;
-    } | undefined;
-}>;
+    }, z.core.$strip>>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 export declare class BaseConfigEntity extends BaseConfigEntity_base {
     static build(input: z.input<typeof BaseConfigSchema>): BaseConfigEntity;
 }
