@@ -80,12 +80,12 @@ let AppExceptionsFilter = class AppExceptionsFilter {
         const { httpAdapter } = this.httpAdapterHost;
         const ctx = host.switchToHttp();
         const { statusCode, message, errors } = this.prepareResponse(exception);
-        if (statusCode === +common_1.HttpStatus.INTERNAL_SERVER_ERROR ||
-            statusCode === +common_1.HttpStatus.NOT_IMPLEMENTED ||
-            statusCode === +common_1.HttpStatus.BAD_GATEWAY ||
-            statusCode === +common_1.HttpStatus.SERVICE_UNAVAILABLE ||
-            statusCode === +common_1.HttpStatus.GATEWAY_TIMEOUT ||
-            statusCode === +common_1.HttpStatus.HTTP_VERSION_NOT_SUPPORTED) {
+        if (statusCode === common_1.HttpStatus.INTERNAL_SERVER_ERROR.valueOf() ||
+            statusCode === common_1.HttpStatus.NOT_IMPLEMENTED.valueOf() ||
+            statusCode === common_1.HttpStatus.BAD_GATEWAY.valueOf() ||
+            statusCode === common_1.HttpStatus.SERVICE_UNAVAILABLE.valueOf() ||
+            statusCode === common_1.HttpStatus.GATEWAY_TIMEOUT.valueOf() ||
+            statusCode === common_1.HttpStatus.HTTP_VERSION_NOT_SUPPORTED.valueOf()) {
             if (exception instanceof Error) {
                 Sentry.captureException(exception);
                 this.loggerService.error(`[${this.clsService.getId()}] ${exception.message}`, {

@@ -1,12 +1,18 @@
 import { z } from "zod";
 declare const JobRequestPayloadEntitySchema: z.ZodObject<{
     jobRequestId: z.ZodString;
-}, z.core.$strip>;
-declare const JobRequestPayloadEntity_base: import("nestjs-zod").ZodDto<z.ZodObject<{
+}, "strip", z.ZodTypeAny, {
+    jobRequestId: string;
+}, {
+    jobRequestId: string;
+}>;
+declare const JobRequestPayloadEntity_base: import("nestjs-zod").ZodDto<{
+    jobRequestId: string;
+}, z.ZodObjectDef<{
     jobRequestId: z.ZodString;
-}, z.core.$strip>> & {
-    io: "input";
-};
+}, "strip", z.ZodTypeAny>, {
+    jobRequestId: string;
+}>;
 export declare class JobRequestPayloadEntity extends JobRequestPayloadEntity_base {
     static build(input: z.infer<typeof JobRequestPayloadEntitySchema>): JobRequestPayloadEntity;
 }

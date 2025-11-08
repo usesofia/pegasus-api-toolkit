@@ -49,12 +49,12 @@ export class AppExceptionsFilter implements ExceptionFilter {
 
     const { statusCode, message, errors } = this.prepareResponse(exception);
     if (
-      statusCode === +HttpStatus.INTERNAL_SERVER_ERROR ||
-      statusCode === +HttpStatus.NOT_IMPLEMENTED ||
-      statusCode === +HttpStatus.BAD_GATEWAY ||
-      statusCode === +HttpStatus.SERVICE_UNAVAILABLE ||
-      statusCode === +HttpStatus.GATEWAY_TIMEOUT ||
-      statusCode === +HttpStatus.HTTP_VERSION_NOT_SUPPORTED
+      statusCode === HttpStatus.INTERNAL_SERVER_ERROR.valueOf() ||
+      statusCode === HttpStatus.NOT_IMPLEMENTED.valueOf() ||
+      statusCode === HttpStatus.BAD_GATEWAY.valueOf() ||
+      statusCode === HttpStatus.SERVICE_UNAVAILABLE.valueOf() ||
+      statusCode === HttpStatus.GATEWAY_TIMEOUT.valueOf() ||
+      statusCode === HttpStatus.HTTP_VERSION_NOT_SUPPORTED.valueOf()
     ) {
       if (exception instanceof Error) {
         Sentry.captureException(exception);

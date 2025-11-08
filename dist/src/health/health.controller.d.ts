@@ -1,13 +1,15 @@
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { z } from 'zod';
-import { Base } from '@app/base';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
-declare const HealthResponseDto_base: import("nestjs-zod").ZodDto<z.ZodObject<{
+import { Base } from '../base';
+import { BaseConfigEntity } from '../config/base-config.entity';
+declare const HealthResponseDto_base: import("nestjs-zod").ZodDto<{
+    status: string;
+}, z.ZodObjectDef<{
     status: z.ZodString;
-}, z.core.$strip>> & {
-    io: "input";
-};
+}, "strip", z.ZodTypeAny>, {
+    status: string;
+}>;
 declare class HealthResponseDto extends HealthResponseDto_base {
 }
 export declare class HealthController extends Base {

@@ -1,8 +1,8 @@
 import { LoggerService } from '@nestjs/common';
-import { EmailSchema, EmailServicePort } from '@app/email/email-service.port';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { EmailSchema, EmailServicePort } from '../../email/email-service.port';
+import { BaseConfigEntity } from '../../config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
-import { Base } from '@app/base';
+import { Base } from '../../base';
 import sgMail from '@sendgrid/mail';
 import z from 'zod';
 export declare class SendgridEmailServiceAdapter extends Base implements EmailServicePort {

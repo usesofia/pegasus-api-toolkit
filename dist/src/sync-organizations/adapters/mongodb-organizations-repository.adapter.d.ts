@@ -1,8 +1,8 @@
-import { Base } from '@app/base';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
-import { MongoDbOrganizationModel } from '@app/sync-organizations/mongodb-organization-model';
-import { OrganizationsRepositoryPort } from '@app/sync-organizations/ports/organizations-repository.port';
-import { OrganizationSubscriptionStatus, OrganizationSubtype } from '@app/sync-organizations/sync-organizations.constants';
+import { Base } from '../../base';
+import { BaseConfigEntity } from '../../config/base-config.entity';
+import { MongoDbOrganizationModel } from '../../sync-organizations/mongodb-organization-model';
+import { OrganizationsRepositoryPort } from '../../sync-organizations/ports/organizations-repository.port';
+import { OrganizationSubscriptionStatus, OrganizationSubtype } from '../../sync-organizations/sync-organizations.constants';
 import { LoggerService } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { ClsService } from 'nestjs-cls';

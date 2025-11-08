@@ -1,4 +1,4 @@
-import { WebsocketMessageEntity } from "@app/pub-sub/websocket-message.entity";
+import { WebsocketMessageEntity } from "../pub-sub/websocket-message.entity";
 export interface PubSubServicePort {
     publish({ topic, payload, correlationId, }: {
         topic: string;
