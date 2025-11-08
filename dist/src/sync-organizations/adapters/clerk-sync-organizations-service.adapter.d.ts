@@ -1,7 +1,7 @@
-import { Base } from "../../base";
-import { BaseConfigEntity } from "../../config/base-config.entity";
-import { OrganizationsRepositoryPort } from "../../sync-organizations/ports/organizations-repository.port";
-import { SyncOrganizationsServicePort } from "../../sync-organizations/ports/sync-organizations-service.port";
+import { Base } from "@app/base";
+import { BaseConfigEntity } from "@app/config/base-config.entity";
+import { OrganizationsRepositoryPort } from "@app/sync-organizations/ports/organizations-repository.port";
+import { SyncOrganizationsServicePort } from "@app/sync-organizations/ports/sync-organizations-service.port";
 import { LoggerService } from "@nestjs/common";
 import { ClerkClient } from "@usesofia/clerk-backend";
 import { ClsService } from "nestjs-cls";

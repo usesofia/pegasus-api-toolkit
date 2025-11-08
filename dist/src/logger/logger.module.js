@@ -21,6 +21,8 @@ const pino_logger_1 = require("./pino-logger");
 const morgan_1 = __importDefault(require("morgan"));
 const correlation_constants_1 = require("../correlation/correlation.constants");
 const base_config_entity_1 = require("../config/base-config.entity");
+const environment_utils_1 = require("../utils/environment.utils");
+const cli_console_logger_1 = require("./cli-console-logger");
 exports.LOGGER_SERVICE_PORT = Symbol('LoggerServicePort');
 morgan_1.default.token(correlation_constants_1.correlationIdTokenKey, (req) => req[correlation_constants_1.correlationIdKey]);
 let LoggerModule = class LoggerModule {
@@ -85,12 +87,16 @@ exports.LoggerModule = LoggerModule = __decorate([
     (0, common_1.Module)({
         providers: [
             pino_logger_1.PinoLoggerAdapter,
+            cli_console_logger_1.CliConsoleLoggerAdapter,
             {
                 provide: exports.LOGGER_SERVICE_PORT,
-                useFactory: (pinoLoggerAdapter) => {
+                useFactory: (pinoLoggerAdapter, consoleLoggerAdapter) => {
+                    if ((0, environment_utils_1.isCli)()) {
+                        return consoleLoggerAdapter;
+                    }
                     return pinoLoggerAdapter;
                 },
-                inject: [pino_logger_1.PinoLoggerAdapter],
+                inject: [pino_logger_1.PinoLoggerAdapter, cli_console_logger_1.CliConsoleLoggerAdapter],
             },
         ],
         exports: [exports.LOGGER_SERVICE_PORT],

@@ -1,15 +1,15 @@
-import { BaseConfigEntity } from '../../config/base-config.entity';
-import type { ConfirmFileUploadRequestEntity } from '../../files/entities/confirm-file-upload-request.entity';
-import type { CreateFileUploadRequestEntity } from '../../files/entities/create-file-upload-request.entity';
-import { BaseFileEntity, FileEntity } from '../../files/entities/file.entity';
-import type { RemoveFileRequestEntity } from '../../files/entities/remove-file-request.entity';
-import { type FilesRepositoryPort } from '../../files/ports/files-repository.port';
-import { type BuildableEntity, type FilesServicePort, type PopulatesFile } from '../../files/ports/files-service.port';
-import { type ObjectStorageServicePort } from '../../files/ports/object-storage-service.port';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import type { ConfirmFileUploadRequestEntity } from '@app/files/entities/confirm-file-upload-request.entity';
+import type { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-upload-request.entity';
+import { BaseFileEntity, FileEntity } from '@app/files/entities/file.entity';
+import type { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
+import { type FilesRepositoryPort } from '@app/files/ports/files-repository.port';
+import { type BuildableEntity, type FilesServicePort, type PopulatesFile } from '@app/files/ports/files-service.port';
+import { type ObjectStorageServicePort } from '@app/files/ports/object-storage-service.port';
 import { LoggerService } from '@nestjs/common';
-import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { ClsService } from 'nestjs-cls';
-import { Base } from '../../base';
+import { Base } from '@app/base';
 export declare class FilesServiceAdapter extends Base implements FilesServicePort {
     protected readonly baseConfig: BaseConfigEntity;
     protected readonly logger: LoggerService;

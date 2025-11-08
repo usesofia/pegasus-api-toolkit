@@ -1,8 +1,8 @@
-import { ConfirmFileUploadRequestEntity } from '../../files/entities/confirm-file-upload-request.entity';
-import { CreateFileUploadRequestEntity } from '../../files/entities/create-file-upload-request.entity';
-import { BaseFileEntity, FileEntity, FileEntitySchema } from '../../files/entities/file.entity';
-import { RemoveFileRequestEntity } from '../../files/entities/remove-file-request.entity';
-import { AuthUserEntity } from '../../auth/entities/auth-user.entity';
+import { ConfirmFileUploadRequestEntity } from '@app/files/entities/confirm-file-upload-request.entity';
+import { CreateFileUploadRequestEntity } from '@app/files/entities/create-file-upload-request.entity';
+import { BaseFileEntity, FileEntity, FileEntitySchema } from '@app/files/entities/file.entity';
+import { RemoveFileRequestEntity } from '@app/files/entities/remove-file-request.entity';
+import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import z from 'zod';
 export declare const FILES_SERVICE_PORT: unique symbol;
 export interface PopulatesFile {

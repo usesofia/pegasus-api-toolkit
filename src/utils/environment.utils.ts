@@ -20,7 +20,7 @@ export function getEnvironment(): Environment {
       return Environment.PROD;
     default:
       throw new Error(
-        `Invalid environment: ${(process.env.ENV ?? 'undefined').toString()}`,
+        `Invalid environment: ${process.env.ENV ?? 'undefined'}`,
       );
   }
 }
@@ -31,4 +31,8 @@ export function isLocalEnvironment(): boolean {
 
 export function isIntegrationTestEnvironment(): boolean {
   return getEnvironment() === Environment.INTEGRATION_TEST;
+}
+
+export function isCli(): boolean {
+	return process.env.CLI === "true";
 }

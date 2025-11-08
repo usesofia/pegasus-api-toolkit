@@ -4,6 +4,7 @@ exports.Environment = void 0;
 exports.getEnvironment = getEnvironment;
 exports.isLocalEnvironment = isLocalEnvironment;
 exports.isIntegrationTestEnvironment = isIntegrationTestEnvironment;
+exports.isCli = isCli;
 var Environment;
 (function (Environment) {
     Environment["LOCAL"] = "local";
@@ -25,7 +26,7 @@ function getEnvironment() {
         case 'prod':
             return Environment.PROD;
         default:
-            throw new Error(`Invalid environment: ${(process.env.ENV ?? 'undefined').toString()}`);
+            throw new Error(`Invalid environment: ${process.env.ENV ?? 'undefined'}`);
     }
 }
 function isLocalEnvironment() {
@@ -33,5 +34,8 @@ function isLocalEnvironment() {
 }
 function isIntegrationTestEnvironment() {
     return getEnvironment() === Environment.INTEGRATION_TEST;
+}
+function isCli() {
+    return process.env.CLI === "true";
 }
 //# sourceMappingURL=environment.utils.js.map

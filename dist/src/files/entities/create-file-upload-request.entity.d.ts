@@ -1,153 +1,46 @@
 import { z } from 'zod';
-export declare const CreateFileUploadRequestDataEntitySchema: z.ZodObject<Omit<{
-    id: z.ZodString;
-    ownerOrganization: z.ZodString;
+export declare const CreateFileUploadRequestDataEntitySchema: z.ZodObject<{
+    size: z.ZodNumber;
+    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodCoercedDate<unknown>>>;
     originalFileName: z.ZodString;
     mimeType: z.ZodString;
-    size: z.ZodNumber;
-    fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
-    objectName: z.ZodString;
-    status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+    fileType: z.ZodEnum<typeof import("@app/files/entities/file.entity").FileType>;
     caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
-    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-} & {
-    url: z.ZodString;
-    signedUrl: z.ZodString;
-}, "status" | "url" | "id" | "ownerOrganization" | "updatedAt" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-    size: number;
-    deletedAt: Date | null;
-    originalFileName: string;
-    mimeType: string;
-    fileType: import("../../files/entities/file.entity").FileType;
-    caption?: string | null | undefined;
-}, {
-    size: number;
-    originalFileName: string;
-    mimeType: string;
-    fileType: import("../../files/entities/file.entity").FileType;
-    deletedAt?: Date | null | undefined;
-    caption?: string | null | undefined;
-}>;
+}, z.core.$strip>;
 declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
-    data: z.ZodObject<Omit<{
-        id: z.ZodString;
-        ownerOrganization: z.ZodString;
+    data: z.ZodObject<{
+        size: z.ZodNumber;
+        deletedAt: z.ZodDefault<z.ZodNullable<z.ZodCoercedDate<unknown>>>;
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
-        size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
-        objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+        fileType: z.ZodEnum<typeof import("@app/files/entities/file.entity").FileType>;
         caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        createdAt: z.ZodDate;
-        updatedAt: z.ZodDate;
-        deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-    } & {
-        url: z.ZodString;
-        signedUrl: z.ZodString;
-    }, "status" | "url" | "id" | "ownerOrganization" | "updatedAt" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-        size: number;
-        deletedAt: Date | null;
-        originalFileName: string;
-        mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
-        caption?: string | null | undefined;
-    }, {
-        size: number;
-        originalFileName: string;
-        mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
-        deletedAt?: Date | null | undefined;
-        caption?: string | null | undefined;
-    }>;
-    channel: z.ZodNativeEnum<{
+    }, z.core.$strip>;
+    channel: z.ZodEnum<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
         readonly EMAIL: "EMAIL";
     }>;
-}, "strip", z.ZodTypeAny, {
-    data: {
-        size: number;
-        deletedAt: Date | null;
-        originalFileName: string;
-        mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
-        caption?: string | null | undefined;
-    };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
-}, {
-    data: {
-        size: number;
-        originalFileName: string;
-        mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
-        deletedAt?: Date | null | undefined;
-        caption?: string | null | undefined;
-    };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
-}>;
-declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
-    data: {
-        size: number;
-        deletedAt: Date | null;
-        originalFileName: string;
-        mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
-        caption?: string | null | undefined;
-    };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
-}, z.ZodObjectDef<{
-    data: z.ZodObject<Omit<{
-        id: z.ZodString;
-        ownerOrganization: z.ZodString;
+}, z.core.$strip>;
+declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<z.ZodObject<{
+    data: z.ZodObject<{
+        size: z.ZodNumber;
+        deletedAt: z.ZodDefault<z.ZodNullable<z.ZodCoercedDate<unknown>>>;
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
-        size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
-        objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+        fileType: z.ZodEnum<typeof import("@app/files/entities/file.entity").FileType>;
         caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        createdAt: z.ZodDate;
-        updatedAt: z.ZodDate;
-        deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-    } & {
-        url: z.ZodString;
-        signedUrl: z.ZodString;
-    }, "status" | "url" | "id" | "ownerOrganization" | "updatedAt" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-        size: number;
-        deletedAt: Date | null;
-        originalFileName: string;
-        mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
-        caption?: string | null | undefined;
-    }, {
-        size: number;
-        originalFileName: string;
-        mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
-        deletedAt?: Date | null | undefined;
-        caption?: string | null | undefined;
-    }>;
-    channel: z.ZodNativeEnum<{
+    }, z.core.$strip>;
+    channel: z.ZodEnum<{
         readonly WEB_APP: "WEB_APP";
         readonly WHATSAPP: "WHATSAPP";
         readonly SYSTEM: "SYSTEM";
         readonly EMAIL: "EMAIL";
     }>;
-}, "strip", z.ZodTypeAny>, {
-    data: {
-        size: number;
-        originalFileName: string;
-        mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
-        deletedAt?: Date | null | undefined;
-        caption?: string | null | undefined;
-    };
-    channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
-}>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 export declare class CreateFileUploadRequestEntity extends CreateFileUploadRequestEntity_base {
     static build(input: z.input<typeof CreateFileUploadRequestEntitySchema>): CreateFileUploadRequestEntity;
 }

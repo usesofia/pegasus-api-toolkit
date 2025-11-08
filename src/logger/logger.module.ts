@@ -15,6 +15,8 @@ import {
 } from '@app/correlation/correlation.constants';
 import { Request } from 'express';
 import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
+import { isCli } from '@app/utils/environment.utils';
+import { CliConsoleLoggerAdapter } from '@app/logger/cli-console-logger';
 
 declare module 'express' {
   interface Request {
@@ -30,12 +32,16 @@ morgan.token(correlationIdTokenKey, (req: Request) => req[correlationIdKey]);
 @Module({
   providers: [
     PinoLoggerAdapter,
+    CliConsoleLoggerAdapter,
     {
       provide: LOGGER_SERVICE_PORT,
-      useFactory: (pinoLoggerAdapter: PinoLoggerAdapter) => {
-        return pinoLoggerAdapter;
-      },
-      inject: [PinoLoggerAdapter],
+      useFactory: (pinoLoggerAdapter: PinoLoggerAdapter, consoleLoggerAdapter: CliConsoleLoggerAdapter) => {
+				if (isCli()) {
+					return consoleLoggerAdapter;
+				}
+				return pinoLoggerAdapter;
+			},
+      inject: [PinoLoggerAdapter, CliConsoleLoggerAdapter],
     },
   ],
   exports: [LOGGER_SERVICE_PORT],

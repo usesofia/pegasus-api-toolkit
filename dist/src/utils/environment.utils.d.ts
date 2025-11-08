@@ -8,3 +8,4 @@ export declare enum Environment {
 export declare function getEnvironment(): Environment;
 export declare function isLocalEnvironment(): boolean;
 export declare function isIntegrationTestEnvironment(): boolean;
+export declare function isCli(): boolean;
