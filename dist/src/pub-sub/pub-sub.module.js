@@ -40,7 +40,7 @@ exports.PubSubModule = PubSubModule = __decorate([
             {
                 provide: pub_sub_service_port_1.PUB_SUB_SERVICE_PORT,
                 useFactory: (baseConfig, logger, cls, pubSubEventModel, pubSub) => {
-                    if ((0, environment_utils_1.isLocalEnvironment)() || (0, environment_utils_1.isIntegrationTestEnvironment)()) {
+                    if ((0, environment_utils_1.isLocalEnvironment)() || (0, environment_utils_1.isIntegrationTestEnvironment)() || (0, environment_utils_1.isCli)()) {
                         return new mongodb_pub_sub_service_adapter_1.MongoDbPubSubServiceAdapter(baseConfig, logger, cls, pubSubEventModel);
                     }
                     return new gcp_pub_sub_service_adapter_1.GcpPubSubServiceAdapter(baseConfig, logger, cls, pubSub);
