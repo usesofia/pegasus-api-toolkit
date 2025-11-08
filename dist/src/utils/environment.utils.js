@@ -35,7 +35,9 @@ function isLocalEnvironment() {
 function isIntegrationTestEnvironment() {
     return getEnvironment() === Environment.INTEGRATION_TEST;
 }
+let _isCli = undefined;
 function isCli() {
-    return process.env.CLI === "true";
+    _isCli ??= process.env.CLI === "true";
+    return _isCli;
 }
 //# sourceMappingURL=environment.utils.js.map

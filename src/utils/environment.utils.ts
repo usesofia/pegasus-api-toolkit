@@ -33,6 +33,9 @@ export function isIntegrationTestEnvironment(): boolean {
   return getEnvironment() === Environment.INTEGRATION_TEST;
 }
 
+let _isCli: boolean | undefined = undefined;
+
 export function isCli(): boolean {
-	return process.env.CLI === "true";
+	_isCli ??= process.env.CLI === "true";
+	return _isCli;
 }
