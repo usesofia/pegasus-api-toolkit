@@ -104,5 +104,8 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
         deltaDurationToConsiderAsOutdated: Duration;
         previousSession?: BaseSessionPort;
         lastRunAt?: Date;
-    }): Promise<string[]>;
+    }): Promise<{
+        id: string;
+        ownerOrganization: string;
+    }[]>;
 }

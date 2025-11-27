@@ -457,7 +457,7 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     deltaDurationToConsiderAsOutdated: Duration;
     previousSession?: BaseSessionPort;
     lastRunAt?: Date;
-  }): Promise<string[]> {
+  }): Promise<{id: string, ownerOrganization: string}[]> {
     const session = previousSession
       ? (previousSession.getSession() as ClientSession)
       : null;
@@ -499,16 +499,16 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
           ],
         },
       },
-      { $project: { _id: 1 } },
+      { $project: { _id: 1, ownerOrganization: 1 } },
       { $limit: limit },
     ];
 
-    const aggregateQuery = this.model.aggregate<{ _id: ObjectId }>(pipeline);
+    const aggregateQuery = this.model.aggregate<{ _id: ObjectId, ownerOrganization: string }>(pipeline);
     if (session) {
       aggregateQuery.session(session);
     }
     const outdateds = await aggregateQuery;
 
-    return outdateds.map((doc) => doc._id.toString());
+    return outdateds.map((doc) => ({ id: doc._id.toString(), ownerOrganization: doc.ownerOrganization }));
   } 
 }

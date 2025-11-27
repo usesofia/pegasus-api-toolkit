@@ -287,7 +287,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
                     ],
                 },
             },
-            { $project: { _id: 1 } },
+            { $project: { _id: 1, ownerOrganization: 1 } },
             { $limit: limit },
         ];
         const aggregateQuery = this.model.aggregate(pipeline);
@@ -295,7 +295,7 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             aggregateQuery.session(session);
         }
         const outdateds = await aggregateQuery;
-        return outdateds.map((doc) => doc._id.toString());
+        return outdateds.map((doc) => ({ id: doc._id.toString(), ownerOrganization: doc.ownerOrganization }));
     }
 }
 exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;
