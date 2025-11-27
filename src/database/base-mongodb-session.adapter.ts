@@ -61,7 +61,7 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
         ) {
           throw error;
         }
-        this.logWarn({
+        this.logDebug({
           functionName: 'withTransaction',
           suffix: `attemptFailed`,
           data: {
