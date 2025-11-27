@@ -247,41 +247,55 @@ class BaseMultitenantMongoDbRepositoryAdapter extends base_1.Base {
             },
         };
     }
-    async findAllWithOutdatedMarkdownEmbedding({ limit, deltaDurationToConsiderAsOutdated, previousSession, }) {
+    async findAllWithOutdatedMarkdownEmbedding({ limit, deltaDurationToConsiderAsOutdated, previousSession, lastRunAt, }) {
         const session = previousSession
             ? previousSession.getSession()
             : null;
         const currentDate = new Date();
         const thresholdDate = new Date(currentDate.getTime() - deltaDurationToConsiderAsOutdated.toMillis());
-        const outdateds = await this.model.find({
-            $or: [
-                {
-                    $or: [
-                        { markdownEmbeddingUpdatedAt: null },
-                        { markdownEmbeddingUpdatedAt: { $exists: false } }
-                    ],
-                    updatedAt: { $lt: thresholdDate }
+        const minUpdatedAt = lastRunAt ? new Date(lastRunAt.getTime() - 2 * deltaDurationToConsiderAsOutdated.toMillis()) : undefined;
+        const pipeline = [
+            {
+                $match: {
+                    deletedAt: null,
+                    ...(minUpdatedAt ? { updatedAt: { $gte: minUpdatedAt } } : {}),
                 },
-                {
-                    markdownEmbeddingUpdatedAt: { $ne: null, $exists: true },
-                    $expr: {
-                        $and: [
-                            { $gt: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
-                            {
+            },
+            {
+                $match: {
+                    $or: [
+                        {
+                            $and: [
+                                {
+                                    $or: [
+                                        { markdownEmbeddingUpdatedAt: null },
+                                        { markdownEmbeddingUpdatedAt: { $exists: false } },
+                                    ],
+                                },
+                                { updatedAt: { $lt: thresholdDate } },
+                            ],
+                        },
+                        {
+                            markdownEmbeddingUpdatedAt: { $ne: null, $exists: true },
+                            $expr: {
                                 $gt: [
-                                    { $subtract: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
-                                    deltaDurationToConsiderAsOutdated.toMillis()
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ],
-            deletedAt: null
-        })
-            .limit(limit)
-            .session(session);
-        return await Promise.all(outdateds.map(async (doc) => this.toEntity({ doc })));
+                                    { $subtract: ['$updatedAt', '$markdownEmbeddingUpdatedAt'] },
+                                    deltaDurationToConsiderAsOutdated.toMillis(),
+                                ],
+                            },
+                        },
+                    ],
+                },
+            },
+            { $project: { _id: 1 } },
+            { $limit: limit },
+        ];
+        const aggregateQuery = this.model.aggregate(pipeline);
+        if (session) {
+            aggregateQuery.session(session);
+        }
+        const outdateds = await aggregateQuery;
+        return outdateds.map((doc) => doc._id.toString());
     }
 }
 exports.BaseMultitenantMongoDbRepositoryAdapter = BaseMultitenantMongoDbRepositoryAdapter;

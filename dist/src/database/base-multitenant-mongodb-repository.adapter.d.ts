@@ -99,9 +99,10 @@ export declare abstract class BaseMultitenantMongoDbRepositoryAdapter<TDoc exten
         path: string;
         limit: number;
     }): PipelineStage;
-    findAllWithOutdatedMarkdownEmbedding({ limit, deltaDurationToConsiderAsOutdated, previousSession, }: {
+    findAllWithOutdatedMarkdownEmbedding({ limit, deltaDurationToConsiderAsOutdated, previousSession, lastRunAt, }: {
         limit: number;
         deltaDurationToConsiderAsOutdated: Duration;
         previousSession?: BaseSessionPort;
-    }): Promise<TEntity[]>;
+        lastRunAt?: Date;
+    }): Promise<string[]>;
 }

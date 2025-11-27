@@ -451,49 +451,64 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     limit,
     deltaDurationToConsiderAsOutdated,
     previousSession,
+    lastRunAt,
   }: {
     limit: number;
     deltaDurationToConsiderAsOutdated: Duration;
     previousSession?: BaseSessionPort;
-  }): Promise<TEntity[]> {
+    lastRunAt?: Date;
+  }): Promise<string[]> {
     const session = previousSession
       ? (previousSession.getSession() as ClientSession)
       : null;
 
     const currentDate = new Date();
     const thresholdDate = new Date(currentDate.getTime() - deltaDurationToConsiderAsOutdated.toMillis());
+    const minUpdatedAt = lastRunAt ? new Date(lastRunAt.getTime() - 2 * deltaDurationToConsiderAsOutdated.toMillis()) : undefined;
 
-    const outdateds = await this.model.find({
-      $or: [
-        // Condition 1: markdownEmbeddingUpdatedAt is null or undefined and updatedAt is older than threshold
-        {
-          $or: [
-            { markdownEmbeddingUpdatedAt: null },
-            { markdownEmbeddingUpdatedAt: { $exists: false } }
-          ],
-          updatedAt: { $lt: thresholdDate }
+    const pipeline: PipelineStage[] = [
+      {
+        $match: {
+          deletedAt: null,
+          ...(minUpdatedAt ? { updatedAt: { $gte: minUpdatedAt } } : {}),
         },
-        // Condition 2: markdownEmbeddingUpdatedAt is older than updatedAt with minimum delta duration
-        {
-          markdownEmbeddingUpdatedAt: { $ne: null, $exists: true },
-          $expr: {
-            $and: [
-              { $gt: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
-              { 
+      },
+      {
+        $match: {
+          $or: [
+            {
+              $and: [
+                {
+                  $or: [
+                    { markdownEmbeddingUpdatedAt: null },
+                    { markdownEmbeddingUpdatedAt: { $exists: false } },
+                  ],
+                },
+                { updatedAt: { $lt: thresholdDate } },
+              ],
+            },
+            {
+              markdownEmbeddingUpdatedAt: { $ne: null, $exists: true },
+              $expr: {
                 $gt: [
-                  { $subtract: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
-                  deltaDurationToConsiderAsOutdated.toMillis()
-                ]
-              }
-            ]
-          }
-        }
-      ],
-      deletedAt: null
-    })
-    .limit(limit)
-    .session(session);
+                  { $subtract: ['$updatedAt', '$markdownEmbeddingUpdatedAt'] },
+                  deltaDurationToConsiderAsOutdated.toMillis(),
+                ],
+              },
+            },
+          ],
+        },
+      },
+      { $project: { _id: 1 } },
+      { $limit: limit },
+    ];
 
-    return await Promise.all(outdateds.map(async (doc) => this.toEntity({ doc })));
+    const aggregateQuery = this.model.aggregate<{ _id: ObjectId }>(pipeline);
+    if (session) {
+      aggregateQuery.session(session);
+    }
+    const outdateds = await aggregateQuery;
+
+    return outdateds.map((doc) => doc._id.toString());
   } 
 }
