@@ -7,9 +7,9 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
         originalFileName: z.ZodOptional<z.ZodString>;
         mimeType: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodNumber>;
-        fileType: z.ZodOptional<z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>>;
+        fileType: z.ZodOptional<z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>>;
         objectName: z.ZodOptional<z.ZodString>;
-        status: z.ZodOptional<z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>>;
+        status: z.ZodOptional<z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>>;
         caption: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
         createdAt: z.ZodOptional<z.ZodDate>;
         updatedAt: z.ZodOptional<z.ZodDate>;
@@ -17,24 +17,24 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
         url: z.ZodOptional<z.ZodString>;
         signedUrl: z.ZodOptional<z.ZodString>;
     }, "id" | "ownerOrganization" | "updatedAt" | "createdAt">, "strip", z.ZodTypeAny, {
-        status?: import("@app/files/entities/file.entity").FileStatus | undefined;
+        status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
         size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
-        fileType?: import("@app/files/entities/file.entity").FileType | undefined;
+        fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
         signedUrl?: string | undefined;
     }, {
-        status?: import("@app/files/entities/file.entity").FileStatus | undefined;
+        status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
         size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
-        fileType?: import("@app/files/entities/file.entity").FileType | undefined;
+        fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
         signedUrl?: string | undefined;
@@ -47,13 +47,13 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
-        status?: import("@app/files/entities/file.entity").FileStatus | undefined;
+        status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
         size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
-        fileType?: import("@app/files/entities/file.entity").FileType | undefined;
+        fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
         signedUrl?: string | undefined;
@@ -62,13 +62,13 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, {
     data: {
-        status?: import("@app/files/entities/file.entity").FileStatus | undefined;
+        status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
         size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
-        fileType?: import("@app/files/entities/file.entity").FileType | undefined;
+        fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
         signedUrl?: string | undefined;
@@ -78,13 +78,13 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
 }>;
 declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
-        status?: import("@app/files/entities/file.entity").FileStatus | undefined;
+        status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
         size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
-        fileType?: import("@app/files/entities/file.entity").FileType | undefined;
+        fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
         signedUrl?: string | undefined;
@@ -99,9 +99,9 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         originalFileName: z.ZodOptional<z.ZodString>;
         mimeType: z.ZodOptional<z.ZodString>;
         size: z.ZodOptional<z.ZodNumber>;
-        fileType: z.ZodOptional<z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>>;
+        fileType: z.ZodOptional<z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>>;
         objectName: z.ZodOptional<z.ZodString>;
-        status: z.ZodOptional<z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>>;
+        status: z.ZodOptional<z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>>;
         caption: z.ZodOptional<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
         createdAt: z.ZodOptional<z.ZodDate>;
         updatedAt: z.ZodOptional<z.ZodDate>;
@@ -109,24 +109,24 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         url: z.ZodOptional<z.ZodString>;
         signedUrl: z.ZodOptional<z.ZodString>;
     }, "id" | "ownerOrganization" | "updatedAt" | "createdAt">, "strip", z.ZodTypeAny, {
-        status?: import("@app/files/entities/file.entity").FileStatus | undefined;
+        status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
         size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
-        fileType?: import("@app/files/entities/file.entity").FileType | undefined;
+        fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
         signedUrl?: string | undefined;
     }, {
-        status?: import("@app/files/entities/file.entity").FileStatus | undefined;
+        status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
         size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
-        fileType?: import("@app/files/entities/file.entity").FileType | undefined;
+        fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
         signedUrl?: string | undefined;
@@ -139,13 +139,13 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
-        status?: import("@app/files/entities/file.entity").FileStatus | undefined;
+        status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
         size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
-        fileType?: import("@app/files/entities/file.entity").FileType | undefined;
+        fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
         signedUrl?: string | undefined;

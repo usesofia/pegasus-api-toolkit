@@ -1,4 +1,4 @@
-import { FileStatus } from '@app/files/entities/file.entity';
+import { FileStatus } from '../../files/entities/file.entity';
 import { z } from 'zod';
 declare const FindByIdFileRequestEntitySchema: z.ZodObject<{
     id: z.ZodString;

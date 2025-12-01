@@ -153,13 +153,3 @@ export * from '@app/files/ports/files-repository.port';
 export * from '@app/email/email.module';
 export * from '@app/email/email-service.port';
 export * from '@app/email/adapters/sendgrid-email-service.adapter';
-
-// Sync Organizations
-export * from '@app/sync-organizations/sync-organizations.module';
-export * from '@app/sync-organizations/sync-organizations.controller';
-export * from '@app/sync-organizations/ports/sync-organizations-service.port';
-export * from '@app/sync-organizations/ports/organizations-repository.port';
-export * from '@app/sync-organizations/adapters/clerk-sync-organizations-service.adapter';
-export * from '@app/sync-organizations/adapters/mongodb-organizations-repository.adapter';
-export * from '@app/sync-organizations/mongodb-organization-model';
-export * from '@app/sync-organizations/sync-organizations.constants';

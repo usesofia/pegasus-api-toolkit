@@ -1,7 +1,7 @@
-import { Base } from '@app/base';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
-import { PubSubServicePort } from '@app/pub-sub/pub-sub-service.port';
-import { WebsocketMessageEntity } from '@app/pub-sub/websocket-message.entity';
+import { Base } from '../base';
+import { BaseConfigEntity } from '../config/base-config.entity';
+import { PubSubServicePort } from '../pub-sub/pub-sub-service.port';
+import { WebsocketMessageEntity } from '../pub-sub/websocket-message.entity';
 import { PubSub } from '@google-cloud/pubsub';
 import { LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';

@@ -1,5 +1,5 @@
 import { User, Organization, OrganizationInvitation, OrganizationMembership } from '@clerk/backend';
-import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
+import { AuthUserEntity } from '../auth/entities/auth-user.entity';
 export declare enum TestOrganization {
     AMBEV = "AMBEV",
     EMBRAER = "EMBRAER",

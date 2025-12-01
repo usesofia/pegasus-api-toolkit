@@ -2,7 +2,7 @@ import { INestApplication, DynamicModule, Type } from '@nestjs/common';
 import supertest from 'supertest';
 import { TestingModuleBuilder } from '@nestjs/testing';
 import { MongoClient } from 'mongodb';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { BaseConfigEntity } from '../config/base-config.entity';
 export declare const buildClsModule: () => DynamicModule;
 export declare class InstanceFixture {
     app: INestApplication;

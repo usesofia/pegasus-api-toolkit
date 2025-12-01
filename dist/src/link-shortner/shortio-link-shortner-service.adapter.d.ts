@@ -1,7 +1,7 @@
 import { LoggerService } from '@nestjs/common';
-import { LinkShortnerServicePort } from '@app/link-shortner/link-shortner-service.port';
-import { Base } from '@app/base';
-import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { LinkShortnerServicePort } from '../link-shortner/link-shortner-service.port';
+import { Base } from '../base';
+import { BaseConfigEntity } from '../config/base-config.entity';
 import { ClsService } from 'nestjs-cls';
 export declare class ShortioLinkShortnerServiceAdapter extends Base implements LinkShortnerServicePort {
     protected readonly baseConfig: BaseConfigEntity;
