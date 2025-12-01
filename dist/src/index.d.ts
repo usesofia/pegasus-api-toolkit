@@ -18,6 +18,8 @@ export * from './auth/adapters/auth-service.adapter';
 export * from './clerk/clerk-logger-service.adapter';
 export * from './clerk/clerk.constants';
 export * from './auth/guards/task-queue.guard';
+export * from './auth/guards/admin.guard';
+export * from './auth/decorators/admin.decorator';
 export * from './cache/cache.module';
 export * from './cache/adapters/memory-cache-service.adapter';
 export * from './cache/adapters/redis-cache-service.adapter';

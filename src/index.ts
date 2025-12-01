@@ -19,6 +19,8 @@ export * from '@app/auth/adapters/auth-service.adapter';
 export * from '@app/clerk/clerk-logger-service.adapter';
 export * from '@app/clerk/clerk.constants';
 export * from '@app/auth/guards/task-queue.guard';
+export * from '@app/auth/guards/admin.guard';
+export * from '@app/auth/decorators/admin.decorator';
 
 // Cache
 export * from '@app/cache/cache.module';

@@ -34,6 +34,8 @@ __exportStar(require("./auth/adapters/auth-service.adapter"), exports);
 __exportStar(require("./clerk/clerk-logger-service.adapter"), exports);
 __exportStar(require("./clerk/clerk.constants"), exports);
 __exportStar(require("./auth/guards/task-queue.guard"), exports);
+__exportStar(require("./auth/guards/admin.guard"), exports);
+__exportStar(require("./auth/decorators/admin.decorator"), exports);
 __exportStar(require("./cache/cache.module"), exports);
 __exportStar(require("./cache/adapters/memory-cache-service.adapter"), exports);
 __exportStar(require("./cache/adapters/redis-cache-service.adapter"), exports);
