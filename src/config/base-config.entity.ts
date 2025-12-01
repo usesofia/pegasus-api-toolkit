@@ -98,6 +98,9 @@ export const BaseConfigSchema = z.object({
   tasks: z.object({
     secret: z.string(),
   }),
+  admin: z.object({
+    secret: z.string().optional(),
+  }),
   email: z
     .object({
       sendgrid: z.object({

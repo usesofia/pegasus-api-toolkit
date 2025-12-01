@@ -89,6 +89,9 @@ exports.BaseConfigSchema = zod_1.z.object({
     tasks: zod_1.z.object({
         secret: zod_1.z.string(),
     }),
+    admin: zod_1.z.object({
+        secret: zod_1.z.string().optional(),
+    }),
     email: zod_1.z
         .object({
         sendgrid: zod_1.z.object({

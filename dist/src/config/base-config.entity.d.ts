@@ -252,6 +252,13 @@ export declare const BaseConfigSchema: z.ZodObject<{
     }, {
         secret: string;
     }>;
+    admin: z.ZodObject<{
+        secret: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        secret?: string | undefined;
+    }, {
+        secret?: string | undefined;
+    }>;
     email: z.ZodOptional<z.ZodObject<{
         sendgrid: z.ZodObject<{
             apiKey: z.ZodString;
@@ -353,6 +360,9 @@ export declare const BaseConfigSchema: z.ZodObject<{
     tasks: {
         secret: string;
     };
+    admin: {
+        secret?: string | undefined;
+    };
     email?: {
         sendgrid: {
             apiKey: string;
@@ -435,6 +445,9 @@ export declare const BaseConfigSchema: z.ZodObject<{
     }[];
     tasks: {
         secret: string;
+    };
+    admin: {
+        secret?: string | undefined;
     };
     email?: {
         sendgrid: {
@@ -519,6 +532,9 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     }[];
     tasks: {
         secret: string;
+    };
+    admin: {
+        secret?: string | undefined;
     };
     email?: {
         sendgrid: {
@@ -781,6 +797,13 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     }, {
         secret: string;
     }>;
+    admin: z.ZodObject<{
+        secret: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        secret?: string | undefined;
+    }, {
+        secret?: string | undefined;
+    }>;
     email: z.ZodOptional<z.ZodObject<{
         sendgrid: z.ZodObject<{
             apiKey: z.ZodString;
@@ -881,6 +904,9 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     }[];
     tasks: {
         secret: string;
+    };
+    admin: {
+        secret?: string | undefined;
     };
     email?: {
         sendgrid: {
