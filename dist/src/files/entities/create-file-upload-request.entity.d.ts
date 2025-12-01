@@ -5,9 +5,9 @@ export declare const CreateFileUploadRequestDataEntitySchema: z.ZodObject<Omit<{
     originalFileName: z.ZodString;
     mimeType: z.ZodString;
     size: z.ZodNumber;
-    fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
+    fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
     objectName: z.ZodString;
-    status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+    status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
     caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
@@ -20,13 +20,13 @@ export declare const CreateFileUploadRequestDataEntitySchema: z.ZodObject<Omit<{
     deletedAt: Date | null;
     originalFileName: string;
     mimeType: string;
-    fileType: import("../../files/entities/file.entity").FileType;
+    fileType: import("@app/files/entities/file.entity").FileType;
     caption?: string | null | undefined;
 }, {
     size: number;
     originalFileName: string;
     mimeType: string;
-    fileType: import("../../files/entities/file.entity").FileType;
+    fileType: import("@app/files/entities/file.entity").FileType;
     deletedAt?: Date | null | undefined;
     caption?: string | null | undefined;
 }>;
@@ -37,9 +37,9 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
         size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
+        fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
         objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+        status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
         caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -52,13 +52,13 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
+        fileType: import("@app/files/entities/file.entity").FileType;
         caption?: string | null | undefined;
     }, {
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
+        fileType: import("@app/files/entities/file.entity").FileType;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
     }>;
@@ -74,7 +74,7 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
+        fileType: import("@app/files/entities/file.entity").FileType;
         caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
@@ -83,7 +83,7 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
+        fileType: import("@app/files/entities/file.entity").FileType;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
     };
@@ -95,7 +95,7 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
+        fileType: import("@app/files/entities/file.entity").FileType;
         caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
@@ -106,9 +106,9 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         originalFileName: z.ZodString;
         mimeType: z.ZodString;
         size: z.ZodNumber;
-        fileType: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileType>;
+        fileType: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileType>;
         objectName: z.ZodString;
-        status: z.ZodNativeEnum<typeof import("../../files/entities/file.entity").FileStatus>;
+        status: z.ZodNativeEnum<typeof import("@app/files/entities/file.entity").FileStatus>;
         caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
@@ -121,13 +121,13 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
+        fileType: import("@app/files/entities/file.entity").FileType;
         caption?: string | null | undefined;
     }, {
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
+        fileType: import("@app/files/entities/file.entity").FileType;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
     }>;
@@ -142,7 +142,7 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         size: number;
         originalFileName: string;
         mimeType: string;
-        fileType: import("../../files/entities/file.entity").FileType;
+        fileType: import("@app/files/entities/file.entity").FileType;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
     };

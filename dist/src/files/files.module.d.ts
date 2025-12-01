@@ -1,4 +1,4 @@
-import { BaseConfigEntity } from '../config/base-config.entity';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { OnModuleInit } from '@nestjs/common';
 import { Connection } from 'mongoose';
 export declare class FilesModule implements OnModuleInit {
