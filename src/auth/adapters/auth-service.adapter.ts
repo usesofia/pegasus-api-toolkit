@@ -105,7 +105,7 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
         limit: 200,
       });
 
-      const currentMember = organizationMembersPage.data.find((member) => member.id === userId);
+      const currentMember = organizationMembersPage.data.find((member) => member.publicUserData?.userId === userId);
 
       if(!currentMember) {
         throw new Error('User is not a member of the organization.');
