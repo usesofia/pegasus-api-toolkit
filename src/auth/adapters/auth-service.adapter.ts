@@ -25,6 +25,25 @@ import {
 } from '@app/clerk/clerk.constants';
 import { GoogleAuth } from 'google-auth-library';
 
+interface ApiKey {
+  object: string;
+  id: string;
+  type: string;
+  subject: string;
+  name: string;
+  description: string | null;
+  scopes: string[];
+  claims: unknown;
+  revoked: boolean;
+  revocation_reason: string | null;
+  expired: boolean;
+  expiration: number | null;
+  created_by: string;
+  last_used_at: number;
+  created_at: number;
+  updated_at: number;
+}
+
 @Injectable()
 export class AuthServiceAdapter extends Base implements AuthServicePort {
   constructor(
@@ -43,14 +62,34 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
     super(AuthServiceAdapter.name, baseConfig, logger, cls);
   }
 
+  private async verifyApiKey(key: string): Promise<ApiKey> {
+    const response = await fetch('https://api.clerk.com/v1/api_keys/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.baseConfig.clerk.secretKey}`,
+      },
+      body: JSON.stringify({
+        secret: key,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to verify API key: ${response.statusText}`);
+    }
+
+    const data = await response.json() as ApiKey;
+    return data;
+  }
+
   @Log()
   async verifyToken(token: string): Promise<AuthUserEntity> {
     try {
       const [key, orgId] = token.split(':');
       
-      const apiKey = await this.clerkClient.originalClient.apiKeys.verify(key);
+      const apiKey = await this.verifyApiKey(key);
 
-      const userId = apiKey.createdBy;
+      const userId = apiKey.created_by;
 
       if(!orgId) {
         throw new Error('Organization ID is required.');
@@ -80,7 +119,7 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
 
       return user;
     } catch(error) {
-      this.logger.warn("Error verifying api key", {error, token});
+      this.logger.warn("Error verifying api key", {error, _token: token});
 
       const jwt = await this.clerkVerifyToken(token, {
         jwtKey: this.baseConfig.clerk.jwtKey,

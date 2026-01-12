@@ -18,6 +18,7 @@ export declare class AuthServiceAdapter extends Base implements AuthServicePort 
     private readonly clerkVerifyToken;
     private readonly googleAuth;
     constructor(baseConfig: BaseConfigEntity, logger: LoggerService, cls: ClsService, cacheService: CacheServicePort, clerkClient: ClerkClient, clerkVerifyToken: ClerkVerifyToken, googleAuth: GoogleAuth);
+    private verifyApiKey;
     verifyToken(token: string): Promise<AuthUserEntity>;
     getOrganizationEntity({ organizationId, organizationRole, ignoreCache, }: {
         organizationId: string;

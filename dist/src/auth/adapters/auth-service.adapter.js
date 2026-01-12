@@ -38,11 +38,28 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
         this.clerkVerifyToken = clerkVerifyToken;
         this.googleAuth = googleAuth;
     }
+    async verifyApiKey(key) {
+        const response = await fetch('https://api.clerk.com/v1/api_keys/verify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.baseConfig.clerk.secretKey}`,
+            },
+            body: JSON.stringify({
+                secret: key,
+            }),
+        });
+        if (!response.ok) {
+            throw new Error(`Failed to verify API key: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data;
+    }
     async verifyToken(token) {
         try {
             const [key, orgId] = token.split(':');
-            const apiKey = await this.clerkClient.originalClient.apiKeys.verify(key);
-            const userId = apiKey.createdBy;
+            const apiKey = await this.verifyApiKey(key);
+            const userId = apiKey.created_by;
             if (!orgId) {
                 throw new Error('Organization ID is required.');
             }
@@ -65,7 +82,7 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
             return user;
         }
         catch (error) {
-            this.logger.warn("Error verifying api key", { error, token });
+            this.logger.warn("Error verifying api key", { error, _token: token });
             const jwt = await this.clerkVerifyToken(token, {
                 jwtKey: this.baseConfig.clerk.jwtKey,
             });
