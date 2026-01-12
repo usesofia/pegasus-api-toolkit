@@ -64,7 +64,8 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
             });
             return user;
         }
-        catch {
+        catch (error) {
+            this.logger.warn("Error verifying api key", { error, token });
             const jwt = await this.clerkVerifyToken(token, {
                 jwtKey: this.baseConfig.clerk.jwtKey,
             });
