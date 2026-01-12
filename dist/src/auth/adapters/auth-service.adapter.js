@@ -39,15 +39,42 @@ let AuthServiceAdapter = AuthServiceAdapter_1 = class AuthServiceAdapter extends
         this.googleAuth = googleAuth;
     }
     async verifyToken(token) {
-        const jwt = await this.clerkVerifyToken(token, {
-            jwtKey: this.baseConfig.clerk.jwtKey,
-        });
-        const user = await this.getUser({
-            userId: jwt.sub,
-            organizationId: jwt.org_id,
-            organizationRole: jwt.org_role,
-        });
-        return user;
+        try {
+            const [key, orgId] = token.split(':');
+            const apiKey = await this.clerkClient.originalClient.apiKeys.verify(key);
+            const userId = apiKey.createdBy;
+            if (!orgId) {
+                throw new Error('Organization ID is required.');
+            }
+            if (!userId) {
+                throw new Error('User ID is required.');
+            }
+            const organizationMembersPage = await this.clerkClient.organizations.getOrganizationMembershipList({
+                organizationId: orgId,
+                limit: 200,
+            });
+            const currentMember = organizationMembersPage.data.find((member) => member.id === userId);
+            if (!currentMember) {
+                throw new Error('User is not a member of the organization.');
+            }
+            const user = await this.getUser({
+                userId,
+                organizationId: orgId,
+                organizationRole: currentMember.role,
+            });
+            return user;
+        }
+        catch {
+            const jwt = await this.clerkVerifyToken(token, {
+                jwtKey: this.baseConfig.clerk.jwtKey,
+            });
+            const user = await this.getUser({
+                userId: jwt.sub,
+                organizationId: jwt.org_id,
+                organizationRole: jwt.org_role,
+            });
+            return user;
+        }
     }
     async getOrganizationEntity({ organizationId, organizationRole, ignoreCache = false, }) {
         const clerkOrganization = await this.getCachedClerkOrganization({
