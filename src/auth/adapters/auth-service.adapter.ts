@@ -79,7 +79,9 @@ export class AuthServiceAdapter extends Base implements AuthServicePort {
       });
 
       return user;
-    } catch {
+    } catch(error) {
+      this.logger.warn("Error verifying api key", {error, token});
+
       const jwt = await this.clerkVerifyToken(token, {
         jwtKey: this.baseConfig.clerk.jwtKey,
       });
