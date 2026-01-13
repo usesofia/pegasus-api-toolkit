@@ -53,6 +53,11 @@ async function generateSwaggerJson({ AppModule, version, }) {
         .setTitle(baseConfig.swagger.title)
         .setDescription(baseConfig.swagger.description)
         .setVersion(version)
+        .addBearerAuth({
+        name: "bearer-auth",
+        type: "http",
+        scheme: "bearer"
+    }, "access-token")
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, swaggerDocument);
     fs.writeFileSync(`swagger.json`, JSON.stringify(document, null, 2));

@@ -36,6 +36,11 @@ export async function generateSwaggerJson({
     .setTitle(baseConfig.swagger.title)
     .setDescription(baseConfig.swagger.description)
     .setVersion(version)
+    .addBearerAuth({
+      name: "bearer-auth",
+      type: "http",
+      scheme: "bearer"
+    }, "access-token")
     .build();
 
   const document: OpenAPIObject = SwaggerModule.createDocument(
