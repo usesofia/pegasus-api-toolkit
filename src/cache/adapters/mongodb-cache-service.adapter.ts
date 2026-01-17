@@ -58,10 +58,10 @@ export class MongoDbCacheServiceAdapter implements CacheServicePort {
       });
     }
 
-    await this.cacheModel.collection.createIndex(
-      { expiresAt: 1 },
-      { expireAfterSeconds: 0},
-    );
+    // await this.cacheModel.collection.createIndex(
+    //   { expiresAt: 1 },
+    //   { expireAfterSeconds: 0},
+    // );
   }
 
   async get(key: string): Promise<string | null> {

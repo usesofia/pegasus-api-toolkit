@@ -40,12 +40,12 @@ export declare const BaseFileEntitySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     status: FileStatus;
     id: string;
-    size: number;
     ownerOrganization: string;
     deletedAt: Date | null;
     updatedAt: Date;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: FileType;
     objectName: string;
     createdAt: Date;
@@ -53,11 +53,11 @@ export declare const BaseFileEntitySchema: z.ZodObject<{
 }, {
     status: FileStatus;
     id: string;
-    size: number;
     ownerOrganization: string;
     updatedAt: Date;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: FileType;
     objectName: string;
     createdAt: Date;
@@ -84,12 +84,12 @@ export declare const FileEntitySchema: z.ZodObject<{
     status: FileStatus;
     url: string;
     id: string;
-    size: number;
     ownerOrganization: string;
     deletedAt: Date | null;
     updatedAt: Date;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: FileType;
     objectName: string;
     createdAt: Date;
@@ -99,11 +99,11 @@ export declare const FileEntitySchema: z.ZodObject<{
     status: FileStatus;
     url: string;
     id: string;
-    size: number;
     ownerOrganization: string;
     updatedAt: Date;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: FileType;
     objectName: string;
     createdAt: Date;
@@ -114,12 +114,12 @@ export declare const FileEntitySchema: z.ZodObject<{
 declare const BaseFileEntity_base: import("nestjs-zod").ZodDto<{
     status: FileStatus;
     id: string;
-    size: number;
     ownerOrganization: string;
     deletedAt: Date | null;
     updatedAt: Date;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: FileType;
     objectName: string;
     createdAt: Date;
@@ -140,11 +140,11 @@ declare const BaseFileEntity_base: import("nestjs-zod").ZodDto<{
 }, "strip", z.ZodTypeAny>, {
     status: FileStatus;
     id: string;
-    size: number;
     ownerOrganization: string;
     updatedAt: Date;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: FileType;
     objectName: string;
     createdAt: Date;
@@ -158,12 +158,12 @@ declare const FileEntity_base: import("nestjs-zod").ZodDto<{
     status: FileStatus;
     url: string;
     id: string;
-    size: number;
     ownerOrganization: string;
     deletedAt: Date | null;
     updatedAt: Date;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: FileType;
     objectName: string;
     createdAt: Date;
@@ -189,11 +189,11 @@ declare const FileEntity_base: import("nestjs-zod").ZodDto<{
     status: FileStatus;
     url: string;
     id: string;
-    size: number;
     ownerOrganization: string;
     updatedAt: Date;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: FileType;
     objectName: string;
     createdAt: Date;

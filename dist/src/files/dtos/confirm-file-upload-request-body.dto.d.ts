@@ -24,8 +24,8 @@ declare const ConfirmFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<
     status: FileStatus.COMPLETED | FileStatus.FAILED;
     id: string;
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
-    size?: number | undefined;
     deletedAt?: Date | null | undefined;
+    size?: number | undefined;
     caption?: string | null | undefined;
 }>;
 export declare class ConfirmFileUploadRequestBodyDto extends ConfirmFileUploadRequestBodyDto_base {

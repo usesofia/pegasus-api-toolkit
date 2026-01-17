@@ -16,16 +16,16 @@ export declare const CreateFileUploadRequestDataEntitySchema: z.ZodObject<Omit<{
     url: z.ZodString;
     signedUrl: z.ZodString;
 }, "status" | "url" | "id" | "ownerOrganization" | "updatedAt" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-    size: number;
     deletedAt: Date | null;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: import("../../files/entities/file.entity").FileType;
     caption?: string | null | undefined;
 }, {
-    size: number;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: import("../../files/entities/file.entity").FileType;
     deletedAt?: Date | null | undefined;
     caption?: string | null | undefined;
@@ -48,16 +48,16 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
         url: z.ZodString;
         signedUrl: z.ZodString;
     }, "status" | "url" | "id" | "ownerOrganization" | "updatedAt" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-        size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         caption?: string | null | undefined;
     }, {
-        size: number;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -70,19 +70,19 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
-        size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
 }, {
     data: {
-        size: number;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -91,10 +91,10 @@ declare const CreateFileUploadRequestEntitySchema: z.ZodObject<{
 }>;
 declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
-        size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         caption?: string | null | undefined;
     };
@@ -117,16 +117,16 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
         url: z.ZodString;
         signedUrl: z.ZodString;
     }, "status" | "url" | "id" | "ownerOrganization" | "updatedAt" | "objectName" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
-        size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         caption?: string | null | undefined;
     }, {
-        size: number;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;
@@ -139,9 +139,9 @@ declare const CreateFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     }>;
 }, "strip", z.ZodTypeAny>, {
     data: {
-        size: number;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         deletedAt?: Date | null | undefined;
         caption?: string | null | undefined;

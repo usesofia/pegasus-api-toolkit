@@ -45,7 +45,6 @@ let MongoDbCacheServiceAdapter = class MongoDbCacheServiceAdapter {
                 expiresAt: new Date(Date.now() + 60000),
             });
         }
-        await this.cacheModel.collection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
     }
     async get(key) {
         const keyPrefix = this.baseConfig.cache.mongodb?.keyPrefix ?? '';

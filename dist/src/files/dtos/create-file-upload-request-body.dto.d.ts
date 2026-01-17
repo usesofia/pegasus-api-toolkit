@@ -1,7 +1,7 @@
 declare const CreateFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<{
-    size: number;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: import("../..").FileType;
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     caption?: string | null | undefined;
@@ -29,9 +29,9 @@ declare const CreateFileUploadRequestBodyDto_base: import("nestjs-zod").ZodDto<{
         readonly EMAIL: "EMAIL";
     }>;
 }, "deletedAt">, "strip", import("zod").ZodTypeAny>, {
-    size: number;
     originalFileName: string;
     mimeType: string;
+    size: number;
     fileType: import("../..").FileType;
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
     caption?: string | null | undefined;

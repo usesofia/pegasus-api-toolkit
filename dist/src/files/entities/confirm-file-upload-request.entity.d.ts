@@ -15,8 +15,8 @@ export declare const ConfirmFileUploadRequestDataEntitySchema: z.ZodObject<{
 }, {
     status: import("../../files/entities/file.entity").FileStatus;
     id: string;
-    size?: number | undefined;
     deletedAt?: Date | null | undefined;
+    size?: number | undefined;
     caption?: string | null | undefined;
 }>;
 declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
@@ -36,8 +36,8 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
         id: string;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
+        size?: number | undefined;
         caption?: string | null | undefined;
     }>;
     channel: z.ZodNativeEnum<{
@@ -59,8 +59,8 @@ declare const ConfirmFileUploadRequestEntitySchema: z.ZodObject<{
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
         id: string;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
+        size?: number | undefined;
         caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";
@@ -91,8 +91,8 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
         id: string;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
+        size?: number | undefined;
         caption?: string | null | undefined;
     }>;
     channel: z.ZodNativeEnum<{
@@ -105,8 +105,8 @@ declare const ConfirmFileUploadRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
         id: string;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
+        size?: number | undefined;
         caption?: string | null | undefined;
     };
     channel: "WEB_APP" | "WHATSAPP" | "SYSTEM" | "EMAIL";

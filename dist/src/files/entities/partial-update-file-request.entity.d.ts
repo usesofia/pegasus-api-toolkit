@@ -19,10 +19,10 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
     }, "id" | "ownerOrganization" | "updatedAt" | "createdAt">, "strip", z.ZodTypeAny, {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
+        size?: number | undefined;
         fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
@@ -30,10 +30,10 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
     }, {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
+        size?: number | undefined;
         fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
@@ -49,10 +49,10 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
     data: {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
+        size?: number | undefined;
         fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
@@ -64,10 +64,10 @@ declare const PartialUpdateFileRequestEntitySchema: z.ZodObject<{
     data: {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
+        size?: number | undefined;
         fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
@@ -80,10 +80,10 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
+        size?: number | undefined;
         fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
@@ -111,10 +111,10 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     }, "id" | "ownerOrganization" | "updatedAt" | "createdAt">, "strip", z.ZodTypeAny, {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
+        size?: number | undefined;
         fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
@@ -122,10 +122,10 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     }, {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
+        size?: number | undefined;
         fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;
@@ -141,10 +141,10 @@ declare const PartialUpdateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
         status?: import("../../files/entities/file.entity").FileStatus | undefined;
         url?: string | undefined;
-        size?: number | undefined;
         deletedAt?: Date | null | undefined;
         originalFileName?: string | undefined;
         mimeType?: string | undefined;
+        size?: number | undefined;
         fileType?: import("../../files/entities/file.entity").FileType | undefined;
         objectName?: string | undefined;
         caption?: string | null | undefined;

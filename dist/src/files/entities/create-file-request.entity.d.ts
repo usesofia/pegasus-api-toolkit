@@ -18,18 +18,18 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
         signedUrl: z.ZodString;
     }, "url" | "id" | "ownerOrganization" | "updatedAt" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
         status: import("../../files/entities/file.entity").FileStatus;
-        size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         caption?: string | null | undefined;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
-        size: number;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
@@ -45,10 +45,10 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         caption?: string | null | undefined;
@@ -58,9 +58,9 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
 }, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        size: number;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
@@ -72,10 +72,10 @@ declare const CreateFileRequestEntitySchema: z.ZodObject<{
 declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         caption?: string | null | undefined;
@@ -101,18 +101,18 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
         signedUrl: z.ZodString;
     }, "url" | "id" | "ownerOrganization" | "updatedAt" | "createdAt" | "signedUrl">, "strip", z.ZodTypeAny, {
         status: import("../../files/entities/file.entity").FileStatus;
-        size: number;
         deletedAt: Date | null;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         caption?: string | null | undefined;
     }, {
         status: import("../../files/entities/file.entity").FileStatus;
-        size: number;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
@@ -128,9 +128,9 @@ declare const CreateFileRequestEntity_base: import("nestjs-zod").ZodDto<{
 }, "strip", z.ZodTypeAny>, {
     data: {
         status: import("../../files/entities/file.entity").FileStatus;
-        size: number;
         originalFileName: string;
         mimeType: string;
+        size: number;
         fileType: import("../../files/entities/file.entity").FileType;
         objectName: string;
         deletedAt?: Date | null | undefined;
