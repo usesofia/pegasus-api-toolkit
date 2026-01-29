@@ -37,7 +37,7 @@ class BaseMongoDbSessionAdapter extends base_1.Base {
                     (error instanceof Error && error.name === 'ValidationError')) {
                     throw error;
                 }
-                this.logDebug({
+                this.logWarn({
                     functionName: 'withTransaction',
                     suffix: `attemptFailed`,
                     data: {
