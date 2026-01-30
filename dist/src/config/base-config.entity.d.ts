@@ -3,6 +3,7 @@ import { z } from 'zod';
 export declare const BaseConfigSchema: z.ZodObject<{
     env: z.ZodNativeEnum<typeof Environment>;
     nodeEnv: z.ZodEnum<["development", "production"]>;
+    httpProxy: z.ZodOptional<z.ZodString>;
     databases: z.ZodArray<z.ZodObject<{
         type: z.ZodEnum<["mongodb", "postgres"]>;
         uri: z.ZodString;
@@ -363,6 +364,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
     admin: {
         secret?: string | undefined;
     };
+    httpProxy?: string | undefined;
     email?: {
         sendgrid: {
             apiKey: string;
@@ -449,6 +451,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
     admin: {
         secret?: string | undefined;
     };
+    httpProxy?: string | undefined;
     email?: {
         sendgrid: {
             apiKey: string;
@@ -536,6 +539,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     admin: {
         secret?: string | undefined;
     };
+    httpProxy?: string | undefined;
     email?: {
         sendgrid: {
             apiKey: string;
@@ -548,6 +552,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
 }, z.ZodObjectDef<{
     env: z.ZodNativeEnum<typeof Environment>;
     nodeEnv: z.ZodEnum<["development", "production"]>;
+    httpProxy: z.ZodOptional<z.ZodString>;
     databases: z.ZodArray<z.ZodObject<{
         type: z.ZodEnum<["mongodb", "postgres"]>;
         uri: z.ZodString;
@@ -908,6 +913,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
     admin: {
         secret?: string | undefined;
     };
+    httpProxy?: string | undefined;
     email?: {
         sendgrid: {
             apiKey: string;

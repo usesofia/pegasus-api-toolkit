@@ -8,6 +8,7 @@ const zod_1 = require("zod");
 exports.BaseConfigSchema = zod_1.z.object({
     env: zod_1.z.nativeEnum(environment_utils_1.Environment),
     nodeEnv: zod_1.z.enum(['development', 'production']),
+    httpProxy: zod_1.z.string().optional(),
     databases: zod_1.z.array(zod_1.z.object({
         type: zod_1.z.enum(['mongodb', 'postgres']),
         uri: zod_1.z.string(),

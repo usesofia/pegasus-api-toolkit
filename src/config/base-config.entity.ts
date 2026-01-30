@@ -6,6 +6,7 @@ import { z } from 'zod';
 export const BaseConfigSchema = z.object({
   env: z.nativeEnum(Environment),
   nodeEnv: z.enum(['development', 'production']),
+  httpProxy: z.string().optional(),
   databases: z.array(
     z.object({
       type: z.enum(['mongodb', 'postgres']),

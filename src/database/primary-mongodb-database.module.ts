@@ -19,7 +19,8 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
           throw new Error('No MongoDB database found.');
         }
         const primaryMongoDatabase = mongoDatabases[0];
-        return await mongoose.createConnection(primaryMongoDatabase.uri, {
+        
+        const connectionOptions: mongoose.ConnectOptions = {
           // Pool
           maxPoolSize: 50,
           minPoolSize: 5,
@@ -32,7 +33,26 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
 
           // Boas práticas p/ prod
           family: 4,         // força IPv4 no driver (pass-through)
-        }).asPromise();
+        };
+
+        // Configure proxy if provided
+        if (baseConfig.httpProxy) {
+          try {
+            const proxyUrl = new URL(baseConfig.httpProxy);
+            connectionOptions.proxyHost = proxyUrl.hostname;
+            connectionOptions.proxyPort = parseInt(proxyUrl.port, 10);
+            if (proxyUrl.username) {
+              connectionOptions.proxyUsername = decodeURIComponent(proxyUrl.username);
+            }
+            if (proxyUrl.password) {
+              connectionOptions.proxyPassword = decodeURIComponent(proxyUrl.password);
+            }
+          } catch {
+            throw new Error(`Invalid httpProxy URL: ${baseConfig.httpProxy}`);
+          }
+        }
+
+        return await mongoose.createConnection(primaryMongoDatabase.uri, connectionOptions).asPromise();
       },
       inject: [BASE_CONFIG],
     },
