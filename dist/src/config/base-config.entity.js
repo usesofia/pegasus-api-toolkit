@@ -37,7 +37,9 @@ exports.BaseConfigSchema = zod_1.z.object({
             type: zod_1.z.string(),
             project_id: zod_1.z.string(),
             private_key_id: zod_1.z.string(),
-            private_key: zod_1.z.string(),
+            private_key: zod_1.z.string().transform((val) => {
+                return val.includes('\\n') ? val.replace(/\\n/g, '\n') : val;
+            }),
             client_email: zod_1.z.string(),
             client_id: zod_1.z.string(),
             auth_uri: zod_1.z.string(),
@@ -52,7 +54,9 @@ exports.BaseConfigSchema = zod_1.z.object({
             name: zod_1.z.string(),
             projectId: zod_1.z.string(),
             clientEmail: zod_1.z.string(),
-            privateKey: zod_1.z.string(),
+            privateKey: zod_1.z.string().transform((val) => {
+                return val.includes('\\n') ? val.replace(/\\n/g, '\n') : val;
+            }),
             audience: zod_1.z.string(),
             subjectTokenType: zod_1.z.string(),
         }),

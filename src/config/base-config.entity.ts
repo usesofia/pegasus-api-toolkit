@@ -44,7 +44,11 @@ export const BaseConfigSchema = z.object({
       type: z.string(),
       project_id: z.string(),
       private_key_id: z.string(),
-      private_key: z.string(),
+      private_key: z.string().transform((val) => {
+        // Replace escaped newlines with actual newlines if present
+        // If already has actual newlines, this won't affect them
+        return val.includes('\\n') ? val.replace(/\\n/g, '\n') : val;
+      }),
       client_email: z.string(),
       client_id: z.string(),
       auth_uri: z.string(),
@@ -59,7 +63,11 @@ export const BaseConfigSchema = z.object({
       name: z.string(),
       projectId: z.string(),
       clientEmail: z.string(),
-      privateKey: z.string(),
+      privateKey: z.string().transform((val) => {
+        // Replace escaped newlines with actual newlines if present
+        // If already has actual newlines, this won't affect them
+        return val.includes('\\n') ? val.replace(/\\n/g, '\n') : val;
+      }),
       audience: z.string(),
       subjectTokenType: z.string(),
     }),

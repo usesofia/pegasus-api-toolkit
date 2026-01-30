@@ -60,7 +60,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
             type: z.ZodString;
             project_id: z.ZodString;
             private_key_id: z.ZodString;
-            private_key: z.ZodString;
+            private_key: z.ZodEffects<z.ZodString, string, string>;
             client_email: z.ZodString;
             client_id: z.ZodString;
             auth_uri: z.ZodString;
@@ -129,7 +129,7 @@ export declare const BaseConfigSchema: z.ZodObject<{
             name: z.ZodString;
             projectId: z.ZodString;
             clientEmail: z.ZodString;
-            privateKey: z.ZodString;
+            privateKey: z.ZodEffects<z.ZodString, string, string>;
             audience: z.ZodString;
             subjectTokenType: z.ZodString;
         }, "strip", z.ZodTypeAny, {
@@ -605,7 +605,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             type: z.ZodString;
             project_id: z.ZodString;
             private_key_id: z.ZodString;
-            private_key: z.ZodString;
+            private_key: z.ZodEffects<z.ZodString, string, string>;
             client_email: z.ZodString;
             client_id: z.ZodString;
             auth_uri: z.ZodString;
@@ -674,7 +674,7 @@ declare const BaseConfigEntity_base: import("nestjs-zod").ZodDto<{
             name: z.ZodString;
             projectId: z.ZodString;
             clientEmail: z.ZodString;
-            privateKey: z.ZodString;
+            privateKey: z.ZodEffects<z.ZodString, string, string>;
             audience: z.ZodString;
             subjectTokenType: z.ZodString;
         }, "strip", z.ZodTypeAny, {
