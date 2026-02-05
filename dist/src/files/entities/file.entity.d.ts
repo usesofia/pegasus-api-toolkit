@@ -30,177 +30,67 @@ export declare const BaseFileEntitySchema: z.ZodObject<{
     originalFileName: z.ZodString;
     mimeType: z.ZodString;
     size: z.ZodNumber;
-    fileType: z.ZodNativeEnum<typeof FileType>;
+    fileType: z.ZodEnum<typeof FileType>;
     objectName: z.ZodString;
-    status: z.ZodNativeEnum<typeof FileStatus>;
+    status: z.ZodEnum<typeof FileStatus>;
     caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
-    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-}, "strip", z.ZodTypeAny, {
-    status: FileStatus;
-    id: string;
-    size: number;
-    ownerOrganization: string;
-    deletedAt: Date | null;
-    updatedAt: Date;
-    originalFileName: string;
-    mimeType: string;
-    fileType: FileType;
-    objectName: string;
-    createdAt: Date;
-    caption?: string | null | undefined;
-}, {
-    status: FileStatus;
-    id: string;
-    size: number;
-    ownerOrganization: string;
-    updatedAt: Date;
-    originalFileName: string;
-    mimeType: string;
-    fileType: FileType;
-    objectName: string;
-    createdAt: Date;
-    deletedAt?: Date | null | undefined;
-    caption?: string | null | undefined;
-}>;
+    createdAt: z.ZodCoercedDate<unknown>;
+    updatedAt: z.ZodCoercedDate<unknown>;
+    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodCoercedDate<unknown>>>;
+}, z.core.$strip>;
 export declare const FileEntitySchema: z.ZodObject<{
     id: z.ZodString;
     ownerOrganization: z.ZodString;
     originalFileName: z.ZodString;
     mimeType: z.ZodString;
     size: z.ZodNumber;
-    fileType: z.ZodNativeEnum<typeof FileType>;
+    fileType: z.ZodEnum<typeof FileType>;
     objectName: z.ZodString;
-    status: z.ZodNativeEnum<typeof FileStatus>;
+    status: z.ZodEnum<typeof FileStatus>;
     caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
-    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-} & {
+    createdAt: z.ZodCoercedDate<unknown>;
+    updatedAt: z.ZodCoercedDate<unknown>;
+    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodCoercedDate<unknown>>>;
     url: z.ZodString;
     signedUrl: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    status: FileStatus;
-    url: string;
-    id: string;
-    size: number;
-    ownerOrganization: string;
-    deletedAt: Date | null;
-    updatedAt: Date;
-    originalFileName: string;
-    mimeType: string;
-    fileType: FileType;
-    objectName: string;
-    createdAt: Date;
-    signedUrl: string;
-    caption?: string | null | undefined;
-}, {
-    status: FileStatus;
-    url: string;
-    id: string;
-    size: number;
-    ownerOrganization: string;
-    updatedAt: Date;
-    originalFileName: string;
-    mimeType: string;
-    fileType: FileType;
-    objectName: string;
-    createdAt: Date;
-    signedUrl: string;
-    deletedAt?: Date | null | undefined;
-    caption?: string | null | undefined;
-}>;
-declare const BaseFileEntity_base: import("nestjs-zod").ZodDto<{
-    status: FileStatus;
-    id: string;
-    size: number;
-    ownerOrganization: string;
-    deletedAt: Date | null;
-    updatedAt: Date;
-    originalFileName: string;
-    mimeType: string;
-    fileType: FileType;
-    objectName: string;
-    createdAt: Date;
-    caption?: string | null | undefined;
-}, z.ZodObjectDef<{
+}, z.core.$strip>;
+declare const BaseFileEntity_base: import("nestjs-zod").ZodDto<z.ZodObject<{
     id: z.ZodString;
     ownerOrganization: z.ZodString;
     originalFileName: z.ZodString;
     mimeType: z.ZodString;
     size: z.ZodNumber;
-    fileType: z.ZodNativeEnum<typeof FileType>;
+    fileType: z.ZodEnum<typeof FileType>;
     objectName: z.ZodString;
-    status: z.ZodNativeEnum<typeof FileStatus>;
+    status: z.ZodEnum<typeof FileStatus>;
     caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
-    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-}, "strip", z.ZodTypeAny>, {
-    status: FileStatus;
-    id: string;
-    size: number;
-    ownerOrganization: string;
-    updatedAt: Date;
-    originalFileName: string;
-    mimeType: string;
-    fileType: FileType;
-    objectName: string;
-    createdAt: Date;
-    deletedAt?: Date | null | undefined;
-    caption?: string | null | undefined;
-}>;
+    createdAt: z.ZodCoercedDate<unknown>;
+    updatedAt: z.ZodCoercedDate<unknown>;
+    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodCoercedDate<unknown>>>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 export declare class BaseFileEntity extends BaseFileEntity_base {
     static build(input: z.input<typeof BaseFileEntitySchema>): BaseFileEntity;
 }
-declare const FileEntity_base: import("nestjs-zod").ZodDto<{
-    status: FileStatus;
-    url: string;
-    id: string;
-    size: number;
-    ownerOrganization: string;
-    deletedAt: Date | null;
-    updatedAt: Date;
-    originalFileName: string;
-    mimeType: string;
-    fileType: FileType;
-    objectName: string;
-    createdAt: Date;
-    signedUrl: string;
-    caption?: string | null | undefined;
-}, z.ZodObjectDef<{
+declare const FileEntity_base: import("nestjs-zod").ZodDto<z.ZodObject<{
     id: z.ZodString;
     ownerOrganization: z.ZodString;
     originalFileName: z.ZodString;
     mimeType: z.ZodString;
     size: z.ZodNumber;
-    fileType: z.ZodNativeEnum<typeof FileType>;
+    fileType: z.ZodEnum<typeof FileType>;
     objectName: z.ZodString;
-    status: z.ZodNativeEnum<typeof FileStatus>;
+    status: z.ZodEnum<typeof FileStatus>;
     caption: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    createdAt: z.ZodDate;
-    updatedAt: z.ZodDate;
-    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodDate>>;
-} & {
+    createdAt: z.ZodCoercedDate<unknown>;
+    updatedAt: z.ZodCoercedDate<unknown>;
+    deletedAt: z.ZodDefault<z.ZodNullable<z.ZodCoercedDate<unknown>>>;
     url: z.ZodString;
     signedUrl: z.ZodString;
-}, "strip", z.ZodTypeAny>, {
-    status: FileStatus;
-    url: string;
-    id: string;
-    size: number;
-    ownerOrganization: string;
-    updatedAt: Date;
-    originalFileName: string;
-    mimeType: string;
-    fileType: FileType;
-    objectName: string;
-    createdAt: Date;
-    signedUrl: string;
-    deletedAt?: Date | null | undefined;
-    caption?: string | null | undefined;
-}>;
+}, z.core.$strip>> & {
+    io: "input";
+};
 export declare class FileEntity extends FileEntity_base {
     static build(input: z.input<typeof FileEntitySchema>): FileEntity;
     isImage(): boolean;

@@ -1,6 +1,6 @@
 import { Connection } from 'mongoose';
-import { BaseConfigEntity } from '../../config/base-config.entity';
-import { CacheServicePort } from '../../cache/ports/cache-service.port';
+import { BaseConfigEntity } from '@app/config/base-config.entity';
+import { CacheServicePort } from '@app/cache/ports/cache-service.port';
 export declare const CACHE_RECORD_COLLECTION_NAME = "_CacheRecords";
 export declare class MongoDbCacheServiceAdapter implements CacheServicePort {
     private readonly baseConfig;

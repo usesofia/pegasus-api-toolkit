@@ -1,4 +1,4 @@
-import { FileStatus, FileType } from '../../files/entities/file.entity';
+import { FileStatus, FileType } from '@app/files/entities/file.entity';
 import { Document } from 'mongoose';
 export declare class MongoDbFileModel extends Document {
     ownerOrganization: string;
@@ -14,11 +14,11 @@ export declare class MongoDbFileModel extends Document {
     deletedAt: Date | null;
 }
 export declare const MongoDbFileModelSchema: import("mongoose").Schema<MongoDbFileModel, import("mongoose").Model<MongoDbFileModel, any, any, any, Document<unknown, any, MongoDbFileModel, any, {}> & MongoDbFileModel & Required<{
-    _id: import("mongoose").Types.ObjectId;
+    _id: unknown;
 }> & {
     __v: number;
 }, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, MongoDbFileModel, Document<unknown, {}, import("mongoose").FlatRecord<MongoDbFileModel>, {}, import("mongoose").ResolveSchemaOptions<import("mongoose").DefaultSchemaOptions>> & import("mongoose").FlatRecord<MongoDbFileModel> & Required<{
-    _id: import("mongoose").Types.ObjectId;
+    _id: unknown;
 }> & {
     __v: number;
 }>;

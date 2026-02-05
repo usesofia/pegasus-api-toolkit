@@ -52,6 +52,13 @@ export class BaseMongoDbSessionAdapter extends Base implements BaseSessionPort {
           timeoutMS:
             options?.timeoutInMiliseconds ??
             mongoDbConfig.transactionTimeoutInMiliseconds,
+          readConcern: {
+            level: 'majority',
+          },
+          writeConcern: {
+            w: 'majority',
+          },
+          readPreference: 'primary',
         });
         return result;
       } catch (error) {
