@@ -41,15 +41,32 @@ exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule = __decorate
                         throw new Error('No MongoDB database found.');
                     }
                     const primaryMongoDatabase = mongoDatabases[0];
-                    return await mongoose_1.default.createConnection(primaryMongoDatabase.uri, {
-                        maxPoolSize: 50,
-                        minPoolSize: 5,
-                        maxIdleTimeMS: 60000,
-                        serverSelectionTimeoutMS: 30000,
-                        connectTimeoutMS: 30000,
-                        socketTimeoutMS: 60000,
-                        family: 4,
-                    }).asPromise();
+                    const maxRetries = 7;
+                    let delay = 2000;
+                    for (let i = 0; i < maxRetries; i++) {
+                        try {
+                            const connection = await mongoose_1.default.createConnection(primaryMongoDatabase.uri, {
+                                maxPoolSize: 50,
+                                minPoolSize: 5,
+                                maxIdleTimeMS: 60000,
+                                serverSelectionTimeoutMS: 10000,
+                                connectTimeoutMS: 10000,
+                                socketTimeoutMS: 60000,
+                                family: 4,
+                            }).asPromise();
+                            console.log('✅ MongoDB connected successfully');
+                            return connection;
+                        }
+                        catch (error) {
+                            if (i === maxRetries - 1)
+                                throw error;
+                            console.warn(`⚠️ Falha ao conectar ao Mongo (tentativa ${i + 1}/${maxRetries}). Tentando em ${delay}ms...`);
+                            console.warn('Erro:', error);
+                            await new Promise((res) => setTimeout(res, delay));
+                            delay *= 2;
+                        }
+                    }
+                    throw new Error('Failed to connect to MongoDB after all attempts.');
                 },
                 inject: [base_config_entity_1.BASE_CONFIG],
             },
