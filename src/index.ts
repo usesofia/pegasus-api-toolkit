@@ -19,6 +19,8 @@ export * from '@app/auth/adapters/auth-service.adapter';
 export * from '@app/clerk/clerk-logger-service.adapter';
 export * from '@app/clerk/clerk.constants';
 export * from '@app/auth/guards/task-queue.guard';
+export * from '@app/auth/guards/admin.guard';
+export * from '@app/auth/decorators/admin.decorator';
 
 // Cache
 export * from '@app/cache/cache.module';
@@ -153,13 +155,3 @@ export * from '@app/files/ports/files-repository.port';
 export * from '@app/email/email.module';
 export * from '@app/email/email-service.port';
 export * from '@app/email/adapters/sendgrid-email-service.adapter';
-
-// Sync Organizations
-export * from '@app/sync-organizations/sync-organizations.module';
-export * from '@app/sync-organizations/sync-organizations.controller';
-export * from '@app/sync-organizations/ports/sync-organizations-service.port';
-export * from '@app/sync-organizations/ports/organizations-repository.port';
-export * from '@app/sync-organizations/adapters/clerk-sync-organizations-service.adapter';
-export * from '@app/sync-organizations/adapters/mongodb-organizations-repository.adapter';
-export * from '@app/sync-organizations/mongodb-organization-model';
-export * from '@app/sync-organizations/sync-organizations.constants';

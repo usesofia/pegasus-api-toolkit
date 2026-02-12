@@ -2,7 +2,7 @@ import { BASE_CONFIG, BaseConfigEntity } from '@app/config/base-config.entity';
 import { GcpTasksServiceAdapter } from '@app/tasks/gcp-tasks-service.adapter';
 import { MongodbTasksServiceAdapter } from '@app/tasks/mongodb-tasks-service.adapter';
 import { TASKS_SERVICE_PORT } from '@app/tasks/tasks-service.port';
-import { Environment, getEnvironment } from '@app/utils/environment.utils';
+import { Environment, getEnvironment, isCli } from '@app/utils/environment.utils';
 import { v2beta2 } from '@google-cloud/tasks';
 import { Global, Module, OnApplicationShutdown } from '@nestjs/common';
 
@@ -16,7 +16,8 @@ import { Global, Module, OnApplicationShutdown } from '@nestjs/common';
         gcpTasksServiceAdapter: GcpTasksServiceAdapter,
       ) => {
         return getEnvironment() === Environment.LOCAL ||
-          getEnvironment() === Environment.INTEGRATION_TEST
+          getEnvironment() === Environment.INTEGRATION_TEST ||
+          isCli()
           ? mongodbTasksServiceAdapter
           : gcpTasksServiceAdapter;
       },

@@ -10,6 +10,7 @@ import { MongoDbPubSubEventModel } from '@app/pub-sub/mongodb-pub-sub-event.mode
 import { PUB_SUB_EVENT_MODEL } from '@app/pub-sub/mongodb-pub-sub-event.module';
 import { sendWebsocketMessageTopicName, WebsocketMessageEntity } from '@app/pub-sub/websocket-message.entity';
 import { Log } from '@app/utils/log.utils';
+import { isCli } from '@app/utils/environment.utils';
 
 const MAX_PUBLISH_BUFFER_SIZE = 4096;
 
@@ -62,16 +63,18 @@ export class MongoDbPubSubServiceAdapter
 
     await event.save();
 
-    this.log({
-      correlationId,
-      functionName: 'publish',
-      suffix: 'success',
-      data: {
-        messageId: event._id,
-        topic,
-        payload,
-      },
-    });
+    if(!isCli()) {
+      this.log({
+        correlationId,
+        functionName: 'publish',
+        suffix: 'success',
+        data: {
+          messageId: event._id,
+          topic,
+          payload,
+        },
+      });
+    }
   }
 
   @Log()

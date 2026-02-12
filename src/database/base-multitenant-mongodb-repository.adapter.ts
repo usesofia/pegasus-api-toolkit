@@ -4,7 +4,6 @@ import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { AuthUserEntity } from '@app/auth/entities/auth-user.entity';
 import { Base } from '@app/base';
-import { Log } from '@app/utils/log.utils';
 import { DeepMergeLeafURI, deepmergeCustom } from 'deepmerge-ts';
 import { BaseSessionPort } from '@app/database/base-session.port';
 import { BaseMongoDbSessionAdapter } from '@app/database/base-mongodb-session.adapter';
@@ -45,7 +44,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     requester?: AuthUserEntity;
   }): Promise<TEntity>;
 
-  @Log()
   protected getOwnerOrganization({
     requester,
   }: {
@@ -58,7 +56,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     return populate;
   };
 
-  @Log()
   async startSession(): Promise<BaseSessionPort> {
     return new BaseMongoDbSessionAdapter(
       await this.model.db.startSession(),
@@ -68,7 +65,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     );
   }
 
-  @Log()
   protected buildPopulatePaths(populate: string, session?: ClientSession): PopulateOptions[] {
     return populate.split(',').map((field) => ({
       path: field.trim(),
@@ -79,7 +75,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   /**
    * Creates a new document in the collection.
    */
-  @Log()
   async create({
     requester,
     request,
@@ -109,7 +104,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   /**
    * Finds one document by ID. Throws an NotFoundException if the document is not found.
    */
-  @Log()
   async findByIdOrThrow({
     requester,
     request,
@@ -150,7 +144,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   /**
    * Finds one document by ID.
    */
-  @Log()
   async findById({
     requester,
     request,
@@ -170,7 +163,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     }
   }
 
-  @Log()
   private async _partialUpdateTransactionFn({
     requester,
     request,
@@ -216,7 +208,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     return this.toEntity({ doc: existing, requester });
   }
 
-  @Log()
   private async _partialUpdate({
     requester,
     request,
@@ -246,7 +237,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   /**
    * Partially updates a document by ID. Throws an NotFoundException if the document is not found.
    */
-  @Log()
   async partialUpdateOrThrow({
     requester,
     request,
@@ -281,7 +271,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   /**
    * Partially updates a document by ID.
    */
-  @Log()
   async partialUpdate({
     requester,
     request,
@@ -308,7 +297,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   /**
    * Removes a document by ID. Throws an NotFoundException if the document is not found.
    */
-  @Log()
   async removeOrThrow({
     requester,
     request,
@@ -344,7 +332,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
   /**
    * Removes a document by ID.
    */
-  @Log()
   async remove({
     requester,
     request,
@@ -364,7 +351,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     }
   }
 
-  @Log()
   protected getTextSearchPipeline({
     requester,
     textSearchTerm,
@@ -429,7 +415,6 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     } as PipelineStage;
   }
 
-  @Log()
   protected getSemanticSearchPipeline({
     requester,
     indexName = 'semantic_search_index',
@@ -462,54 +447,68 @@ export abstract class BaseMultitenantMongoDbRepositoryAdapter<
     };
   }
 
-  @Log()
   async findAllWithOutdatedMarkdownEmbedding({
     limit,
     deltaDurationToConsiderAsOutdated,
     previousSession,
+    lastRunAt,
   }: {
     limit: number;
     deltaDurationToConsiderAsOutdated: Duration;
     previousSession?: BaseSessionPort;
-  }): Promise<TEntity[]> {
+    lastRunAt?: Date;
+  }): Promise<{id: string, ownerOrganization: string}[]> {
     const session = previousSession
       ? (previousSession.getSession() as ClientSession)
       : null;
 
     const currentDate = new Date();
     const thresholdDate = new Date(currentDate.getTime() - deltaDurationToConsiderAsOutdated.toMillis());
+    const minUpdatedAt = lastRunAt ? new Date(lastRunAt.getTime() - 2 * deltaDurationToConsiderAsOutdated.toMillis()) : undefined;
 
-    const outdateds = await this.model.find({
-      $or: [
-        // Condition 1: markdownEmbeddingUpdatedAt is null or undefined and updatedAt is older than threshold
-        {
-          $or: [
-            { markdownEmbeddingUpdatedAt: null },
-            { markdownEmbeddingUpdatedAt: { $exists: false } }
-          ],
-          updatedAt: { $lt: thresholdDate }
+    const pipeline: PipelineStage[] = [
+      {
+        $match: {
+          deletedAt: null,
+          ...(minUpdatedAt ? { updatedAt: { $gte: minUpdatedAt } } : {}),
         },
-        // Condition 2: markdownEmbeddingUpdatedAt is older than updatedAt with minimum delta duration
-        {
-          markdownEmbeddingUpdatedAt: { $ne: null, $exists: true },
-          $expr: {
-            $and: [
-              { $gt: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
-              { 
+      },
+      {
+        $match: {
+          $or: [
+            {
+              $and: [
+                {
+                  $or: [
+                    { markdownEmbeddingUpdatedAt: null },
+                    { markdownEmbeddingUpdatedAt: { $exists: false } },
+                  ],
+                },
+                { updatedAt: { $lt: thresholdDate } },
+              ],
+            },
+            {
+              markdownEmbeddingUpdatedAt: { $ne: null, $exists: true },
+              $expr: {
                 $gt: [
-                  { $subtract: ["$updatedAt", "$markdownEmbeddingUpdatedAt"] },
-                  deltaDurationToConsiderAsOutdated.toMillis()
-                ]
-              }
-            ]
-          }
-        }
-      ],
-      deletedAt: null
-    })
-    .limit(limit)
-    .session(session);
+                  { $subtract: ['$updatedAt', '$markdownEmbeddingUpdatedAt'] },
+                  deltaDurationToConsiderAsOutdated.toMillis(),
+                ],
+              },
+            },
+          ],
+        },
+      },
+      { $project: { _id: 1, ownerOrganization: 1 } },
+      { $limit: limit },
+    ];
 
-    return await Promise.all(outdateds.map(async (doc) => this.toEntity({ doc })));
+    const aggregateQuery = this.model.aggregate<{ _id: ObjectId, ownerOrganization: string }>(pipeline);
+    if (session) {
+      aggregateQuery.session(session);
+    }
+    const outdateds = await aggregateQuery;
+
+    return outdateds.map((doc) => ({ id: doc._id.toString(), ownerOrganization: doc.ownerOrganization }));
   } 
 }

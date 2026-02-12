@@ -13,6 +13,7 @@ import { GcpPubSubServiceAdapter } from '@app/pub-sub/gcp-pub-sub-service.adapte
 import { GCP_PUB_SUB, GcpPubSubModule } from '@app/pub-sub/gcp-pub-sub.module';
 import { MongoDbPubSubServiceAdapter } from '@app/pub-sub/mongodb-pub-sub-service.adapter';
 import {
+  isCli,
   isIntegrationTestEnvironment,
   isLocalEnvironment,
 } from '@app/utils/environment.utils';
@@ -40,7 +41,7 @@ import { PubSub } from '@google-cloud/pubsub';
         pubSubEventModel: Model<MongoDbPubSubEventModel>,
         pubSub: PubSub,
       ) => {
-        if (isLocalEnvironment() || isIntegrationTestEnvironment()) {
+        if (isLocalEnvironment() || isIntegrationTestEnvironment() || isCli()) {
           return new MongoDbPubSubServiceAdapter(
             baseConfig,
             logger,

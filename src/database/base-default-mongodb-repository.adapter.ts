@@ -3,7 +3,6 @@ import { NotFoundException, LoggerService } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { BaseConfigEntity } from '@app/config/base-config.entity';
 import { Base } from '@app/base';
-import { Log } from '@app/utils/log.utils';
 import { DeepMergeLeafURI, deepmergeCustom } from 'deepmerge-ts';
 import { BaseSessionPort } from '@app/database/base-session.port';
 import { BaseMongoDbSessionAdapter } from '@app/database/base-mongodb-session.adapter';
@@ -39,7 +38,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     return populate;
   };
 
-  @Log()
   async startSession(): Promise<BaseSessionPort> {
     return new BaseMongoDbSessionAdapter(
       await this.model.db.startSession(),
@@ -50,7 +48,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   }
 
 
-  @Log()
   protected buildPopulatePaths(populate: string, session?: ClientSession | null): PopulateOptions[] {
     return populate.split(',').map((field) => ({
       path: field.trim(),
@@ -61,7 +58,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   /**
    * Creates a new document in the collection.
    */
-  @Log()
   async create({
     request,
     previousSession,
@@ -88,7 +84,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   /**
    * Finds one document by ID. Throws an NotFoundException if the document is not found.
    */
-  @Log()
   async findByIdOrThrow({
     request,
     previousSession,
@@ -126,7 +121,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   /**
    * Finds one document by ID.
    */
-  @Log()
   async findById({
     request,
     previousSession,
@@ -144,7 +138,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     }
   }
 
-  @Log()
   private async _partialUpdateTransactionFn({
     request,
     session,
@@ -187,7 +180,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
     return this.toEntity(existing);
   }
 
-  @Log()
   private async _partialUpdate({
     request,
     session,
@@ -213,7 +205,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   /**
    * Partially updates a document by ID. Throws an NotFoundException if the document is not found.
    */
-  @Log()
   async partialUpdateOrThrow({
     request,
     previousSession,
@@ -244,7 +235,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   /**
    * Partially updates a document by ID.
    */
-  @Log()
   async partialUpdate({
     request,
     previousSession,
@@ -265,7 +255,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   /**
    * Removes a document by ID. Throws an NotFoundException if the document is not found.
    */
-  @Log()
   async removeOrThrow({
     request,
     previousSession,
@@ -298,7 +287,6 @@ export abstract class BaseDefaultMongoDbRepositoryAdapter<
   /**
    * Removes a document by ID.
    */
-  @Log()
   async remove({
     request,
     previousSession,
