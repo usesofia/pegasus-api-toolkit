@@ -33,12 +33,9 @@ export const PRIMARY_MONGOOSE_CONNECTION = Symbol('PrimaryMongooseConnection');
               socketTimeoutMS: 60000,
               family: 4,
             }).asPromise();
-
-            console.log('✅ MongoDB connected successfully');
             return connection;
           } catch (error) {
             if (i === maxRetries - 1) throw error; // Se for a última tentativa, explode o erro
-            
             console.warn(`⚠️ Falha ao conectar ao Mongo (tentativa ${i + 1}/${maxRetries}). Tentando em ${delay}ms...`);
             console.warn('Erro:', error);
             await new Promise((res) => setTimeout(res, delay));

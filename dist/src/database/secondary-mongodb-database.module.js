@@ -55,7 +55,6 @@ exports.SecondaryMongoDbDatabaseModule = SecondaryMongoDbDatabaseModule = __deco
                                 readPreference: 'secondaryPreferred',
                                 family: 4,
                             }).asPromise();
-                            console.log('✅ Secondary MongoDB connected successfully');
                             return connection;
                         }
                         catch (error) {

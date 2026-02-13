@@ -41,12 +41,9 @@ export const SECONDARY_MONGOOSE_CONNECTION = Symbol('SecondaryMongooseConnection
               // Boas práticas p/ prod
               family: 4,         // força IPv4 no driver (pass-through)
             }).asPromise();
-
-            console.log('✅ Secondary MongoDB connected successfully');
             return connection;
           } catch (error) {
             if (i === maxRetries - 1) throw error; // Se for a última tentativa, explode o erro
-            
             console.warn(`⚠️ Falha ao conectar ao Mongo secundário (tentativa ${i + 1}/${maxRetries}). Tentando em ${delay}ms...`);
             console.warn('Erro:', error);
             await new Promise((res) => setTimeout(res, delay));

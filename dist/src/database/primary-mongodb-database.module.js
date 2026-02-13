@@ -54,7 +54,6 @@ exports.PrimaryMongoDbDatabaseModule = PrimaryMongoDbDatabaseModule = __decorate
                                 socketTimeoutMS: 60000,
                                 family: 4,
                             }).asPromise();
-                            console.log('✅ MongoDB connected successfully');
                             return connection;
                         }
                         catch (error) {
